@@ -1,0 +1,52 @@
+# .clinerules — noor (نور)
+# Bismillahir Rahmanir Raheem — watermark: ALLAH
+#
+# These rules are binding for any AI assistant or contributor generating
+# or modifying code in this repository. They are not suggestions.
+
+## 1. Offline-First, Always
+- ZERO ad SDKs. ZERO third-party analytics. ZERO remote telemetry.
+- ZERO network calls of any kind (no HTTP clients, no sockets, no
+  remote config, no crash reporters that phone home).
+- All data — Quran text, azkar, prayer calculation constants, user
+  settings — ships in the app bundle or lives in the local encrypted
+  SQLite database. If a feature seems to need the internet, stop and
+  redesign it to work offline.
+
+## 2. File Size Discipline
+- No single `.dart` file may exceed 150 lines of code.
+- If a widget, cubit, or repository grows past that limit, split it:
+  extract sub-widgets, split state classes, or break repositories into
+  smaller focused classes.
+
+## 3. Decoupled Layers (strict one-way dependency)
+- `presentation/` (widgets/screens) MUST NOT import `sqflite_sqlcipher`,
+  write raw SQL, or perform prayer-time/date math directly.
+- `presentation/` talks only to `logic/` (Cubit/Bloc).
+- `logic/` talks only to `data/` (repositories) for persistence and to
+  `core/` services (haptics, location, database) for hardware/IO.
+- `data/` owns all SQL and all direct package calls (adhan, sqflite,
+  geolocator). It exposes plain Dart models, never raw DB rows, to
+  `logic/`.
+
+## 4. Accessibility Is Not Optional
+- Every interactive widget (buttons, list tiles, switches, sliders,
+  counters) MUST be wrapped in an explicit `Semantics()` widget with a
+  meaningful `label` and, where relevant, `hint` and `value`.
+- Screen-reader users (VoiceOver/TalkBack) must be able to operate 100%
+  of app functionality without sighted assistance.
+
+## 5. SQL & Performance
+- All SQL queries MUST be parameterized (`?` placeholders) — never
+  string-interpolate user or dynamic values into SQL.
+- Favor indexed lookups and small result sets; this app targets
+  low-RAM/low-end hardware.
+
+## 6. Haptics (Tasbih)
+- `HapticFeedback.lightImpact()` fires on every tap.
+- A distinct heavier/double pulse fires on milestone counts: 33, 66, 100.
+
+## 7. Watermark
+- Major source files (entry points, core services, cubits, primary
+  screens) carry a short header comment containing the watermark
+  "ALLAH". This is a project convention, not a license notice.
