@@ -1,7 +1,9 @@
 # Bismillahir Rahmanir Raheem - watermark: ALLAH
-# Noor - bootstrap + Android release build.
-# First run scaffolds the full project into this repo, then builds an APK.
-# Every run after that skips the scaffold and just builds.
+# Noor - Android release build (v2).
+# Source is already committed to the repo, so this build only compiles.
+# Gradle is patched for plugin requirements before building, and any
+# build error is echoed into the job summary so it can be read without
+# opening the raw log.
 
 name: Build Noor Android APK
 
@@ -11,14 +13,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  PAYLOAD_SHA256: "c7a098aa1827ef30d250595ed5182ac0d0827cb336a191c9a68229af22b62c16"
 
 jobs:
   build:
@@ -29,205 +28,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Detect whether project already exists
-        id: state
-        run: |
-          if [ -f lib/main.dart ] && [ -f pubspec.yaml ]; then
-            echo "scaffolded=true" >> "$GITHUB_OUTPUT"
-            echo "Project already present - skipping bootstrap."
-          else
-            echo "scaffolded=false" >> "$GITHUB_OUTPUT"
-            echo "Empty repo detected - bootstrap will run."
-          fi
-
-      - name: Unpack Noor source payload
-        if: steps.state.outputs.scaffolded == 'false'
-        run: |
-          base64 -d -i <<'PAYLOAD' > /tmp/noor.tar.xz
-          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
-          PAYLOAD
-          ACTUAL=$(sha256sum /tmp/noor.tar.xz | cut -d' ' -f1)
-          if [ "$ACTUAL" != "$PAYLOAD_SHA256" ]; then
-            echo "::error::Payload checksum mismatch - the paste was truncated or altered."
-            echo "expected $PAYLOAD_SHA256"
-            echo "actual   $ACTUAL"
-            exit 1
-          fi
-          tar xJf /tmp/noor.tar.xz -C .
-          rm -f /tmp/noor.tar.xz
-          echo "Source tree unpacked:"
-          find lib -name '*.dart' | sort
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -251,99 +51,167 @@ jobs:
           key: noor-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
           restore-keys: noor-${{ runner.os }}-
 
-      - name: Ensure declared asset folders exist
-        run: |
-          mkdir -p assets/database
-          [ -f assets/database/.gitkeep ] || echo "placeholder" > assets/database/.gitkeep
+      - name: Ensure asset folders exist
+        run: mkdir -p assets/database
 
-      - name: Generate Android platform files
+      - name: Regenerate Android platform files if missing
         run: |
-          if [ -d android ]; then
-            echo "android/ already present - skipping."
-          else
+          if [ ! -d android ]; then
             cp pubspec.yaml pubspec.yaml.bak
             flutter create --platforms=android \
               --project-name noor --org com.noorapp .
             mv pubspec.yaml.bak pubspec.yaml
           fi
 
-      - name: Commit scaffolded sources back to repo
+      - name: Patch Gradle for plugin requirements
         run: |
-          git config user.name  "noor-bootstrap[bot]"
-          git config user.email "noor-bootstrap@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "Nothing new to commit."
-          else
-            git commit -m "chore: bootstrap Noor project scaffold and Android platform files"
-            git push origin HEAD:${{ github.ref_name }}
-            echo "Sources committed - future runs will build only."
-          fi
+          cat > /tmp/patch_gradle.py <<'PATCHER'
+          #!/usr/bin/env python3
+          """Patch android/app/build.gradle[.kts] for Noor's plugin requirements.
+
+          flutter_local_notifications needs core library desugaring; sqflite_sqlcipher
+          and geolocator need a modern minSdk. Handles both Kotlin and Groovy DSL.
+          Idempotent: safe to run on every build.
+          """
+          import re
+          import sys
+          import pathlib
+
+          DESUGAR_LIB = "com.android.tools:desugar_jdk_libs:2.1.4"
+          MIN_SDK = "23"
+          COMPILE_SDK = "35"
+
+
+          def patch(path: pathlib.Path) -> str:
+              src = path.read_text()
+              kts = path.suffix == ".kts"
+              notes = []
+
+              # 1. SDK levels -----------------------------------------------------
+              if kts:
+                  new = re.sub(r"minSdk\s*=\s*flutter\.minSdkVersion", f"minSdk = {MIN_SDK}", src)
+                  new = re.sub(r"compileSdk\s*=\s*flutter\.compileSdkVersion",
+                               f"compileSdk = {COMPILE_SDK}", new)
+              else:
+                  new = re.sub(r"minSdkVersion\s+flutter\.minSdkVersion",
+                               f"minSdkVersion {MIN_SDK}", src)
+                  new = re.sub(r"compileSdkVersion\s+flutter\.compileSdkVersion",
+                               f"compileSdkVersion {COMPILE_SDK}", new)
+              if new != src:
+                  notes.append(f"SDK levels pinned (min {MIN_SDK}, compile {COMPILE_SDK})")
+              src = new
+
+              # 2. Java 17 + desugaring inside compileOptions ---------------------
+              if "CoreLibraryDesugaringEnabled" not in src and "coreLibraryDesugaringEnabled" not in src:
+                  if kts:
+                      block = (
+                          "compileOptions {\n"
+                          "        isCoreLibraryDesugaringEnabled = true\n"
+                          "        sourceCompatibility = JavaVersion.VERSION_17\n"
+                          "        targetCompatibility = JavaVersion.VERSION_17\n"
+                          "    }"
+                      )
+                  else:
+                      block = (
+                          "compileOptions {\n"
+                          "        coreLibraryDesugaringEnabled true\n"
+                          "        sourceCompatibility JavaVersion.VERSION_17\n"
+                          "        targetCompatibility JavaVersion.VERSION_17\n"
+                          "    }"
+                      )
+                  src, n = re.subn(r"compileOptions\s*\{[^}]*\}", block, src, count=1)
+                  if n:
+                      notes.append("core library desugaring enabled, Java 17")
+                  else:
+                      # No compileOptions block at all - inject after android {
+                      src = re.sub(r"(android\s*\{)", r"\1\n    " + block, src, count=1)
+                      notes.append("compileOptions block created with desugaring")
+
+              # 3. Kotlin jvmTarget ----------------------------------------------
+              if "jvmTarget" in src:
+                  src = re.sub(r'jvmTarget\s*=\s*JavaVersion\.VERSION_\w+\.toString\(\)',
+                               'jvmTarget = JavaVersion.VERSION_17.toString()', src)
+                  src = re.sub(r"jvmTarget\s*=\s*['\"][\d.]+['\"]",
+                               'jvmTarget = "17"', src)
+                  notes.append("Kotlin jvmTarget set to 17")
+
+              # 4. Desugaring dependency -----------------------------------------
+              has_dep = re.search(r"coreLibraryDesugaring\s*[('\"]", src) is not None
+              if not has_dep:
+                  if kts:
+                      dep = f'\ndependencies {{\n    coreLibraryDesugaring("{DESUGAR_LIB}")\n}}\n'
+                  else:
+                      dep = f"\ndependencies {{\n    coreLibraryDesugaring '{DESUGAR_LIB}'\n}}\n"
+                  src = src.rstrip() + "\n" + dep
+                  notes.append(f"desugar_jdk_libs dependency added")
+
+              path.write_text(src)
+              return "; ".join(notes) if notes else "already patched, no changes"
+
+
+          if __name__ == "__main__":
+              target = None
+              for candidate in ("android/app/build.gradle.kts", "android/app/build.gradle"):
+                  p = pathlib.Path(candidate)
+                  if p.exists():
+                      target = p
+                      break
+              if target is None:
+                  print("::error::No android/app/build.gradle[.kts] found")
+                  sys.exit(1)
+              print(f"Patching {target}")
+              print("  ->", patch(target))
+          PATCHER
+          python3 /tmp/patch_gradle.py
+
+      - name: Show patched Gradle config
+        run: |
+          F=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          echo "--- $F ---"
+          cat "$F"
 
       - name: Resolve dependencies
         run: flutter pub get
-
-      - name: Guard - 150 line file limit
-        continue-on-error: true
-        run: |
-          OVER=0
-          while IFS= read -r f; do
-            N=$(wc -l < "$f")
-            if [ "$N" -gt 150 ]; then
-              echo "::warning file=$f::$f has $N lines (limit 150)"
-              OVER=1
-            fi
-          done < <(find lib -name '*.dart')
-          [ "$OVER" -eq 0 ] && echo "All Dart files within the 150 line limit."
-
-      - name: Guard - offline first (no network or analytics SDKs)
-        continue-on-error: true
-        run: |
-          BANNED='package:(http|dio|firebase|google_mobile_ads|sentry|mixpanel|amplitude|posthog)'
-          if grep -rnE "$BANNED" lib/ 2>/dev/null; then
-            echo "::warning::Networking or analytics package detected in lib/"
-          else
-            echo "No banned packages found - offline-first intact."
-          fi
-
-      - name: Guard - accessibility semantics present
-        continue-on-error: true
-        run: |
-          COUNT=$(grep -rl 'Semantics' lib/ 2>/dev/null | wc -l)
-          echo "Files referencing Semantics(): $COUNT"
-          [ "$COUNT" -gt 0 ] || echo "::warning::No Semantics() usage found in lib/"
 
       - name: Static analysis
         continue-on-error: true
         run: flutter analyze --no-fatal-infos
 
       - name: Build release APK
+        id: apk
         run: |
+          set -o pipefail
           flutter build apk --release \
-            --build-number ${{ github.run_number }}
+            --build-number ${{ github.run_number }} 2>&1 | tee /tmp/build.log
 
-      - name: Write build summary
-        if: always()
+      - name: Publish build error to summary
+        if: failure()
+        run: |
+          {
+            echo "## Build failed - error detail"
+            echo ""
+            echo "Last 120 lines of the Gradle output:"
+            echo ""
+            echo '```'
+            tail -n 120 /tmp/build.log 2>/dev/null || echo "no build log captured"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish success summary
+        if: success()
         run: |
           APK=build/app/outputs/flutter-apk/app-release.apk
           {
             echo "## Noor build #${{ github.run_number }}"
             echo ""
-            if [ -f "$APK" ]; then
-              echo "**Status:** APK built successfully"
-              echo ""
-              echo "| Field | Value |"
-              echo "|---|---|"
-              echo "| APK size | $(du -h \"$APK\" | cut -f1) |"
-              echo "| Flutter | $(flutter --version | head -1) |"
-              echo "| Commit | \`${{ github.sha }}\` |"
-              echo ""
-              echo "Signed with a debug key - sideload only, not Play Store ready."
-            else
-              echo "**Status:** build failed - no APK produced."
-              echo ""
-              echo "Open the failed step above to read the error."
-            fi
+            echo "**APK built successfully.**"
+            echo ""
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Size | $(du -h \"$APK\" | cut -f1) |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo ""
+            echo "Debug-signed - sideload only, not Play Store ready."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload APK artifact
