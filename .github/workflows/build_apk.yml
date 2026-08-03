@@ -1,9 +1,13 @@
 # Bismillahir Rahmanir Raheem - watermark: ALLAH
-# Noor - Android release build (v3).
+# Noor - Android release build (v4).
 #
-# compileSdk is forced via a Gradle init script in ~/.gradle/init.d/
-# rather than in android/app/build.gradle.kts, because `flutter build`
-# rewrites that file during its own migration and discards edits.
+# `flutter build` rewrites android/app/build.gradle.kts during its own
+# migration, discarding any edits made beforehand. So this workflow runs
+# the build twice: pass 1 lets the migration happen (and is allowed to
+# fail), then the file is patched, then pass 2 does the real build.
+#
+# The failure summary prints the actual build.gradle.kts so the real
+# file contents are visible rather than guessed at.
 
 name: Build Noor Android APK
 
@@ -17,7 +21,7 @@ jobs:
   build:
     name: Scaffold and build
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
 
     steps:
       - name: Checkout repository
@@ -45,7 +49,7 @@ jobs:
           key: noor-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
           restore-keys: noor-${{ runner.os }}-
 
-      - name: Install Gradle init script
+      - name: Install Gradle init script (belt and braces)
         run: |
           mkdir -p ~/.gradle/init.d
           cat > ~/.gradle/init.d/noor_android_config.gradle <<'INITSCRIPT'
@@ -97,45 +101,156 @@ jobs:
               }
           }
           INITSCRIPT
-          echo "--- installed init script ---"
-          cat ~/.gradle/init.d/noor_android_config.gradle
 
       - name: Ensure asset folders exist
         run: mkdir -p assets/database
 
-      - name: Regenerate Android platform files if missing
-        run: |
-          if [ ! -d android ]; then
-            cp pubspec.yaml pubspec.yaml.bak
-            flutter create --platforms=android \
-              --project-name noor --org com.noorapp .
-            mv pubspec.yaml.bak pubspec.yaml
-          fi
-
       - name: Resolve dependencies
         run: flutter pub get
 
-      - name: Build release APK
+      - name: Pass 1 - let Flutter run its Gradle migration
+        run: |
+          echo "This pass is expected to fail; it exists so Flutter"
+          echo "performs its build.gradle.kts rewrite before we patch."
+          flutter build apk --release 2>&1 | tail -n 30 || true
+
+      - name: Show build.gradle.kts as Flutter left it
+        run: |
+          F=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          echo "GRADLE_FILE=$F" >> "$GITHUB_ENV"
+          echo "--- $F (post-migration, pre-patch) ---"
+          cat "$F"
+
+      - name: Patch Gradle and verify
+        run: |
+          cat > /tmp/patch_gradle.py <<'PATCHER'
+          #!/usr/bin/env python3
+          """Patch android/app/build.gradle[.kts] for Noor's plugin requirements.
+
+          flutter_local_notifications needs core library desugaring; sqflite_sqlcipher
+          and geolocator need a modern minSdk. Handles both Kotlin and Groovy DSL.
+          Idempotent: safe to run on every build.
+          """
+          import re
+          import sys
+          import pathlib
+
+          DESUGAR_LIB = "com.android.tools:desugar_jdk_libs:2.1.4"
+          MIN_SDK = "23"
+          COMPILE_SDK = "36"
+
+
+          def patch(path: pathlib.Path) -> str:
+              src = path.read_text()
+              kts = path.suffix == ".kts"
+              notes = []
+
+              # 1. SDK levels -----------------------------------------------------
+              if kts:
+                  new = re.sub(r"minSdk\s*=\s*flutter\.minSdkVersion", f"minSdk = {MIN_SDK}", src)
+                  new = re.sub(r"compileSdk\s*=\s*(flutter\.compileSdkVersion|\d+)",
+                               f"compileSdk = {COMPILE_SDK}", new)
+              else:
+                  new = re.sub(r"minSdkVersion\s+flutter\.minSdkVersion",
+                               f"minSdkVersion {MIN_SDK}", src)
+                  new = re.sub(r"compileSdkVersion\s+(flutter\.compileSdkVersion|\d+)",
+                               f"compileSdkVersion {COMPILE_SDK}", new)
+              if new != src:
+                  notes.append(f"SDK levels pinned (min {MIN_SDK}, compile {COMPILE_SDK})")
+              src = new
+
+              # 2. Java 17 + desugaring inside compileOptions ---------------------
+              if "CoreLibraryDesugaringEnabled" not in src and "coreLibraryDesugaringEnabled" not in src:
+                  if kts:
+                      block = (
+                          "compileOptions {\n"
+                          "        isCoreLibraryDesugaringEnabled = true\n"
+                          "        sourceCompatibility = JavaVersion.VERSION_17\n"
+                          "        targetCompatibility = JavaVersion.VERSION_17\n"
+                          "    }"
+                      )
+                  else:
+                      block = (
+                          "compileOptions {\n"
+                          "        coreLibraryDesugaringEnabled true\n"
+                          "        sourceCompatibility JavaVersion.VERSION_17\n"
+                          "        targetCompatibility JavaVersion.VERSION_17\n"
+                          "    }"
+                      )
+                  src, n = re.subn(r"compileOptions\s*\{[^}]*\}", block, src, count=1)
+                  if n:
+                      notes.append("core library desugaring enabled, Java 17")
+                  else:
+                      # No compileOptions block at all - inject after android {
+                      src = re.sub(r"(android\s*\{)", r"\1\n    " + block, src, count=1)
+                      notes.append("compileOptions block created with desugaring")
+
+              # 3. Kotlin jvmTarget ----------------------------------------------
+              if "jvmTarget" in src:
+                  src = re.sub(r'jvmTarget\s*=\s*JavaVersion\.VERSION_\w+\.toString\(\)',
+                               'jvmTarget = JavaVersion.VERSION_17.toString()', src)
+                  src = re.sub(r"jvmTarget\s*=\s*['\"][\d.]+['\"]",
+                               'jvmTarget = "17"', src)
+                  notes.append("Kotlin jvmTarget set to 17")
+
+              # 4. Desugaring dependency -----------------------------------------
+              has_dep = re.search(r"coreLibraryDesugaring\s*[('\"]", src) is not None
+              if not has_dep:
+                  if kts:
+                      dep = f'\ndependencies {{\n    coreLibraryDesugaring("{DESUGAR_LIB}")\n}}\n'
+                  else:
+                      dep = f"\ndependencies {{\n    coreLibraryDesugaring '{DESUGAR_LIB}'\n}}\n"
+                  src = src.rstrip() + "\n" + dep
+                  notes.append(f"desugar_jdk_libs dependency added")
+
+              path.write_text(src)
+              return "; ".join(notes) if notes else "already patched, no changes"
+
+
+          if __name__ == "__main__":
+              target = None
+              for candidate in ("android/app/build.gradle.kts", "android/app/build.gradle"):
+                  p = pathlib.Path(candidate)
+                  if p.exists():
+                      target = p
+                      break
+              if target is None:
+                  print("::error::No android/app/build.gradle[.kts] found")
+                  sys.exit(1)
+              print(f"Patching {target}")
+              print("  ->", patch(target))
+          PATCHER
+          python3 /tmp/patch_gradle.py
+          echo "--- after patch ---"
+          cat "$GRADLE_FILE"
+          if ! grep -qE "compileSdk(Version)?\s*=?\s*36" "$GRADLE_FILE"; then
+            echo "::error::Patch did not set compileSdk to 36."
+            echo "The file contents are printed above - the regex needs updating."
+            exit 1
+          fi
+          echo "Verified: compileSdk is 36."
+
+      - name: Pass 2 - build release APK
         run: |
           set -o pipefail
-          flutter build apk --release \
+          flutter build apk --release --no-pub \
             --build-number ${{ github.run_number }} 2>&1 | tee /tmp/build.log
 
-      - name: Publish build error to summary
+      - name: Publish failure detail to summary
         if: failure()
         run: |
+          F="${GRADLE_FILE:-android/app/build.gradle.kts}"
           {
             echo "## Build failed"
             echo ""
-            echo "### compileSdk actually used"
-            echo '```'
-            grep "noor-init:" /tmp/build.log 2>/dev/null | head -20 \
-              || echo "init script produced no output - it did not run"
+            echo "### $F"
+            echo '```kotlin'
+            cat "$F" 2>/dev/null || echo "file not found"
             echo '```'
             echo ""
-            echo "### Last 100 lines"
+            echo "### Last 80 lines of build output"
             echo '```'
-            tail -n 100 /tmp/build.log 2>/dev/null || echo "no log captured"
+            tail -n 80 /tmp/build.log 2>/dev/null || echo "no log captured"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
