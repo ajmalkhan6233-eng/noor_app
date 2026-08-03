@@ -44,9 +44,7 @@ class PrayerCubit extends Cubit<PrayerState> {
       emit(
         state.copyWith(
           isResolvingLocation: false,
-          locationError:
-              'Location unavailable — check permissions, or enter '
-              'coordinates manually below.',
+          locationError: 'Enter your coordinates below to see prayer times.',
         ),
       );
       return;
@@ -69,8 +67,9 @@ class PrayerCubit extends Cubit<PrayerState> {
     if (latitude.abs() > 90 || longitude.abs() > 180) {
       emit(
         state.copyWith(
-          locationError: 'Latitude must be within ±90, longitude within '
-              '±180.',
+          locationError:
+              'Enter a latitude between -90 and 90, and a longitude '
+              'between -180 and 180.',
         ),
       );
       return;

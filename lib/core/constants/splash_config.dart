@@ -6,6 +6,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 /// Tunables for `SplashScreen` and its cosmic sub-widgets.
 abstract final class SplashConfig {
   /// Master switch. When false, [SplashScreen] shows a plain still
@@ -13,26 +15,28 @@ abstract final class SplashConfig {
   static const bool cosmicEnabled = true;
 
   /// Total duration of the cosmic sequence before `onFinished` fires.
-  static const Duration totalDuration = Duration(milliseconds: 5200);
+  static const Duration totalDuration = Duration(milliseconds: 2800);
 
-  // --- Background gradient (never pure black) ---
-  static const Color emeraldCenter = Color(0xFF1B3D2B);
-  static const Color emeraldMid = Color(0xFF0A1912);
-  static const Color emeraldEdge = Color(0xFF050D09);
+  // --- Background gradient (never pure black, but reads almost so —
+  // a green cast, not a lit scene) ---
+  static const Color emeraldCenter = AppColors.card;
+  static const Color emeraldMid = AppColors.emerald;
+  static const Color emeraldEdge = AppColors.ink;
 
   // --- Gold centre glow ("nur"), slowly breathing ---
-  static const Color glowColor = Color(0xFFD4AF37);
+  static const Color glowColor = AppColors.gold;
 
   /// Base glow radius as a fraction of the field's max radius. Kept
   /// modest so the gold glow reads as a soft accent, never a wash
   /// over the whole screen.
   static const double nurRadius = 0.22;
-  static const double glowAmplitudeFraction = 0.06;
+  static const double glowAmplitudeFraction = 0.04;
   static const double glowBreathPeriodSeconds = 3.6;
 
-  /// Peak glow opacity — deliberately low; this glow sits behind a
-  /// starfield and gold text and must never compete with either.
-  static const double glowPeakOpacity = 0.1;
+  /// Peak glow opacity — deliberately low; a suggestion of light, not
+  /// a floodlight. This glow sits behind a starfield and gold text
+  /// and must never compete with either.
+  static const double glowPeakOpacity = 0.06;
 
   // --- Whole-field slow rotation ---
   /// One full rotation every 48 seconds.
@@ -43,8 +47,8 @@ abstract final class SplashConfig {
   static const int starFieldSeed = 20260803;
 
   /// Distance (fraction of the field's max radius) covered by the
-  /// initial fast burst term.
-  static const double starBurstDistanceFraction = 0.55;
+  /// initial fast burst term — calmer than a full sweep to the edge.
+  static const double starBurstDistanceFraction = 0.4;
 
   /// Decay constant (seconds) of the burst term — smaller means the
   /// burst dies out faster, handing off to the steady drift term.
@@ -59,36 +63,34 @@ abstract final class SplashConfig {
   static const double starStreakTrailSeconds = 0.045;
 
   static const double starStrokeWidth = 1.4;
-  static const double starBaseAlpha = 0.55;
-  static const double starTwinkleAmplitude = 0.45;
+  static const double starBaseAlpha = 0.4;
+  static const double starTwinkleAmplitude = 0.3;
   static const double starTwinkleFreqMinHz = 0.6;
   static const double starTwinkleFreqMaxHz = 1.8;
 
-  // --- Greeting: word-by-word reveal, hold, then scale-through-fade ---
-  static const double wordStaggerSeconds = 0.35;
-  static const double wordAppearDurationSeconds = 0.5;
-  static const double holdDurationSeconds = 1.8;
-  static const double exitDurationSeconds = 2.2;
+  // --- Greeting: gentle fade in, hold, gentle fade out. No scaling
+  // past the viewer — a calm greeting, not a flourish. ---
+  static const double wordStaggerSeconds = 0.22;
+  static const double wordAppearDurationSeconds = 0.35;
+  static const double holdDurationSeconds = 1.31;
+  static const double exitDurationSeconds = 0.7;
 
-  /// Starting scale for a word appearing "small/distant".
-  static const double wordSmallScale = 0.15;
+  /// Starting scale for a word gently arriving.
+  static const double wordSmallScale = 0.92;
 
-  /// Scale a word reaches as it passes the viewer during exit — kept
-  /// modest so a scaled word's render bounds never grow past the
-  /// generous per-word line height and collide with its neighbours.
-  static const double textEndScale = 1.25;
+  /// Scale held through hold and exit — `1.0` means no scale change
+  /// at all once a word has arrived; the exit is opacity-only.
+  static const double textEndScale = 1.0;
 
   static const double textFontSize = 26;
-  static const double textLetterSpacing = 1.4;
+  static const double textLetterSpacing = 3.2;
 
-  /// Height reserved per word line — generous relative to
-  /// [textFontSize] * [textEndScale] so a fully-scaled word never
-  /// overlaps the line above or below it.
-  static const double wordLineHeight = 72;
+  /// Height reserved per word line — generous enough that even the
+  /// gentle arrival scale never crowds neighbouring lines.
+  static const double wordLineHeight = 64;
 
-  /// Kept small deliberately: a soft lift for the gold text, not a
-  /// diffuse glow that blurs the words into each other.
-  static const double textShadowBlurRadius = 3;
+  /// A soft lift for the gold text, not a glow.
+  static const double textShadowBlurRadius = 2;
 
   // --- Plain (non-cosmic) fallback ---
   static const Duration plainHoldDuration = Duration(milliseconds: 2400);

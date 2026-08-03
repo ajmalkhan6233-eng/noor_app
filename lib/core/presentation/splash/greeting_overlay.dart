@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
+import '../../constants/app_typography.dart';
 import '../../constants/splash_config.dart';
 import 'greeting_timeline.dart';
 
@@ -56,13 +57,14 @@ class GreetingOverlay extends StatelessWidget {
         child: Text(
           word,
           style: TextStyle(
-            color: AppColors.accent,
+            fontFamily: AppTypography.displayFamily,
+            color: AppColors.gold,
             fontSize: SplashConfig.textFontSize,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w300,
             letterSpacing: SplashConfig.textLetterSpacing,
             shadows: [
               Shadow(
-                color: AppColors.accent.withValues(alpha: 0.4),
+                color: AppColors.gold.withValues(alpha: 0.25),
                 blurRadius: SplashConfig.textShadowBlurRadius,
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
 
 /// Shown instead of prayer times whenever the repository returns
 /// `HighLatitudeUnresolved` — never a guessed clock time.
@@ -15,11 +16,10 @@ class HighLatitudeNotice extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       label: AppStrings.highLatitudeUnresolvedMessage,
-      child: const Padding(
-        padding: EdgeInsets.symmetric(vertical: 16),
+      child: const AppCard(
         child: Text(
           AppStrings.highLatitudeUnresolvedMessage,
-          style: TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: AppColors.sage),
         ),
       ),
     );

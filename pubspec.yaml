@@ -41,3 +41,19 @@ flutter:
   assets:
     - assets/database/
     - assets/quran/
+  fonts:
+    - family: Cormorant Garamond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond/CormorantGaramond.ttf
+        - asset: assets/fonts/CormorantGaramond/CormorantGaramond-Italic.ttf
+          style: italic
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter/Inter.ttf
+        - asset: assets/fonts/Inter/Inter-Italic.ttf
+          style: italic
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/Amiri/Amiri-Regular.ttf
+        - asset: assets/fonts/Amiri/Amiri-Bold.ttf
+          weight: 700

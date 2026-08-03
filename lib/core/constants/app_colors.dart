@@ -3,34 +3,48 @@
 // Centralized design tokens. Never hardcode hex colors in widgets —
 // import and use these instead, so the palette stays consistent and
 // easy to re-theme.
+//
+// Design anchor: the astrolabe — manuscript illumination, not neon.
+// Backgrounds read almost black with a green cast; gold is
+// punctuation, not paint.
 
 import 'package:flutter/material.dart';
 
 /// Static color palette for `noor`.
-///
-/// Deep emerald + metallic gold, evoking traditional Islamic manuscript
-/// illumination while staying legible on low-end/OLED screens.
 abstract final class AppColors {
-  /// Primary app background — Deep Emerald.
-  static const Color background = Color(0xFF0A1912);
+  /// Deepest ground — app background.
+  static const Color ink = Color(0xFF060D0A);
 
-  /// Card / surface background — Dark Card.
-  static const Color surface = Color(0xFF132A20);
+  /// Surface, one step up from [ink].
+  static const Color emerald = Color(0xFF0A1912);
 
-  /// Primary accent — Metallic Gold. Used for active states, counters,
-  /// highlighted Arabic text, and progress indicators.
-  static const Color accent = Color(0xFFD4AF37);
+  /// Raised cards.
+  static const Color card = Color(0xFF12241B);
 
-  /// Primary text on dark backgrounds.
-  static const Color textPrimary = Color(0xFFF5F0E6);
+  /// 1px dividers and card borders.
+  static const Color hairline = Color(0xFF1E3327);
 
-  /// Secondary / muted text on dark backgrounds.
-  static const Color textSecondary = Color(0xFFB8C4BD);
+  /// Accent — punctuation, used sparingly (active states, the current
+  /// prayer marker, the astrolabe's position needle).
+  static const Color gold = Color(0xFFC9A227);
 
-  /// Divider / hairline color, low-contrast on emerald surfaces.
-  static const Color divider = Color(0xFF23392E);
+  /// Inactive/dimmed gold.
+  static const Color goldSoft = Color(0xFF8C7420);
 
-  /// Success / milestone-reached color (used sparingly, e.g. tasbih
-  /// milestone pulses at 33/66/100).
-  static const Color milestone = Color(0xFFE8C766);
+  /// Primary text.
+  static const Color parchment = Color(0xFFF2EDE1);
+
+  /// Secondary text — captions, section labels.
+  static const Color sage = Color(0xFF94A79B);
+
+  // --- Legacy aliases: kept so the wider codebase keeps compiling
+  // while every screen is migrated to the named tokens above; prefer
+  // the new names in new/updated code. ---
+  static const Color background = ink;
+  static const Color surface = card;
+  static const Color accent = gold;
+  static const Color textPrimary = parchment;
+  static const Color textSecondary = sage;
+  static const Color divider = hairline;
+  static const Color milestone = gold;
 }

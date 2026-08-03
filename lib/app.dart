@@ -1,8 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
 import 'package:flutter/material.dart';
-import 'core/constants/app_colors.dart';
 import 'core/constants/app_strings.dart';
+import 'core/constants/app_theme.dart';
 import 'core/presentation/splash_screen.dart';
 import 'features/home/presentation/home_dashboard.dart';
 import 'features/settings/data/app_theme_mode.dart';
@@ -38,28 +38,8 @@ class _NoorAppState extends State<NoorApp> {
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       themeMode: _themeMode,
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: AppColors.background,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.accent,
-          brightness: Brightness.dark,
-          surface: AppColors.surface,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.background,
-          foregroundColor: AppColors.textPrimary,
-        ),
-      ),
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.accent,
-          brightness: Brightness.light,
-        ),
-      ),
+      darkTheme: buildDarkTheme(),
+      theme: buildLightTheme(),
       home: _showSplash
           ? SplashScreen(onFinished: () => setState(() => _showSplash = false))
           : const HomeDashboard(),
