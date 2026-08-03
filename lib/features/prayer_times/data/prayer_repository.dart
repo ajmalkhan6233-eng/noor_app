@@ -15,6 +15,7 @@ import 'package:adhan/adhan.dart' as adhan;
 import 'package:adhan/src/internal/solar_time.dart' show SolarTime;
 
 import '../../../core/location/location_service.dart';
+import 'prayer_high_latitude_rule.dart';
 import 'prayer_settings.dart';
 import 'prayer_times_result.dart';
 
@@ -34,7 +35,16 @@ class PrayerRepository {
       coordinates.longitude,
     );
     final params = settings.method.toAdhan().getParameters()
-      ..madhab = settings.madhab.toAdhan();
+      ..madhab = settings.madhab.toAdhan()
+      ..highLatitudeRule = settings.highLatitudeRule.toAdhan()
+      ..adjustments = adhan.PrayerAdjustments(
+        fajr: settings.adjustments.fajr,
+        sunrise: settings.adjustments.sunrise,
+        dhuhr: settings.adjustments.dhuhr,
+        asr: settings.adjustments.asr,
+        maghrib: settings.adjustments.maghrib,
+        isha: settings.adjustments.isha,
+      );
 
     if (!_anglesReachable(adhanCoordinates, date, params)) {
       return const HighLatitudeUnresolved();
@@ -120,6 +130,19 @@ extension on PrayerMadhab {
         return adhan.Madhab.shafi;
       case PrayerMadhab.hanafi:
         return adhan.Madhab.hanafi;
+    }
+  }
+}
+
+extension on PrayerHighLatitudeRule {
+  adhan.HighLatitudeRule toAdhan() {
+    switch (this) {
+      case PrayerHighLatitudeRule.middleOfNight:
+        return adhan.HighLatitudeRule.middle_of_the_night;
+      case PrayerHighLatitudeRule.seventhOfNight:
+        return adhan.HighLatitudeRule.seventh_of_the_night;
+      case PrayerHighLatitudeRule.twilightAngle:
+        return adhan.HighLatitudeRule.twilight_angle;
     }
   }
 }

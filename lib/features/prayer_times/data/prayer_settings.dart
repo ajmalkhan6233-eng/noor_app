@@ -4,6 +4,9 @@
 // by default logic elsewhere — the cubit always carries an explicit
 // [PrayerSettings], and the screen always shows it.
 
+import 'prayer_adjustments.dart';
+import 'prayer_high_latitude_rule.dart';
+
 /// Standard prayer-time calculation methods, mapped onto the `adhan`
 /// package's equivalents inside `PrayerRepository` only.
 enum PrayerCalculationMethod {
@@ -29,18 +32,26 @@ class PrayerSettings {
   const PrayerSettings({
     this.method = PrayerCalculationMethod.muslimWorldLeague,
     this.madhab = PrayerMadhab.shafi,
+    this.highLatitudeRule = PrayerHighLatitudeRule.middleOfNight,
+    this.adjustments = const PrayerAdjustmentMinutes(),
   });
 
   final PrayerCalculationMethod method;
   final PrayerMadhab madhab;
+  final PrayerHighLatitudeRule highLatitudeRule;
+  final PrayerAdjustmentMinutes adjustments;
 
   PrayerSettings copyWith({
     PrayerCalculationMethod? method,
     PrayerMadhab? madhab,
+    PrayerHighLatitudeRule? highLatitudeRule,
+    PrayerAdjustmentMinutes? adjustments,
   }) {
     return PrayerSettings(
       method: method ?? this.method,
       madhab: madhab ?? this.madhab,
+      highLatitudeRule: highLatitudeRule ?? this.highLatitudeRule,
+      adjustments: adjustments ?? this.adjustments,
     );
   }
 }

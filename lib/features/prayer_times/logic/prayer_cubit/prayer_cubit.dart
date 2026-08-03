@@ -1,24 +1,38 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Presentation only dispatches (`useGps`, `setManualLocation`,
-// `setMethod`, `setMadhab`) and reads state — GPS calls and prayer
-// math both stay out of the widget tree.
+// Presentation only dispatches (`useGps`, `setManualLocation`) and
+// reads state — GPS calls and prayer math both stay out of the widget
+// tree. Calculation method/madhab/adjustments are never set here —
+// they're read once from Settings on load; change them in Settings.
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/location/location_service.dart';
+import '../../../settings/data/settings_repository.dart';
 import '../../data/prayer_repository.dart';
-import '../../data/prayer_settings.dart';
 import 'prayer_state.dart';
 
 class PrayerCubit extends Cubit<PrayerState> {
-  PrayerCubit({PrayerRepository? repository, LocationService? locationService})
-    : _repository = repository ?? const PrayerRepository(),
-      _locationService = locationService ?? const LocationService(),
-      super(PrayerState(date: DateTime.now()));
+  PrayerCubit({
+    PrayerRepository? repository,
+    LocationService? locationService,
+    SettingsRepository? settingsRepository,
+  }) : _repository = repository ?? const PrayerRepository(),
+       _locationService = locationService ?? const LocationService(),
+       _settingsRepository = settingsRepository ?? SettingsRepository(),
+       super(PrayerState(date: DateTime.now()));
 
   final PrayerRepository _repository;
   final LocationService _locationService;
+  final SettingsRepository _settingsRepository;
+
+  /// Reads the persisted calculation settings — always the single
+  /// source of truth — before anything is calculated.
+  Future<void> loadSettings() async {
+    final appSettings = await _settingsRepository.load();
+    emit(state.copyWith(settings: appSettings.prayerSettings));
+    _recalculate();
+  }
 
   /// Resolves the device's GPS location. Never called automatically —
   /// only in response to an explicit user action — and manual entry
@@ -69,16 +83,6 @@ class PrayerCubit extends Cubit<PrayerState> {
         locationError: null,
       ),
     );
-    _recalculate();
-  }
-
-  void setMethod(PrayerCalculationMethod method) {
-    emit(state.copyWith(settings: state.settings.copyWith(method: method)));
-    _recalculate();
-  }
-
-  void setMadhab(PrayerMadhab madhab) {
-    emit(state.copyWith(settings: state.settings.copyWith(madhab: madhab)));
     _recalculate();
   }
 
