@@ -1,25 +1,30 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Bismillahir Rahmanir Raheem — watermark: ALLAH
 
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:noor/app.dart';
-import 'package:noor/core/constants/app_strings.dart';
+import 'package:noor/core/constants/splash_config.dart';
+import 'package:noor/features/tasbih/presentation/tasbih_screen.dart';
 
 void main() {
-  testWidgets('NoorApp shows splash greeting on launch', (
+  testWidgets('NoorApp shows the cosmic greeting then the Tasbih screen', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const NoorApp());
 
-    expect(find.text(AppStrings.splashGreeting), findsOneWidget);
+    // Advance enough for the first greeting word to fully appear. Use
+    // fixed pumps rather than pumpAndSettle — the starfield/rotation
+    // Ticker animates continuously and never "settles" on its own.
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.text('BISMILLAHIR'), findsOneWidget);
 
-    // Let the splash screen's delayed fade-out timer fire so no timer is
-    // left pending when the test tears down the widget tree.
-    await tester.pumpAndSettle(const Duration(milliseconds: 2500));
+    // Advance past the full splash sequence; onFinished should swap
+    // the splash out for the main dashboard.
+    await tester.pump(
+      SplashConfig.totalDuration + const Duration(milliseconds: 100),
+    );
+    await tester.pump();
+
+    expect(find.byType(TasbihScreen), findsOneWidget);
   });
 }
