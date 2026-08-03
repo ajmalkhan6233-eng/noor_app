@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
 import '../../data/quran_import_status.dart';
 
 class QuranImportNotice extends StatelessWidget {
@@ -17,33 +18,31 @@ class QuranImportNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final message = switch (status) {
-      QuranAssetMissing() =>
-        'The Quran feature is not yet set up on this device — no '
-            'source text file has been added.',
+      QuranAssetMissing() => 'Add a Quran source file to enable this feature.',
       QuranVerificationFailed() =>
-        'The Quran text file on this device failed verification, so '
-            'it has not been loaded. Please reinstall or update the app.',
+        'Reinstall or update the app to restore the Quran text — the '
+            'file on this device did not pass verification.',
       QuranImported() => '',
     };
 
     return Semantics(
       liveRegion: true,
       label: message,
-      child: Padding(
+      child: AppCard(
         padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
               Icons.menu_book_outlined,
-              color: AppColors.textSecondary,
+              color: AppColors.sage,
               size: 40,
             ),
             const SizedBox(height: 16),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondary),
+              style: const TextStyle(color: AppColors.sage),
             ),
           ],
         ),

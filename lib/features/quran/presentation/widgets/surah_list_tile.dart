@@ -18,8 +18,11 @@ class SurahListTile extends StatelessWidget {
       label: '${surah.displayName}, ${surah.ayahCount} ayahs',
       hint: 'Double tap to open',
       onTap: onTap,
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.hairline)),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -29,19 +32,19 @@ class SurahListTile extends StatelessWidget {
                   width: 28,
                   child: Text(
                     '${surah.id}',
-                    style: const TextStyle(color: AppColors.textSecondary),
+                    style: const TextStyle(color: AppColors.sage),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   surah.displayName,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: const TextStyle(color: AppColors.parchment),
                 ),
               ],
             ),
             Text(
               '${surah.ayahCount} ayahs',
-              style: const TextStyle(color: AppColors.textSecondary),
+              style: const TextStyle(color: AppColors.sage),
             ),
           ],
         ),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/widgets/app_card.dart';
+import '../../../core/presentation/widgets/section_header.dart';
 import '../logic/settings_cubit/settings_cubit.dart';
 import '../logic/settings_cubit/settings_state.dart';
 import 'widgets/about_donate_section.dart';
@@ -33,60 +35,42 @@ class _SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: const Text('Settings'),
-      ),
+      backgroundColor: AppColors.ink,
+      appBar: AppBar(title: const Text('Settings')),
       body: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.accent),
+              child: CircularProgressIndicator(color: AppColors.gold),
             );
           }
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(24),
             children: const [
-              _SectionHeader('Calculation'),
-              MethodMadhabSection(),
-              SizedBox(height: 12),
-              HighLatitudeRuleSection(),
-              _SectionHeader('Manual adjustments (minutes)'),
-              PrayerAdjustmentsSection(),
-              _SectionHeader('Notifications'),
-              NotificationTogglesSection(),
-              _SectionHeader('Display'),
-              DisplaySection(),
-              SizedBox(height: 32),
-              Divider(color: AppColors.divider),
-              SizedBox(height: 8),
+              SectionHeader('Calculation'),
+              AppCard(
+                child: Column(
+                  children: [
+                    MethodMadhabSection(),
+                    SizedBox(height: 12),
+                    HighLatitudeRuleSection(),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+              SectionHeader('Manual adjustments (minutes)'),
+              AppCard(child: PrayerAdjustmentsSection()),
+              SizedBox(height: 16),
+              SectionHeader('Notifications'),
+              AppCard(child: NotificationTogglesSection()),
+              SizedBox(height: 16),
+              SectionHeader('Display'),
+              AppCard(child: DisplaySection()),
+              SizedBox(height: 24),
               AboutDonateSection(),
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader(this.title);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: AppColors.accent,
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
       ),
     );
   }

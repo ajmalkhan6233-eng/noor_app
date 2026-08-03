@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
 
 class AzkarEmptyState extends StatelessWidget {
   const AzkarEmptyState({super.key});
@@ -17,17 +18,17 @@ class AzkarEmptyState extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       label: message,
-      child: const Padding(
+      child: const AppCard(
         padding: EdgeInsets.symmetric(vertical: 48, horizontal: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.menu_book_outlined, color: AppColors.textSecondary, size: 40),
+            Icon(Icons.menu_book_outlined, color: AppColors.sage, size: 40),
             SizedBox(height: 16),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary),
+              style: TextStyle(color: AppColors.sage),
             ),
           ],
         ),

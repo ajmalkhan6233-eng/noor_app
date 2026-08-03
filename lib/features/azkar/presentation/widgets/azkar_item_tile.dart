@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_item.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
@@ -22,66 +23,68 @@ class AzkarItemTile extends StatelessWidget {
         final count = state.progressFor(item.id);
         final done = count >= item.repeatCount;
         return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                item.arabicText,
-                textDirection: TextDirection.rtl,
-                style: const TextStyle(color: AppColors.textPrimary, fontSize: 20),
-              ),
-              if (item.transliteration != null) ...[
-                const SizedBox(height: 8),
+          margin: const EdgeInsets.only(bottom: 16),
+          child: AppCard(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Text(
-                  item.transliteration!,
+                  item.arabicText,
+                  textDirection: TextDirection.rtl,
                   style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontStyle: FontStyle.italic,
+                    fontFamily: 'Amiri',
+                    color: AppColors.parchment,
+                    fontSize: 20,
                   ),
                 ),
-              ],
-              if (item.translation != null) ...[
+                if (item.transliteration != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    item.transliteration!,
+                    style: const TextStyle(
+                      color: AppColors.sage,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+                if (item.translation != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    item.translation!,
+                    style: const TextStyle(color: AppColors.sage),
+                  ),
+                ],
                 const SizedBox(height: 4),
                 Text(
-                  item.translation!,
-                  style: const TextStyle(color: AppColors.textSecondary),
+                  'Source: ${item.source}',
+                  style: const TextStyle(color: AppColors.sage, fontSize: 11),
+                ),
+                const SizedBox(height: 12),
+                SemanticButton(
+                  label: 'Count for this dhikr: $count of ${item.repeatCount}',
+                  hint: 'Double tap to count one repetition',
+                  onTap: () => context.read<AzkarCubit>().increment(item.id),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: done ? AppColors.gold : AppColors.hairline,
+                      ),
+                    ),
+                    child: Text(
+                      '$count / ${item.repeatCount}',
+                      style: TextStyle(
+                        color: done ? AppColors.gold : AppColors.parchment,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
               ],
-              const SizedBox(height: 4),
-              Text(
-                'Source: ${item.source}',
-                style: const TextStyle(color: AppColors.divider, fontSize: 11),
-              ),
-              const SizedBox(height: 12),
-              SemanticButton(
-                label: 'Count for this dhikr: $count of ${item.repeatCount}',
-                hint: 'Double tap to count one repetition',
-                onTap: () => context.read<AzkarCubit>().increment(item.id),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: done ? AppColors.milestone : AppColors.accent,
-                    ),
-                  ),
-                  child: Text(
-                    '$count / ${item.repeatCount}',
-                    style: TextStyle(
-                      color: done ? AppColors.milestone : AppColors.accent,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

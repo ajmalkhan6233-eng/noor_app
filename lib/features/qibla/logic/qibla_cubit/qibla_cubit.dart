@@ -34,9 +34,7 @@ class QiblaCubit extends Cubit<QiblaState> {
       emit(
         state.copyWith(
           isResolvingLocation: false,
-          locationError:
-              'Location unavailable — enable location services to see '
-              'the qibla direction.',
+          locationError: 'Enable location to see the qibla direction.',
         ),
       );
       return;

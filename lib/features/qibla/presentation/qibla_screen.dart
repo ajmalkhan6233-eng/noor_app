@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../logic/qibla_cubit/qibla_cubit.dart';
 import '../logic/qibla_cubit/qibla_state.dart';
@@ -33,10 +34,16 @@ class _QiblaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: BlocBuilder<QiblaCubit, QiblaState>(
-          builder: (context, state) => _buildBody(state),
+      backgroundColor: AppColors.ink,
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: BlocBuilder<QiblaCubit, QiblaState>(
+            builder: (context, state) => AppCard(
+              padding: const EdgeInsets.all(24),
+              child: _buildBody(state),
+            ),
+          ),
         ),
       ),
     );
@@ -47,19 +54,16 @@ class _QiblaView extends StatelessWidget {
       return Semantics(
         liveRegion: true,
         label: state.locationError,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-            state.locationError!,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.textSecondary),
-          ),
+        child: Text(
+          state.locationError!,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: AppColors.sage),
         ),
       );
     }
 
     if (state.bearingDegrees == null || state.distanceKm == null) {
-      return const CircularProgressIndicator(color: AppColors.accent);
+      return const CircularProgressIndicator(color: AppColors.gold);
     }
 
     return Column(
@@ -81,14 +85,14 @@ class _QiblaView extends StatelessWidget {
         Text(
           AppStrings.qiblaNoCompassMessage,
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: AppColors.sage),
         ),
       ];
     }
 
     final rotation = state.needleRotationDegrees;
     if (rotation == null) {
-      return const [CircularProgressIndicator(color: AppColors.accent)];
+      return const [CircularProgressIndicator(color: AppColors.gold)];
     }
 
     final trustworthy = state.compassAccuracy == CompassAccuracy.good;

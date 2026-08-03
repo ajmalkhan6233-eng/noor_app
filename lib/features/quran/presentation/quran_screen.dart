@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/widgets/app_card.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
@@ -31,14 +32,14 @@ class _QuranView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.ink,
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (context, state) {
             if (state.isLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.accent),
+                child: CircularProgressIndicator(color: AppColors.gold),
               );
             }
             if (!state.isImported) {
@@ -72,23 +73,31 @@ class _SurahIndex extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const QuranSearchBar(),
-        const SizedBox(height: 12),
-        if (state.lastRead != null)
-          Semantics(
-            label:
-                'Continue reading: Surah ${state.lastRead!.surahId}, '
-                'Ayah ${state.lastRead!.ayahNumber}',
-            button: true,
-            child: TextButton(
-              onPressed: () => _open(context, state.lastRead!.surahId),
-              child: Text(
-                'Continue: Surah ${state.lastRead!.surahId}, '
-                'Ayah ${state.lastRead!.ayahNumber}',
-                style: const TextStyle(color: AppColors.accent),
-              ),
-            ),
+        AppCard(
+          child: Column(
+            children: [
+              const QuranSearchBar(),
+              if (state.lastRead != null) ...[
+                const SizedBox(height: 8),
+                Semantics(
+                  label:
+                      'Continue reading: Surah ${state.lastRead!.surahId}, '
+                      'Ayah ${state.lastRead!.ayahNumber}',
+                  button: true,
+                  child: TextButton(
+                    onPressed: () => _open(context, state.lastRead!.surahId),
+                    child: Text(
+                      'Continue: Surah ${state.lastRead!.surahId}, '
+                      'Ayah ${state.lastRead!.ayahNumber}',
+                      style: const TextStyle(color: AppColors.gold),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
+        ),
+        const SizedBox(height: 16),
         Expanded(
           child: ListView(
             children: [

@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_typography.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/quran_ayah.dart';
 
@@ -25,51 +27,50 @@ class AyahTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Ayah ${ayah.ayahNumber}',
-                style: const TextStyle(color: AppColors.textSecondary),
-              ),
-              SemanticButton(
-                label: isBookmarked ? 'Remove bookmark' : 'Add bookmark',
-                onTap: onToggleBookmark,
-                child: Icon(
-                  isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                  color: AppColors.accent,
-                  size: 20,
+      margin: const EdgeInsets.only(bottom: 16),
+      child: AppCard(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Ayah ${ayah.ayahNumber}',
+                  style: const TextStyle(color: AppColors.sage),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            ayah.arabicText,
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 22 * fontScale,
-              height: 1.8,
+                SemanticButton(
+                  label: isBookmarked ? 'Remove bookmark' : 'Add bookmark',
+                  onTap: onToggleBookmark,
+                  child: Icon(
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    color: AppColors.gold,
+                    size: 20,
+                  ),
+                ),
+              ],
             ),
-          ),
-          if (ayah.translation != null) ...[
             const SizedBox(height: 8),
             Text(
-              ayah.translation!,
-              style: const TextStyle(color: AppColors.textSecondary),
+              ayah.arabicText,
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: AppTypography.arabicFamily,
+                color: AppColors.parchment,
+                fontSize: 22 * fontScale,
+                height: 1.8,
+              ),
             ),
+            if (ayah.translation != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                ayah.translation!,
+                style: const TextStyle(color: AppColors.sage),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

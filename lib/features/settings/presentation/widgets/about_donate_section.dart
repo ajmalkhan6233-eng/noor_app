@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../about_screen.dart';
 
@@ -15,28 +16,30 @@ class AboutDonateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SemanticButton(
-          label: 'About noor',
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => const AboutScreen()),
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SemanticButton(
+            label: 'About noor',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const AboutScreen()),
+            ),
+            child: const _Row(icon: Icons.info_outline, label: 'About'),
           ),
-          child: const _Row(icon: Icons.info_outline, label: 'About'),
-        ),
-        const SizedBox(height: 4),
-        SemanticButton(
-          label: 'Donate',
-          hint: 'Double tap for ways to support this project',
-          onTap: () => _showDonateDialog(context),
-          child: const _Row(
-            icon: Icons.favorite_border,
+          const SizedBox(height: 4),
+          SemanticButton(
             label: 'Donate',
-            muted: true,
+            hint: 'Double tap for ways to support this project',
+            onTap: () => _showDonateDialog(context),
+            child: const _Row(
+              icon: Icons.favorite_border,
+              label: 'Donate',
+              muted: true,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

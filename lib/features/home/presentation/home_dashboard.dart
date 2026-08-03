@@ -71,20 +71,27 @@ class _HomeDashboardState extends State<HomeDashboard> {
         ],
       ),
       body: IndexedStack(index: _selectedIndex, children: _screens),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.accent,
-        unselectedItemColor: AppColors.textSecondary,
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        items: [
-          _tab(Icons.access_time, AppStrings.prayerTimesScreenTitle),
-          _tab(Icons.explore, AppStrings.qiblaScreenTitle),
-          _tab(Icons.menu_book, AppStrings.quranScreenTitle),
-          _tab(Icons.self_improvement, AppStrings.azkarScreenTitle),
-          _tab(Icons.fingerprint, AppStrings.tasbihScreenTitle),
-        ],
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: AppColors.ink,
+          border: Border(top: BorderSide(color: AppColors.hairline)),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: AppColors.ink,
+          elevation: 0,
+          selectedItemColor: AppColors.gold,
+          unselectedItemColor: AppColors.sage,
+          currentIndex: _selectedIndex,
+          onTap: (index) => setState(() => _selectedIndex = index),
+          items: [
+            _tab(Icons.access_time, AppStrings.prayerTimesScreenTitle),
+            _tab(Icons.explore, AppStrings.qiblaScreenTitle),
+            _tab(Icons.menu_book, AppStrings.quranScreenTitle),
+            _tab(Icons.self_improvement, AppStrings.azkarScreenTitle),
+            _tab(Icons.fingerprint, AppStrings.tasbihScreenTitle),
+          ],
+        ),
       ),
     );
   }
