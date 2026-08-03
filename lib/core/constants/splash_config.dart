@@ -20,12 +20,19 @@ abstract final class SplashConfig {
   static const Color emeraldMid = Color(0xFF0A1912);
   static const Color emeraldEdge = Color(0xFF050D09);
 
-  // --- Gold centre glow, slowly breathing ---
+  // --- Gold centre glow ("nur"), slowly breathing ---
   static const Color glowColor = Color(0xFFD4AF37);
-  static const double glowBaseRadiusFraction = 0.22;
+
+  /// Base glow radius as a fraction of the field's max radius. Kept
+  /// modest so the gold glow reads as a soft accent, never a wash
+  /// over the whole screen.
+  static const double nurRadius = 0.22;
   static const double glowAmplitudeFraction = 0.06;
   static const double glowBreathPeriodSeconds = 3.6;
-  static const double glowPeakOpacity = 0.32;
+
+  /// Peak glow opacity — deliberately low; this glow sits behind a
+  /// starfield and gold text and must never compete with either.
+  static const double glowPeakOpacity = 0.1;
 
   // --- Whole-field slow rotation ---
   /// One full rotation every 48 seconds.
@@ -66,11 +73,22 @@ abstract final class SplashConfig {
   /// Starting scale for a word appearing "small/distant".
   static const double wordSmallScale = 0.15;
 
-  /// Scale a word reaches as it passes the viewer during exit.
-  static const double wordFarScale = 3.2;
+  /// Scale a word reaches as it passes the viewer during exit — kept
+  /// modest so a scaled word's render bounds never grow past the
+  /// generous per-word line height and collide with its neighbours.
+  static const double textEndScale = 1.25;
 
   static const double textFontSize = 26;
   static const double textLetterSpacing = 1.4;
+
+  /// Height reserved per word line — generous relative to
+  /// [textFontSize] * [textEndScale] so a fully-scaled word never
+  /// overlaps the line above or below it.
+  static const double wordLineHeight = 72;
+
+  /// Kept small deliberately: a soft lift for the gold text, not a
+  /// diffuse glow that blurs the words into each other.
+  static const double textShadowBlurRadius = 3;
 
   // --- Plain (non-cosmic) fallback ---
   static const Duration plainHoldDuration = Duration(milliseconds: 2400);

@@ -55,7 +55,7 @@ abstract final class GreetingTimeline {
         .clamp(0.0, 1.0);
     final eased = Curves.easeIn.transform(exitProgress);
     return GreetingWordFrame(
-      scale: _lerp(1.0, SplashConfig.wordFarScale, eased),
+      scale: _lerp(1.0, SplashConfig.textEndScale, eased),
       opacity: 1.0 - eased,
     );
   }

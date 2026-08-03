@@ -20,22 +20,28 @@ class GreetingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // One word per line, each in a generously-tall fixed-height row —
+    // Transform.scale grows a word's paint bounds without affecting
+    // layout, so without this a scaled word can bleed into whichever
+    // neighbour shares its line. A tall dedicated row per word gives
+    // that growth somewhere to go.
     return ExcludeSemantics(
       child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 12,
-          runSpacing: 8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             for (var i = 0; i < words.length; i++)
-              _buildWord(context, i, words[i]),
+              SizedBox(
+                height: SplashConfig.wordLineHeight,
+                child: Center(child: _buildWord(i, words[i])),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildWord(BuildContext context, int index, String word) {
+  Widget _buildWord(int index, String word) {
     final frame = GreetingTimeline.frameFor(
       index,
       words.length,
@@ -49,11 +55,17 @@ class GreetingOverlay extends StatelessWidget {
         scale: frame.scale,
         child: Text(
           word,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.accent,
             fontSize: SplashConfig.textFontSize,
             fontWeight: FontWeight.w600,
             letterSpacing: SplashConfig.textLetterSpacing,
+            shadows: [
+              Shadow(
+                color: AppColors.accent.withValues(alpha: 0.4),
+                blurRadius: SplashConfig.textShadowBlurRadius,
+              ),
+            ],
           ),
         ),
       ),

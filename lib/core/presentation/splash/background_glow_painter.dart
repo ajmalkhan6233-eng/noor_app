@@ -36,7 +36,7 @@ class BackgroundGlowPainter extends CustomPainter {
       2 * math.pi * elapsedSeconds / SplashConfig.glowBreathPeriodSeconds,
     );
     final glowRadius = maxRadius *
-        (SplashConfig.glowBaseRadiusFraction +
+        (SplashConfig.nurRadius +
             SplashConfig.glowAmplitudeFraction * breath);
     final glowOpacity =
         SplashConfig.glowPeakOpacity * (0.7 + 0.3 * breath.abs());
