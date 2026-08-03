@@ -19,4 +19,19 @@ abstract final class AppStrings {
   static const String tasbihScreenTitle = 'Tasbih';
   static const String tasbihCounterSemanticLabel = 'Tasbih counter';
   static const String tasbihResetSemanticLabel = 'Reset tasbih count';
+
+  // Prayer times
+  static const String prayerTimesScreenTitle = 'Prayer Times';
+  static const String useGpsSemanticLabel = 'Use my current location';
+  static const String manualLatitudeSemanticLabel = 'Manual latitude entry';
+  static const String manualLongitudeSemanticLabel = 'Manual longitude entry';
+  static const String applyManualLocationSemanticLabel =
+      'Apply manual coordinates';
+  static const String calculationMethodSemanticLabel =
+      'Prayer time calculation method';
+  static const String madhabSemanticLabel = 'Asr madhab';
+  static const String highLatitudeUnresolvedMessage =
+      'No genuine Isha (or Fajr) time exists for this location and date — '
+      'the sun does not reach the required angle. Showing an estimated '
+      'clock time here would be misleading, so none is shown.';
 }
