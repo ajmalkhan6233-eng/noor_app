@@ -1,0 +1,200 @@
+# Bismillahir Rahmanir Raheem - watermark: ALLAH
+# noor - build pipeline (v7).
+#
+# Builds the release APK and publishes it as a GitHub Release.
+#
+# Unit tests are BLOCKING. A wrong qibla bearing must not ship.
+
+name: Build Noor Android APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Scaffold and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub and Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: noor-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: noor-${{ runner.os }}-
+
+      - name: Ensure asset folders exist
+        run: mkdir -p assets/database
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Analyse
+        continue-on-error: true
+        run: flutter analyze --no-fatal-infos 2>&1 | tail -n 50
+
+      - name: Unit tests (BLOCKING - qibla accuracy)
+        run: |
+          set -o pipefail
+          flutter test 2>&1 | tee /tmp/test.log
+
+      - name: Guard - 150 line limit
+        continue-on-error: true
+        run: |
+          while IFS= read -r f; do
+            N=$(wc -l < "$f")
+            [ "$N" -gt 150 ] && echo "::warning file=$f::$N lines"
+          done < <(find lib -name '*.dart')
+          echo "line check complete"
+
+      - name: Guard - offline first
+        continue-on-error: true
+        run: |
+          if grep -rnE "package:(http|dio|firebase|sentry|mixpanel)" lib/; then
+            echo "::warning::networking or analytics package in lib/"
+          else
+            echo "offline-first intact"
+          fi
+
+      - name: Pass 1 - Flutter Gradle migration
+        run: timeout 900 flutter build apk --release 2>&1 | tail -n 12 || true
+
+      - name: Append build overrides
+        run: |
+          cat > /tmp/append_override.sh <<'APPENDER'
+          #!/bin/bash
+          # Append an override block to android/app/build.gradle.kts.
+          # Kotlin DSL allows configuring the `android` extension more than once,
+          # so a second block simply overrides values from the first. No regex,
+          # nothing to fail to match.
+          set -e
+          F=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          if [ -z "$F" ]; then
+            echo "::error::No android/app/build.gradle[.kts] found"
+            exit 1
+          fi
+
+          if grep -q "NOOR_BUILD_OVERRIDES" "$F"; then
+            echo "Overrides already present in $F"
+            exit 0
+          fi
+
+          if [ "${F##*.}" = "kts" ]; then
+            cat >> "$F" << 'KTS'
+
+          // --- NOOR_BUILD_OVERRIDES ---
+          // Appended by CI. Kotlin DSL permits configuring the android extension
+          // more than once; this block runs after the one above and wins.
+          // compileSdk 36 is required by geolocator_android,
+          // shared_preferences_android and sqflite_sqlcipher.
+          android {
+              compileSdk = 36
+              defaultConfig {
+                  minSdk = 23
+              }
+              compileOptions {
+                  isCoreLibraryDesugaringEnabled = true
+              }
+          }
+
+          dependencies {
+              coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+          }
+          KTS
+          else
+            cat >> "$F" << 'GROOVY'
+
+          // --- NOOR_BUILD_OVERRIDES ---
+          android {
+              compileSdk 36
+              defaultConfig {
+                  minSdkVersion 23
+              }
+              compileOptions {
+                  coreLibraryDesugaringEnabled true
+              }
+          }
+
+          dependencies {
+              coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+          }
+          GROOVY
+          fi
+          echo "Overrides appended to $F"
+          APPENDER
+          bash /tmp/append_override.sh
+          F=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          echo "GRADLE_FILE=$F" >> "$GITHUB_ENV"
+          grep -q "compileSdk = 36" "$F" || grep -q "compileSdk 36" "$F" || {
+            echo "::error::override block missing"; exit 1; }
+          echo "compileSdk 36 verified"
+
+      - name: Pass 2 - build release APK
+        run: |
+          set -o pipefail
+          flutter build apk --release --no-pub \
+            --build-number ${{ github.run_number }} 2>&1 | tee /tmp/build.log
+
+      - name: Publish GitHub Release
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp build/app/outputs/flutter-apk/app-release.apk \
+             "noor-v${{ github.run_number }}.apk"
+          gh release create "build-${{ github.run_number }}" \
+            "noor-v${{ github.run_number }}.apk" \
+            --title "noor build ${{ github.run_number }}" \
+            --notes "Cosmic splash and qibla calculator. Debug-signed."
+
+      - name: Success summary
+        if: success()
+        run: |
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          {
+            echo "## noor build #${{ github.run_number }}"
+            echo ""
+            echo "APK built, tests passed, published as a Release."
+            echo ""
+            echo "- Size: $(du -h $APK | cut -f1)"
+            echo "- Download: Releases tab, tag build-${{ github.run_number }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Failure detail
+        if: failure()
+        run: |
+          {
+            echo "## Build failed"
+            echo ""
+            echo "### Test output"
+            echo '```'
+            tail -n 60 /tmp/test.log 2>/dev/null || echo "tests did not run"
+            echo '```'
+            echo ""
+            echo "### Build output"
+            echo '```'
+            tail -n 60 /tmp/build.log 2>/dev/null || echo "build did not run"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
