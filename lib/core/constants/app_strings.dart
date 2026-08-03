@@ -34,4 +34,15 @@ abstract final class AppStrings {
       'No genuine Isha (or Fajr) time exists for this location and date — '
       'the sun does not reach the required angle. Showing an estimated '
       'clock time here would be misleading, so none is shown.';
+
+  // Qibla
+  static const String qiblaScreenTitle = 'Qibla';
+  static const String qiblaNeedleSemanticLabel = 'Qibla direction needle';
+  static const String qiblaCalibrationPromptMessage =
+      'Compass reading is uncalibrated or unreliable — move your device '
+      'in a figure-eight motion to calibrate. The needle is dimmed until '
+      'then so it is never shown pointing confidently in a wrong direction.';
+  static const String qiblaNoCompassMessage =
+      'This device has no compass — showing the qibla bearing as a number '
+      'only.';
 }
