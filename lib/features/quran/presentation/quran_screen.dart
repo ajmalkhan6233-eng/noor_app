@@ -75,12 +75,18 @@ class _SurahIndex extends StatelessWidget {
         const QuranSearchBar(),
         const SizedBox(height: 12),
         if (state.lastRead != null)
-          TextButton(
-            onPressed: () => _open(context, state.lastRead!.surahId),
-            child: Text(
-              'Continue: Surah ${state.lastRead!.surahId}, '
-              'Ayah ${state.lastRead!.ayahNumber}',
-              style: const TextStyle(color: AppColors.accent),
+          Semantics(
+            label:
+                'Continue reading: Surah ${state.lastRead!.surahId}, '
+                'Ayah ${state.lastRead!.ayahNumber}',
+            button: true,
+            child: TextButton(
+              onPressed: () => _open(context, state.lastRead!.surahId),
+              child: Text(
+                'Continue: Surah ${state.lastRead!.surahId}, '
+                'Ayah ${state.lastRead!.ayahNumber}',
+                style: const TextStyle(color: AppColors.accent),
+              ),
             ),
           ),
         Expanded(
@@ -92,16 +98,22 @@ class _SurahIndex extends StatelessWidget {
                 SurahListTile(surah: surah, onTap: () => _open(context, surah.id)),
               if (state.searchQuery.isNotEmpty)
                 for (final ayah in state.searchResults)
-                  ListTile(
-                    onTap: () => _open(context, ayah.surahId),
-                    title: Text(
-                      ayah.arabicText,
-                      textDirection: TextDirection.rtl,
-                      style: const TextStyle(color: AppColors.textPrimary),
-                    ),
-                    subtitle: Text(
-                      'Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
-                      style: const TextStyle(color: AppColors.textSecondary),
+                  Semantics(
+                    label:
+                        'Search result: Surah ${ayah.surahId}, '
+                        'Ayah ${ayah.ayahNumber}',
+                    button: true,
+                    child: ListTile(
+                      onTap: () => _open(context, ayah.surahId),
+                      title: Text(
+                        ayah.arabicText,
+                        textDirection: TextDirection.rtl,
+                        style: const TextStyle(color: AppColors.textPrimary),
+                      ),
+                      subtitle: Text(
+                        'Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
+                        style: const TextStyle(color: AppColors.textSecondary),
+                      ),
                     ),
                   ),
             ],

@@ -47,7 +47,7 @@ class HapticCounterButton extends StatelessWidget {
           boxShadow: pulsing
               ? [
                   BoxShadow(
-                    color: AppColors.milestone.withOpacity(0.5),
+                    color: AppColors.milestone.withValues(alpha: 0.5),
                     blurRadius: 24,
                     spreadRadius: 2,
                   ),

@@ -56,9 +56,16 @@ class AboutDonateSection extends StatelessWidget {
           style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close', style: TextStyle(color: AppColors.accent)),
+          Semantics(
+            label: 'Close dialog',
+            button: true,
+            child: TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'Close',
+                style: TextStyle(color: AppColors.accent),
+              ),
+            ),
           ),
         ],
       ),
