@@ -32,11 +32,6 @@ class _AzkarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: const Text('Azkar'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

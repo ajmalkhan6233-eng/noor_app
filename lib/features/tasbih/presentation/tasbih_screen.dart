@@ -32,11 +32,6 @@ class _TasbihView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: const Text(AppStrings.tasbihScreenTitle),
-      ),
       body: BlocBuilder<TasbihCubit, TasbihState>(
         builder: (context, state) {
           return Center(

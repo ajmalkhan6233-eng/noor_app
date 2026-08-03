@@ -34,11 +34,6 @@ class _QiblaView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: const Text(AppStrings.qiblaScreenTitle),
-      ),
       body: Center(
         child: BlocBuilder<QiblaCubit, QiblaState>(
           builder: (context, state) => _buildBody(state),

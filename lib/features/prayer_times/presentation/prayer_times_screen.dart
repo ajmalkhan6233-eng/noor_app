@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
@@ -36,11 +35,6 @@ class _PrayerTimesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: const Text(AppStrings.prayerTimesScreenTitle),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(

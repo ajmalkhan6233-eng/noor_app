@@ -45,4 +45,9 @@ abstract final class AppStrings {
   static const String qiblaNoCompassMessage =
       'This device has no compass — showing the qibla bearing as a number '
       'only.';
+
+  // Quran / Azkar / Home nav
+  static const String quranScreenTitle = 'Quran';
+  static const String azkarScreenTitle = 'Azkar';
+  static const String settingsSemanticLabel = 'Settings';
 }

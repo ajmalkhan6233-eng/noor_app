@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:noor/app.dart';
 import 'package:noor/core/constants/splash_config.dart';
-import 'package:noor/features/tasbih/presentation/tasbih_screen.dart';
+import 'package:noor/features/home/presentation/home_dashboard.dart';
 
 void main() {
-  testWidgets('NoorApp shows the cosmic greeting then the Tasbih screen', (
+  testWidgets('NoorApp shows the cosmic greeting then the home dashboard', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const NoorApp());
@@ -25,6 +25,6 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byType(TasbihScreen), findsOneWidget);
+    expect(find.byType(HomeDashboard), findsOneWidget);
   });
 }
