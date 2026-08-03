@@ -8,14 +8,25 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
+import '../security/secure_passphrase_service.dart';
+import 'schema/azkar_schema.dart';
+import 'schema/quran_schema.dart';
+import 'schema/settings_schema.dart';
+import 'schema/tasbih_schema.dart';
+
 /// Singleton factory for the app's encrypted local database.
 ///
 /// Fully offline: the database file lives in the app's private storage
-/// directory and is never synced or transmitted anywhere.
+/// directory and is never synced or transmitted anywhere. Encrypted
+/// with a random passphrase generated on first launch and kept only
+/// in the OS Keystore/Keychain — see [SecurePassphraseService].
 class DatabaseHelper {
-  DatabaseHelper._internal();
+  DatabaseHelper._internal({SecurePassphraseService? passphraseService})
+    : _passphraseService = passphraseService ?? const SecurePassphraseService();
 
   static final DatabaseHelper instance = DatabaseHelper._internal();
+
+  final SecurePassphraseService _passphraseService;
 
   static const String _dbName = 'noor.db';
   static const int _dbVersion = 1;
@@ -34,14 +45,7 @@ class DatabaseHelper {
   Future<Database> _open() async {
     final dir = await getDatabasesPath();
     final path = join(dir, _dbName);
-
-    // NOTE: replace `_passphrase` with a passphrase pulled from secure
-    // platform storage (e.g. flutter_secure_storage) before shipping —
-    // never hardcode the real passphrase in source.
-    const passphrase = String.fromEnvironment(
-      'NOOR_DB_PASSPHRASE',
-      defaultValue: 'change-me-before-release',
-    );
+    final passphrase = await _passphraseService.getOrCreatePassphrase();
 
     return openDatabase(
       path,
@@ -52,15 +56,17 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE tasbih_sessions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        dhikr_label TEXT NOT NULL,
-        count INTEGER NOT NULL DEFAULT 0,
-        target INTEGER,
-        updated_at TEXT NOT NULL
-      )
-    ''');
+    for (final statement in [
+      ...tasbihCreateStatements,
+      ...settingsCreateStatements,
+      ...azkarCreateStatements,
+      ...quranCreateStatements,
+    ]) {
+      await db.execute(statement);
+    }
+    for (final statement in azkarSeedStatements) {
+      await db.execute(statement);
+    }
   }
 
   /// Closes the database (mainly useful for tests).
