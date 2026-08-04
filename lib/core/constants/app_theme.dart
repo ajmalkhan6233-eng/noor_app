@@ -17,6 +17,12 @@ ThemeData buildAppTheme() {
     useMaterial3: true,
     brightness: Brightness.light,
     fontFamily: AppTypography.bodyFamily,
+    // Falls back to the bundled Noto Sans Tamil/Sinhala faces for any
+    // glyph Inter can't render — the mechanism that makes Tamil/
+    // Sinhala UI chrome display correctly without per-widget locale
+    // checks. Arabic text always sets AppTypography.arabicFamily
+    // explicitly, so this fallback never touches it.
+    fontFamilyFallback: AppTypography.uiFontFallback,
     scaffoldBackgroundColor: AppColors.paper,
     canvasColor: AppColors.paper,
     cardColor: AppColors.card,

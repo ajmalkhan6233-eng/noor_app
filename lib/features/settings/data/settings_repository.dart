@@ -9,6 +9,7 @@ import '../../prayer_times/data/prayer_adjustments.dart';
 import '../../prayer_times/data/prayer_high_latitude_rule.dart';
 import '../../prayer_times/data/prayer_settings.dart';
 import '../../prayer_times/data/silent_mode_settings.dart';
+import 'app_locale.dart';
 import 'app_settings.dart';
 import 'app_theme_mode.dart';
 import 'notification_settings.dart';
@@ -72,6 +73,9 @@ class SettingsRepository {
         extraMinutesAfterIqamath: row['silent_extra_minutes']! as int,
       ),
       selectedDistrict: row['selected_district'] as String?,
+      locale: AppLocaleOptionData.fromLanguageCode(
+        row['language_code'] as String? ?? 'en',
+      ),
     );
   }
 
@@ -114,6 +118,7 @@ class SettingsRepository {
       'silent_isha': silent.isha ? 1 : 0,
       'silent_extra_minutes': silent.extraMinutesAfterIqamath,
       'selected_district': settings.selectedDistrict,
+      'language_code': settings.locale.languageCode,
     };
 
     final existing = await db.query('app_settings', where: 'id = 1');

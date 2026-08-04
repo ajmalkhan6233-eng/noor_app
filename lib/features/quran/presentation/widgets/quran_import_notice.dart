@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/empty_state.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/quran_import_status.dart';
 
 class QuranImportNotice extends StatelessWidget {
@@ -22,11 +23,10 @@ class QuranImportNotice extends StatelessWidget {
       return _ImportingProgress(progress: importing.progress);
     }
 
+    final l10n = AppLocalizations.of(context)!;
     final message = switch (status) {
-      QuranAssetMissing() => 'Add a Quran source file to enable this feature.',
-      QuranVerificationFailed() =>
-        'Reinstall or update the app to restore the Quran text — the '
-            'file on this device did not pass verification.',
+      QuranAssetMissing() => l10n.quranAssetMissingMessage,
+      QuranVerificationFailed() => l10n.quranVerificationFailedMessage,
       QuranImported() || QuranImporting() => '',
     };
 
@@ -41,19 +41,20 @@ class _ImportingProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final percent = (progress * 100).round();
     return Semantics(
       liveRegion: true,
-      label: 'Importing Quran text, $percent percent complete',
+      label: l10n.importingQuranProgressSemanticLabel(percent),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Importing Quran text…',
-                style: TextStyle(color: AppColors.sage),
+              Text(
+                l10n.importingQuranLabel,
+                style: const TextStyle(color: AppColors.sage),
               ),
               const SizedBox(height: 16),
               ClipRRect(

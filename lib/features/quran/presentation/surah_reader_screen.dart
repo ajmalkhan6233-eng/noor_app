@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/widgets/reading_position_tracker.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'widgets/ayah_tile.dart';
@@ -54,7 +55,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.paper,
         elevation: 0,
-        title: Text('Surah ${widget.surahId}'),
+        title: Text(AppLocalizations.of(context)!.surahReaderTitle(widget.surahId)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

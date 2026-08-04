@@ -37,7 +37,8 @@ const List<String> settingsCreateStatements = [
     silent_maghrib INTEGER NOT NULL DEFAULT 0,
     silent_isha INTEGER NOT NULL DEFAULT 0,
     silent_extra_minutes INTEGER NOT NULL DEFAULT 5,
-    selected_district TEXT
+    selected_district TEXT,
+    language_code TEXT NOT NULL DEFAULT 'en'
   )
   ''',
 ];

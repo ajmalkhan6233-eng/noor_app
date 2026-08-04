@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/dhikr_option.dart';
 import '../../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../../logic/tasbih_cubit/tasbih_state.dart';
@@ -19,7 +20,7 @@ class DhikrSelector extends StatelessWidget {
     return BlocBuilder<TasbihCubit, TasbihState>(
       builder: (context, state) {
         return Semantics(
-          label: 'Dhikr to count',
+          label: AppLocalizations.of(context)!.dhikrSelectorSemanticLabel,
           value: state.dhikrLabel,
           child: DropdownButton<String>(
             value: state.dhikrLabel,

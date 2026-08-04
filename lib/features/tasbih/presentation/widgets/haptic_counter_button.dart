@@ -5,9 +5,9 @@
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 /// Large, accessible circular counter button used by the tasbih screen.
 class HapticCounterButton extends StatelessWidget {
@@ -27,12 +27,10 @@ class HapticCounterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SemanticButton(
-      label: semanticCountLabel(
-        AppStrings.tasbihCounterSemanticLabel,
-        count,
-      ),
-      hint: 'Double tap to increment',
+      label: semanticCountLabel(l10n.tasbihCounterSemanticLabel, count),
+      hint: l10n.tasbihIncrementHint,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

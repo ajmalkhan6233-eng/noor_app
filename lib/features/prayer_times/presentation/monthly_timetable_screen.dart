@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/location/location_service.dart';
 import '../../../core/presentation/widgets/app_card.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../data/prayer_settings.dart';
 import '../logic/monthly_timetable_cubit/monthly_timetable_cubit.dart';
 import '../logic/monthly_timetable_cubit/monthly_timetable_state.dart';
@@ -50,7 +50,9 @@ class _MonthlyTimetableView extends StatelessWidget {
     final today = DateTime.now();
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text(AppStrings.monthlyTimetableScreenTitle)),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.monthlyTimetableScreenTitle),
+      ),
       body: BlocBuilder<MonthlyTimetableCubit, MonthlyTimetableState>(
         builder: (context, state) {
           if (state.days.isEmpty) {

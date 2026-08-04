@@ -11,6 +11,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/empty_state.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
@@ -20,16 +21,16 @@ class BookmarksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text('Bookmarks')),
+      appBar: AppBar(title: Text(l10n.bookmarksLabel)),
       body: BlocBuilder<QuranCubit, QuranState>(
         builder: (context, state) {
           if (state.bookmarks.isEmpty) {
-            return const EmptyState(
+            return EmptyState(
               icon: Icons.bookmark_border,
-              message: 'No bookmarks yet — tap the bookmark icon on any '
-                  'ayah while reading to save it here.',
+              message: l10n.noBookmarksMessage,
             );
           }
           return ListView.separated(
@@ -38,13 +39,15 @@ class BookmarksScreen extends StatelessWidget {
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final bookmark = state.bookmarks[index];
-              final label =
-                  'Surah ${bookmark.surahId}, Ayah ${bookmark.ayahNumber}';
+              final label = l10n.surahAyahLabel(
+                bookmark.surahId,
+                bookmark.ayahNumber,
+              );
               return AppCard(
                 padding: EdgeInsets.zero,
                 child: SemanticButton(
                   label: label,
-                  hint: 'Double tap to open',
+                  hint: l10n.openHint,
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (_) => BlocProvider.value(

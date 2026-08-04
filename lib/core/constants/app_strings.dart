@@ -1,7 +1,10 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Global user-facing strings. Keeping these centralized avoids typos
-// scattered across widgets and makes future localization easier.
+// Non-translatable constants: the app's name and the mandatory Arabic
+// splash invocation, which must render identically regardless of the
+// selected UI language (see `.clinerules` — religious text is never
+// localized). Every translatable UI-chrome string lives in the ARB
+// files under `lib/l10n/` and is read via `AppLocalizations`.
 
 /// Static string constants for `noor`.
 abstract final class AppStrings {
@@ -9,50 +12,10 @@ abstract final class AppStrings {
   static const String appName = 'noor';
 
   /// Mandatory splash-screen greeting, shown in full caps on launch.
+  /// A religious invocation, not UI chrome — never translated.
   static const String splashGreeting = 'BISMILLAHIR RAHMANIR RAHEEM';
 
   /// Internal project watermark. Not shown in the UI; used only in
   /// source-file header comments per `.clinerules` §7.
   static const String watermark = 'ALLAH';
-
-  // Tasbih
-  static const String tasbihScreenTitle = 'Tasbih';
-  static const String tasbihCounterSemanticLabel = 'Tasbih counter';
-  static const String tasbihResetSemanticLabel = 'Reset tasbih count';
-
-  // Prayer times
-  static const String prayerTimesScreenTitle = 'Prayer Times';
-  static const String useGpsSemanticLabel = 'Use my current location';
-  static const String manualLatitudeSemanticLabel = 'Manual latitude entry';
-  static const String manualLongitudeSemanticLabel = 'Manual longitude entry';
-  static const String applyManualLocationSemanticLabel =
-      'Apply manual coordinates';
-  static const String calculationMethodSemanticLabel =
-      'Prayer time calculation method';
-  static const String madhabSemanticLabel = 'Asr madhab';
-  static const String highLatitudeUnresolvedMessage =
-      'No genuine Isha (or Fajr) time exists for this location and date — '
-      'the sun does not reach the required angle. Showing an estimated '
-      'clock time here would be misleading, so none is shown.';
-  static const String monthlyTimetableScreenTitle = 'Monthly Timetable';
-  static const String openMonthlyTimetableSemanticLabel =
-      'Open monthly prayer timetable';
-  static const String districtSelectorSemanticLabel =
-      'Select a Sri Lankan district';
-
-  // Qibla
-  static const String qiblaScreenTitle = 'Qibla';
-  static const String qiblaNeedleSemanticLabel = 'Qibla direction needle';
-  static const String qiblaCalibrationPromptMessage =
-      'Compass reading is uncalibrated or unreliable — move your device '
-      'in a figure-eight motion to calibrate. The needle is dimmed until '
-      'then so it is never shown pointing confidently in a wrong direction.';
-  static const String qiblaNoCompassMessage =
-      'This device has no compass — showing the qibla bearing as a number '
-      'only.';
-
-  // Quran / Azkar / Home nav
-  static const String quranScreenTitle = 'Quran';
-  static const String azkarScreenTitle = 'Azkar';
-  static const String settingsSemanticLabel = 'Settings';
 }

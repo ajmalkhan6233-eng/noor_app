@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../data/quran_import_status.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
@@ -31,17 +31,18 @@ class _QuranView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
       appBar: AppBar(
-        title: const Text(AppStrings.quranScreenTitle),
+        title: Text(l10n.quranScreenTitle),
         actions: [
           Semantics(
-            label: 'Bookmarks',
+            label: l10n.bookmarksLabel,
             button: true,
             child: IconButton(
               icon: const Icon(Icons.bookmark_outline),
-              tooltip: 'Bookmarks',
+              tooltip: l10n.bookmarksLabel,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder: (_) => BlocProvider.value(

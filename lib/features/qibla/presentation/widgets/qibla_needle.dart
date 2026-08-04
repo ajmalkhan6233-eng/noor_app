@@ -8,7 +8,7 @@
 // tilts subtly with the accelerometer via a perspective transform.
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'compass_face_painter.dart';
 
 class QiblaNeedle extends StatelessWidget {
@@ -28,7 +28,7 @@ class QiblaNeedle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label =
-        '${AppStrings.qiblaNeedleSemanticLabel}: '
+        '${AppLocalizations.of(context)!.qiblaNeedleSemanticLabel}: '
         '${rotationDegrees.round()} degrees from facing direction'
         '${dimmed ? ', low confidence' : ''}';
 

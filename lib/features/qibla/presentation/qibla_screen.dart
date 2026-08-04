@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../core/sensors/compass_reading.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../logic/qibla_cubit/qibla_cubit.dart';
 import '../logic/qibla_cubit/qibla_state.dart';
 import 'widgets/calibration_prompt.dart';
@@ -50,17 +50,18 @@ class _QiblaViewState extends State<_QiblaView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
       appBar: AppBar(
-        title: const Text(AppStrings.qiblaScreenTitle),
+        title: Text(l10n.qiblaScreenTitle),
         actions: [
           Semantics(
-            label: 'Recentre compass',
+            label: l10n.recentreCompassLabel,
             button: true,
             child: IconButton(
               icon: const Icon(Icons.center_focus_strong_outlined),
-              tooltip: 'Recentre compass',
+              tooltip: l10n.recentreCompassLabel,
               onPressed: _compassPosition.reset,
             ),
           ),

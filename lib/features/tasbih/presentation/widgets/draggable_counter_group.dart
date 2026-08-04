@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/draggable_floating.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'haptic_counter_button.dart';
 
 class DraggableCounterGroup extends StatelessWidget {
@@ -35,7 +36,9 @@ class DraggableCounterGroup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Semantics(
-              label: 'Currently counting $dhikrLabel',
+              label: AppLocalizations.of(
+                context,
+              )!.currentlyCountingLabel(dhikrLabel),
               child: Text(
                 dhikrLabel,
                 textAlign: TextAlign.center,

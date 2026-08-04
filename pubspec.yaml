@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
 
   # State management
   flutter_bloc: ^8.1.3
@@ -43,6 +46,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/database/
     - assets/quran/
@@ -63,3 +67,9 @@ flutter:
         - asset: assets/fonts/Amiri/Amiri-Regular.ttf
         - asset: assets/fonts/Amiri/Amiri-Bold.ttf
           weight: 700
+    - family: Noto Sans Tamil
+      fonts:
+        - asset: assets/fonts/NotoSansTamil/NotoSansTamil-VariableFont_wdth,wght.ttf
+    - family: Noto Sans Sinhala
+      fonts:
+        - asset: assets/fonts/NotoSansSinhala/NotoSansSinhala-VariableFont_wdth,wght.ttf

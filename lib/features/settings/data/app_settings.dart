@@ -7,6 +7,7 @@
 import '../../prayer_times/data/iqamath_offsets.dart';
 import '../../prayer_times/data/prayer_settings.dart';
 import '../../prayer_times/data/silent_mode_settings.dart';
+import 'app_locale.dart';
 import 'app_theme_mode.dart';
 import 'notification_settings.dart';
 
@@ -21,11 +22,15 @@ class AppSettings {
     this.iqamathOffsets = const IqamathOffsetMinutes(),
     this.silentMode = const SilentModeSettings(),
     this.selectedDistrict,
+    this.locale = AppLocaleOption.english,
   });
 
   final PrayerSettings prayerSettings;
   final NotificationSettings notifications;
   final AppThemeModeOption themeMode;
+
+  /// UI chrome language — never affects Arabic/Quran/Azkar text.
+  final AppLocaleOption locale;
 
   /// Minutes added after each adhan to get the iqamath time, shown as
   /// a second column beside the adhan time.
@@ -61,6 +66,7 @@ class AppSettings {
     String? locationLabel,
     IqamathOffsetMinutes? iqamathOffsets,
     SilentModeSettings? silentMode,
+    AppLocaleOption? locale,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -72,6 +78,7 @@ class AppSettings {
       iqamathOffsets: iqamathOffsets ?? this.iqamathOffsets,
       silentMode: silentMode ?? this.silentMode,
       selectedDistrict: selectedDistrict,
+      locale: locale ?? this.locale,
     );
   }
 
@@ -89,6 +96,7 @@ class AppSettings {
       iqamathOffsets: iqamathOffsets,
       silentMode: silentMode,
       selectedDistrict: district,
+      locale: locale,
     );
   }
 }

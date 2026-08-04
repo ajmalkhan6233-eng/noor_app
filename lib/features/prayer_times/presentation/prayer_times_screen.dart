@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
@@ -56,13 +56,14 @@ class _PrayerTimesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<PrayerCubit, PrayerState>(
       builder: (context, state) => CollapsingScaffold(
-        title: AppStrings.prayerTimesScreenTitle,
+        title: l10n.prayerTimesScreenTitle,
         actions: [
           Semantics(
             button: true,
-            label: AppStrings.openMonthlyTimetableSemanticLabel,
+            label: l10n.openMonthlyTimetableSemanticLabel,
             child: IconButton(
               icon: const Icon(Icons.calendar_month_outlined),
               onPressed: state.hasCoordinates
@@ -77,13 +78,13 @@ class _PrayerTimesView extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: StaggeredFadeIn(
                 children: [
-                  _buildResult(state),
+                  _buildResult(context, state),
                   const SizedBox(height: 16),
                   const LocationSelector(),
                   const SizedBox(height: 16),
                   const DistrictSelector(),
                   const SizedBox(height: 16),
-                  _activeSettingsCaption(state.settings),
+                  _activeSettingsCaption(context, state.settings),
                 ],
               ),
             ),
@@ -93,22 +94,24 @@ class _PrayerTimesView extends StatelessWidget {
     );
   }
 
-  Widget _activeSettingsCaption(PrayerSettings settings) {
+  Widget _activeSettingsCaption(BuildContext context, PrayerSettings settings) {
     final text = '${settings.method.label} · ${settings.madhab.label} madhab';
     return Center(
       child: Semantics(
-        label: 'Active calculation settings: $text',
+        label: AppLocalizations.of(
+          context,
+        )!.activeCalculationSettingsLabel(text),
         child: Text(text, style: AppTypography.caption),
       ),
     );
   }
 
-  Widget _buildResult(PrayerState state) {
+  Widget _buildResult(BuildContext context, PrayerState state) {
     final result = state.result;
     return switch (result) {
-      null => const Center(
+      null => Center(
         child: Text(
-          'Enter your location to see prayer times.',
+          AppLocalizations.of(context)!.enterLocationPrompt,
           style: AppTypography.caption,
         ),
       ),

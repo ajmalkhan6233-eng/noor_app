@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 import '../../data/sri_lanka_district.dart';
@@ -31,21 +31,20 @@ class DistrictSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         final selected = state.settings.selectedDistrict;
         return AppCard(
           child: Semantics(
-            label: AppStrings.districtSelectorSemanticLabel,
-            value: selected ?? 'None selected',
+            label: l10n.districtSelectorSemanticLabel,
+            value: selected ?? l10n.noneSelectedLabel,
             child: DropdownButtonFormField<String>(
               initialValue: selected,
               isExpanded: true,
-              decoration: const InputDecoration(
-                labelText: 'Sri Lankan district (optional)',
-              ),
+              decoration: InputDecoration(labelText: l10n.districtFieldLabel),
               dropdownColor: AppColors.card,
-              hint: const Text('Choose a district'),
+              hint: Text(l10n.chooseDistrictHint),
               items: [
                 for (final district in sriLankaDistricts)
                   DropdownMenuItem(

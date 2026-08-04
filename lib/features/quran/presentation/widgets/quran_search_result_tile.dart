@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/quran_ayah.dart';
 
 class QuranSearchResultTile extends StatelessWidget {
@@ -22,9 +23,10 @@ class QuranSearchResultTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SemanticButton(
-      label: 'Search result: Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
-      hint: 'Double tap to open',
+      label: l10n.searchResultSemanticLabel(ayah.surahId, ayah.ayahNumber),
+      hint: l10n.openHint,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -41,7 +43,7 @@ class QuranSearchResultTile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
+              l10n.surahAyahLabel(ayah.surahId, ayah.ayahNumber),
               style: AppTypography.caption,
             ),
           ],

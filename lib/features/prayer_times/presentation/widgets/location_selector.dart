@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../logic/prayer_cubit/prayer_cubit.dart';
 import '../../logic/prayer_cubit/prayer_state.dart';
@@ -49,6 +49,7 @@ class _LocationSelectorState extends State<LocationSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<PrayerCubit, PrayerState>(
       builder: (context, state) {
         return AppCard(
@@ -56,15 +57,15 @@ class _LocationSelectorState extends State<LocationSelector> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SemanticButton(
-                label: AppStrings.useGpsSemanticLabel,
-                hint: 'Double tap to resolve your location via GPS',
+                label: l10n.useGpsSemanticLabel,
+                hint: l10n.useGpsHint,
                 onTap: () => _useGps(context),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Text(
                     state.isResolvingLocation
-                        ? 'Locating…'
-                        : 'Use my location',
+                        ? l10n.locatingLabel
+                        : l10n.useMyLocationLabel,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: AppColors.emerald),
                   ),
@@ -73,21 +74,30 @@ class _LocationSelectorState extends State<LocationSelector> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(child: _field(_latController, 'Latitude', true)),
+                  Expanded(
+                    child: _field(context, _latController, l10n.latitudeLabel, true),
+                  ),
                   const SizedBox(width: 8),
-                  Expanded(child: _field(_lngController, 'Longitude', false)),
+                  Expanded(
+                    child: _field(
+                      context,
+                      _lngController,
+                      l10n.longitudeLabel,
+                      false,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
               SemanticButton(
-                label: AppStrings.applyManualLocationSemanticLabel,
+                label: l10n.applyManualLocationSemanticLabel,
                 onTap: () => _applyManual(context),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Text(
-                    'Apply coordinates',
+                    l10n.applyCoordinatesLabel,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.ink),
+                    style: const TextStyle(color: AppColors.ink),
                   ),
                 ),
               ),
@@ -105,12 +115,18 @@ class _LocationSelectorState extends State<LocationSelector> {
     );
   }
 
-  Widget _field(TextEditingController controller, String label, bool isLat) {
+  Widget _field(
+    BuildContext context,
+    TextEditingController controller,
+    String label,
+    bool isLat,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
     return Semantics(
       textField: true,
       label: isLat
-          ? AppStrings.manualLatitudeSemanticLabel
-          : AppStrings.manualLongitudeSemanticLabel,
+          ? l10n.manualLatitudeSemanticLabel
+          : l10n.manualLongitudeSemanticLabel,
       child: TextField(
         controller: controller,
         style: const TextStyle(color: AppColors.ink),
