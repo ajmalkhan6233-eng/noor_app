@@ -6,8 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/presentation/widgets/empty_state.dart';
 import '../../data/quran_import_status.dart';
 
 class QuranImportNotice extends StatelessWidget {
@@ -25,28 +24,6 @@ class QuranImportNotice extends StatelessWidget {
       QuranImported() => '',
     };
 
-    return Semantics(
-      liveRegion: true,
-      label: message,
-      child: AppCard(
-        padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.menu_book_outlined,
-              color: AppColors.sage,
-              size: 40,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.sage),
-            ),
-          ],
-        ),
-      ),
-    );
+    return EmptyState(icon: Icons.menu_book_outlined, message: message);
   }
 }

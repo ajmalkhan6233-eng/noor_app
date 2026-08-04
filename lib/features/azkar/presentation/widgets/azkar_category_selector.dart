@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/presentation/widgets/app_chip.dart';
 import '../../data/azkar_category.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../../logic/azkar_cubit/azkar_state.dart';
@@ -24,22 +24,12 @@ class AzkarCategorySelector extends StatelessWidget {
               for (final category in AzkarCategory.values)
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: Semantics(
-                    label: '${category.label} azkar',
+                  child: AppChip(
+                    label: category.label,
+                    semanticLabel: '${category.label} azkar',
                     selected: state.category == category,
-                    child: ChoiceChip(
-                      label: Text(category.label),
-                      selected: state.category == category,
-                      selectedColor: AppColors.accent,
-                      backgroundColor: AppColors.surface,
-                      labelStyle: TextStyle(
-                        color: state.category == category
-                            ? AppColors.background
-                            : AppColors.textPrimary,
-                      ),
-                      onSelected: (_) =>
-                          context.read<AzkarCubit>().selectCategory(category),
-                    ),
+                    onTap: () =>
+                        context.read<AzkarCubit>().selectCategory(category),
                   ),
                 ),
             ],

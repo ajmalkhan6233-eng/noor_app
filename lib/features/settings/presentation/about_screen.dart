@@ -8,6 +8,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import 'licences_screen.dart';
 
 /// About page: app identity, bundled font credits, and licences.
 class AboutScreen extends StatelessWidget {
@@ -70,9 +71,10 @@ class AboutScreen extends StatelessWidget {
             child: SemanticButton(
               label: 'Open source licences',
               hint: 'Double tap to view third-party licences',
-              onTap: () => showLicensePage(
-                context: context,
-                applicationName: AppStrings.appName,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const LicencesScreen(),
+                ),
               ),
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
