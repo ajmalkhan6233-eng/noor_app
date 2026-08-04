@@ -4,9 +4,11 @@
 // row (`id = 1`); loading before any save exists returns the defaults.
 
 import '../../../core/database/database_helper.dart';
+import '../../prayer_times/data/iqamath_offsets.dart';
 import '../../prayer_times/data/prayer_adjustments.dart';
 import '../../prayer_times/data/prayer_high_latitude_rule.dart';
 import '../../prayer_times/data/prayer_settings.dart';
+import '../../prayer_times/data/silent_mode_settings.dart';
 import 'app_settings.dart';
 import 'app_theme_mode.dart';
 import 'notification_settings.dart';
@@ -54,6 +56,22 @@ class SettingsRepository {
       arabicFontScale: row['arabic_font_scale']! as double,
       hijriOffsetDays: row['hijri_offset_days']! as int,
       locationLabel: row['location_label'] as String?,
+      iqamathOffsets: IqamathOffsetMinutes(
+        fajr: row['iqamath_fajr_minutes']! as int,
+        dhuhr: row['iqamath_dhuhr_minutes']! as int,
+        asr: row['iqamath_asr_minutes']! as int,
+        maghrib: row['iqamath_maghrib_minutes']! as int,
+        isha: row['iqamath_isha_minutes']! as int,
+      ),
+      silentMode: SilentModeSettings(
+        fajr: (row['silent_fajr']! as int) != 0,
+        dhuhr: (row['silent_dhuhr']! as int) != 0,
+        asr: (row['silent_asr']! as int) != 0,
+        maghrib: (row['silent_maghrib']! as int) != 0,
+        isha: (row['silent_isha']! as int) != 0,
+        extraMinutesAfterIqamath: row['silent_extra_minutes']! as int,
+      ),
+      selectedDistrict: row['selected_district'] as String?,
     );
   }
 
@@ -61,6 +79,8 @@ class SettingsRepository {
     final db = await _dbHelper.database;
     final prayer = settings.prayerSettings;
     final notify = settings.notifications;
+    final iqamath = settings.iqamathOffsets;
+    final silent = settings.silentMode;
 
     final values = {
       'id': 1,
@@ -82,6 +102,18 @@ class SettingsRepository {
       'arabic_font_scale': settings.arabicFontScale,
       'hijri_offset_days': settings.hijriOffsetDays,
       'location_label': settings.locationLabel,
+      'iqamath_fajr_minutes': iqamath.fajr,
+      'iqamath_dhuhr_minutes': iqamath.dhuhr,
+      'iqamath_asr_minutes': iqamath.asr,
+      'iqamath_maghrib_minutes': iqamath.maghrib,
+      'iqamath_isha_minutes': iqamath.isha,
+      'silent_fajr': silent.fajr ? 1 : 0,
+      'silent_dhuhr': silent.dhuhr ? 1 : 0,
+      'silent_asr': silent.asr ? 1 : 0,
+      'silent_maghrib': silent.maghrib ? 1 : 0,
+      'silent_isha': silent.isha ? 1 : 0,
+      'silent_extra_minutes': silent.extraMinutesAfterIqamath,
+      'selected_district': settings.selectedDistrict,
     };
 
     final existing = await db.query('app_settings', where: 'id = 1');

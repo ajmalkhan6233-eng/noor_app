@@ -10,6 +10,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../logic/prayer_cubit/prayer_cubit.dart';
 import '../../logic/prayer_cubit/prayer_state.dart';
 
@@ -38,6 +39,12 @@ class _LocationSelectorState extends State<LocationSelector> {
     final lng = double.tryParse(_lngController.text);
     if (lat == null || lng == null) return;
     context.read<PrayerCubit>().setManualLocation(lat, lng);
+    context.read<SettingsCubit>().setSelectedDistrict(null);
+  }
+
+  void _useGps(BuildContext context) {
+    context.read<PrayerCubit>().useGps();
+    context.read<SettingsCubit>().setSelectedDistrict(null);
   }
 
   @override
@@ -51,7 +58,7 @@ class _LocationSelectorState extends State<LocationSelector> {
               SemanticButton(
                 label: AppStrings.useGpsSemanticLabel,
                 hint: 'Double tap to resolve your location via GPS',
-                onTap: () => context.read<PrayerCubit>().useGps(),
+                onTap: () => _useGps(context),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Text(

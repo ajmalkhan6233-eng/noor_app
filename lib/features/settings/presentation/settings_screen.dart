@@ -12,8 +12,10 @@ import '../logic/settings_cubit/settings_state.dart';
 import 'widgets/about_donate_section.dart';
 import 'widgets/display_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
+import 'widgets/iqamath_offset_section.dart';
 import 'widgets/method_madhab_section.dart';
 import 'widgets/prayer_adjustments_section.dart';
+import 'widgets/silent_mode_section.dart';
 
 /// Settings: calculation preferences and display. Notification
 /// toggles live on the Home dashboard, not buried here.
@@ -62,6 +64,12 @@ class _SettingsView extends StatelessWidget {
                   SizedBox(height: 16),
                   SectionHeader('Manual adjustments (minutes)'),
                   AppCard(child: PrayerAdjustmentsSection()),
+                  SizedBox(height: 16),
+                  SectionHeader('Iqamath offsets (minutes after adhan)'),
+                  AppCard(child: IqamathOffsetSection()),
+                  SizedBox(height: 16),
+                  SectionHeader('Silent mode'),
+                  AppCard(child: SilentModeSection()),
                   SizedBox(height: 16),
                   SectionHeader('Display'),
                   AppCard(child: DisplaySection()),

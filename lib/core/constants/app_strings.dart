@@ -34,6 +34,11 @@ abstract final class AppStrings {
       'No genuine Isha (or Fajr) time exists for this location and date — '
       'the sun does not reach the required angle. Showing an estimated '
       'clock time here would be misleading, so none is shown.';
+  static const String monthlyTimetableScreenTitle = 'Monthly Timetable';
+  static const String openMonthlyTimetableSemanticLabel =
+      'Open monthly prayer timetable';
+  static const String districtSelectorSemanticLabel =
+      'Select a Sri Lankan district';
 
   // Qibla
   static const String qiblaScreenTitle = 'Qibla';

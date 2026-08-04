@@ -7,16 +7,20 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
 import 'prayer_time_format.dart';
 
 /// The five daily prayers plus sunrise, in chronological order. The
 /// prayer currently in effect carries a thin gold left rule — the
-/// only colour accent in an otherwise quiet list.
+/// only colour accent in an otherwise quiet list. When [iqamathOffsets]
+/// is supplied, each prayer (never sunrise) also shows its iqamath
+/// time beside the adhan time.
 class PrayerTimesList extends StatefulWidget {
-  const PrayerTimesList({super.key, required this.times});
+  const PrayerTimesList({super.key, required this.times, this.iqamathOffsets});
 
   final PrayerTimesComputed times;
+  final IqamathOffsetMinutes? iqamathOffsets;
 
   @override
   State<PrayerTimesList> createState() => _PrayerTimesListState();
@@ -63,7 +67,15 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
   }
 
   Widget _row(String name, DateTime time, bool isCurrent) {
-    final label = '$name: ${formatClock(time)}${isCurrent ? ', current' : ''}';
+    final offsets = widget.iqamathOffsets;
+    final showIqamath = offsets != null && name != 'Sunrise';
+    final iqamathTime = showIqamath
+        ? time.add(Duration(minutes: offsets.forPrayer(name)))
+        : null;
+    final label =
+        '$name: ${formatClock(time)}'
+        '${iqamathTime != null ? ', iqamath ${formatClock(iqamathTime)}' : ''}'
+        '${isCurrent ? ', current' : ''}';
     return Semantics(
       label: label,
       child: Container(
@@ -81,7 +93,19 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(name, style: const TextStyle(color: AppColors.ink)),
-            Text(formatClock(time), style: AppTypography.time),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(formatClock(time), style: AppTypography.time),
+                if (iqamathTime != null) ...[
+                  const SizedBox(width: 10),
+                  Text(
+                    formatClock(iqamathTime),
+                    style: AppTypography.caption,
+                  ),
+                ],
+              ],
+            ),
           ],
         ),
       ),

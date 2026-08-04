@@ -4,7 +4,9 @@
 // or calculation preferences from — one explicit object, never
 // scattered defaults.
 
+import '../../prayer_times/data/iqamath_offsets.dart';
 import '../../prayer_times/data/prayer_settings.dart';
+import '../../prayer_times/data/silent_mode_settings.dart';
 import 'app_theme_mode.dart';
 import 'notification_settings.dart';
 
@@ -16,11 +18,26 @@ class AppSettings {
     this.arabicFontScale = 1.0,
     this.hijriOffsetDays = 0,
     this.locationLabel,
+    this.iqamathOffsets = const IqamathOffsetMinutes(),
+    this.silentMode = const SilentModeSettings(),
+    this.selectedDistrict,
   });
 
   final PrayerSettings prayerSettings;
   final NotificationSettings notifications;
   final AppThemeModeOption themeMode;
+
+  /// Minutes added after each adhan to get the iqamath time, shown as
+  /// a second column beside the adhan time.
+  final IqamathOffsetMinutes iqamathOffsets;
+
+  /// Per-prayer "silence the phone" toggles plus the extra minutes
+  /// kept silent after iqamath.
+  final SilentModeSettings silentMode;
+
+  /// Name of the selected Sri Lankan district (see [sriLankaDistricts]),
+  /// or `null` when the user is using GPS or manual coordinates.
+  final String? selectedDistrict;
 
   /// Scale factor applied to Arabic text throughout the app (Quran,
   /// Azkar) — `1.0` is the base design size.
@@ -42,6 +59,8 @@ class AppSettings {
     double? arabicFontScale,
     int? hijriOffsetDays,
     String? locationLabel,
+    IqamathOffsetMinutes? iqamathOffsets,
+    SilentModeSettings? silentMode,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -50,6 +69,26 @@ class AppSettings {
       arabicFontScale: arabicFontScale ?? this.arabicFontScale,
       hijriOffsetDays: hijriOffsetDays ?? this.hijriOffsetDays,
       locationLabel: locationLabel ?? this.locationLabel,
+      iqamathOffsets: iqamathOffsets ?? this.iqamathOffsets,
+      silentMode: silentMode ?? this.silentMode,
+      selectedDistrict: selectedDistrict,
+    );
+  }
+
+  /// Sets (or clears) the selected district explicitly — `copyWith`
+  /// can't distinguish "leave unchanged" from "set to null", so this
+  /// dedicated method exists for the one field that must support both.
+  AppSettings withSelectedDistrict(String? district) {
+    return AppSettings(
+      prayerSettings: prayerSettings,
+      notifications: notifications,
+      themeMode: themeMode,
+      arabicFontScale: arabicFontScale,
+      hijriOffsetDays: hijriOffsetDays,
+      locationLabel: locationLabel,
+      iqamathOffsets: iqamathOffsets,
+      silentMode: silentMode,
+      selectedDistrict: district,
     );
   }
 }

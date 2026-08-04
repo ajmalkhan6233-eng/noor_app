@@ -7,10 +7,13 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
+import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
 import '../logic/prayer_cubit/prayer_state.dart';
+import 'monthly_timetable_screen.dart';
+import 'widgets/district_selector.dart';
 import 'widgets/high_latitude_notice.dart';
 import 'widgets/location_selector.dart';
 import 'widgets/prayer_hero.dart';
@@ -25,8 +28,11 @@ class PrayerTimesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PrayerCubit()..loadSettings(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
+        BlocProvider(create: (_) => SettingsCubit()..load()),
+      ],
       child: const _PrayerTimesView(),
     );
   }
@@ -35,28 +41,55 @@ class PrayerTimesScreen extends StatelessWidget {
 class _PrayerTimesView extends StatelessWidget {
   const _PrayerTimesView();
 
+  void _openMonthlyTimetable(BuildContext context, PrayerState state) {
+    if (!state.hasCoordinates) return;
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => MonthlyTimetableScreen(
+          latitude: state.latitude!,
+          longitude: state.longitude!,
+          settings: state.settings,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CollapsingScaffold(
-      title: AppStrings.prayerTimesScreenTitle,
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.all(24),
-          sliver: SliverToBoxAdapter(
-            child: BlocBuilder<PrayerCubit, PrayerState>(
-              builder: (context, state) => StaggeredFadeIn(
+    return BlocBuilder<PrayerCubit, PrayerState>(
+      builder: (context, state) => CollapsingScaffold(
+        title: AppStrings.prayerTimesScreenTitle,
+        actions: [
+          Semantics(
+            button: true,
+            label: AppStrings.openMonthlyTimetableSemanticLabel,
+            child: IconButton(
+              icon: const Icon(Icons.calendar_month_outlined),
+              onPressed: state.hasCoordinates
+                  ? () => _openMonthlyTimetable(context, state)
+                  : null,
+            ),
+          ),
+        ],
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(24),
+            sliver: SliverToBoxAdapter(
+              child: StaggeredFadeIn(
                 children: [
                   _buildResult(state),
                   const SizedBox(height: 16),
                   const LocationSelector(),
+                  const SizedBox(height: 16),
+                  const DistrictSelector(),
                   const SizedBox(height: 16),
                   _activeSettingsCaption(state.settings),
                 ],
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -84,7 +117,7 @@ class _PrayerTimesView extends StatelessWidget {
         children: [
           PrayerHero(times: result),
           const SizedBox(height: 20),
-          PrayerTimesList(times: result),
+          PrayerTimesList(times: result, iqamathOffsets: state.iqamathOffsets),
         ],
       ),
     };

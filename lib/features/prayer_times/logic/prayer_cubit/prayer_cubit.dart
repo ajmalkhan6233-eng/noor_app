@@ -5,11 +5,16 @@
 // tree. Calculation method/madhab/adjustments are never set here —
 // they're read once from Settings on load; change them in Settings.
 
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/location/location_service.dart';
 import '../../../settings/data/settings_repository.dart';
+import '../../data/prayer_notification_coordinator.dart';
 import '../../data/prayer_repository.dart';
+import '../../data/prayer_times_result.dart';
+import '../../data/sri_lanka_district.dart';
 import 'prayer_state.dart';
 
 class PrayerCubit extends Cubit<PrayerState> {
@@ -17,20 +22,47 @@ class PrayerCubit extends Cubit<PrayerState> {
     PrayerRepository? repository,
     LocationService? locationService,
     SettingsRepository? settingsRepository,
+    PrayerNotificationCoordinator? notificationCoordinator,
   }) : _repository = repository ?? const PrayerRepository(),
        _locationService = locationService ?? const LocationService(),
        _settingsRepository = settingsRepository ?? SettingsRepository(),
+       _notificationCoordinator =
+           notificationCoordinator ?? PrayerNotificationCoordinator(),
        super(PrayerState(date: DateTime.now()));
 
   final PrayerRepository _repository;
   final LocationService _locationService;
   final SettingsRepository _settingsRepository;
+  final PrayerNotificationCoordinator _notificationCoordinator;
 
   /// Reads the persisted calculation settings — always the single
-  /// source of truth — before anything is calculated.
+  /// source of truth — before anything is calculated. Also re-applies
+  /// a previously selected Sri Lankan district, if any, so the last
+  /// chosen location survives an app restart.
   Future<void> loadSettings() async {
     final appSettings = await _settingsRepository.load();
-    emit(state.copyWith(settings: appSettings.prayerSettings));
+    emit(
+      state.copyWith(
+        settings: appSettings.prayerSettings,
+        notifications: appSettings.notifications,
+        iqamathOffsets: appSettings.iqamathOffsets,
+        silentMode: appSettings.silentMode,
+      ),
+    );
+    final districtName = appSettings.selectedDistrict;
+    if (districtName != null) {
+      final matches = sriLankaDistricts.where((d) => d.name == districtName);
+      if (matches.isNotEmpty) {
+        final district = matches.first;
+        emit(
+          state.copyWith(
+            latitude: district.latitude,
+            longitude: district.longitude,
+            usingGps: false,
+          ),
+        );
+      }
+    }
     _recalculate();
   }
 
@@ -96,5 +128,20 @@ class PrayerCubit extends Cubit<PrayerState> {
       settings: state.settings,
     );
     emit(state.copyWith(result: result));
+    if (result is PrayerTimesComputed) {
+      // Fire-and-forget: notification/silent-mode scheduling never
+      // blocks prayer-time display, and failures here (e.g. no device
+      // to run platform channels against) must never crash the cubit.
+      unawaited(
+        _notificationCoordinator
+            .scheduleForDay(
+              times: result,
+              notifications: state.notifications,
+              iqamathOffsets: state.iqamathOffsets,
+              silentMode: state.silentMode,
+            )
+            .catchError((_) {}),
+      );
+    }
   }
 }
