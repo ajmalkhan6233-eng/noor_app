@@ -36,13 +36,13 @@ class _SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       appBar: AppBar(title: const Text('Settings')),
       body: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.gold),
+              child: CircularProgressIndicator(color: AppColors.emerald),
             );
           }
           return ListView(

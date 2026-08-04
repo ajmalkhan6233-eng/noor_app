@@ -68,13 +68,13 @@ class AzkarItemTile extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: done ? AppColors.gold : AppColors.hairline,
+                        color: done ? AppColors.emerald : AppColors.hairline,
                       ),
                     ),
                     child: Text(
                       '$count / ${item.repeatCount}',
                       style: TextStyle(
-                        color: done ? AppColors.gold : AppColors.parchment,
+                        color: done ? AppColors.emerald : AppColors.ink,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

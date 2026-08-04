@@ -32,7 +32,7 @@ class _AzkarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -44,7 +44,7 @@ class _AzkarView extends StatelessWidget {
                 builder: (context, state) {
                   if (state.isLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(color: AppColors.gold),
+                      child: CircularProgressIndicator(color: AppColors.emerald),
                     );
                   }
                   if (state.items.isEmpty) {

@@ -46,8 +46,8 @@ class NotificationTogglesSection extends StatelessWidget {
       toggled: value,
       child: SwitchListTile(
         contentPadding: EdgeInsets.zero,
-        activeThumbColor: AppColors.gold,
-        title: Text(label, style: const TextStyle(color: AppColors.parchment)),
+        activeThumbColor: AppColors.emerald,
+        title: Text(label, style: const TextStyle(color: AppColors.ink)),
         value: value,
         onChanged: (v) =>
             context.read<SettingsCubit>().setNotifications(apply(v)),

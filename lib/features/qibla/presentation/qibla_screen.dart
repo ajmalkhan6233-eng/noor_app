@@ -35,7 +35,7 @@ class _QiblaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Center(
@@ -64,7 +64,7 @@ class _QiblaView extends StatelessWidget {
     }
 
     if (state.bearingDegrees == null || state.distanceKm == null) {
-      return const CircularProgressIndicator(color: AppColors.gold);
+      return const CircularProgressIndicator(color: AppColors.emerald);
     }
 
     return StaggeredFadeIn(
@@ -92,7 +92,7 @@ class _QiblaView extends StatelessWidget {
 
     final rotation = state.needleRotationDegrees;
     if (rotation == null) {
-      return const [CircularProgressIndicator(color: AppColors.gold)];
+      return const [CircularProgressIndicator(color: AppColors.emerald)];
     }
 
     final trustworthy = state.compassAccuracy == CompassAccuracy.good;

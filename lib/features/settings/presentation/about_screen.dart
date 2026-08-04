@@ -21,7 +21,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       appBar: AppBar(title: const Text('About')),
       body: ListView(
         padding: const EdgeInsets.all(24),
@@ -97,11 +97,11 @@ class AboutScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(
             children: [
-              Icon(Icons.description_outlined, color: AppColors.gold),
+              Icon(Icons.description_outlined, color: AppColors.emerald),
               SizedBox(width: 12),
               Text(
                 'Open source licences',
-                style: TextStyle(color: AppColors.parchment),
+                style: TextStyle(color: AppColors.ink),
               ),
             ],
           ),

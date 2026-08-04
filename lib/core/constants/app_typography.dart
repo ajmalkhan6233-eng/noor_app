@@ -21,16 +21,7 @@ abstract final class AppTypography {
     fontWeight: FontWeight.w300,
     fontSize: 44,
     letterSpacing: 1.2,
-    color: AppColors.parchment,
-  );
-
-  /// The Bismillah / splash greeting.
-  static const TextStyle greeting = TextStyle(
-    fontFamily: displayFamily,
-    fontWeight: FontWeight.w300,
-    fontSize: 26,
-    letterSpacing: 3.2,
-    color: AppColors.gold,
+    color: AppColors.ink,
   );
 
   /// Small letterspaced caption headers above a section's content.
@@ -56,12 +47,12 @@ abstract final class AppTypography {
     fontFeatures: [FontFeature.tabularFigures()],
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: AppColors.parchment,
+    color: AppColors.ink,
   );
 
   static const TextStyle arabic = TextStyle(
     fontFamily: arabicFamily,
-    color: AppColors.parchment,
+    color: AppColors.ink,
     height: 1.9,
   );
 
@@ -71,6 +62,6 @@ abstract final class AppTypography {
     fontFeatures: [FontFeature.tabularFigures()],
     fontSize: 56,
     fontWeight: FontWeight.bold,
-    color: AppColors.parchment,
+    color: AppColors.ink,
   );
 }

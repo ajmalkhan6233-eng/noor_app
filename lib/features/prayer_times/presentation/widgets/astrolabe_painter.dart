@@ -63,18 +63,18 @@ class AstrolabePainter extends CustomPainter {
   }
 
   void _drawMark(Canvas canvas, Offset center, double radius, double f) {
-    final paint = Paint()..color = AppColors.goldSoft;
+    final paint = Paint()..color = AppColors.emeraldSoft;
     canvas.drawCircle(_pointAt(center, radius, f), 3, paint);
   }
 
   void _drawNowMarker(Canvas canvas, Offset center, double radius, double f) {
     final point = _pointAt(center, radius, f);
-    canvas.drawCircle(point, 6, Paint()..color = AppColors.gold);
+    canvas.drawCircle(point, 6, Paint()..color = AppColors.emerald);
     canvas.drawCircle(
       point,
       6,
       Paint()
-        ..color = AppColors.gold.withValues(alpha: 0.35)
+        ..color = AppColors.emerald.withValues(alpha: 0.35)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 6,
     );

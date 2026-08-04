@@ -50,7 +50,7 @@ class AboutDonateSection extends StatelessWidget {
         backgroundColor: AppColors.card,
         title: const Text(
           'Support noor',
-          style: TextStyle(color: AppColors.parchment),
+          style: TextStyle(color: AppColors.ink),
         ),
         content: const Text(
           'noor will always be free, offline, and ad-free. If you would '
@@ -66,7 +66,7 @@ class AboutDonateSection extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: const Text(
                 'Close',
-                style: TextStyle(color: AppColors.gold),
+                style: TextStyle(color: AppColors.emerald),
               ),
             ),
           ),
@@ -85,7 +85,7 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = muted ? AppColors.sage : AppColors.parchment;
+    final color = muted ? AppColors.sage : AppColors.ink;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(

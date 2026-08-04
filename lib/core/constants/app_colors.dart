@@ -4,36 +4,38 @@
 // import and use these instead, so the palette stays consistent and
 // easy to re-theme.
 //
-// Design anchor: the astrolabe — manuscript illumination, not neon.
-// Backgrounds read almost black with a green cast; gold is
-// punctuation, not paint.
+// Design anchor: fine paper and ink, not a dark dashboard. Warm
+// cream, dark text, colour used sparingly and only where it carries
+// meaning. Calm, spacious, premium.
 
 import 'package:flutter/material.dart';
 
 /// Static color palette for `noor`.
 abstract final class AppColors {
-  /// Deepest ground — app background.
-  static const Color ink = Color(0xFF060D0A);
+  /// App background — warm cream paper.
+  static const Color paper = Color(0xFFF2EFE7);
 
-  /// Surface, one step up from [ink].
-  static const Color emerald = Color(0xFF0A1912);
-
-  /// Raised cards.
-  static const Color card = Color(0xFF12241B);
-
-  /// 1px dividers and card borders.
-  static const Color hairline = Color(0xFF1E3327);
-
-  /// Accent — punctuation, used sparingly (active states, the current
-  /// prayer marker, the astrolabe's position needle).
-  static const Color gold = Color(0xFFC9A227);
-
-  /// Inactive/dimmed gold.
-  static const Color goldSoft = Color(0xFF8C7420);
+  /// Cards — white, raised off the paper with a hairline + soft
+  /// shadow, never a filled color block.
+  static const Color card = Color(0xFFFFFFFF);
 
   /// Primary text.
-  static const Color parchment = Color(0xFFF2EDE1);
+  static const Color ink = Color(0xFF16211C);
 
   /// Secondary text — captions, section labels.
-  static const Color sage = Color(0xFF94A79B);
+  static const Color sage = Color(0xFF6E7B72);
+
+  /// 1px borders and dividers.
+  static const Color hairline = Color(0xFFE3DFD4);
+
+  /// Primary accent — active states, prayer names, progress. The only
+  /// colour used for interaction; punctuation, not paint.
+  static const Color emerald = Color(0xFF14603C);
+
+  /// Dimmed/inactive accent (unselected track, soft marks).
+  static const Color emeraldSoft = Color(0xFFAFC6BA);
+
+  /// Reserved exclusively for the الله calligraphy — never used for
+  /// buttons, chips, links, or any other UI element.
+  static const Color gold = Color(0xFFB8912F);
 }

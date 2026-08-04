@@ -72,7 +72,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-              color: isCurrent ? AppColors.gold : Colors.transparent,
+              color: isCurrent ? AppColors.emerald : Colors.transparent,
               width: 2,
             ),
           ),
@@ -80,7 +80,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(name, style: const TextStyle(color: AppColors.parchment)),
+            Text(name, style: const TextStyle(color: AppColors.ink)),
             Text(formatClock(time), style: AppTypography.time),
           ],
         ),

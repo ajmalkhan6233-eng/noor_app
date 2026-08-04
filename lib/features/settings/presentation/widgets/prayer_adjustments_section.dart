@@ -54,13 +54,13 @@ class PrayerAdjustmentsSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.parchment)),
+          Text(label, style: const TextStyle(color: AppColors.ink)),
           Row(
             children: [
               SemanticButton(
                 label: 'Decrease $label offset',
                 onTap: () => change(-1),
-                child: const Icon(Icons.remove, color: AppColors.gold),
+                child: const Icon(Icons.remove, color: AppColors.emerald),
               ),
               SizedBox(
                 width: 48,
@@ -73,7 +73,7 @@ class PrayerAdjustmentsSection extends StatelessWidget {
               SemanticButton(
                 label: 'Increase $label offset',
                 onTap: () => change(1),
-                child: const Icon(Icons.add, color: AppColors.gold),
+                child: const Icon(Icons.add, color: AppColors.emerald),
               ),
             ],
           ),

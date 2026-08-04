@@ -46,14 +46,14 @@ class _LicencesScreenState extends State<LicencesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       appBar: AppBar(title: const Text('Open source licences')),
       body: FutureBuilder<List<_PackageLicence>>(
         future: _future,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.gold),
+              child: CircularProgressIndicator(color: AppColors.emerald),
             );
           }
           final packages = snapshot.data!;

@@ -53,7 +53,7 @@ class SurahListTile extends StatelessWidget {
                 children: [
                   Text(
                     surah.displayName,
-                    style: const TextStyle(color: AppColors.parchment),
+                    style: const TextStyle(color: AppColors.ink),
                   ),
                   if (subtitle.isNotEmpty) ...[
                     const SizedBox(height: 2),

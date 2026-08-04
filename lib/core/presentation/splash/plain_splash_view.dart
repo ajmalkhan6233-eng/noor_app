@@ -1,14 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Fallback shown when `SplashConfig.cosmicEnabled` is false: a plain,
-// still, centred greeting with no animation beyond the parent's fade.
+// A calm, still, centred greeting on paper, with no animation beyond
+// the parent's fade.
 
 import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
+import '../widgets/allah_calligraphy.dart';
 
-/// Static centred greeting, used when the cosmic sequence is disabled.
 class PlainSplashView extends StatelessWidget {
   const PlainSplashView({super.key});
 
@@ -17,15 +17,22 @@ class PlainSplashView extends StatelessWidget {
     return const Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 32),
-        child: Text(
-          AppStrings.splashGreeting,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: AppColors.gold,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.2,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AllahCalligraphy(fontSize: 56),
+            SizedBox(height: 24),
+            Text(
+              AppStrings.splashGreeting,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.ink,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ],
         ),
       ),
     );

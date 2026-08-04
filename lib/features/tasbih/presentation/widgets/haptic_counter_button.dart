@@ -42,13 +42,13 @@ class HapticCounterButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: AppColors.card,
           border: Border.all(
-            color: pulsing ? AppColors.gold : AppColors.gold,
+            color: pulsing ? AppColors.emerald : AppColors.emerald,
             width: pulsing ? 5 : 3,
           ),
           boxShadow: pulsing
               ? [
                   BoxShadow(
-                    color: AppColors.gold.withValues(alpha: 0.5),
+                    color: AppColors.emerald.withValues(alpha: 0.5),
                     blurRadius: 24,
                     spreadRadius: 2,
                   ),

@@ -40,13 +40,13 @@ class AppChip extends StatelessWidget {
             color: selected ? AppColors.card : Colors.transparent,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: selected ? AppColors.gold : AppColors.hairline,
+              color: selected ? AppColors.emerald : AppColors.hairline,
             ),
           ),
           child: Text(
             label,
             style: TextStyle(
-              color: selected ? AppColors.gold : AppColors.sage,
+              color: selected ? AppColors.emerald : AppColors.sage,
               fontSize: 13,
             ),
           ),

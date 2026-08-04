@@ -37,7 +37,7 @@ class _PrayerTimesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),

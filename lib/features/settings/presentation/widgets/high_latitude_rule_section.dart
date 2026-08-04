@@ -24,7 +24,7 @@ class HighLatitudeRuleSection extends StatelessWidget {
             isExpanded: true,
             value: rule,
             dropdownColor: AppColors.card,
-            style: const TextStyle(color: AppColors.parchment),
+            style: const TextStyle(color: AppColors.ink),
             items: [
               for (final option in PrayerHighLatitudeRule.values)
                 DropdownMenuItem(value: option, child: Text(option.label)),

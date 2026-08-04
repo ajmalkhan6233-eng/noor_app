@@ -45,7 +45,7 @@ class AyahTile extends StatelessWidget {
                   onTap: onToggleBookmark,
                   child: Icon(
                     isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                    color: AppColors.gold,
+                    color: AppColors.emerald,
                     size: 20,
                   ),
                 ),
@@ -57,7 +57,7 @@ class AyahTile extends StatelessWidget {
               textDirection: TextDirection.rtl,
               style: TextStyle(
                 fontFamily: AppTypography.arabicFamily,
-                color: AppColors.parchment,
+                color: AppColors.ink,
                 fontSize: 22 * fontScale,
                 height: 1.8,
               ),

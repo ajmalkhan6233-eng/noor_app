@@ -1,7 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The one card shape used everywhere: card fill, 16px radius, a 1px
-// hairline border, no Material elevation shadow.
+// The one card shape used everywhere: white on cream, 20px radius, a
+// 1px hairline border, and a very soft shadow — paper lifted off the
+// page, never a filled colour block.
 
 import 'package:flutter/material.dart';
 
@@ -23,8 +24,15 @@ class AppCard extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.hairline),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.ink.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: child,
     );

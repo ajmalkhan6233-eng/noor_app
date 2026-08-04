@@ -32,7 +32,7 @@ class _TasbihView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       body: BlocBuilder<TasbihCubit, TasbihState>(
         builder: (context, state) {
           return Center(
@@ -64,7 +64,7 @@ class _TasbihView extends StatelessWidget {
                     child: Text(
                       'Reset',
                       style: TextStyle(
-                        color: AppColors.gold,
+                        color: AppColors.emerald,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),

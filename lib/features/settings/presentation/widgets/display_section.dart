@@ -28,7 +28,7 @@ class DisplaySection extends StatelessWidget {
                 isExpanded: true,
                 value: settings.themeMode,
                 dropdownColor: AppColors.card,
-                style: const TextStyle(color: AppColors.parchment),
+                style: const TextStyle(color: AppColors.ink),
                 items: [
                   for (final mode in AppThemeModeOption.values)
                     DropdownMenuItem(value: mode, child: Text(mode.label)),
@@ -46,7 +46,7 @@ class DisplaySection extends StatelessWidget {
               value: '${settings.arabicFontScale.toStringAsFixed(2)}x',
               slider: true,
               child: Slider(
-                activeColor: AppColors.gold,
+                activeColor: AppColors.emerald,
                 min: 0.75,
                 max: 2.0,
                 divisions: 25,
@@ -61,7 +61,7 @@ class DisplaySection extends StatelessWidget {
               children: [
                 const Text(
                   'Hijri offset',
-                  style: TextStyle(color: AppColors.parchment),
+                  style: TextStyle(color: AppColors.ink),
                 ),
                 Row(
                   children: [
@@ -70,7 +70,7 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays - 1),
-                      child: const Icon(Icons.remove, color: AppColors.gold),
+                      child: const Icon(Icons.remove, color: AppColors.emerald),
                     ),
                     SizedBox(
                       width: 32,
@@ -85,7 +85,7 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays + 1),
-                      child: const Icon(Icons.add, color: AppColors.gold),
+                      child: const Icon(Icons.add, color: AppColors.emerald),
                     ),
                   ],
                 ),

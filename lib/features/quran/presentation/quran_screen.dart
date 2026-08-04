@@ -35,7 +35,7 @@ class _QuranView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: BlocBuilder<QuranCubit, QuranState>(
@@ -45,7 +45,7 @@ class _QuranView extends StatelessWidget {
             }
             if (state.isLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.gold),
+                child: CircularProgressIndicator(color: AppColors.emerald),
               );
             }
             if (!state.isImported) {
@@ -95,7 +95,7 @@ class _SurahIndex extends StatelessWidget {
                     child: Text(
                       'Continue: Surah ${state.lastRead!.surahId}, '
                       'Ayah ${state.lastRead!.ayahNumber}',
-                      style: const TextStyle(color: AppColors.gold),
+                      style: const TextStyle(color: AppColors.emerald),
                     ),
                   ),
                 ),

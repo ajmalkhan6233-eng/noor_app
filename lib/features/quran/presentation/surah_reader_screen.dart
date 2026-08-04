@@ -50,9 +50,9 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       appBar: AppBar(
-        backgroundColor: AppColors.ink,
+        backgroundColor: AppColors.paper,
         elevation: 0,
         title: Text('Surah ${widget.surahId}'),
       ),
@@ -62,7 +62,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
           builder: (context, state) {
             if (state.currentSurahId != widget.surahId) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.gold),
+                child: CircularProgressIndicator(color: AppColors.emerald),
               );
             }
             _maybeScrollToLastRead(state);

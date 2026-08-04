@@ -62,7 +62,7 @@ class _ImportingProgress extends StatelessWidget {
                   value: progress,
                   minHeight: 4,
                   backgroundColor: AppColors.hairline,
-                  color: AppColors.gold,
+                  color: AppColors.emerald,
                 ),
               ),
               const SizedBox(height: 8),

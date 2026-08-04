@@ -30,7 +30,7 @@ class QiblaInfoPanel extends StatelessWidget {
           Text(
             bearingText,
             style: const TextStyle(
-              color: AppColors.gold,
+              color: AppColors.emerald,
               fontSize: 40,
               fontWeight: FontWeight.w700,
             ),

@@ -47,7 +47,7 @@ class AboutSourcesCard extends StatelessWidget {
             child: const Text(
               'tanzil.net',
               style: TextStyle(
-                color: AppColors.gold,
+                color: AppColors.emerald,
                 decoration: TextDecoration.underline,
               ),
             ),

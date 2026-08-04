@@ -59,7 +59,7 @@ class _LocationSelectorState extends State<LocationSelector> {
                         ? 'Locating…'
                         : 'Use my location',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: AppColors.gold),
+                    style: const TextStyle(color: AppColors.emerald),
                   ),
                 ),
               ),
@@ -80,7 +80,7 @@ class _LocationSelectorState extends State<LocationSelector> {
                   child: Text(
                     'Apply coordinates',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.parchment),
+                    style: TextStyle(color: AppColors.ink),
                   ),
                 ),
               ),
@@ -106,7 +106,7 @@ class _LocationSelectorState extends State<LocationSelector> {
           : AppStrings.manualLongitudeSemanticLabel,
       child: TextField(
         controller: controller,
-        style: const TextStyle(color: AppColors.parchment),
+        style: const TextStyle(color: AppColors.ink),
         keyboardType: const TextInputType.numberWithOptions(
           decimal: true,
           signed: true,

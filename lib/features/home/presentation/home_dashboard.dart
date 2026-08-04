@@ -54,9 +54,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.paper,
       appBar: AppBar(
-        backgroundColor: AppColors.ink,
+        backgroundColor: AppColors.paper,
         elevation: 0,
         title: Text(_titles[_selectedIndex]),
         actions: [
@@ -74,14 +74,14 @@ class _HomeDashboardState extends State<HomeDashboard> {
       body: FadeTabSwitcher(index: _selectedIndex, children: _screens),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          color: AppColors.ink,
+          color: AppColors.paper,
           border: Border(top: BorderSide(color: AppColors.hairline)),
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: AppColors.ink,
+          backgroundColor: AppColors.paper,
           elevation: 0,
-          selectedItemColor: AppColors.gold,
+          selectedItemColor: AppColors.emerald,
           unselectedItemColor: AppColors.sage,
           currentIndex: _selectedIndex,
           onTap: (index) => setState(() => _selectedIndex = index),
