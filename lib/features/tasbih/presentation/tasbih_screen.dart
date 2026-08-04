@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../logic/tasbih_cubit/tasbih_state.dart';
-import 'widgets/haptic_counter_button.dart';
+import 'widgets/dhikr_selector.dart';
+import 'widgets/draggable_counter_group.dart';
 
 /// Screen-free-friendly tasbih (dhikr counter) screen.
 ///
 /// Provides its own [TasbihCubit] and restores any previously saved
-/// count on load, so the counter survives app restarts.
+/// count on load, so the counter survives app restarts. The counter
+/// itself is draggable and remembers where it was left.
 class TasbihScreen extends StatelessWidget {
   const TasbihScreen({super.key});
 
@@ -33,48 +34,53 @@ class _TasbihView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.paper,
-      body: BlocBuilder<TasbihCubit, TasbihState>(
-        builder: (context, state) {
-          return Center(
-            child: StaggeredFadeIn(
-              children: [
-                Semantics(
-                  label: 'Currently counting ${state.dhikrLabel}',
-                  child: Text(
-                    state.dhikrLabel,
-                    style: const TextStyle(color: AppColors.sage, fontSize: 18),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                HapticCounterButton(
-                  count: state.count,
-                  pulsing: state.justHitMilestone,
-                  onTap: () => context.read<TasbihCubit>().increment(),
-                ),
-                const SizedBox(height: 40),
-                SemanticButton(
-                  label: AppStrings.tasbihResetSemanticLabel,
-                  hint: 'Double tap to reset the count to zero',
-                  onTap: () => context.read<TasbihCubit>().reset(),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
+      appBar: AppBar(title: const Text(AppStrings.tasbihScreenTitle)),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(24),
+            child: Center(child: DhikrSelector()),
+          ),
+          Expanded(
+            child: BlocBuilder<TasbihCubit, TasbihState>(
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    DraggableCounterGroup(
+                      dhikrLabel: state.dhikrLabel,
+                      count: state.count,
+                      pulsing: state.justHitMilestone,
+                      onTap: () => context.read<TasbihCubit>().increment(),
                     ),
-                    child: Text(
-                      'Reset',
-                      style: TextStyle(
-                        color: AppColors.emerald,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                    Positioned(
+                      bottom: 16,
+                      right: 16,
+                      child: SemanticButton(
+                        label: AppStrings.tasbihResetSemanticLabel,
+                        hint: 'Double tap to reset the count to zero',
+                        onTap: () => context.read<TasbihCubit>().reset(),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: Text(
+                            'Reset',
+                            style: TextStyle(
+                              color: AppColors.emerald,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

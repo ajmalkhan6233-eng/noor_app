@@ -29,6 +29,19 @@ class TasbihCubit extends Cubit<TasbihState> {
     }
   }
 
+  /// Switches the active dhikr, restoring whatever count was last
+  /// saved under that label (zero if it's never been counted before).
+  Future<void> selectDhikr(String dhikrLabel) async {
+    final saved = await _repository.loadSession(dhikrLabel);
+    emit(
+      TasbihState(
+        dhikrLabel: dhikrLabel,
+        count: saved?.count ?? 0,
+        target: saved?.target,
+      ),
+    );
+  }
+
   /// Increments the count by one, fires the appropriate haptic
   /// feedback, and persists the new count.
   Future<void> increment() async {

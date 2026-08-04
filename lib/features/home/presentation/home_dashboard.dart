@@ -9,10 +9,13 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
+import '../../../core/presentation/widgets/draggable_floating.dart';
+import '../../../core/utils/semantics_helpers.dart';
 import '../../azkar/presentation/azkar_screen.dart';
 import '../../more/presentation/more_screen.dart';
 import '../../prayer_times/presentation/prayer_times_screen.dart';
 import '../../quran/presentation/quran_screen.dart';
+import '../../settings/presentation/settings_screen.dart';
 import 'home_overview_screen.dart';
 
 class HomeDashboard extends StatefulWidget {
@@ -37,7 +40,44 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.paper,
-      body: FadeTabSwitcher(index: _selectedIndex, children: _screens),
+      body: Stack(
+        children: [
+          FadeTabSwitcher(index: _selectedIndex, children: _screens),
+          DraggableFloating(
+            size: const Size(48, 48),
+            widgetKey: 'settings_gear',
+            initialAlignment: const Alignment(1, 1),
+            snapToNearestEdge: true,
+            child: SemanticButton(
+              label: AppStrings.settingsSemanticLabel,
+              hint: 'Double tap to open Settings',
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
+              ),
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.hairline),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.ink.withValues(alpha: 0.12),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.settings_outlined,
+                  color: AppColors.emerald,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: AppColors.paper,
