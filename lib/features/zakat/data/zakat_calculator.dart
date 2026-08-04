@@ -1,12 +1,12 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Pure Zakat al-Mal maths — no I/O, no widgets, fully unit-testable.
-// Nisab (the minimum-wealth threshold) is the value of 85g of gold or
-// 595g of silver; this app is offline, so the user supplies today's
-// per-gram prices themselves rather than the app guessing or fetching
-// them. Per majority contemporary fiqh council guidance, the LOWER of
-// the two nisab values is used for mixed/cash wealth — that includes
-// more people under the obligation, not fewer.
+// Nisab (the minimum-wealth threshold) is the value of 87.48g of gold
+// or 612.36g of silver; this app is offline, so the user supplies
+// today's per-gram prices themselves rather than the app guessing or
+// fetching them. Per majority contemporary fiqh council guidance, the
+// LOWER of the two nisab values is used for mixed/cash wealth — that
+// includes more people under the obligation, not fewer.
 
 class ZakatInputs {
   const ZakatInputs({
@@ -79,8 +79,8 @@ class ZakatResult {
 }
 
 abstract final class ZakatCalculator {
-  static const double nisabGoldGrams = 85;
-  static const double nisabSilverGrams = 595;
+  static const double nisabGoldGrams = 87.48;
+  static const double nisabSilverGrams = 612.36;
   static const double rate = 0.025;
 
   static ZakatResult calculate(ZakatInputs inputs) {
