@@ -7,18 +7,19 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
-import '../../../core/presentation/widgets/draggable_floating.dart';
+import '../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../logic/qibla_cubit/qibla_cubit.dart';
 import '../logic/qibla_cubit/qibla_state.dart';
 import 'widgets/calibration_prompt.dart';
+import 'widgets/qibla_compass_area.dart';
 import 'widgets/qibla_info_panel.dart';
-import 'widgets/qibla_needle.dart';
 
 /// Qibla-compass screen: a needle toward the Kaaba (only ever shown
 /// with confidence the underlying compass reading earns), plus the
 /// numeric bearing and distance, which are always shown. The compass
-/// itself floats free — drag it anywhere on screen, it isn't fixed.
+/// itself floats free — drag it anywhere on screen, position
+/// persisted, with a button to recentre it.
 class QiblaScreen extends StatelessWidget {
   const QiblaScreen({super.key});
 
@@ -31,14 +32,40 @@ class QiblaScreen extends StatelessWidget {
   }
 }
 
-class _QiblaView extends StatelessWidget {
+class _QiblaView extends StatefulWidget {
   const _QiblaView();
+
+  @override
+  State<_QiblaView> createState() => _QiblaViewState();
+}
+
+class _QiblaViewState extends State<_QiblaView> {
+  final _compassPosition = DraggablePositionController();
+
+  @override
+  void dispose() {
+    _compassPosition.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text(AppStrings.qiblaScreenTitle)),
+      appBar: AppBar(
+        title: const Text(AppStrings.qiblaScreenTitle),
+        actions: [
+          Semantics(
+            label: 'Recentre compass',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Icons.center_focus_strong_outlined),
+              tooltip: 'Recentre compass',
+              onPressed: _compassPosition.reset,
+            ),
+          ),
+        ],
+      ),
       body: BlocBuilder<QiblaCubit, QiblaState>(
         builder: (context, state) => _buildBody(state),
       ),
@@ -90,36 +117,13 @@ class _QiblaView extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(child: _compassArea(state)),
-      ],
-    );
-  }
-
-  Widget _compassArea(QiblaState state) {
-    if (state.compassAccuracy == CompassAccuracy.unavailable) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Text(
-            AppStrings.qiblaNoCompassMessage,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.sage),
+        Expanded(
+          child: QiblaCompassArea(
+            state: state,
+            positionController: _compassPosition,
           ),
         ),
-      );
-    }
-
-    final rotation = state.needleRotationDegrees;
-    if (rotation == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.emerald),
-      );
-    }
-
-    final trustworthy = state.compassAccuracy == CompassAccuracy.good;
-    return DraggableFloating(
-      size: const Size(220, 220),
-      child: QiblaNeedle(rotationDegrees: rotation, dimmed: !trustworthy),
+      ],
     );
   }
 }

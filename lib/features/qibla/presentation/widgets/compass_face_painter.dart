@@ -1,10 +1,10 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Paints the compass as a physical object: a raised bezel (gradient +
-// drop shadow), a recessed face (an inset-shadow ring at its rim),
-// hairline degree ticks, cardinal labels, and a gradient-filled
-// needle that casts its own soft shadow onto the face beneath it via
-// Canvas.drawShadow.
+// drop shadow that shifts with device tilt), a recessed face (an
+// inset-shadow ring at its rim), engraved degree ticks, cardinal
+// labels, an emerald Kaaba marker, and a gradient-filled needle that
+// casts its own soft shadow onto the face via Canvas.drawShadow.
 
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -15,10 +15,20 @@ import '../../../../core/constants/app_colors.dart';
 import 'compass_ticks.dart';
 
 class CompassFacePainter extends CustomPainter {
-  CompassFacePainter({required this.rotationDegrees, required this.dimmed});
+  CompassFacePainter({
+    required this.rotationDegrees,
+    required this.dimmed,
+    this.tiltX = 0,
+    this.tiltY = 0,
+  });
 
   final double rotationDegrees;
   final bool dimmed;
+
+  /// Device tilt (-1..1 per axis) — shifts where the bezel's light
+  /// highlight falls, so light appears to move across the metal.
+  final double tiltX;
+  final double tiltY;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -29,6 +39,7 @@ class CompassFacePainter extends CustomPainter {
     final faceRadius = radius * 0.82;
     _paintRecessedFace(canvas, center, faceRadius);
     paintCompassTicksAndLabels(canvas, center, faceRadius);
+    _paintKaabaMarker(canvas, center, faceRadius);
     _paintNeedle(canvas, center, faceRadius);
 
     canvas.drawCircle(
@@ -46,15 +57,18 @@ class CompassFacePainter extends CustomPainter {
         ..color = AppColors.ink.withValues(alpha: 0.14)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10),
     );
-    final rect = Rect.fromCircle(center: center, radius: radius);
+    // The highlight drifts opposite the tilt, as if light were fixed
+    // overhead and the bezel were tipping under it.
+    final lightOffset = Offset(-tiltX, -tiltY) * radius * 0.6;
     canvas.drawCircle(
       center,
       radius,
       Paint()
-        ..shader = ui.Gradient.linear(rect.topLeft, rect.bottomRight, [
-          Colors.white,
-          AppColors.hairline,
-        ]),
+        ..shader = ui.Gradient.radial(
+          center + lightOffset,
+          radius * 1.4,
+          [Colors.white, AppColors.hairline],
+        ),
     );
     canvas.drawCircle(
       center,
@@ -78,6 +92,18 @@ class CompassFacePainter extends CustomPainter {
           [Colors.transparent, AppColors.ink.withValues(alpha: 0.12)],
           const [0.82, 1.0],
         ),
+    );
+  }
+
+  void _paintKaabaMarker(Canvas canvas, Offset center, double faceRadius) {
+    // A small fixed marker at true-north-up on the dial, showing where
+    // the Kaaba direction sits relative to the ring — the needle does
+    // the live pointing; this is the dial's own landmark.
+    final pos = center + const Offset(0, -1) * (faceRadius * 0.42);
+    final rect = Rect.fromCenter(center: pos, width: 10, height: 10);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, const Radius.circular(2)),
+      Paint()..color = AppColors.emerald,
     );
   }
 
@@ -117,5 +143,7 @@ class CompassFacePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CompassFacePainter oldDelegate) =>
       oldDelegate.rotationDegrees != rotationDegrees ||
-      oldDelegate.dimmed != dimmed;
+      oldDelegate.dimmed != dimmed ||
+      oldDelegate.tiltX != tiltX ||
+      oldDelegate.tiltY != tiltY;
 }

@@ -15,14 +15,21 @@ void paintCompassTicksAndLabels(
   Offset center,
   double faceRadius,
 ) {
+  // Engraved look: ticks facing the light (upper-left) read lighter,
+  // ticks on the shadowed side (lower-right) read darker — same
+  // convention as the embossed Allah calligraphy.
+  const light = Offset(-0.7, -0.7);
   for (var deg = 0; deg < 360; deg += 30) {
     final angle = deg * math.pi / 180;
     final direction = Offset(math.sin(angle), -math.cos(angle));
+    final lit = direction.dx * light.dx + direction.dy * light.dy > 0;
     canvas.drawLine(
       center + direction * (faceRadius * 0.8),
       center + direction * (faceRadius * 0.95),
       Paint()
-        ..color = AppColors.hairline
+        ..color = lit
+            ? Colors.white.withValues(alpha: 0.9)
+            : AppColors.ink.withValues(alpha: 0.25)
         ..strokeWidth = deg % 90 == 0 ? 2 : 1,
     );
   }

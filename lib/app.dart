@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
+import 'core/presentation/app_scroll_behavior.dart';
 import 'core/presentation/splash_screen.dart';
 import 'features/home/presentation/home_dashboard.dart';
 import 'features/settings/data/app_theme_mode.dart';
@@ -37,6 +38,7 @@ class _NoorAppState extends State<NoorApp> {
     return MaterialApp(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
+      scrollBehavior: AppScrollBehavior(),
       themeMode: _themeMode,
       darkTheme: buildDarkTheme(),
       theme: buildLightTheme(),

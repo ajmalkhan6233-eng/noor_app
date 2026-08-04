@@ -30,6 +30,7 @@ dependencies:
   geolocator: ^10.1.0
   flutter_local_notifications: ^17.0.0
   flutter_compass: ^0.8.0
+  sensors_plus: ^4.0.0
 
   # Parses the bundled Tanzil surah-metadata XML (offline, no network)
   xml: ^6.5.0

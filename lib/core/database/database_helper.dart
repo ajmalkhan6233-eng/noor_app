@@ -13,6 +13,7 @@ import 'schema/azkar_schema.dart';
 import 'schema/quran_schema.dart';
 import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
+import 'schema/widget_position_schema.dart';
 
 /// Singleton factory for the app's encrypted local database.
 ///
@@ -61,6 +62,7 @@ class DatabaseHelper {
       ...settingsCreateStatements,
       ...azkarCreateStatements,
       ...quranCreateStatements,
+      ...widgetPositionCreateStatements,
     ]) {
       await db.execute(statement);
     }

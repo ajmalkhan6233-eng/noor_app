@@ -16,6 +16,8 @@ class QiblaState extends Equatable {
     this.locationError,
     this.headingDegrees,
     this.compassAccuracy = CompassAccuracy.unavailable,
+    this.tiltX = 0,
+    this.tiltY = 0,
   });
 
   final double? latitude;
@@ -36,6 +38,11 @@ class QiblaState extends Equatable {
   final double? headingDegrees;
   final CompassAccuracy compassAccuracy;
 
+  /// Device tilt from the accelerometer, -1..1 per axis — purely a
+  /// visual cue for the compass's light-sweep effect.
+  final double tiltX;
+  final double tiltY;
+
   bool get hasLocation => latitude != null && longitude != null;
 
   /// Angle to rotate a north-up needle so it points at the Kaaba
@@ -55,6 +62,8 @@ class QiblaState extends Equatable {
     String? locationError,
     double? headingDegrees,
     CompassAccuracy? compassAccuracy,
+    double? tiltX,
+    double? tiltY,
   }) {
     return QiblaState(
       latitude: latitude ?? this.latitude,
@@ -65,6 +74,8 @@ class QiblaState extends Equatable {
       locationError: locationError,
       headingDegrees: headingDegrees,
       compassAccuracy: compassAccuracy ?? this.compassAccuracy,
+      tiltX: tiltX ?? this.tiltX,
+      tiltY: tiltY ?? this.tiltY,
     );
   }
 
@@ -78,5 +89,7 @@ class QiblaState extends Equatable {
     locationError,
     headingDegrees,
     compassAccuracy,
+    tiltX,
+    tiltY,
   ];
 }
