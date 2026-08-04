@@ -23,3 +23,10 @@ class QuranAssetMissing extends QuranImportStatus {
 class QuranVerificationFailed extends QuranImportStatus {
   const QuranVerificationFailed();
 }
+
+/// A verified import is actively running. [progress] is 0..1.
+class QuranImporting extends QuranImportStatus {
+  const QuranImporting(this.progress);
+
+  final double progress;
+}

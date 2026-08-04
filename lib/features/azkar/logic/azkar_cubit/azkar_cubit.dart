@@ -3,15 +3,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/azkar_category.dart';
+import '../../data/azkar_import_service.dart';
 import '../../data/azkar_repository.dart';
 import 'azkar_state.dart';
 
 class AzkarCubit extends Cubit<AzkarState> {
-  AzkarCubit({AzkarRepository? repository})
+  AzkarCubit({AzkarRepository? repository, AzkarImportService? importService})
     : _repository = repository ?? AzkarRepository(),
+      _importService = importService ?? AzkarImportService(),
       super(const AzkarState());
 
   final AzkarRepository _repository;
+  final AzkarImportService _importService;
+
+  Future<void> init() async {
+    final status = await _importService.ensureImported();
+    emit(state.copyWith(importStatus: status));
+    await selectCategory(AzkarCategory.morning);
+  }
 
   Future<void> selectCategory(AzkarCategory category) async {
     emit(state.copyWith(category: category, isLoading: true));

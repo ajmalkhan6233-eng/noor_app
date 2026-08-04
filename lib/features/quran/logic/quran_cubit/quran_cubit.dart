@@ -24,7 +24,13 @@ class QuranCubit extends Cubit<QuranState> {
 
   Future<void> init() async {
     final appSettings = await _settingsRepository.load();
-    final status = await _importService.ensureImported();
+    final status = await _importService.ensureImported(
+      onProgress: (progress) {
+        if (!isClosed) {
+          emit(state.copyWith(importStatus: QuranImporting(progress)));
+        }
+      },
+    );
     if (status is! QuranImported) {
       emit(
         state.copyWith(

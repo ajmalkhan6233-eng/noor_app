@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
+import '../data/quran_import_status.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
@@ -39,6 +40,9 @@ class _QuranView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (context, state) {
+            if (state.importStatus is QuranImporting) {
+              return QuranImportNotice(status: state.importStatus!);
+            }
             if (state.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(color: AppColors.gold),

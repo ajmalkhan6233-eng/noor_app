@@ -19,15 +19,23 @@ class QuranRepository {
   Future<List<QuranSurah>> surahs() async {
     final db = await _dbHelper.database;
     final rows = await db.query('quran_surahs', orderBy: 'id ASC');
-    return [
-      for (final row in rows)
-        QuranSurah(
-          id: row['id']! as int,
-          ayahCount: row['ayah_count']! as int,
-          nameArabic: row['name_arabic'] as String?,
-          nameTranslit: row['name_translit'] as String?,
-        ),
-    ];
+    return [for (final row in rows) _toSurah(row)];
+  }
+
+  QuranSurah _toSurah(Map<String, Object?> row) {
+    final place = row['revelation_place'] as String?;
+    return QuranSurah(
+      id: row['id']! as int,
+      ayahCount: row['ayah_count']! as int,
+      nameArabic: row['name_arabic'] as String?,
+      nameTranslit: row['name_translit'] as String?,
+      nameEnglish: row['name_english'] as String?,
+      revelationPlace: switch (place) {
+        'meccan' => RevelationPlace.meccan,
+        'medinan' => RevelationPlace.medinan,
+        _ => null,
+      },
+    );
   }
 
   Future<List<QuranAyah>> ayahsForSurah(int surahId) async {

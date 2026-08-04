@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
-import '../data/azkar_category.dart';
+import '../data/azkar_import_status.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
 import '../logic/azkar_cubit/azkar_state.dart';
 import 'widgets/azkar_category_selector.dart';
@@ -20,7 +20,7 @@ class AzkarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AzkarCubit()..selectCategory(AzkarCategory.values.first),
+      create: (_) => AzkarCubit()..init(),
       child: const _AzkarView(),
     );
   }
@@ -48,7 +48,10 @@ class _AzkarView extends StatelessWidget {
                     );
                   }
                   if (state.items.isEmpty) {
-                    return const AzkarEmptyState();
+                    return AzkarEmptyState(
+                      verificationFailed:
+                          state.importStatus is AzkarVerificationFailed,
+                    );
                   }
                   return ListView(
                     children: [

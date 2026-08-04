@@ -16,7 +16,9 @@ class _FakeImportService implements QuranImportService {
   final QuranImportStatus status;
 
   @override
-  Future<QuranImportStatus> ensureImported() async => status;
+  Future<QuranImportStatus> ensureImported({
+    void Function(double progress)? onProgress,
+  }) async => status;
 }
 
 class _FakeQuranRepository extends QuranRepository {

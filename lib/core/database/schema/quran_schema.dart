@@ -10,6 +10,8 @@ const List<String> quranCreateStatements = [
     id INTEGER PRIMARY KEY,
     name_arabic TEXT,
     name_translit TEXT,
+    name_english TEXT,
+    revelation_place TEXT,
     ayah_count INTEGER NOT NULL
   )
   ''',
@@ -44,6 +46,7 @@ const List<String> quranCreateStatements = [
   CREATE TABLE quran_import_meta (
     id INTEGER PRIMARY KEY CHECK (id = 1),
     imported_sha256 TEXT NOT NULL,
+    imported_metadata_sha256 TEXT NOT NULL,
     imported_at TEXT NOT NULL
   )
   ''',

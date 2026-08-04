@@ -1,8 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Azkar schema. `azkar_items` is intentionally left empty by
-// `azkarSeedStatements` — TODO: import a properly sourced azkar
-// collection; every row that goes in later MUST carry a non-empty
+// Azkar schema. `azkar_items` starts empty and is populated by
+// `AzkarImportService` from a SHA-256-verified, MIT-licensed dataset —
+// see `assets/azkar/README.md`. Every row carries a non-empty
 // `source` citation, hence that column being NOT NULL.
 
 const List<String> azkarCreateStatements = [
@@ -30,6 +30,14 @@ const List<String> azkarCreateStatements = [
     item_id INTEGER PRIMARY KEY REFERENCES azkar_items(id),
     count INTEGER NOT NULL DEFAULT 0,
     updated_at TEXT NOT NULL
+  )
+  ''',
+  '''
+  CREATE TABLE azkar_import_meta (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    imported_ar_sha256 TEXT NOT NULL,
+    imported_en_sha256 TEXT NOT NULL,
+    imported_at TEXT NOT NULL
   )
   ''',
 ];

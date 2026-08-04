@@ -10,8 +10,11 @@ import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import 'licences_screen.dart';
+import 'widgets/about_sources_card.dart';
+import 'widgets/font_credit.dart';
 
-/// About page: app identity, bundled font credits, and licences.
+/// About page: app identity, text-source attribution, bundled font
+/// credits, and licences.
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -26,6 +29,8 @@ class AboutScreen extends StatelessWidget {
           StaggeredFadeIn(
             children: [
               _identityCard(),
+              const SizedBox(height: 16),
+              const AboutSourcesCard(),
               const SizedBox(height: 16),
               _fontCreditsCard(),
               const SizedBox(height: 16),
@@ -60,14 +65,14 @@ class AboutScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
           SectionHeader('Typefaces'),
-          _FontCredit(
+          FontCredit(
             family: 'Cormorant Garamond',
             role: 'Display — prayer times, the Bismillah, headers',
           ),
           SizedBox(height: 12),
-          _FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
+          FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
           SizedBox(height: 12),
-          _FontCredit(family: 'Amiri', role: 'Arabic text'),
+          FontCredit(family: 'Amiri', role: 'Arabic text'),
           SizedBox(height: 8),
           Text(
             'Each is licensed under the SIL Open Font Licence 1.1 and '
@@ -102,24 +107,6 @@ class AboutScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _FontCredit extends StatelessWidget {
-  const _FontCredit({required this.family, required this.role});
-
-  final String family;
-  final String role;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(family, style: const TextStyle(color: AppColors.parchment)),
-        Text(role, style: AppTypography.caption),
-      ],
     );
   }
 }
