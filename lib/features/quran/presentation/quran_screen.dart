@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
@@ -101,30 +102,41 @@ class _SurahIndex extends StatelessWidget {
         Expanded(
           child: ListView(
             children: [
-              for (final surah in (state.searchQuery.isEmpty
-                  ? state.surahs
-                  : const []))
-                SurahListTile(surah: surah, onTap: () => _open(context, surah.id)),
-              if (state.searchQuery.isNotEmpty)
-                for (final ayah in state.searchResults)
-                  Semantics(
-                    label:
-                        'Search result: Surah ${ayah.surahId}, '
-                        'Ayah ${ayah.ayahNumber}',
-                    button: true,
-                    child: ListTile(
-                      onTap: () => _open(context, ayah.surahId),
-                      title: Text(
-                        ayah.arabicText,
-                        textDirection: TextDirection.rtl,
-                        style: const TextStyle(color: AppColors.textPrimary),
-                      ),
-                      subtitle: Text(
-                        'Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
-                        style: const TextStyle(color: AppColors.textSecondary),
-                      ),
+              StaggeredFadeIn(
+                children: [
+                  for (final surah in (state.searchQuery.isEmpty
+                      ? state.surahs
+                      : const []))
+                    SurahListTile(
+                      surah: surah,
+                      onTap: () => _open(context, surah.id),
                     ),
-                  ),
+                  if (state.searchQuery.isNotEmpty)
+                    for (final ayah in state.searchResults)
+                      Semantics(
+                        label:
+                            'Search result: Surah ${ayah.surahId}, '
+                            'Ayah ${ayah.ayahNumber}',
+                        button: true,
+                        child: ListTile(
+                          onTap: () => _open(context, ayah.surahId),
+                          title: Text(
+                            ayah.arabicText,
+                            textDirection: TextDirection.rtl,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                ],
+              ),
             ],
           ),
         ),

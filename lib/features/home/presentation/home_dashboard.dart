@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/presentation/motion/fade_tab_switcher.dart';
 import '../../azkar/presentation/azkar_screen.dart';
 import '../../prayer_times/presentation/prayer_times_screen.dart';
 import '../../qibla/presentation/qibla_screen.dart';
@@ -70,7 +71,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
           ),
         ],
       ),
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: FadeTabSwitcher(index: _selectedIndex, children: _screens),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: AppColors.ink,

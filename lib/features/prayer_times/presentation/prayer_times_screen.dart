@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
@@ -43,11 +44,15 @@ class _PrayerTimesView extends StatelessWidget {
           child: BlocBuilder<PrayerCubit, PrayerState>(
             builder: (context, state) => ListView(
               children: [
-                _buildResult(state),
-                const SizedBox(height: 16),
-                const LocationSelector(),
-                const SizedBox(height: 16),
-                _activeSettingsCaption(state.settings),
+                StaggeredFadeIn(
+                  children: [
+                    _buildResult(state),
+                    const SizedBox(height: 16),
+                    const LocationSelector(),
+                    const SizedBox(height: 16),
+                    _activeSettingsCaption(state.settings),
+                  ],
+                ),
               ],
             ),
           ),

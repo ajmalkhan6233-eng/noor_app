@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
 import '../logic/settings_cubit/settings_cubit.dart';
@@ -46,28 +47,32 @@ class _SettingsView extends StatelessWidget {
           }
           return ListView(
             padding: const EdgeInsets.all(24),
-            children: const [
-              SectionHeader('Calculation'),
-              AppCard(
-                child: Column(
-                  children: [
-                    MethodMadhabSection(),
-                    SizedBox(height: 12),
-                    HighLatitudeRuleSection(),
-                  ],
-                ),
+            children: [
+              StaggeredFadeIn(
+                children: const [
+                  SectionHeader('Calculation'),
+                  AppCard(
+                    child: Column(
+                      children: [
+                        MethodMadhabSection(),
+                        SizedBox(height: 12),
+                        HighLatitudeRuleSection(),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  SectionHeader('Manual adjustments (minutes)'),
+                  AppCard(child: PrayerAdjustmentsSection()),
+                  SizedBox(height: 16),
+                  SectionHeader('Notifications'),
+                  AppCard(child: NotificationTogglesSection()),
+                  SizedBox(height: 16),
+                  SectionHeader('Display'),
+                  AppCard(child: DisplaySection()),
+                  SizedBox(height: 24),
+                  AboutDonateSection(),
+                ],
               ),
-              SizedBox(height: 16),
-              SectionHeader('Manual adjustments (minutes)'),
-              AppCard(child: PrayerAdjustmentsSection()),
-              SizedBox(height: 16),
-              SectionHeader('Notifications'),
-              AppCard(child: NotificationTogglesSection()),
-              SizedBox(height: 16),
-              SectionHeader('Display'),
-              AppCard(child: DisplaySection()),
-              SizedBox(height: 24),
-              AboutDonateSection(),
             ],
           );
         },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../logic/tasbih_cubit/tasbih_state.dart';
@@ -35,8 +36,7 @@ class _TasbihView extends StatelessWidget {
       body: BlocBuilder<TasbihCubit, TasbihState>(
         builder: (context, state) {
           return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            child: StaggeredFadeIn(
               children: [
                 Semantics(
                   label: 'Currently counting ${state.dhikrLabel}',

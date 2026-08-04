@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import 'widgets/licence_package_tile.dart';
 
 class _PackageLicence {
@@ -64,17 +65,21 @@ class _LicencesScreenState extends State<LicencesScreen> {
               ),
             );
           }
-          return ListView.separated(
+          return ListView(
             padding: const EdgeInsets.all(24),
-            itemCount: packages.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final package = packages[index];
-              return LicencePackageTile(
-                packageName: package.name,
-                licenceText: package.text,
-              );
-            },
+            children: [
+              StaggeredFadeIn(
+                children: [
+                  for (final package in packages) ...[
+                    LicencePackageTile(
+                      packageName: package.name,
+                      licenceText: package.text,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                ],
+              ),
+            ],
           );
         },
       ),

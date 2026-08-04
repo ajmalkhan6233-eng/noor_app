@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../data/prayer_times_result.dart';
 import 'prayer_time_format.dart';
 
@@ -51,7 +52,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
   @override
   Widget build(BuildContext context) {
     final current = _currentPrayerName();
-    return Column(
+    return StaggeredFadeIn(
       children: [
         _row('Fajr', widget.times.fajr, current == 'Fajr'),
         _row('Sunrise', widget.times.sunrise, false),

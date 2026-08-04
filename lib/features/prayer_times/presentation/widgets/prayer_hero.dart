@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/presentation/motion/motion.dart';
 import '../../data/prayer_times_result.dart';
 import 'astrolabe_ring.dart';
 
@@ -69,15 +70,38 @@ class _PrayerHeroState extends State<PrayerHero> {
             children: [
               Text(heroName, style: AppTypography.heroDisplay),
               const SizedBox(height: 4),
-              Text(
-                countdown,
-                style: const TextStyle(
-                  color: AppColors.sage,
-                  fontFeatures: [FontFeature.tabularFigures()],
-                  letterSpacing: 1,
-                ),
-              ),
+              _countdownText(context, countdown),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  static const _countdownStyle = TextStyle(
+    color: AppColors.sage,
+    fontFeatures: [FontFeature.tabularFigures()],
+    letterSpacing: 1,
+  );
+
+  /// The seconds digits fade as they change rather than jumping; the
+  /// rest of the countdown ("HH:MM:") stays static.
+  Widget _countdownText(BuildContext context, String countdown) {
+    if (countdown.length < 2) {
+      return Text(countdown, style: _countdownStyle);
+    }
+    final prefix = countdown.substring(0, countdown.length - 2);
+    final seconds = countdown.substring(countdown.length - 2);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(prefix, style: _countdownStyle),
+        AnimatedSwitcher(
+          duration: Motion.effective(context, Motion.short),
+          child: Text(
+            seconds,
+            key: ValueKey(seconds),
+            style: _countdownStyle,
           ),
         ),
       ],

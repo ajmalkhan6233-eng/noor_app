@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../data/azkar_category.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
 import '../logic/azkar_cubit/azkar_state.dart';
@@ -51,8 +52,12 @@ class _AzkarView extends StatelessWidget {
                   }
                   return ListView(
                     children: [
-                      for (final item in state.items)
-                        AzkarItemTile(item: item),
+                      StaggeredFadeIn(
+                        children: [
+                          for (final item in state.items)
+                            AzkarItemTile(item: item),
+                        ],
+                      ),
                     ],
                   );
                 },
