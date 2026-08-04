@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../data/quran_import_status.dart';
@@ -36,6 +37,7 @@ class _QuranView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.paper,
+      appBar: AppBar(title: const Text(AppStrings.quranScreenTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: BlocBuilder<QuranCubit, QuranState>(

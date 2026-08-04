@@ -24,7 +24,8 @@ const List<String> settingsCreateStatements = [
     notify_isha INTEGER NOT NULL DEFAULT 1,
     theme_mode TEXT NOT NULL DEFAULT 'dark',
     arabic_font_scale REAL NOT NULL DEFAULT 1.0,
-    hijri_offset_days INTEGER NOT NULL DEFAULT 0
+    hijri_offset_days INTEGER NOT NULL DEFAULT 0,
+    location_label TEXT
   )
   ''',
 ];

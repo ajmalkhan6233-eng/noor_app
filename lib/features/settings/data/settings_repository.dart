@@ -53,6 +53,7 @@ class SettingsRepository {
       ),
       arabicFontScale: row['arabic_font_scale']! as double,
       hijriOffsetDays: row['hijri_offset_days']! as int,
+      locationLabel: row['location_label'] as String?,
     );
   }
 
@@ -80,6 +81,7 @@ class SettingsRepository {
       'theme_mode': settings.themeMode.name,
       'arabic_font_scale': settings.arabicFontScale,
       'hijri_offset_days': settings.hijriOffsetDays,
+      'location_label': settings.locationLabel,
     };
 
     final existing = await db.query('app_settings', where: 'id = 1');

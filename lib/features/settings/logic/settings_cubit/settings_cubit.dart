@@ -59,6 +59,16 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> setHijriOffsetDays(int days) =>
       _update((s) => s.copyWith(hijriOffsetDays: days));
 
+  Future<void> setLocationLabel(String? label) =>
+      _update((s) => AppSettings(
+        prayerSettings: s.prayerSettings,
+        notifications: s.notifications,
+        themeMode: s.themeMode,
+        arabicFontScale: s.arabicFontScale,
+        hijriOffsetDays: s.hijriOffsetDays,
+        locationLabel: label,
+      ));
+
   Future<void> _update(AppSettings Function(AppSettings) updater) async {
     final next = updater(state.settings);
     emit(state.copyWith(settings: next));

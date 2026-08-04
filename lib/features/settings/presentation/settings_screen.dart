@@ -13,11 +13,10 @@ import 'widgets/about_donate_section.dart';
 import 'widgets/display_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
 import 'widgets/method_madhab_section.dart';
-import 'widgets/notification_toggles_section.dart';
 import 'widgets/prayer_adjustments_section.dart';
 
-/// Settings: calculation preferences, notifications, display, and —
-/// at the very bottom, once, quietly — About and Donate.
+/// Settings: calculation preferences and display. Notification
+/// toggles live on the Home dashboard, not buried here.
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -63,9 +62,6 @@ class _SettingsView extends StatelessWidget {
                   SizedBox(height: 16),
                   SectionHeader('Manual adjustments (minutes)'),
                   AppCard(child: PrayerAdjustmentsSection()),
-                  SizedBox(height: 16),
-                  SectionHeader('Notifications'),
-                  AppCard(child: NotificationTogglesSection()),
                   SizedBox(height: 16),
                   SectionHeader('Display'),
                   AppCard(child: DisplaySection()),

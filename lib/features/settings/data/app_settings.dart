@@ -15,6 +15,7 @@ class AppSettings {
     this.themeMode = AppThemeModeOption.dark,
     this.arabicFontScale = 1.0,
     this.hijriOffsetDays = 0,
+    this.locationLabel,
   });
 
   final PrayerSettings prayerSettings;
@@ -29,12 +30,18 @@ class AppSettings {
   /// for local moon-sighting differences.
   final int hijriOffsetDays;
 
+  /// User-entered display name for the current location, e.g.
+  /// "Amman, Jordan" — the app never resolves this itself (no
+  /// geocoding, no network); `null` until the user sets it.
+  final String? locationLabel;
+
   AppSettings copyWith({
     PrayerSettings? prayerSettings,
     NotificationSettings? notifications,
     AppThemeModeOption? themeMode,
     double? arabicFontScale,
     int? hijriOffsetDays,
+    String? locationLabel,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -42,6 +49,7 @@ class AppSettings {
       themeMode: themeMode ?? this.themeMode,
       arabicFontScale: arabicFontScale ?? this.arabicFontScale,
       hijriOffsetDays: hijriOffsetDays ?? this.hijriOffsetDays,
+      locationLabel: locationLabel ?? this.locationLabel,
     );
   }
 }

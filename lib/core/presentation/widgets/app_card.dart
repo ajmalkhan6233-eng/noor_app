@@ -21,11 +21,8 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding,
       decoration: BoxDecoration(
-        color: AppColors.card,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.hairline),
         boxShadow: [
           BoxShadow(
             color: AppColors.ink.withValues(alpha: 0.05),
@@ -34,7 +31,22 @@ class AppCard extends StatelessWidget {
           ),
         ],
       ),
-      child: child,
+      // A dedicated Material — rather than relying on a distant
+      // ancestor — so any ListTile/InkWell/etc. inside the card paints
+      // its ink effects here, not hidden beneath the shadow's
+      // DecoratedBox.
+      child: Material(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.hairline),
+          ),
+          child: child,
+        ),
+      ),
     );
   }
 }

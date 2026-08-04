@@ -1,0 +1,84 @@
+// Bismillahir Rahmanir Raheem — watermark: ALLAH
+//
+// Secondary features and app settings — everything that isn't one of
+// the four primary bottom-nav tabs, plus quick-access duplicates of
+// the dashboard's shortcuts for anyone who lands here first.
+
+import 'package:flutter/material.dart';
+
+import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/widgets/app_card.dart';
+import '../../../core/utils/semantics_helpers.dart';
+import '../../calendar/presentation/calendar_screen.dart';
+import '../../qibla/presentation/qibla_screen.dart';
+import '../../settings/presentation/about_screen.dart';
+import '../../settings/presentation/settings_screen.dart';
+import '../../tasbih/presentation/tasbih_screen.dart';
+import '../../zakat/presentation/zakat_screen.dart';
+
+class MoreScreen extends StatelessWidget {
+  const MoreScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.paper,
+      appBar: AppBar(title: const Text('More')),
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          AppCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _row(context, Icons.explore, 'Qibla', const QiblaScreen()),
+                _divider(),
+                _row(context, Icons.fingerprint, 'Tasbih', const TasbihScreen()),
+                _divider(),
+                _row(context, Icons.calendar_month, 'Calendar', const CalendarScreen()),
+                _divider(),
+                _row(context, Icons.savings_outlined, 'Zakat calculator', const ZakatScreen()),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          AppCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _row(context, Icons.settings_outlined, 'Settings', const SettingsScreen()),
+                _divider(),
+                _row(context, Icons.info_outline, 'About', const AboutScreen()),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _divider() => const Divider(color: AppColors.hairline, height: 1);
+
+  Widget _row(BuildContext context, IconData icon, String label, Widget destination) {
+    return SemanticButton(
+      label: label,
+      hint: 'Double tap to open $label',
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => destination),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        child: Row(
+          children: [
+            Icon(icon, color: AppColors.emerald, size: 20),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(label, style: const TextStyle(color: AppColors.ink)),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.sage, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+}
