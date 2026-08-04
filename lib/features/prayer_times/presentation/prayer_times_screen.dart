@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../../core/presentation/widgets/collapsing_scaffold.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
@@ -37,29 +37,26 @@ class _PrayerTimesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text(AppStrings.prayerTimesScreenTitle)),
-      body: SafeArea(
-        child: Padding(
+    return CollapsingScaffold(
+      title: AppStrings.prayerTimesScreenTitle,
+      slivers: [
+        SliverPadding(
           padding: const EdgeInsets.all(24),
-          child: BlocBuilder<PrayerCubit, PrayerState>(
-            builder: (context, state) => ListView(
-              children: [
-                StaggeredFadeIn(
-                  children: [
-                    _buildResult(state),
-                    const SizedBox(height: 16),
-                    const LocationSelector(),
-                    const SizedBox(height: 16),
-                    _activeSettingsCaption(state.settings),
-                  ],
-                ),
-              ],
+          sliver: SliverToBoxAdapter(
+            child: BlocBuilder<PrayerCubit, PrayerState>(
+              builder: (context, state) => StaggeredFadeIn(
+                children: [
+                  _buildResult(state),
+                  const SizedBox(height: 16),
+                  const LocationSelector(),
+                  const SizedBox(height: 16),
+                  _activeSettingsCaption(state.settings),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 
