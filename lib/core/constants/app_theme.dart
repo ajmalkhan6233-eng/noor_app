@@ -18,19 +18,24 @@ ThemeData buildDarkTheme() {
     canvasColor: AppColors.ink,
     cardColor: AppColors.card,
     dividerColor: AppColors.hairline,
+    // Material 3 tints elevated surfaces with colorScheme.surfaceTint by
+    // default, which turns our near-black cards a bright, unintended
+    // green. Cards must render exactly AppColors.card — flat, no tint.
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.gold,
       brightness: Brightness.dark,
       surface: AppColors.card,
-    ),
+    ).copyWith(surfaceTint: Colors.transparent),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.ink,
       foregroundColor: AppColors.parchment,
       elevation: 0,
+      surfaceTintColor: Colors.transparent,
     ),
     cardTheme: CardThemeData(
       color: AppColors.card,
       elevation: 0,
+      surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: const BorderSide(color: AppColors.hairline),
@@ -74,7 +79,10 @@ ThemeData buildDarkTheme() {
       unselectedItemColor: AppColors.sage,
       type: BottomNavigationBarType.fixed,
     ),
-    dialogTheme: const DialogThemeData(backgroundColor: AppColors.card),
+    dialogTheme: const DialogThemeData(
+      backgroundColor: AppColors.card,
+      surfaceTintColor: Colors.transparent,
+    ),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: AppColors.parchment),
     ),
