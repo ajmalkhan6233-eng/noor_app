@@ -1,4 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Re-schedule flutter_local_notifications' alarms after a reboot
+         or app update — no boot-time network or background service,
+         just re-arming already-computed local alarms. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Required (Android 6+) before ringer mode can be changed for
+         Silent Mode — the user must grant this explicitly in system
+         settings; see SilentModeChannel/MainActivity. -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <!-- Exact alarms for adhan/iqamath notifications and Silent Mode
+         ringer windows. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <application
         android:label="noor"
         android:name="${applicationName}"
@@ -30,6 +41,21 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- flutter_local_notifications' own receiver: re-arms
+             zonedSchedule alarms after boot/app update. -->
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Silent Mode: fires SILENCE/RESTORE at scheduled times set
+             from Dart via SilentModeChannel/MainActivity. -->
+        <receiver android:exported="false" android:name=".SilentModeReceiver"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

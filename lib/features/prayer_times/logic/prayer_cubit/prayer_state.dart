@@ -2,8 +2,11 @@
 
 import 'package:equatable/equatable.dart';
 
+import '../../../settings/data/notification_settings.dart';
+import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_settings.dart';
 import '../../data/prayer_times_result.dart';
+import '../../data/silent_mode_settings.dart';
 
 /// Immutable state for the prayer-times feature.
 ///
@@ -20,6 +23,9 @@ class PrayerState extends Equatable {
     this.result,
     this.isResolvingLocation = false,
     this.locationError,
+    this.notifications = const NotificationSettings(),
+    this.iqamathOffsets = const IqamathOffsetMinutes(),
+    this.silentMode = const SilentModeSettings(),
   });
 
   final double? latitude;
@@ -35,6 +41,12 @@ class PrayerState extends Equatable {
   final bool isResolvingLocation;
   final String? locationError;
 
+  /// Read from Settings on [PrayerCubit.loadSettings] and used to
+  /// schedule notifications and to show the iqamath column.
+  final NotificationSettings notifications;
+  final IqamathOffsetMinutes iqamathOffsets;
+  final SilentModeSettings silentMode;
+
   bool get hasCoordinates => latitude != null && longitude != null;
 
   PrayerState copyWith({
@@ -46,6 +58,9 @@ class PrayerState extends Equatable {
     PrayerTimesResult? result,
     bool? isResolvingLocation,
     String? locationError,
+    NotificationSettings? notifications,
+    IqamathOffsetMinutes? iqamathOffsets,
+    SilentModeSettings? silentMode,
   }) {
     return PrayerState(
       latitude: latitude ?? this.latitude,
@@ -56,6 +71,9 @@ class PrayerState extends Equatable {
       result: result ?? this.result,
       isResolvingLocation: isResolvingLocation ?? false,
       locationError: locationError,
+      notifications: notifications ?? this.notifications,
+      iqamathOffsets: iqamathOffsets ?? this.iqamathOffsets,
+      silentMode: silentMode ?? this.silentMode,
     );
   }
 

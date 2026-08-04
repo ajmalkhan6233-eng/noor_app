@@ -102,6 +102,22 @@ class QuranRepository {
     await db.delete('quran_bookmarks', where: 'id = ?', whereArgs: [bookmarkId]);
   }
 
+  /// Looks up one specific ayah by (surah, ayah) — e.g. for a guide
+  /// screen that wants to quote a single verse. Returns `null` if the
+  /// Quran hasn't been imported yet (table empty) or the reference
+  /// doesn't exist; callers must show their own "not loaded" state,
+  /// never invented text.
+  Future<QuranAyah?> singleAyah(int surahId, int ayahNumber) async {
+    final db = await _dbHelper.database;
+    final rows = await db.query(
+      'quran_ayahs',
+      where: 'surah_id = ? AND ayah_number = ?',
+      whereArgs: [surahId, ayahNumber],
+    );
+    if (rows.isEmpty) return null;
+    return _toAyahs(rows).first;
+  }
+
   Future<QuranReadingPosition?> lastRead() async {
     final db = await _dbHelper.database;
     final rows = await db.query('quran_last_read', where: 'id = 1');

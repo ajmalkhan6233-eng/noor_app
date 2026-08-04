@@ -10,6 +10,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../security/secure_passphrase_service.dart';
 import 'schema/azkar_schema.dart';
+import 'schema/pilgrimage_schema.dart';
 import 'schema/quran_schema.dart';
 import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
@@ -24,6 +25,14 @@ import 'schema/widget_position_schema.dart';
 class DatabaseHelper {
   DatabaseHelper._internal({SecurePassphraseService? passphraseService})
     : _passphraseService = passphraseService ?? const SecurePassphraseService();
+
+  /// Test-only seam: wraps an already-open [Database] (e.g. an
+  /// in-memory `sqflite_common_ffi` database in a unit test) so
+  /// repositories can be exercised without the real encrypted-DB
+  /// bootstrap (secure passphrase storage, platform channels).
+  DatabaseHelper.forTesting(Database db)
+    : _passphraseService = const SecurePassphraseService(),
+      _database = db;
 
   static final DatabaseHelper instance = DatabaseHelper._internal();
 
@@ -63,6 +72,7 @@ class DatabaseHelper {
       ...azkarCreateStatements,
       ...quranCreateStatements,
       ...widgetPositionCreateStatements,
+      ...pilgrimageCreateStatements,
     ]) {
       await db.execute(statement);
     }

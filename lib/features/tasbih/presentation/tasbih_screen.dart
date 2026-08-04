@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../logic/tasbih_cubit/tasbih_state.dart';
 import 'widgets/dhikr_selector.dart';
@@ -32,9 +32,10 @@ class _TasbihView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text(AppStrings.tasbihScreenTitle)),
+      appBar: AppBar(title: Text(l10n.tasbihScreenTitle)),
       body: Column(
         children: [
           const Padding(
@@ -56,17 +57,17 @@ class _TasbihView extends StatelessWidget {
                       bottom: 16,
                       right: 16,
                       child: SemanticButton(
-                        label: AppStrings.tasbihResetSemanticLabel,
-                        hint: 'Double tap to reset the count to zero',
+                        label: l10n.tasbihResetSemanticLabel,
+                        hint: l10n.tasbihResetHint,
                         onTap: () => context.read<TasbihCubit>().reset(),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 8,
                           ),
                           child: Text(
-                            'Reset',
-                            style: TextStyle(
+                            l10n.resetLabel,
+                            style: const TextStyle(
                               color: AppColors.emerald,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

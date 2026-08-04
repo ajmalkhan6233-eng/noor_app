@@ -17,6 +17,23 @@ class NotificationSettings {
   final bool maghrib;
   final bool isha;
 
+  bool forPrayer(String name) {
+    switch (name) {
+      case 'Fajr':
+        return fajr;
+      case 'Dhuhr':
+        return dhuhr;
+      case 'Asr':
+        return asr;
+      case 'Maghrib':
+        return maghrib;
+      case 'Isha':
+        return isha;
+      default:
+        return false;
+    }
+  }
+
   NotificationSettings copyWith({
     bool? fajr,
     bool? dhuhr,

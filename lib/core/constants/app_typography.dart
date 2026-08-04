@@ -15,6 +15,31 @@ abstract final class AppTypography {
   static const String bodyFamily = 'Inter';
   static const String arabicFamily = 'Amiri';
 
+  /// Additional UI-chrome typefaces for languages Inter has no glyphs
+  /// for — registered as a theme-wide fallback so any UI text (button
+  /// labels, titles) renders correctly when the app language is Tamil
+  /// or Sinhala, without ever touching Arabic/Quran/Azkar styling
+  /// (those always use [arabicFamily] explicitly).
+  static const List<String> uiFontFallback = [
+    'Noto Sans Tamil',
+    'Noto Sans Sinhala',
+  ];
+
+  /// Explicit UI font family for a given language code — used where a
+  /// widget always renders a specific language's text regardless of
+  /// the active locale, e.g. each option's native name in the language
+  /// picker. Returns `null` for English (falls back to [bodyFamily]).
+  static String? uiFamilyForLanguageCode(String languageCode) {
+    switch (languageCode) {
+      case 'ta':
+        return 'Noto Sans Tamil';
+      case 'si':
+        return 'Noto Sans Sinhala';
+      default:
+        return null;
+    }
+  }
+
   /// The largest display moment — the next-prayer name.
   static const TextStyle heroDisplay = TextStyle(
     fontFamily: displayFamily,

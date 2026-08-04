@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/features/prayer_times/data/prayer_adjustments.dart';
 import 'package:noor/features/prayer_times/data/prayer_high_latitude_rule.dart';
 import 'package:noor/features/prayer_times/data/prayer_settings.dart';
+import 'package:noor/features/settings/data/app_locale.dart';
 import 'package:noor/features/settings/data/app_settings.dart';
 import 'package:noor/features/settings/data/app_theme_mode.dart';
 import 'package:noor/features/settings/data/notification_settings.dart';
@@ -56,6 +57,33 @@ void main() {
       expect(updated.asr, isFalse);
       expect(updated.fajr, isTrue);
       expect(updated.isha, isTrue);
+    });
+  });
+
+  group('AppLocaleOption', () {
+    test('defaults to English and persists a distinct chosen language', () {
+      const original = AppSettings();
+      expect(original.locale, AppLocaleOption.english);
+
+      final updated = original.copyWith(locale: AppLocaleOption.tamil);
+      expect(updated.locale, AppLocaleOption.tamil);
+      expect(updated.arabicFontScale, original.arabicFontScale);
+    });
+
+    test('fromLanguageCode round-trips every option', () {
+      for (final option in AppLocaleOption.values) {
+        expect(
+          AppLocaleOptionData.fromLanguageCode(option.languageCode),
+          option,
+        );
+      }
+    });
+
+    test('unknown language code falls back to English', () {
+      expect(
+        AppLocaleOptionData.fromLanguageCode('xx'),
+        AppLocaleOption.english,
+      );
     });
   });
 

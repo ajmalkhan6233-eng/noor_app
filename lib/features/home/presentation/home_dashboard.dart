@@ -7,10 +7,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
 import '../../../core/presentation/widgets/draggable_floating.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../azkar/presentation/azkar_screen.dart';
 import '../../more/presentation/more_screen.dart';
 import '../../prayer_times/presentation/prayer_times_screen.dart';
@@ -38,6 +38,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
       body: Stack(
@@ -49,7 +50,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
             initialAlignment: const Alignment(1, 1),
             snapToNearestEdge: true,
             child: SemanticButton(
-              label: AppStrings.settingsSemanticLabel,
+              label: l10n.settingsSemanticLabel,
               hint: 'Double tap to open Settings',
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
@@ -92,11 +93,11 @@ class _HomeDashboardState extends State<HomeDashboard> {
           currentIndex: _selectedIndex,
           onTap: (index) => setState(() => _selectedIndex = index),
           items: [
-            _tab(Icons.home_outlined, 'Home'),
-            _tab(Icons.access_time, AppStrings.prayerTimesScreenTitle),
-            _tab(Icons.menu_book, AppStrings.quranScreenTitle),
-            _tab(Icons.self_improvement, AppStrings.azkarScreenTitle),
-            _tab(Icons.more_horiz, 'More'),
+            _tab(Icons.home_outlined, l10n.homeTab),
+            _tab(Icons.access_time, l10n.prayerTimesScreenTitle),
+            _tab(Icons.menu_book, l10n.quranScreenTitle),
+            _tab(Icons.self_improvement, l10n.azkarScreenTitle),
+            _tab(Icons.more_horiz, l10n.moreTab),
           ],
         ),
       ),

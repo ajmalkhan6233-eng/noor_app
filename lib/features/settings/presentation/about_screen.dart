@@ -73,6 +73,16 @@ class AboutScreen extends StatelessWidget {
           FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
           SizedBox(height: 12),
           FontCredit(family: 'Amiri', role: 'Arabic text'),
+          SizedBox(height: 12),
+          FontCredit(
+            family: 'Noto Sans Tamil',
+            role: 'Tamil interface text',
+          ),
+          SizedBox(height: 12),
+          FontCredit(
+            family: 'Noto Sans Sinhala',
+            role: 'Sinhala interface text',
+          ),
           SizedBox(height: 8),
           Text(
             'Each is licensed under the SIL Open Font Licence 1.1 and '

@@ -6,10 +6,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/presentation/widgets/draggable_floating.dart';
 import '../../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../../core/sensors/compass_reading.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../logic/qibla_cubit/qibla_state.dart';
 import 'qibla_needle.dart';
 
@@ -26,13 +26,13 @@ class QiblaCompassArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.compassAccuracy == CompassAccuracy.unavailable) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Text(
-            AppStrings.qiblaNoCompassMessage,
+            AppLocalizations.of(context)!.qiblaNoCompassMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.sage),
+            style: const TextStyle(color: AppColors.sage),
           ),
         ),
       );

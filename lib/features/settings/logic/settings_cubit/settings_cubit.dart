@@ -6,9 +6,12 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../prayer_times/data/iqamath_offsets.dart';
 import '../../../prayer_times/data/prayer_adjustments.dart';
 import '../../../prayer_times/data/prayer_high_latitude_rule.dart';
 import '../../../prayer_times/data/prayer_settings.dart';
+import '../../../prayer_times/data/silent_mode_settings.dart';
+import '../../data/app_locale.dart';
 import '../../data/app_settings.dart';
 import '../../data/app_theme_mode.dart';
 import '../../data/notification_settings.dart';
@@ -67,7 +70,26 @@ class SettingsCubit extends Cubit<SettingsState> {
         arabicFontScale: s.arabicFontScale,
         hijriOffsetDays: s.hijriOffsetDays,
         locationLabel: label,
+        iqamathOffsets: s.iqamathOffsets,
+        silentMode: s.silentMode,
+        selectedDistrict: s.selectedDistrict,
+        locale: s.locale,
       ));
+
+  Future<void> setIqamathOffsets(IqamathOffsetMinutes offsets) =>
+      _update((s) => s.copyWith(iqamathOffsets: offsets));
+
+  Future<void> setSilentMode(SilentModeSettings silentMode) =>
+      _update((s) => s.copyWith(silentMode: silentMode));
+
+  /// Sets or clears (pass `null`) the selected Sri Lankan district.
+  Future<void> setSelectedDistrict(String? district) =>
+      _update((s) => s.withSelectedDistrict(district));
+
+  /// Switches the app's UI chrome language — takes effect immediately,
+  /// no restart required. Never affects Arabic/Quran/Azkar text.
+  Future<void> setLocale(AppLocaleOption locale) =>
+      _update((s) => s.copyWith(locale: locale));
 
   Future<void> _update(AppSettings Function(AppSettings) updater) async {
     final next = updater(state.settings);

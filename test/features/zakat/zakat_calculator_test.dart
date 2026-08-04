@@ -24,14 +24,14 @@ void main() {
     test('nisab threshold uses the lower of gold and silver values', () {
       const inputs = ZakatInputs(goldPricePerGram: 80, silverPricePerGram: 1);
       final result = ZakatCalculator.calculate(inputs);
-      // gold nisab = 85*80=6800, silver nisab = 595*1=595 -> lower is silver
-      expect(result.nisabThreshold, 595);
+      // gold nisab = 87.48*80=6998.4, silver nisab = 612.36*1=612.36 -> lower is silver
+      expect(result.nisabThreshold, closeTo(612.36, 0.0001));
     });
 
     test('falls back to whichever metal price was actually entered', () {
       const inputs = ZakatInputs(silverPricePerGram: 1);
       final result = ZakatCalculator.calculate(inputs);
-      expect(result.nisabThreshold, 595);
+      expect(result.nisabThreshold, closeTo(612.36, 0.0001));
     });
 
     test('nisab threshold is zero when no prices are entered', () {
@@ -55,6 +55,22 @@ void main() {
       expect(result.zakatDue, 0);
     });
 
+    test('exactly at nisab counts as met and zakat is due', () {
+      // silver nisab = 612.36*1 = 612.36; net wealth set to exactly that.
+      const inputs = ZakatInputs(silverPricePerGram: 1, cash: 612.36);
+      final result = ZakatCalculator.calculate(inputs);
+      expect(result.netWealth, closeTo(result.nisabThreshold, 0.0001));
+      expect(result.nisabMet, isTrue);
+      expect(result.zakatDue, closeTo(612.36 * 0.025, 0.0001));
+    });
+
+    test('one cent below nisab is not met', () {
+      const inputs = ZakatInputs(silverPricePerGram: 1, cash: 612.35);
+      final result = ZakatCalculator.calculate(inputs);
+      expect(result.nisabMet, isFalse);
+      expect(result.zakatDue, 0);
+    });
+
     test('liabilities can bring net wealth below nisab', () {
       const inputs = ZakatInputs(
         silverPricePerGram: 1,
@@ -64,6 +80,18 @@ void main() {
       final result = ZakatCalculator.calculate(inputs);
       expect(result.netWealth, 100);
       expect(result.nisabMet, isFalse);
+    });
+
+    test('liabilities exceeding assets give a negative net wealth and no zakat due', () {
+      const inputs = ZakatInputs(
+        silverPricePerGram: 1,
+        cash: 500,
+        liabilities: 1200,
+      );
+      final result = ZakatCalculator.calculate(inputs);
+      expect(result.netWealth, -700);
+      expect(result.nisabMet, isFalse);
+      expect(result.zakatDue, 0);
     });
   });
 }
