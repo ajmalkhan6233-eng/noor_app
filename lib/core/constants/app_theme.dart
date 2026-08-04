@@ -83,8 +83,34 @@ ThemeData buildDarkTheme() {
       backgroundColor: AppColors.card,
       surfaceTintColor: Colors.transparent,
     ),
+    snackBarTheme: const SnackBarThemeData(
+      backgroundColor: AppColors.card,
+      contentTextStyle: TextStyle(color: AppColors.parchment),
+      actionTextColor: AppColors.gold,
+    ),
+    listTileTheme: const ListTileThemeData(
+      textColor: AppColors.parchment,
+      iconColor: AppColors.sage,
+    ),
+    tooltipTheme: const TooltipThemeData(
+      decoration: BoxDecoration(color: AppColors.card),
+      textStyle: TextStyle(color: AppColors.parchment),
+    ),
+    popupMenuTheme: const PopupMenuThemeData(
+      color: AppColors.card,
+      surfaceTintColor: Colors.transparent,
+      textStyle: TextStyle(color: AppColors.parchment),
+    ),
     textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontFamily: AppTypography.displayFamily,
+        color: AppColors.parchment,
+      ),
+      titleMedium: TextStyle(color: AppColors.parchment),
+      bodyLarge: TextStyle(color: AppColors.parchment),
       bodyMedium: TextStyle(color: AppColors.parchment),
+      bodySmall: TextStyle(color: AppColors.sage),
+      labelLarge: TextStyle(color: AppColors.gold),
     ),
   );
 }

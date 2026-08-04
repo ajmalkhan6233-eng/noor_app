@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_item.dart';
@@ -32,11 +33,7 @@ class AzkarItemTile extends StatelessWidget {
                 Text(
                   item.arabicText,
                   textDirection: TextDirection.rtl,
-                  style: const TextStyle(
-                    fontFamily: 'Amiri',
-                    color: AppColors.parchment,
-                    fontSize: 20,
-                  ),
+                  style: AppTypography.arabic.copyWith(fontSize: 20),
                 ),
                 if (item.transliteration != null) ...[
                   const SizedBox(height: 8),

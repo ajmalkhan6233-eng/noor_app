@@ -27,8 +27,8 @@ class DisplaySection extends StatelessWidget {
               child: DropdownButton<AppThemeModeOption>(
                 isExpanded: true,
                 value: settings.themeMode,
-                dropdownColor: AppColors.surface,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: AppColors.card,
+                style: const TextStyle(color: AppColors.parchment),
                 items: [
                   for (final mode in AppThemeModeOption.values)
                     DropdownMenuItem(value: mode, child: Text(mode.label)),
@@ -46,7 +46,7 @@ class DisplaySection extends StatelessWidget {
               value: '${settings.arabicFontScale.toStringAsFixed(2)}x',
               slider: true,
               child: Slider(
-                activeColor: AppColors.accent,
+                activeColor: AppColors.gold,
                 min: 0.75,
                 max: 2.0,
                 divisions: 25,
@@ -61,7 +61,7 @@ class DisplaySection extends StatelessWidget {
               children: [
                 const Text(
                   'Hijri offset',
-                  style: TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.parchment),
                 ),
                 Row(
                   children: [
@@ -70,14 +70,14 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays - 1),
-                      child: const Icon(Icons.remove, color: AppColors.accent),
+                      child: const Icon(Icons.remove, color: AppColors.gold),
                     ),
                     SizedBox(
                       width: 32,
                       child: Text(
                         '${settings.hijriOffsetDays}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.textSecondary),
+                        style: const TextStyle(color: AppColors.sage),
                       ),
                     ),
                     SemanticButton(
@@ -85,7 +85,7 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays + 1),
-                      child: const Icon(Icons.add, color: AppColors.accent),
+                      child: const Icon(Icons.add, color: AppColors.gold),
                     ),
                   ],
                 ),

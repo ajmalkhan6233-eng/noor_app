@@ -11,6 +11,7 @@ import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
 import 'widgets/quran_import_notice.dart';
 import 'widgets/quran_search_bar.dart';
+import 'widgets/quran_search_result_tile.dart';
 import 'widgets/surah_list_tile.dart';
 
 /// Quran: surah index and search, or a clear notice when the feature
@@ -113,27 +114,9 @@ class _SurahIndex extends StatelessWidget {
                     ),
                   if (state.searchQuery.isNotEmpty)
                     for (final ayah in state.searchResults)
-                      Semantics(
-                        label:
-                            'Search result: Surah ${ayah.surahId}, '
-                            'Ayah ${ayah.ayahNumber}',
-                        button: true,
-                        child: ListTile(
-                          onTap: () => _open(context, ayah.surahId),
-                          title: Text(
-                            ayah.arabicText,
-                            textDirection: TextDirection.rtl,
-                            style: const TextStyle(
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          subtitle: Text(
-                            'Surah ${ayah.surahId}, Ayah ${ayah.ayahNumber}',
-                            style: const TextStyle(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ),
+                      QuranSearchResultTile(
+                        ayah: ayah,
+                        onTap: () => _open(context, ayah.surahId),
                       ),
                 ],
               ),

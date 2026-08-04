@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.ink,
       body: Semantics(
         label: AppStrings.splashGreeting,
         child: SplashConfig.cosmicEnabled

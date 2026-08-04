@@ -32,7 +32,7 @@ class _TasbihView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.ink,
       body: BlocBuilder<TasbihCubit, TasbihState>(
         builder: (context, state) {
           return Center(
@@ -42,10 +42,7 @@ class _TasbihView extends StatelessWidget {
                   label: 'Currently counting ${state.dhikrLabel}',
                   child: Text(
                     state.dhikrLabel,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 18,
-                    ),
+                    style: const TextStyle(color: AppColors.sage, fontSize: 18),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -67,7 +64,7 @@ class _TasbihView extends StatelessWidget {
                     child: Text(
                       'Reset',
                       style: TextStyle(
-                        color: AppColors.accent,
+                        color: AppColors.gold,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),

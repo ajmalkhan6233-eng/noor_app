@@ -30,7 +30,7 @@ class QiblaInfoPanel extends StatelessWidget {
           Text(
             bearingText,
             style: const TextStyle(
-              color: AppColors.accent,
+              color: AppColors.gold,
               fontSize: 40,
               fontWeight: FontWeight.w700,
             ),
@@ -38,7 +38,7 @@ class QiblaInfoPanel extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '$distanceText to the Kaaba',
-            style: const TextStyle(color: AppColors.textSecondary),
+            style: const TextStyle(color: AppColors.sage),
           ),
         ],
       ),

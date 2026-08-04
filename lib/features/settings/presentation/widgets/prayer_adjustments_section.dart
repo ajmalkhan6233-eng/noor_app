@@ -54,26 +54,26 @@ class PrayerAdjustmentsSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.textPrimary)),
+          Text(label, style: const TextStyle(color: AppColors.parchment)),
           Row(
             children: [
               SemanticButton(
                 label: 'Decrease $label offset',
                 onTap: () => change(-1),
-                child: const Icon(Icons.remove, color: AppColors.accent),
+                child: const Icon(Icons.remove, color: AppColors.gold),
               ),
               SizedBox(
                 width: 48,
                 child: Text(
                   '$minutes min',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppColors.textSecondary),
+                  style: const TextStyle(color: AppColors.sage),
                 ),
               ),
               SemanticButton(
                 label: 'Increase $label offset',
                 onTap: () => change(1),
-                child: const Icon(Icons.add, color: AppColors.accent),
+                child: const Icon(Icons.add, color: AppColors.gold),
               ),
             ],
           ),

@@ -31,9 +31,9 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.ink,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.ink,
         elevation: 0,
         title: Text('Surah ${widget.surahId}'),
       ),
@@ -43,7 +43,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
           builder: (context, state) {
             if (state.currentSurahId != widget.surahId) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.accent),
+                child: CircularProgressIndicator(color: AppColors.gold),
               );
             }
             return ListView(

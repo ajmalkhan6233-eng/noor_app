@@ -36,15 +36,4 @@ abstract final class AppColors {
 
   /// Secondary text — captions, section labels.
   static const Color sage = Color(0xFF94A79B);
-
-  // --- Legacy aliases: kept so the wider codebase keeps compiling
-  // while every screen is migrated to the named tokens above; prefer
-  // the new names in new/updated code. ---
-  static const Color background = ink;
-  static const Color surface = card;
-  static const Color accent = gold;
-  static const Color textPrimary = parchment;
-  static const Color textSecondary = sage;
-  static const Color divider = hairline;
-  static const Color milestone = gold;
 }

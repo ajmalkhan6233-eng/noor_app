@@ -72,7 +72,7 @@ class AboutScreen extends StatelessWidget {
           Text(
             'Each is licensed under the SIL Open Font Licence 1.1 and '
             'bundled with the app for fully offline use.',
-            style: TextStyle(color: AppColors.sage, fontSize: 12),
+            style: AppTypography.caption,
           ),
         ],
       ),
@@ -118,7 +118,7 @@ class _FontCredit extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(family, style: const TextStyle(color: AppColors.parchment)),
-        Text(role, style: const TextStyle(color: AppColors.sage, fontSize: 12)),
+        Text(role, style: AppTypography.caption),
       ],
     );
   }

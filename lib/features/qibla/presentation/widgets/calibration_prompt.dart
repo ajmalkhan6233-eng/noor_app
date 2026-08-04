@@ -20,7 +20,7 @@ class CalibrationPrompt extends StatelessWidget {
         child: Text(
           AppStrings.qiblaCalibrationPromptMessage,
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.milestone),
+          style: TextStyle(color: AppColors.gold),
         ),
       ),
     );

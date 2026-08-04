@@ -54,9 +54,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.ink,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.ink,
         elevation: 0,
         title: Text(_titles[_selectedIndex]),
         actions: [

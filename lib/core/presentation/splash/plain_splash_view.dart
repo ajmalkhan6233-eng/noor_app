@@ -21,7 +21,7 @@ class PlainSplashView extends StatelessWidget {
           AppStrings.splashGreeting,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: AppColors.accent,
+            color: AppColors.gold,
             fontSize: 22,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.2,

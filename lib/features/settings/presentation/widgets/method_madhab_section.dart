@@ -26,8 +26,8 @@ class MethodMadhabSection extends StatelessWidget {
               child: DropdownButton<PrayerCalculationMethod>(
                 isExpanded: true,
                 value: prayer.method,
-                dropdownColor: AppColors.surface,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: AppColors.card,
+                style: const TextStyle(color: AppColors.parchment),
                 items: [
                   for (final method in PrayerCalculationMethod.values)
                     DropdownMenuItem(value: method, child: Text(method.label)),
@@ -44,8 +44,8 @@ class MethodMadhabSection extends StatelessWidget {
               child: DropdownButton<PrayerMadhab>(
                 isExpanded: true,
                 value: prayer.madhab,
-                dropdownColor: AppColors.surface,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: AppColors.card,
+                style: const TextStyle(color: AppColors.parchment),
                 items: [
                   for (final madhab in PrayerMadhab.values)
                     DropdownMenuItem(value: madhab, child: Text(madhab.label)),

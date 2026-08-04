@@ -64,4 +64,13 @@ abstract final class AppTypography {
     color: AppColors.parchment,
     height: 1.9,
   );
+
+  /// A large tap-to-count number — the tasbih counter.
+  static const TextStyle counter = TextStyle(
+    fontFamily: bodyFamily,
+    fontFeatures: [FontFeature.tabularFigures()],
+    fontSize: 56,
+    fontWeight: FontWeight.bold,
+    color: AppColors.parchment,
+  );
 }

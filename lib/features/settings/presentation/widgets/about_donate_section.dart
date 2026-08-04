@@ -47,16 +47,16 @@ class AboutDonateSection extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.card,
         title: const Text(
           'Support noor',
-          style: TextStyle(color: AppColors.textPrimary),
+          style: TextStyle(color: AppColors.parchment),
         ),
         content: const Text(
           'noor will always be free, offline, and ad-free. If you would '
           'like to support its development, details are on the project '
           'page. JazakAllahu khairan.',
-          style: TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: AppColors.sage),
         ),
         actions: [
           Semantics(
@@ -66,7 +66,7 @@ class AboutDonateSection extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: const Text(
                 'Close',
-                style: TextStyle(color: AppColors.accent),
+                style: TextStyle(color: AppColors.gold),
               ),
             ),
           ),
@@ -85,7 +85,7 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = muted ? AppColors.textSecondary : AppColors.textPrimary;
+    final color = muted ? AppColors.sage : AppColors.parchment;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(

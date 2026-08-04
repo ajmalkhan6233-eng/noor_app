@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 
 /// Large, accessible circular counter button used by the tasbih screen.
@@ -39,15 +40,15 @@ class HapticCounterButton extends StatelessWidget {
         height: 220,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.surface,
+          color: AppColors.card,
           border: Border.all(
-            color: pulsing ? AppColors.milestone : AppColors.accent,
+            color: pulsing ? AppColors.gold : AppColors.gold,
             width: pulsing ? 5 : 3,
           ),
           boxShadow: pulsing
               ? [
                   BoxShadow(
-                    color: AppColors.milestone.withValues(alpha: 0.5),
+                    color: AppColors.gold.withValues(alpha: 0.5),
                     blurRadius: 24,
                     spreadRadius: 2,
                   ),
@@ -55,14 +56,7 @@ class HapticCounterButton extends StatelessWidget {
               : const [],
         ),
         alignment: Alignment.center,
-        child: Text(
-          '$count',
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 56,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child: Text('$count', style: AppTypography.counter),
       ),
     );
   }

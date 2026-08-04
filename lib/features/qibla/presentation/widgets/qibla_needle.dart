@@ -36,7 +36,7 @@ class QiblaNeedle extends StatelessWidget {
           angle: rotationDegrees * 3.14159265358979 / 180,
           child: const Icon(
             Icons.navigation,
-            color: AppColors.accent,
+            color: AppColors.gold,
             size: 96,
           ),
         ),
