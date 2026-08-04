@@ -10,6 +10,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../security/secure_passphrase_service.dart';
 import 'schema/azkar_schema.dart';
+import 'schema/pilgrimage_schema.dart';
 import 'schema/quran_schema.dart';
 import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
@@ -63,6 +64,7 @@ class DatabaseHelper {
       ...azkarCreateStatements,
       ...quranCreateStatements,
       ...widgetPositionCreateStatements,
+      ...pilgrimageCreateStatements,
     ]) {
       await db.execute(statement);
     }

@@ -502,4 +502,193 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get languagePickerSemanticLabel => 'பயன்பாட்டு மொழி';
+
+  @override
+  String get pilgrimageLabel => 'ஹஜ் & உம்ரா';
+
+  @override
+  String get pilgrimageMoreRowHint =>
+      'ஹஜ் மற்றும் உம்ரா கண்காணிப்பானைத் திறக்க இருமுறை தட்டவும்';
+
+  @override
+  String get profilePickerTitle => 'ஒரு யாத்ரீகரைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get profilePickerEmptyMessage =>
+      'இன்னும் சுயவிவரங்கள் இல்லை. கண்காணிக்கத் தொடங்க ஒன்றைச் சேர்க்கவும்.';
+
+  @override
+  String get addProfileLabel => 'யாத்ரீகரைச் சேர்';
+
+  @override
+  String get addProfileHint =>
+      'புதிய யாத்ரீகர் சுயவிவரத்தைச் சேர்க்க இருமுறை தட்டவும்';
+
+  @override
+  String get profileNameFieldLabel => 'பெயர்';
+
+  @override
+  String get profileNameFieldHint => 'இந்த சுயவிவரத்திற்கான பெயரை உள்ளிடவும்';
+
+  @override
+  String get experienceLevelLabel => 'அனுபவ நிலை';
+
+  @override
+  String get beginnerLabel => 'புதியவர்';
+
+  @override
+  String get experiencedLabel => 'அனுபவமுள்ளவர்';
+
+  @override
+  String get createProfileButtonLabel => 'சுயவிவரத்தை உருவாக்கு';
+
+  @override
+  String get createProfileButtonHint =>
+      'இந்த சுயவிவரத்தைச் சேமிக்க இருமுறை தட்டவும்';
+
+  @override
+  String selectProfileHint(String name) {
+    return '$name ஆகத் தொடர இருமுறை தட்டவும்';
+  }
+
+  @override
+  String get sessionSetupTitle => 'ஒரு அமர்வைத் தொடங்கு';
+
+  @override
+  String get pilgrimageTypeLabel => 'வகை';
+
+  @override
+  String get umrahLabel => 'உம்ரா';
+
+  @override
+  String get hajjLabel => 'ஹஜ்';
+
+  @override
+  String get genderLabel => 'பாலினம்';
+
+  @override
+  String get maleLabel => 'ஆண்';
+
+  @override
+  String get femaleLabel => 'பெண்';
+
+  @override
+  String get startSessionButtonLabel => 'தொடங்கு';
+
+  @override
+  String get startSessionButtonHint => 'புதிய அமர்வைத் தொடங்க இருமுறை தட்டவும்';
+
+  @override
+  String get resumeSessionMessage => 'முடிக்கப்படாத அமர்வு ஒன்று உள்ளது.';
+
+  @override
+  String get resumeSessionButtonLabel => 'தொடரவும்';
+
+  @override
+  String get resumeSessionButtonHint =>
+      'முடிக்கப்படாத அமர்வைத் தொடர இருமுறை தட்டவும்';
+
+  @override
+  String get tawafScreenTitle => 'தவாஃப்';
+
+  @override
+  String get tawafCounterSemanticLabel => 'தவாஃப் சுற்று';
+
+  @override
+  String get tawafIncrementHint => 'ஒரு சுற்றை எண்ண இருமுறை தட்டவும்';
+
+  @override
+  String circuitProgressLabel(int count) {
+    return 'சுற்று $count / 7';
+  }
+
+  @override
+  String get tawafCompleteMessage => 'தவாஃப் நிறைவடைந்தது.';
+
+  @override
+  String get continueToSaiButtonLabel => 'ஸாயீக்குச் செல்';
+
+  @override
+  String get continueToSaiButtonHint => 'ஸாயீக்குச் செல்ல இருமுறை தட்டவும்';
+
+  @override
+  String get idtibaTitle => 'இத்திபா';
+
+  @override
+  String get idtibaExplanation =>
+      'ஆண்கள் தவாஃப் முழுவதும் வலது தோளை மூடாமல் வைத்திருந்து, 7ஆவது சுற்று முடிந்தவுடன் மீண்டும் மூடிக்கொள்கிறார்கள்.';
+
+  @override
+  String get idtibaBadgeLabel => 'இத்திபா: தோள் திறந்திருக்கும்';
+
+  @override
+  String get ramalTitle => 'ரமல்';
+
+  @override
+  String get ramalExplanation =>
+      'ஆண்கள் முதல் மூன்று சுற்றுகளில் வேகமாக, சிறு அடிகளுடன் நடந்து, நான்காவது சுற்றிலிருந்து இயல்பான வேகத்திற்குத் திரும்புகிறார்கள்.';
+
+  @override
+  String get ramalBadgeLabel => 'ரமல்: வேக நடை';
+
+  @override
+  String get saiScreenTitle => 'ஸாயீ';
+
+  @override
+  String get saiCounterSemanticLabel => 'ஸாயீ சுற்று';
+
+  @override
+  String get saiIncrementHint => 'ஒரு சுற்றை எண்ண இருமுறை தட்டவும்';
+
+  @override
+  String roundProgressLabel(int count) {
+    return 'சுற்று $count / 7';
+  }
+
+  @override
+  String get saiDirectionSafaToMarwah => 'ஸஃபாவிலிருந்து மர்வாவிற்கு';
+
+  @override
+  String get saiDirectionMarwahToSafa => 'மர்வாவிலிருந்து ஸஃபாவிற்கு';
+
+  @override
+  String get saiDirectionExplanation =>
+      'ஸாயீ என்பது ஸஃபா மற்றும் மர்வா மலைகளுக்கு இடையே ஏழு முறை நடந்து, ஒவ்வொரு சுற்றிலும் திசையை மாற்றுவதாகும்.';
+
+  @override
+  String get completeSessionButtonLabel => 'நிறைவுசெய்';
+
+  @override
+  String get completeSessionButtonHint =>
+      'இந்த அமர்வை முடிக்க இருமுறை தட்டவும்';
+
+  @override
+  String get completionScreenTitle => 'அல்ஹம்துலில்லாஹ்';
+
+  @override
+  String completionMessage(String type) {
+    return 'உங்கள் $type அல்லாஹ்வால் ஏற்றுக்கொள்ளப்படட்டும்.';
+  }
+
+  @override
+  String completionUmrahCountLabel(int count) {
+    return 'நிறைவு செய்த உம்ரா: $count';
+  }
+
+  @override
+  String completionHajjCountLabel(int count) {
+    return 'நிறைவு செய்த ஹஜ்: $count';
+  }
+
+  @override
+  String get doneButtonLabel => 'முடிந்தது';
+
+  @override
+  String get doneButtonHint => 'திரும்பச் செல்ல இருமுறை தட்டவும்';
+
+  @override
+  String get ofSevenSuffix => '/ 7';
+
+  @override
+  String get selectOptionHint => 'தேர்ந்தெடுக்க இருமுறை தட்டவும்';
 }

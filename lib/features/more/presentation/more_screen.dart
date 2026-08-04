@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
+import '../../pilgrimage/presentation/pilgrimage_home_screen.dart';
 import '../../qibla/presentation/qibla_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
@@ -21,6 +23,7 @@ class MoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
       appBar: AppBar(title: const Text('More')),
@@ -38,6 +41,8 @@ class MoreScreen extends StatelessWidget {
                 _row(context, Icons.calendar_month, 'Calendar', const CalendarScreen()),
                 _divider(),
                 _row(context, Icons.savings_outlined, 'Zakat calculator', const ZakatScreen()),
+                _divider(),
+                _row(context, Icons.mosque, l10n.pilgrimageLabel, const PilgrimageHomeScreen()),
               ],
             ),
           ),

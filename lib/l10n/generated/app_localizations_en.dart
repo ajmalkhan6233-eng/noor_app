@@ -493,4 +493,191 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languagePickerSemanticLabel => 'App language';
+
+  @override
+  String get pilgrimageLabel => 'Hajj & Umrah';
+
+  @override
+  String get pilgrimageMoreRowHint =>
+      'Double tap to open the Hajj and Umrah tracker';
+
+  @override
+  String get profilePickerTitle => 'Choose a pilgrim';
+
+  @override
+  String get profilePickerEmptyMessage =>
+      'No profiles yet. Add one to begin tracking.';
+
+  @override
+  String get addProfileLabel => 'Add pilgrim';
+
+  @override
+  String get addProfileHint => 'Double tap to add a new pilgrim profile';
+
+  @override
+  String get profileNameFieldLabel => 'Name';
+
+  @override
+  String get profileNameFieldHint => 'Enter a name for this profile';
+
+  @override
+  String get experienceLevelLabel => 'Experience level';
+
+  @override
+  String get beginnerLabel => 'Beginner';
+
+  @override
+  String get experiencedLabel => 'Experienced';
+
+  @override
+  String get createProfileButtonLabel => 'Create profile';
+
+  @override
+  String get createProfileButtonHint => 'Double tap to save this profile';
+
+  @override
+  String selectProfileHint(String name) {
+    return 'Double tap to continue as $name';
+  }
+
+  @override
+  String get sessionSetupTitle => 'Start a session';
+
+  @override
+  String get pilgrimageTypeLabel => 'Type';
+
+  @override
+  String get umrahLabel => 'Umrah';
+
+  @override
+  String get hajjLabel => 'Hajj';
+
+  @override
+  String get genderLabel => 'Gender';
+
+  @override
+  String get maleLabel => 'Male';
+
+  @override
+  String get femaleLabel => 'Female';
+
+  @override
+  String get startSessionButtonLabel => 'Start';
+
+  @override
+  String get startSessionButtonHint => 'Double tap to begin a new session';
+
+  @override
+  String get resumeSessionMessage =>
+      'You have an unfinished session in progress.';
+
+  @override
+  String get resumeSessionButtonLabel => 'Resume';
+
+  @override
+  String get resumeSessionButtonHint =>
+      'Double tap to continue your unfinished session';
+
+  @override
+  String get tawafScreenTitle => 'Tawaf';
+
+  @override
+  String get tawafCounterSemanticLabel => 'Tawaf circuit';
+
+  @override
+  String get tawafIncrementHint => 'Double tap to count one circuit';
+
+  @override
+  String circuitProgressLabel(int count) {
+    return 'Circuit $count of 7';
+  }
+
+  @override
+  String get tawafCompleteMessage => 'Tawaf complete.';
+
+  @override
+  String get continueToSaiButtonLabel => 'Continue to Sa\'i';
+
+  @override
+  String get continueToSaiButtonHint => 'Double tap to move on to Sa\'i';
+
+  @override
+  String get idtibaTitle => 'Idtiba';
+
+  @override
+  String get idtibaExplanation =>
+      'Men keep the right shoulder uncovered throughout Tawaf, re-covering it once the 7th circuit is complete.';
+
+  @override
+  String get idtibaBadgeLabel => 'Idtiba: shoulder bare';
+
+  @override
+  String get ramalTitle => 'Ramal';
+
+  @override
+  String get ramalExplanation =>
+      'Men walk briskly with short steps for the first three circuits, then return to a normal pace from the fourth circuit onward.';
+
+  @override
+  String get ramalBadgeLabel => 'Ramal: brisk pace';
+
+  @override
+  String get saiScreenTitle => 'Sa\'i';
+
+  @override
+  String get saiCounterSemanticLabel => 'Sa\'i round';
+
+  @override
+  String get saiIncrementHint => 'Double tap to count one round';
+
+  @override
+  String roundProgressLabel(int count) {
+    return 'Round $count of 7';
+  }
+
+  @override
+  String get saiDirectionSafaToMarwah => 'Safa to Marwah';
+
+  @override
+  String get saiDirectionMarwahToSafa => 'Marwah to Safa';
+
+  @override
+  String get saiDirectionExplanation =>
+      'Sa\'i is walking seven times between the hills of Safa and Marwah, alternating direction each round.';
+
+  @override
+  String get completeSessionButtonLabel => 'Complete';
+
+  @override
+  String get completeSessionButtonHint => 'Double tap to finish this session';
+
+  @override
+  String get completionScreenTitle => 'Alhamdulillah';
+
+  @override
+  String completionMessage(String type) {
+    return 'May Allah accept your $type.';
+  }
+
+  @override
+  String completionUmrahCountLabel(int count) {
+    return 'Umrah completed: $count';
+  }
+
+  @override
+  String completionHajjCountLabel(int count) {
+    return 'Hajj completed: $count';
+  }
+
+  @override
+  String get doneButtonLabel => 'Done';
+
+  @override
+  String get doneButtonHint => 'Double tap to return';
+
+  @override
+  String get ofSevenSuffix => 'of 7';
+
+  @override
+  String get selectOptionHint => 'Double tap to select';
 }

@@ -958,6 +958,342 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'App language'**
   String get languagePickerSemanticLabel;
+
+  /// No description provided for @pilgrimageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj & Umrah'**
+  String get pilgrimageLabel;
+
+  /// No description provided for @pilgrimageMoreRowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to open the Hajj and Umrah tracker'**
+  String get pilgrimageMoreRowHint;
+
+  /// No description provided for @profilePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pilgrim'**
+  String get profilePickerTitle;
+
+  /// No description provided for @profilePickerEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No profiles yet. Add one to begin tracking.'**
+  String get profilePickerEmptyMessage;
+
+  /// No description provided for @addProfileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add pilgrim'**
+  String get addProfileLabel;
+
+  /// No description provided for @addProfileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to add a new pilgrim profile'**
+  String get addProfileHint;
+
+  /// No description provided for @profileNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get profileNameFieldLabel;
+
+  /// No description provided for @profileNameFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name for this profile'**
+  String get profileNameFieldHint;
+
+  /// No description provided for @experienceLevelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience level'**
+  String get experienceLevelLabel;
+
+  /// No description provided for @beginnerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get beginnerLabel;
+
+  /// No description provided for @experiencedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Experienced'**
+  String get experiencedLabel;
+
+  /// No description provided for @createProfileButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Create profile'**
+  String get createProfileButtonLabel;
+
+  /// No description provided for @createProfileButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to save this profile'**
+  String get createProfileButtonHint;
+
+  /// No description provided for @selectProfileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to continue as {name}'**
+  String selectProfileHint(String name);
+
+  /// No description provided for @sessionSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a session'**
+  String get sessionSetupTitle;
+
+  /// No description provided for @pilgrimageTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get pilgrimageTypeLabel;
+
+  /// No description provided for @umrahLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Umrah'**
+  String get umrahLabel;
+
+  /// No description provided for @hajjLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj'**
+  String get hajjLabel;
+
+  /// No description provided for @genderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get genderLabel;
+
+  /// No description provided for @maleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get maleLabel;
+
+  /// No description provided for @femaleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get femaleLabel;
+
+  /// No description provided for @startSessionButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get startSessionButtonLabel;
+
+  /// No description provided for @startSessionButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to begin a new session'**
+  String get startSessionButtonHint;
+
+  /// No description provided for @resumeSessionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an unfinished session in progress.'**
+  String get resumeSessionMessage;
+
+  /// No description provided for @resumeSessionButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resumeSessionButtonLabel;
+
+  /// No description provided for @resumeSessionButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to continue your unfinished session'**
+  String get resumeSessionButtonHint;
+
+  /// No description provided for @tawafScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tawaf'**
+  String get tawafScreenTitle;
+
+  /// No description provided for @tawafCounterSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tawaf circuit'**
+  String get tawafCounterSemanticLabel;
+
+  /// No description provided for @tawafIncrementHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to count one circuit'**
+  String get tawafIncrementHint;
+
+  /// No description provided for @circuitProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Circuit {count} of 7'**
+  String circuitProgressLabel(int count);
+
+  /// No description provided for @tawafCompleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tawaf complete.'**
+  String get tawafCompleteMessage;
+
+  /// No description provided for @continueToSaiButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to Sa\'i'**
+  String get continueToSaiButtonLabel;
+
+  /// No description provided for @continueToSaiButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to move on to Sa\'i'**
+  String get continueToSaiButtonHint;
+
+  /// No description provided for @idtibaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Idtiba'**
+  String get idtibaTitle;
+
+  /// No description provided for @idtibaExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Men keep the right shoulder uncovered throughout Tawaf, re-covering it once the 7th circuit is complete.'**
+  String get idtibaExplanation;
+
+  /// No description provided for @idtibaBadgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Idtiba: shoulder bare'**
+  String get idtibaBadgeLabel;
+
+  /// No description provided for @ramalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramal'**
+  String get ramalTitle;
+
+  /// No description provided for @ramalExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Men walk briskly with short steps for the first three circuits, then return to a normal pace from the fourth circuit onward.'**
+  String get ramalExplanation;
+
+  /// No description provided for @ramalBadgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramal: brisk pace'**
+  String get ramalBadgeLabel;
+
+  /// No description provided for @saiScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sa\'i'**
+  String get saiScreenTitle;
+
+  /// No description provided for @saiCounterSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sa\'i round'**
+  String get saiCounterSemanticLabel;
+
+  /// No description provided for @saiIncrementHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to count one round'**
+  String get saiIncrementHint;
+
+  /// No description provided for @roundProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {count} of 7'**
+  String roundProgressLabel(int count);
+
+  /// No description provided for @saiDirectionSafaToMarwah.
+  ///
+  /// In en, this message translates to:
+  /// **'Safa to Marwah'**
+  String get saiDirectionSafaToMarwah;
+
+  /// No description provided for @saiDirectionMarwahToSafa.
+  ///
+  /// In en, this message translates to:
+  /// **'Marwah to Safa'**
+  String get saiDirectionMarwahToSafa;
+
+  /// No description provided for @saiDirectionExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Sa\'i is walking seven times between the hills of Safa and Marwah, alternating direction each round.'**
+  String get saiDirectionExplanation;
+
+  /// No description provided for @completeSessionButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get completeSessionButtonLabel;
+
+  /// No description provided for @completeSessionButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to finish this session'**
+  String get completeSessionButtonHint;
+
+  /// No description provided for @completionScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah'**
+  String get completionScreenTitle;
+
+  /// No description provided for @completionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'May Allah accept your {type}.'**
+  String completionMessage(String type);
+
+  /// No description provided for @completionUmrahCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Umrah completed: {count}'**
+  String completionUmrahCountLabel(int count);
+
+  /// No description provided for @completionHajjCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj completed: {count}'**
+  String completionHajjCountLabel(int count);
+
+  /// No description provided for @doneButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get doneButtonLabel;
+
+  /// No description provided for @doneButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to return'**
+  String get doneButtonHint;
+
+  /// No description provided for @ofSevenSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'of 7'**
+  String get ofSevenSuffix;
+
+  /// No description provided for @selectOptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to select'**
+  String get selectOptionHint;
 }
 
 class _AppLocalizationsDelegate
