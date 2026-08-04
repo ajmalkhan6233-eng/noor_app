@@ -1294,6 +1294,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Double tap to select'**
   String get selectOptionHint;
+
+  /// No description provided for @umrahGuideLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Umrah Guide'**
+  String get umrahGuideLabel;
+
+  /// No description provided for @umrahGuideMoreRowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to open the Umrah guide'**
+  String get umrahGuideMoreRowHint;
+
+  /// No description provided for @hajjGuideLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj Guide'**
+  String get hajjGuideLabel;
+
+  /// No description provided for @hajjGuideMoreRowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to open the Hajj guide'**
+  String get hajjGuideMoreRowHint;
+
+  /// No description provided for @scholarConfirmationNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm all ritual details with your scholar or Hajj group.'**
+  String get scholarConfirmationNotice;
+
+  /// No description provided for @guideTextNotLoadedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Guide text not yet loaded from a verified source'**
+  String get guideTextNotLoadedMessage;
+
+  /// No description provided for @guideStepLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {number}'**
+  String guideStepLabel(int number);
+
+  /// No description provided for @guideDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {number}'**
+  String guideDayLabel(int number);
+
+  /// No description provided for @talbiyahSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Talbiyah'**
+  String get talbiyahSectionTitle;
+
+  /// No description provided for @guideReferenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get guideReferenceLabel;
+
+  /// No description provided for @rabbanaSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested supplication — Qur\'an 2:201'**
+  String get rabbanaSectionTitle;
+
+  /// No description provided for @womenTawafNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them.'**
+  String get womenTawafNote;
 }
 
 class _AppLocalizationsDelegate

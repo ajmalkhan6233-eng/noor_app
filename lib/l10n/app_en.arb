@@ -244,5 +244,20 @@
   "doneButtonLabel": "Done",
   "doneButtonHint": "Double tap to return",
   "ofSevenSuffix": "of 7",
-  "selectOptionHint": "Double tap to select"
+  "selectOptionHint": "Double tap to select",
+
+  "umrahGuideLabel": "Umrah Guide",
+  "umrahGuideMoreRowHint": "Double tap to open the Umrah guide",
+  "hajjGuideLabel": "Hajj Guide",
+  "hajjGuideMoreRowHint": "Double tap to open the Hajj guide",
+  "scholarConfirmationNotice": "Confirm all ritual details with your scholar or Hajj group.",
+  "guideTextNotLoadedMessage": "Guide text not yet loaded from a verified source",
+  "guideStepLabel": "Step {number}",
+  "@guideStepLabel": {"placeholders": {"number": {"type": "int"}}},
+  "guideDayLabel": "Day {number}",
+  "@guideDayLabel": {"placeholders": {"number": {"type": "int"}}},
+  "talbiyahSectionTitle": "Talbiyah",
+  "guideReferenceLabel": "Reference",
+  "rabbanaSectionTitle": "Suggested supplication — Qur'an 2:201",
+  "womenTawafNote": "Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them."
 }

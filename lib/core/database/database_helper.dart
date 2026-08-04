@@ -26,6 +26,14 @@ class DatabaseHelper {
   DatabaseHelper._internal({SecurePassphraseService? passphraseService})
     : _passphraseService = passphraseService ?? const SecurePassphraseService();
 
+  /// Test-only seam: wraps an already-open [Database] (e.g. an
+  /// in-memory `sqflite_common_ffi` database in a unit test) so
+  /// repositories can be exercised without the real encrypted-DB
+  /// bootstrap (secure passphrase storage, platform channels).
+  DatabaseHelper.forTesting(Database db)
+    : _passphraseService = const SecurePassphraseService(),
+      _database = db;
+
   static final DatabaseHelper instance = DatabaseHelper._internal();
 
   final SecurePassphraseService _passphraseService;

@@ -219,5 +219,18 @@
   "doneButtonLabel": "නිමයි",
   "doneButtonHint": "ආපසු යාමට දෙවරක් තට්ටු කරන්න",
   "ofSevenSuffix": "/ 7",
-  "selectOptionHint": "තේරීමට දෙවරක් තට්ටු කරන්න"
+  "selectOptionHint": "තේරීමට දෙවරක් තට්ටු කරන්න",
+
+  "umrahGuideLabel": "උම්රා මාර්ගෝපදේශය",
+  "umrahGuideMoreRowHint": "උම්රා මාර්ගෝපදේශය විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",
+  "hajjGuideLabel": "හජ් මාර්ගෝපදේශය",
+  "hajjGuideMoreRowHint": "හජ් මාර්ගෝපදේශය විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",
+  "scholarConfirmationNotice": "සියලුම චාරිත්‍ර විස්තර ඔබේ විද්වතා හෝ හජ් කණ්ඩායම සමඟ තහවුරු කරගන්න.",
+  "guideTextNotLoadedMessage": "සත්‍යාපිත මූලාශ්‍රයකින් මෙම මාර්ගෝපදේශ පෙළ තවම පූරණය කර නැත",
+  "guideStepLabel": "පියවර {number}",
+  "guideDayLabel": "දිනය {number}",
+  "talbiyahSectionTitle": "තල්බියා",
+  "guideReferenceLabel": "මූලාශ්‍රය",
+  "rabbanaSectionTitle": "යෝජිත ප්‍රාර්ථනාව — කුර්ආන් 2:201",
+  "womenTawafNote": "කාන්තාවන් තවාෆ් පුරාවටම සාමාන්‍ය වේගයෙන් ඇවිද, උරහිස් දෙකම ආවරණය කර සිටිති — ඉද්තිබා සහ රමල් ඔවුන්ට අදාළ නොවේ."
 }

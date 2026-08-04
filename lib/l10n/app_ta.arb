@@ -219,5 +219,18 @@
   "doneButtonLabel": "முடிந்தது",
   "doneButtonHint": "திரும்பச் செல்ல இருமுறை தட்டவும்",
   "ofSevenSuffix": "/ 7",
-  "selectOptionHint": "தேர்ந்தெடுக்க இருமுறை தட்டவும்"
+  "selectOptionHint": "தேர்ந்தெடுக்க இருமுறை தட்டவும்",
+
+  "umrahGuideLabel": "உம்ரா வழிகாட்டி",
+  "umrahGuideMoreRowHint": "உம்ரா வழிகாட்டியைத் திறக்க இருமுறை தட்டவும்",
+  "hajjGuideLabel": "ஹஜ் வழிகாட்டி",
+  "hajjGuideMoreRowHint": "ஹஜ் வழிகாட்டியைத் திறக்க இருமுறை தட்டவும்",
+  "scholarConfirmationNotice": "எல்லா சடங்கு விவரங்களையும் உங்கள் அறிஞர் அல்லது ஹஜ் குழுவிடம் உறுதிப்படுத்திக் கொள்ளுங்கள்.",
+  "guideTextNotLoadedMessage": "சரிபார்க்கப்பட்ட மூலத்திலிருந்து இந்த வழிகாட்டி உரை இன்னும் ஏற்றப்படவில்லை",
+  "guideStepLabel": "படி {number}",
+  "guideDayLabel": "நாள் {number}",
+  "talbiyahSectionTitle": "தல்பியா",
+  "guideReferenceLabel": "மேற்கோள்",
+  "rabbanaSectionTitle": "பரிந்துரைக்கப்படும் துஆ — குர்ஆன் 2:201",
+  "womenTawafNote": "பெண்கள் தவாஃப் முழுவதும் இயல்பான வேகத்தில் நடந்து, இரு தோள்களையும் மூடியிருப்பார்கள் — இத்திபாவும் ரமலும் அவர்களுக்குப் பொருந்தாது."
 }

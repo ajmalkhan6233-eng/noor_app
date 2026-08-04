@@ -680,4 +680,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectOptionHint => 'Double tap to select';
+
+  @override
+  String get umrahGuideLabel => 'Umrah Guide';
+
+  @override
+  String get umrahGuideMoreRowHint => 'Double tap to open the Umrah guide';
+
+  @override
+  String get hajjGuideLabel => 'Hajj Guide';
+
+  @override
+  String get hajjGuideMoreRowHint => 'Double tap to open the Hajj guide';
+
+  @override
+  String get scholarConfirmationNotice =>
+      'Confirm all ritual details with your scholar or Hajj group.';
+
+  @override
+  String get guideTextNotLoadedMessage =>
+      'Guide text not yet loaded from a verified source';
+
+  @override
+  String guideStepLabel(int number) {
+    return 'Step $number';
+  }
+
+  @override
+  String guideDayLabel(int number) {
+    return 'Day $number';
+  }
+
+  @override
+  String get talbiyahSectionTitle => 'Talbiyah';
+
+  @override
+  String get guideReferenceLabel => 'Reference';
+
+  @override
+  String get rabbanaSectionTitle => 'Suggested supplication — Qur\'an 2:201';
+
+  @override
+  String get womenTawafNote =>
+      'Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them.';
 }

@@ -691,4 +691,49 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get selectOptionHint => 'தேர்ந்தெடுக்க இருமுறை தட்டவும்';
+
+  @override
+  String get umrahGuideLabel => 'உம்ரா வழிகாட்டி';
+
+  @override
+  String get umrahGuideMoreRowHint =>
+      'உம்ரா வழிகாட்டியைத் திறக்க இருமுறை தட்டவும்';
+
+  @override
+  String get hajjGuideLabel => 'ஹஜ் வழிகாட்டி';
+
+  @override
+  String get hajjGuideMoreRowHint =>
+      'ஹஜ் வழிகாட்டியைத் திறக்க இருமுறை தட்டவும்';
+
+  @override
+  String get scholarConfirmationNotice =>
+      'எல்லா சடங்கு விவரங்களையும் உங்கள் அறிஞர் அல்லது ஹஜ் குழுவிடம் உறுதிப்படுத்திக் கொள்ளுங்கள்.';
+
+  @override
+  String get guideTextNotLoadedMessage =>
+      'சரிபார்க்கப்பட்ட மூலத்திலிருந்து இந்த வழிகாட்டி உரை இன்னும் ஏற்றப்படவில்லை';
+
+  @override
+  String guideStepLabel(int number) {
+    return 'படி $number';
+  }
+
+  @override
+  String guideDayLabel(int number) {
+    return 'நாள் $number';
+  }
+
+  @override
+  String get talbiyahSectionTitle => 'தல்பியா';
+
+  @override
+  String get guideReferenceLabel => 'மேற்கோள்';
+
+  @override
+  String get rabbanaSectionTitle => 'பரிந்துரைக்கப்படும் துஆ — குர்ஆன் 2:201';
+
+  @override
+  String get womenTawafNote =>
+      'பெண்கள் தவாஃப் முழுவதும் இயல்பான வேகத்தில் நடந்து, இரு தோள்களையும் மூடியிருப்பார்கள் — இத்திபாவும் ரமலும் அவர்களுக்குப் பொருந்தாது.';
 }

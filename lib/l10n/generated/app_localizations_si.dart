@@ -691,4 +691,49 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get selectOptionHint => 'තේරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String get umrahGuideLabel => 'උම්රා මාර්ගෝපදේශය';
+
+  @override
+  String get umrahGuideMoreRowHint =>
+      'උම්රා මාර්ගෝපදේශය විවෘත කිරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String get hajjGuideLabel => 'හජ් මාර්ගෝපදේශය';
+
+  @override
+  String get hajjGuideMoreRowHint =>
+      'හජ් මාර්ගෝපදේශය විවෘත කිරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String get scholarConfirmationNotice =>
+      'සියලුම චාරිත්‍ර විස්තර ඔබේ විද්වතා හෝ හජ් කණ්ඩායම සමඟ තහවුරු කරගන්න.';
+
+  @override
+  String get guideTextNotLoadedMessage =>
+      'සත්‍යාපිත මූලාශ්‍රයකින් මෙම මාර්ගෝපදේශ පෙළ තවම පූරණය කර නැත';
+
+  @override
+  String guideStepLabel(int number) {
+    return 'පියවර $number';
+  }
+
+  @override
+  String guideDayLabel(int number) {
+    return 'දිනය $number';
+  }
+
+  @override
+  String get talbiyahSectionTitle => 'තල්බියා';
+
+  @override
+  String get guideReferenceLabel => 'මූලාශ්‍රය';
+
+  @override
+  String get rabbanaSectionTitle => 'යෝජිත ප්‍රාර්ථනාව — කුර්ආන් 2:201';
+
+  @override
+  String get womenTawafNote =>
+      'කාන්තාවන් තවාෆ් පුරාවටම සාමාන්‍ය වේගයෙන් ඇවිද, උරහිස් දෙකම ආවරණය කර සිටිති — ඉද්තිබා සහ රමල් ඔවුන්ට අදාළ නොවේ.';
 }
