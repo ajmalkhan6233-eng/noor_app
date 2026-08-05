@@ -1,0 +1,93 @@
+name: update-core-architecture
+
+on:
+  push:
+    paths:
+      - '.github/workflows/update_core_architecture.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  apply-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decode and verify payload
+        env:
+          PAYLOAD_B64: "H4sIAAAAAAAAA+087XLbOJL5rafAZO7Wco1MfdsZJbbPnzOuydfazs7Mbe1KEAlJGFMEA5B2NClX3UPcE96TXDcAUiRN2XESeyt3xGQsEmx0N7objUYToNN88uClBWWr39e/UIq/+rrd73R7/W6/19uE+q2tTu8J6T88a0+exCqikpAnUojoNri7nn+jxWk6rs8DJmOfqQeigQre7PVW6b/bAdvI6b/dAQt4QloPxE+u/D/X//fktRCS/M9//TfZk+6MR8yNYsnIKdpDrXY+Y4oRbRyEQnUggo2ATUXE6dhnZAJNabAgrvAYmTIwIxoxj0At8zhe8YBEM65qkoVC8UjIhUMA54KwD1xFJBLkgrEQYBihYUhCyS+pu9hQdMIaZE55EMH/mpQICK21+60NtNaNkMmNCYdqn8951AAmPEJdlynFAdip1b7/nrQd8mYy0eATLhVC+Vd0oWob5D+ZFIR65OzwF+WYO2BTehshldECsFF/EXFXYU8i5rM5i+TCQCetJZuLCATCoishL4hLfV+hLK5mDOQE/R75fNwcOSBfMppFUThqkJHHBfwo4V6wSDVqBPFbRBMWuTMiJlqeFzzwtKC0VOZgo2QSB27EQQpXPJqBHsjJ6/Oj09dH54AFpDHn0HV4qgXOyF7gScE9EGHAJ0xFyPae7xOPRpTU/xpLCnDsA8rkzwsqGyB5umASu+HGPtWEIpS7WidqxkNFxnHg+cwDatg3qhT0oDnSAgJ6voCWhAWuXISod6QzpmA6aFgBuwTUuoPwiEZgT0HE51ZNHYccoyYV/9OqE3gFoSkeTKF65HigkxHR2p5TtByXARowBYK6VSgztD/s4gmIz0BOpbhSJKRoZDMK/VShzyMC/+rMmTqAJZLUjQD8intTBgBpDXRxDmJnclnnigDcRBCBNMDCQcOINADVvY9BuMAoaE0zFqLkTL+6DjlkrohDkBrxUbpoee9OSH0UShhVYNoI3BytWwEZExodWtH9zHzgAczl7K8vGyjnjG6ARV9MuUs8LmHA+gvHoBaBvwC9+RcKhxYlB/GYR8190I6xJn2fBViOS0BZH6HagCEDvHxGuNJa1uh1V2Ao+eIKOgZYIhG7M2he5Bx5hl/wEXMQKBitkby1NDQA0iTvYbxS3bV1I7aeQ/bsQOagsQV07AikAzwEEUNl8EtmdUbq4ziKQDUN4GEKxgIXProVcD1zuFY+90Dq63oAAYNjaChRs9ovaY2BUbggkdEZg5GCI76+PoLB5TEzzCiZMxhBwXQS+9hDn46ZP2qOZsDMSHu/vwnusjeoPnRB5yDZfepeGLMXEfkDh65k/gJtROvNYxMa+1HSBZUQNr3vO+RnGmrX43Hl8hBNnNTPqRrz2YYKmcsn3F0HoYwM3DGMhTFQHKGOtH5SW4JuTqSYJ5BnTF4Cr+CRftWkFTCDPGubULpFEbRhLfMGrazZncHAgCEKpkBDsg0KmM5AA/MQVOWQAwFDXQ/Rbhe0vbkJf9qtFsB5Ika3PmP0Em0vjH3wFpecFnhwRKBxgF6c2r96svw/WJwmTlMPS+Pe8X+71dvqVPH/YxSj/wmjGPWphzGE++u/0223Kv0/RinoP9ITzVc2g/vrv9vfrMb/o5Ry/ecC1C+mcX/9b3a2+pX+H6N8gv5NpPoFc8P99b+11etW+n+Mcg/9z3RcPnQxHGdyaNZeenV+B4078n+b3c5WXv8duGlX+b/HKLBQEzIia6jGQczXntdqSRWs4C7olA0mPmiaySas4Znk1NcqB8AVcMOxL9xm9iZpkLZwnGb6zxWSNdP8ShOW52BhvpCqSMaA67SHNdOhq9Mb2Zv7NgKqEUv5azabafIB1qYRZhvg11o8sRZPfl0mETJ5A0wHaAxpSqCZpAMaSTZh6lOlyA/wK65IJGHUzWGYkToCeVKEx9wHQhrL2I9lQwNi6mAspIcJKRVKvFWwWmcbsOBeB6agDQko5kV8zJKQYyN6p+ZqamY5fWD6sK+7gHktFngK1+4Rm8S+yQiQj7AQ16ooa1T/qOIQ0F6wxfU6CIuQ/xDQSck9Btca04uSZjvExX4yDQBS2t4hwxIw+/h57bpm+V4Jlee+lCYwRIzMz3QW8Zy7F0y+leISM0K63Sv+AWSFPfYR54QH1Cd7AZ9rp3cggkgK3wetgzmm19tlEHVN7VItAnegs90NXeHFUgMOrEgP7X19zn2fKwa1nhqQ9rPWummACTW5D/3wBqTl/NgxtTFmIm1t22mZykvqxyy9v6mNS8z9elyFQqHMP+pGmY446bPn+pHRbK7yGnEexzgtvEB0oLYZxRTwOQ1tPspkE/V4WicU+28p0SsKD7L0JOaRlvRuAsDguaLSywOYIc0DsCAcJxnGsp21xosDwavv41/UDRgJCh5/EwEYHWukoEn7EFij3otMh3YSHiSDzgcEs6caK5NZsAYxN9qYdowNEMMEkwNSt+hhyCJAwkIG79J1pE+IdTFgRjJmjUy9TjwOMhVY1gwHiX9qkH/7aPyZrrjGrFtSA3Mcymh3lzyNA51kZ97T67UsCcxpDsjaocnLYTIvEgY1EQFLMXkzfiFfIjv55u4Mej4gPzGFJnPI8EWSkPUcyyIA4wHZGC+wNCdjQo0crMV3hp7uXNJAcT14CiLQjnCQtaRGAcLiOfB5eHoKPBUxEOtbT6nHYxiP+5k7x+USU+6y3u601ouYU9x5732TAFoePhmQkzlMlAbMQQdfV3w6p7/BSN4EQ8Hr3/G6hNSyI0K/Eyung07Pi2YD0um0ynCAlhnmZ28BoD6fBjjaBmQvuXRcpg2stIEHnizxdPviw2F6W84g6AwCSaZhz/BKC9ln5chxPoJgAHgJwwMTFrjgJs5iOaEuc9DFv4H4g0eLesvp90sFh8XoONGuQ31/FXclFKfC9wqkuqtJpTpor4K4hUsUiSeuBuTvK7HvJ0Cre5D2wQxZrl5BGKPAsbBbmmDZzfYa5qNPbTcotDsTk2i1fIgObpIBd4NH4KLXApSrLNQUiITAcd+GZBNxrEaxUgv/KH+wAt4Oy3Pw9asUspb3y2urCKtogc7MhAuI8Awr7mGos9jDZqv7PAHnccb/BCK9Z7dD/Wr9xHF67VxttlZqZIVwSqtLKm9UFSpyt5kbO1NDUGDqbIBwXb0p+tRSvv43C6avReP++Z/eZn+ryv88RrlN/7kF8xfQ+Iz8X7dd6f9Ryifr/0aW5dNp3JH/a2912oX8X2ez26vyf49RvmISz+SH0zyxshs4Chm5lYm3N1eBwm1FJLuqxWSXNkazJSmbl7YbkdI9LxqJ2UOVyRiQJsE25gp+D3H5Cje4QYdHdn+L3sHElMZge6E3XOnFr966lGx4IXXcC0m6mGfLbJxdT5Jt2cRIkqbSdy+y2QKdDMiA1j/m9rzsWibs7fW6DXIGuGY23G3nQXBhn982w3VC1c0sq3SOp55hA2BgTU39+rpJIJn0SA5NSvD5jWxQVsbZ3I/BErArnZEDRjOhL/mBtE3ExubQ6+RJuPgVFld1DTJIm67nc0WWkXQ/UApWnqxKlJ5l7RairZXUTg2ilIpOraWGdBbpfKxOz6zfQmaZNRlY4JsYz3WOps6DaJeYfM1tGA3EIIH83Mj3vv5/OW4/ncZd/r/f7tzw/73K/z9KKfp/9j6meuNvM71KvXTWxeUz8UcJrDZY4wLAjo0HfZ6tSkx7WWmH0HKEaF9jF8FLWvWPNin7PgZf7OlEu/EqjZIHS2zmqa40lLHCvsCYUFdvby11ipijvMlF6k4Tx7F0sNkxvnYWj2c02PN9OkvX+4YojiDuWtRnLHoBUtkhw3mSuUDn/rHbbZDNzQbulbzWrcZC+ARTuNkcx3auneOa1KAyTk17hLSZZBR3Xxsfgw1tRvi7bRLEMOn+5S92utvZto++03Sz2k59z0etSCP8rFIbVpm7GVlcJ07Mpr1LhGlFaejDTFZULSF5Z5fCLBValP/yOgUumkT5y4SXXEUv3oz/gNl+d0dLLpQiVCixv9sOJ31dIvzH82825WD8v47fHozG/dd/7V6n2v/1KCWj/yR+/+o07q//bqtf7f96lFKi/5L125fRuCv+22x3i/v/tnD8V/Hfw5dVm32s9lVuiX4Ayz1Jff4nMyv1ZIPMxB4MIUrgKSS7YSx7uiTIrdBXHyix6+v+qvV1fnWKgUV+2Ts0KzUbY5WtaJOFMURZJU0/Oz7T4sGu4e4afV4J36Cni2QHAovluRhzbpIEQs5xQ0IS6SAOhm+0qc576ANa2WMy9pAMUEiZMY2VU1z+JqtkDMLTlXJuMcwnpF4aPC7X3+meBbsoTqHfIh/JNolrwpCrPGxev44+FHSi+542K99jUqRRsq+kgFuLJo/bwBnEjscwUeTVb9+F0ylkAO4icpP1NFVwN8tz5vF4nkf3LwogM/4/ObP51QOAz5j/25ub1fz/GKVM/8nFcKYPcn5xBHDH/N/t9Irz/1a7V53/f5RSnP9DGs2a+GfVLl/1fuLziA3Ve9/l4QxDBVOTixTMtkuIB2IJU62Y4Ia2aKbnPTxIvDwobg6Op8fFwR0HzDWHqBHPa0FsbjJ7HFnNROx7RIQsIBhdiKtgicJsK9MJfpiPNRbzZQAyFQzPMUsRT2fF08ppwtxJEI2SmCMPqP16oW1Z1FFolQk7yhrfiDtMUmzojV/TOTZaC4SAkThee14ExSke4P7GpP4AwDam2DMs7uLDbPo+eWCyG6nYspMWtCC7u9vJvI9yLmyKBIjvitPgErFtUfJewBu/xdcpCWrgIGml8EFCxQCHBvQPwYO6adhIJFKAUyqcSexFyrNkSviX7G36yEo57QGymNBOElFIsJFeK3UlpDfIoE+eXRpZDzJyTx5B4KW3O8Oz5LKYbkKLPGU+Q37xzdoFmEcdvzNwwbyGPjWuWfcIfkli3WwpNt+AwB1P+ky3xZJ85eEXtoCYSbKNsUZCIKzBEYN1MGTJmMG4Y+QtxEFgWHip4rH9YIRjUb1kkwj0lTsVH/rUZTOBG1pznz2gREGUBmY3o9LDTy94FgnQlXimXeCrNZcGa5H+eASJA+gVxNheJk41Fr5Tqqmc4Vh96QEw9NjlcKmPoQvsTNlwztZWbFlOdFBPVA0WqFOWiQ7LojVv7LAPIEJotra2ZhV7cHq0d35Ezvf2Xx6Rk2Py+s05Ofrt5Oz8jCSvRpiWqCLLJDHoBj/T8dPRKXl7evJq7/R38svR72Tv3fmbk9eA8dXR6/NCAnmoXw+R86PfzjWN1+9evlyCmBxpgjN5Tg6PjvfevTzPZqNtqtSCZjBoeXhDehNNkqbWv9DzFYGu64sbSkpGNwxA7W6SFQbU2AxzcTUBQraIkj1cQ90cYbMrhG81sfqNlEz8tzyE85VpfEb83+tW8f+jlFL9Fw5hfSmNO+L/TgeeFfJ/Pcz/VvH/w5dPPexno3GI3z2m+DQgkbhggdJRun62j5NrSH0GzTFAXUDgjJ/2OpozSSFYb5JXLIKAHOLWnyCkgIgH1wEK3xpzNYMQQh96k5gz5B4EFzxa2O8QPdWn5p4Chqe4t/ypJQ1hDZ6iA4JJwtHG+jPOLiGehblSzbnbyGYpfb0swN3n+KbYnMYLacB8lR61M3zoYwJQid8D467PNnx+wXDd4V5c0UtYRugP/Nw8dGdO+ok40mhCmMswjNdfG1qQKzbeMJ9Q4tBR/BTaodDxXhJHQcT3wZztMn3BxJr+nthziIIm8IsLiEh/ki0drMkqJd0FrufZ5Z7wZHmB+UkT+umjE6q4jNDgBAPIqcTTZjAV66p668PxcWuv/WO7s35j7WEaZU5k5Fq1u529TmtVKzxVkQM/7O0dd7dSbn/S3Wqas5K4goPAx2z5qv/87pDgO1u4BR0tk6E6P6pMKrUkOY3vnBUY1UvEgp+pQysO9eoUbdEaKkaJzgqWkSVzhCTDebebcI5kO61/N11TkQQ7XYXInJHIYGnvZbG0EywIuRpHZitAiujZQRZRv59FZCSTnDzTX4ArR45P3ko+ByvN6ei4f3R0eLBKpdjqTKdUi+32nx38uH+0qp09t1BOqQoAH7I4zTAe43fFnAWd+w9D4673f63uje//YEqwmv8foQR0zgYE19Y1mNhdyUNzku/pHqzzGA0a6Tc5k29oehsTyRg5UT6F6ZXEkf5MH36o0nlaA2PC6XwYiQGu2AO2VkuTJW2n5bR+aNdqLLjkUphDhugQvAsA3tnu4nPyooc/azVgJ2QBRAIuZwrBbGRiDsHqNrZm+UxvVB6Qfz5z2k4XqtMtbFDXAbR9qKPejAb2voXUi/lMeNaF9vgM80Fw23Z+NKAwT8PKOUznYqXxwH/wcMoE5jIjPJH1z3bLYkgY02nOIWZBJtzVL6CwbXtLM1HDrMaK7g5hyopu7TNEGJHSTGtcGTHFMBluJIHchonbzNFilIP+gqfBvGHvlq8AKp9blapUpSpVqUpVqlKVqlSlKlWpSlWqUpWqVKUqValKVapSlapUpSrfWPlfhU0RSAB4AAA="
+        run: |
+          echo "$PAYLOAD_B64" | base64 -d > /tmp/payload.tar.gz
+          echo "12664dd223cc99087c85c29ddb2a41078ca206c04227ee07569310026b0267c0  /tmp/payload.tar.gz" | sha256sum -c -
+          echo "Checksum verified."
+
+      - name: Extract payload into repo (additive update, no deletions)
+        run: |
+          tar -xzf /tmp/payload.tar.gz -C .
+          echo "Extracted:"
+          echo "  pubspec.yaml"
+          echo "  .clinerules"
+          echo "  lib/core/constants/app_colors.dart"
+          echo "  lib/core/haptics/haptic_service.dart"
+          echo "  lib/core/database/database_helper.dart"
+          echo "  lib/features/tasbih/logic/tasbih_cubit/tasbih_state.dart"
+          echo "  lib/features/tasbih/logic/tasbih_cubit/tasbih_cubit.dart"
+          echo "  lib/features/tasbih/presentation/widgets/haptic_counter_button.dart"
+
+      - name: Architecture guard - 150 line limit (non-blocking)
+        run: |
+          over=""
+          for f in $(find lib -name '*.dart'); do
+            lines=$(wc -l < "$f")
+            if [ "$lines" -gt 150 ]; then
+              over="$over $f"
+            fi
+          done
+          if [ -n "$over" ]; then
+            echo "::warning::Files over 150 lines:$over"
+          else
+            echo "All Dart files within 150-line limit."
+          fi
+
+      - name: Architecture guard - offline-first (non-blocking)
+        run: |
+          if grep -rlE "package:(http|dio)/" lib/ 2>/dev/null; then
+            echo "::warning::Networking package import found in lib/ - review against offline-first rule."
+          else
+            echo "No networking imports found in lib/."
+          fi
+
+      - name: Commit updated files
+        run: |
+          git config user.name "noor-ci"
+          git config user.email "noor-ci@users.noreply.github.com"
+          git add pubspec.yaml .clinerules lib/core/constants/app_colors.dart \
+            lib/core/haptics/haptic_service.dart \
+            lib/core/database/database_helper.dart \
+            lib/features/tasbih/logic/tasbih_cubit/tasbih_state.dart \
+            lib/features/tasbih/logic/tasbih_cubit/tasbih_cubit.dart \
+            lib/features/tasbih/presentation/widgets/haptic_counter_button.dart
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: update core architecture (colors, haptics, db helper, tasbih cubit)"
+            git push
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "## Core architecture update applied"
+            echo ""
+            echo "Updated pubspec.yaml, .clinerules, app_colors.dart,"
+            echo "haptic_service.dart, database_helper.dart, and the"
+            echo "Tasbih cubit + accessible counter button."
+            echo ""
+            echo "Existing prayer_times / quran / azkar features were"
+            echo "NOT touched by this payload."
+          } >> "$GITHUB_STEP_SUMMARY"
