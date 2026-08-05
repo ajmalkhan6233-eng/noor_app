@@ -50,4 +50,16 @@ const List<String> quranCreateStatements = [
     imported_at TEXT NOT NULL
   )
   ''',
+  quranTranslationImportMetaCreateStatement,
 ];
+
+/// Split out from [quranCreateStatements] so `DatabaseHelper`'s upgrade
+/// path can create it on its own for installs that already ran the
+/// version-1 `onCreate` before this table existed.
+const String quranTranslationImportMetaCreateStatement = '''
+  CREATE TABLE IF NOT EXISTS quran_translation_import_meta (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    imported_sha256 TEXT NOT NULL,
+    imported_at TEXT NOT NULL
+  )
+  ''';

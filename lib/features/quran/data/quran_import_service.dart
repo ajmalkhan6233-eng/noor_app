@@ -15,6 +15,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 import '../../../core/database/database_helper.dart';
 import 'quran_import_parser.dart';
 import 'quran_import_status.dart';
+import 'quran_translation_backfill.dart';
 
 class QuranImportService {
   QuranImportService({DatabaseHelper? databaseHelper})
@@ -45,7 +46,10 @@ class QuranImportService {
   }) async {
     final db = await _dbHelper.database;
     final existing = await db.query('quran_import_meta', where: 'id = 1');
-    if (existing.isNotEmpty) return const QuranImported();
+    if (existing.isNotEmpty) {
+      await ensureQuranTranslationImported(db);
+      return const QuranImported();
+    }
 
     final ByteData quranData;
     final ByteData metadataData;
@@ -86,6 +90,7 @@ class QuranImportService {
       'imported_at': DateTime.now().toIso8601String(),
     });
     onProgress?.call(1);
+    await ensureQuranTranslationImported(db);
     return const QuranImported();
   }
 

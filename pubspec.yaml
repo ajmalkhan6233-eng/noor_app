@@ -51,6 +51,7 @@ flutter:
   assets:
     - assets/database/
     - assets/quran/
+    - assets/quran_translations/
     - assets/azkar/
     - assets/talbiyah/
   fonts:

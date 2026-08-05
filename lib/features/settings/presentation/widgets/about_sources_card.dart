@@ -54,6 +54,15 @@ class AboutSourcesCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           const Text(
+            'English translation: Saheeh International (Umm Muhammad), '
+            'via Tanzil.net. Tanzil restricts translations to '
+            'non-commercial use, permitted here as noor is free and '
+            'ad-free; see assets/quran_translations/README.md for full '
+            'provenance and license detail.',
+            style: AppTypography.caption,
+          ),
+          const SizedBox(height: 12),
+          const Text(
             'Talbiyah (Hajj/Umrah guide): from asellam/HisnElMuslim on '
             'GitHub, MIT licence. Text drawn from Hisn al-Muslim by '
             'Said bin Ali bin Wahf Al-Qahthani; see '

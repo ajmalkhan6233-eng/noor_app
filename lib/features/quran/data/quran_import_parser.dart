@@ -56,6 +56,40 @@ List<Map<String, Object?>> _parseAyahs(List<int> bytes) {
   return rows;
 }
 
+class QuranTranslationRow {
+  const QuranTranslationRow({
+    required this.surahId,
+    required this.ayahNumber,
+    required this.text,
+  });
+
+  final int surahId;
+  final int ayahNumber;
+  final String text;
+}
+
+/// Parses a Tanzil-format `sura|aya|text` translation file. Top-level
+/// so it can be handed to `compute()`, same as [parseQuranImport].
+List<QuranTranslationRow> parseQuranTranslation(List<int> bytes) {
+  final text = utf8.decode(bytes, allowMalformed: true);
+  final rows = <QuranTranslationRow>[];
+  for (final line in const LineSplitter().convert(text)) {
+    final parts = line.split('|');
+    if (parts.length < 3) continue;
+    final surahId = int.tryParse(parts[0]);
+    final ayahNumber = int.tryParse(parts[1]);
+    if (surahId == null || ayahNumber == null) continue;
+    // Rejoin in case the translation text itself contained a literal
+    // '|' — split(3) above would have already handled this, but stay
+    // defensive since this only ever runs against verified bytes.
+    final ayahText = parts.sublist(2).join('|');
+    rows.add(
+      QuranTranslationRow(surahId: surahId, ayahNumber: ayahNumber, text: ayahText),
+    );
+  }
+  return rows;
+}
+
 List<Map<String, Object?>> _parseSurahMetadata(List<int> bytes) {
   final xmlText = utf8.decode(bytes, allowMalformed: true);
   final doc = XmlDocument.parse(xmlText);
