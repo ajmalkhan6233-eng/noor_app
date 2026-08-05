@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/umrah_guide_steps.dart';
 import 'widgets/guide_step_card.dart';
@@ -30,14 +31,24 @@ class UmrahGuideScreen extends StatelessWidget {
         children: [
           const ScholarNoticeBanner(),
           Expanded(
-            child: ListView.separated(
+            child: ListView(
               padding: const EdgeInsets.all(24),
-              itemCount: umrahGuideSteps.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final step = umrahGuideSteps[index];
-                return GuideStepCard(step: step, trailing: _trailingFor(index));
-              },
+              children: [
+                StaggeredFadeIn(
+                  children: [
+                    for (var i = 0; i < umrahGuideSteps.length; i++)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: i == umrahGuideSteps.length - 1 ? 0 : 16,
+                        ),
+                        child: GuideStepCard(
+                          step: umrahGuideSteps[i],
+                          trailing: _trailingFor(i),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

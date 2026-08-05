@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/hajj_guide_days.dart';
 import 'widgets/guide_step_card.dart';
@@ -28,18 +29,25 @@ class HajjGuideScreen extends StatelessWidget {
         children: [
           const ScholarNoticeBanner(),
           Expanded(
-            child: ListView.separated(
+            child: ListView(
               padding: const EdgeInsets.all(24),
-              itemCount: hajjGuideDays.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final day = hajjGuideDays[index];
-                // The 10th (index 2) includes Tawaf al-Ifadah/Sa'i.
-                return GuideStepCard(
-                  step: day,
-                  trailing: index == 2 ? const TawafEtiquetteNote() : null,
-                );
-              },
+              children: [
+                StaggeredFadeIn(
+                  children: [
+                    for (var i = 0; i < hajjGuideDays.length; i++)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: i == hajjGuideDays.length - 1 ? 0 : 16,
+                        ),
+                        // The 10th (index 2) includes Tawaf al-Ifadah/Sa'i.
+                        child: GuideStepCard(
+                          step: hajjGuideDays[i],
+                          trailing: i == 2 ? const TawafEtiquetteNote() : null,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/empty_state.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../data/quran_bookmark.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
@@ -33,52 +35,58 @@ class BookmarksScreen extends StatelessWidget {
               message: l10n.noBookmarksMessage,
             );
           }
-          return ListView.separated(
+          return ListView(
             padding: const EdgeInsets.all(24),
-            itemCount: state.bookmarks.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final bookmark = state.bookmarks[index];
-              final label = l10n.surahAyahLabel(
-                bookmark.surahId,
-                bookmark.ayahNumber,
-              );
-              return AppCard(
-                padding: EdgeInsets.zero,
-                child: SemanticButton(
-                  label: label,
-                  hint: l10n.openHint,
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<QuranCubit>(),
-                        child: SurahReaderScreen(surahId: bookmark.surahId),
+            children: [
+              StaggeredFadeIn(
+                children: [
+                  for (var i = 0; i < state.bookmarks.length; i++)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: i == state.bookmarks.length - 1 ? 0 : 12,
                       ),
+                      child: _bookmarkTile(context, l10n, state.bookmarks[i]),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 16,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.bookmark, color: AppColors.emerald, size: 20),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Text(
-                            label,
-                            style: const TextStyle(color: AppColors.ink),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
+                ],
+              ),
+            ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _bookmarkTile(
+    BuildContext context,
+    AppLocalizations l10n,
+    QuranBookmark bookmark,
+  ) {
+    final label = l10n.surahAyahLabel(bookmark.surahId, bookmark.ayahNumber);
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: SemanticButton(
+        label: label,
+        hint: l10n.openHint,
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => BlocProvider.value(
+              value: context.read<QuranCubit>(),
+              child: SurahReaderScreen(surahId: bookmark.surahId),
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          child: Row(
+            children: [
+              const Icon(Icons.bookmark, color: AppColors.emerald, size: 20),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(label, style: const TextStyle(color: AppColors.ink)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

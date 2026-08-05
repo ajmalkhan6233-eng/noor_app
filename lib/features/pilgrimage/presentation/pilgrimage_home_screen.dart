@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -42,38 +43,49 @@ class _PilgrimageHomeView extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(24),
             children: [
-              Text(l10n.profilePickerTitle, style: const TextStyle(color: AppColors.ink, fontSize: 18)),
-              const SizedBox(height: 16),
-              if (state.profiles.isEmpty)
-                Text(l10n.profilePickerEmptyMessage, style: const TextStyle(color: AppColors.sage)),
-              if (state.profiles.isNotEmpty)
-                AppCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      for (final profile in state.profiles) ...[
-                        _profileRow(context, profile),
-                        if (profile != state.profiles.last)
-                          const Divider(color: AppColors.hairline, height: 1),
-                      ],
-                    ],
+              StaggeredFadeIn(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(l10n.profilePickerTitle, style: const TextStyle(color: AppColors.ink, fontSize: 18)),
                   ),
-                ),
-              const SizedBox(height: 16),
-              SemanticButton(
-                label: l10n.addProfileLabel,
-                hint: l10n.addProfileHint,
-                onTap: () => _addProfile(context),
-                child: AppCard(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person_add_alt, color: AppColors.emerald),
-                      const SizedBox(width: 8),
-                      Text(l10n.addProfileLabel, style: const TextStyle(color: AppColors.emerald)),
-                    ],
+                  if (state.profiles.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(l10n.profilePickerEmptyMessage, style: const TextStyle(color: AppColors.sage)),
+                    ),
+                  if (state.profiles.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: AppCard(
+                        padding: EdgeInsets.zero,
+                        child: Column(
+                          children: [
+                            for (final profile in state.profiles) ...[
+                              _profileRow(context, profile),
+                              if (profile != state.profiles.last)
+                                const Divider(color: AppColors.hairline, height: 1),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  SemanticButton(
+                    label: l10n.addProfileLabel,
+                    hint: l10n.addProfileHint,
+                    onTap: () => _addProfile(context),
+                    child: AppCard(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.person_add_alt, color: AppColors.emerald),
+                          const SizedBox(width: 8),
+                          Text(l10n.addProfileLabel, style: const TextStyle(color: AppColors.emerald)),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           );

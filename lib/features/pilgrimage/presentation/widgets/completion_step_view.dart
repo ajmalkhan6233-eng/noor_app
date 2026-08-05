@@ -1,28 +1,48 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Simple confirmation once a session is marked complete, showing the
-// pilgrim's updated lifetime Umrah/Hajj counts.
+// pilgrim's updated lifetime Umrah/Hajj counts. A single particle
+// burst plays once behind the check-circle icon when this screen
+// first appears — the clearest "moment of completion" in the app.
 
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/pilgrim_profile.dart';
 import '../../data/pilgrimage_session.dart';
 
-class CompletionStepView extends StatelessWidget {
+class CompletionStepView extends StatefulWidget {
   const CompletionStepView({super.key, required this.profile, required this.session});
 
   final PilgrimProfile profile;
   final PilgrimageSession? session;
 
   @override
+  State<CompletionStepView> createState() => _CompletionStepViewState();
+}
+
+class _CompletionStepViewState extends State<CompletionStepView> {
+  final _iconKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final iconContext = _iconKey.currentContext;
+      if (iconContext != null) ParticleBurst.play(iconContext);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final type = session?.type ?? PilgrimageType.umrah;
-    final umrahCount = profile.totalUmrahCompleted + (type == PilgrimageType.umrah ? 1 : 0);
-    final hajjCount = profile.totalHajjCompleted + (type == PilgrimageType.hajj ? 1 : 0);
+    final type = widget.session?.type ?? PilgrimageType.umrah;
+    final umrahCount = widget.profile.totalUmrahCompleted + (type == PilgrimageType.umrah ? 1 : 0);
+    final hajjCount = widget.profile.totalHajjCompleted + (type == PilgrimageType.hajj ? 1 : 0);
     final typeLabel = type == PilgrimageType.umrah ? l10n.umrahLabel : l10n.hajjLabel;
 
     return Center(
@@ -31,7 +51,7 @@ class CompletionStepView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle, color: AppColors.emerald, size: 64),
+            Icon(Icons.check_circle, key: _iconKey, color: AppColors.emerald, size: 64),
             const SizedBox(height: 16),
             Text(l10n.completionScreenTitle, style: const TextStyle(color: AppColors.ink, fontSize: 22, fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),

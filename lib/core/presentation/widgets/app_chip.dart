@@ -3,13 +3,16 @@
 // A hand-rolled chip instead of Material's ChoiceChip — Chip pulls in
 // M3 elevation tinting and defaults to a solid fill we don't want.
 // Gold is punctuation: selected chips get a hairline gold border and
-// gold text, never a solid gold fill.
+// gold text, never a solid gold fill. Presses use the same calm
+// 0.98 scale-down as SemanticButton, so every tappable element in the
+// app responds to touch the same way.
 
 import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
+import '../motion/motion.dart';
 
-class AppChip extends StatelessWidget {
+class AppChip extends StatefulWidget {
   const AppChip({
     super.key,
     required this.label,
@@ -24,30 +27,51 @@ class AppChip extends StatelessWidget {
   final String? semanticLabel;
 
   @override
+  State<AppChip> createState() => _AppChipState();
+}
+
+class _AppChipState extends State<AppChip> {
+  bool _pressed = false;
+
+  void _setPressed(bool value) {
+    if (_pressed != value) setState(() => _pressed = value);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: semanticLabel ?? label,
-      selected: selected,
+      label: widget.semanticLabel ?? widget.label,
+      selected: widget.selected,
       button: true,
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          _setPressed(false);
+          widget.onTap();
+        },
+        onTapDown: (_) => _setPressed(true),
+        onTapCancel: () => _setPressed(false),
         borderRadius: BorderRadius.circular(20),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: selected ? AppColors.card : Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: selected ? AppColors.emerald : AppColors.hairline,
+        child: AnimatedScale(
+          scale: _pressed ? 0.98 : 1,
+          duration: Motion.effective(context, Motion.short),
+          curve: Motion.curve,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: widget.selected ? AppColors.card : Colors.transparent,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: widget.selected ? AppColors.emerald : AppColors.hairline,
+              ),
             ),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: selected ? AppColors.emerald : AppColors.sage,
-              fontSize: 13,
+            child: Text(
+              widget.label,
+              style: TextStyle(
+                color: widget.selected ? AppColors.emerald : AppColors.sage,
+                fontSize: 13,
+              ),
             ),
           ),
         ),

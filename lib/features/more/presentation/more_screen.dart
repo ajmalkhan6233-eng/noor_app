@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -32,36 +33,42 @@ class MoreScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          AppCard(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                _row(context, Icons.explore, 'Qibla', const QiblaScreen()),
-                _divider(),
-                _row(context, Icons.fingerprint, 'Tasbih', const TasbihScreen()),
-                _divider(),
-                _row(context, Icons.calendar_month, 'Calendar', const CalendarScreen()),
-                _divider(),
-                _row(context, Icons.savings_outlined, 'Zakat calculator', const ZakatScreen()),
-                _divider(),
-                _row(context, Icons.mosque, l10n.pilgrimageLabel, const PilgrimageHomeScreen()),
-                _divider(),
-                _row(context, Icons.menu_book_outlined, l10n.umrahGuideLabel, const UmrahGuideScreen()),
-                _divider(),
-                _row(context, Icons.menu_book, l10n.hajjGuideLabel, const HajjGuideScreen()),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          AppCard(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                _row(context, Icons.settings_outlined, 'Settings', const SettingsScreen()),
-                _divider(),
-                _row(context, Icons.info_outline, 'About', const AboutScreen()),
-              ],
-            ),
+          StaggeredFadeIn(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: AppCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      _row(context, Icons.explore, 'Qibla', const QiblaScreen()),
+                      _divider(),
+                      _row(context, Icons.fingerprint, 'Tasbih', const TasbihScreen()),
+                      _divider(),
+                      _row(context, Icons.calendar_month, 'Calendar', const CalendarScreen()),
+                      _divider(),
+                      _row(context, Icons.savings_outlined, 'Zakat calculator', const ZakatScreen()),
+                      _divider(),
+                      _row(context, Icons.mosque, l10n.pilgrimageLabel, const PilgrimageHomeScreen()),
+                      _divider(),
+                      _row(context, Icons.menu_book_outlined, l10n.umrahGuideLabel, const UmrahGuideScreen()),
+                      _divider(),
+                      _row(context, Icons.menu_book, l10n.hajjGuideLabel, const HajjGuideScreen()),
+                    ],
+                  ),
+                ),
+              ),
+              AppCard(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    _row(context, Icons.settings_outlined, 'Settings', const SettingsScreen()),
+                    _divider(),
+                    _row(context, Icons.info_outline, 'About', const AboutScreen()),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
