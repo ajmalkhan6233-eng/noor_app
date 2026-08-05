@@ -7,6 +7,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../prayer_tracker/presentation/widgets/prayer_tracker_card.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
@@ -79,6 +80,8 @@ class _PrayerTimesView extends StatelessWidget {
               child: StaggeredFadeIn(
                 children: [
                   _buildResult(context, state),
+                  const SizedBox(height: 16),
+                  const PrayerTrackerCard(),
                   const SizedBox(height: 16),
                   const LocationSelector(),
                   const SizedBox(height: 16),

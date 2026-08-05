@@ -11,6 +11,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 import '../security/secure_passphrase_service.dart';
 import 'schema/azkar_schema.dart';
 import 'schema/pilgrimage_schema.dart';
+import 'schema/prayer_tracker_schema.dart';
 import 'schema/quran_schema.dart';
 import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
@@ -39,7 +40,7 @@ class DatabaseHelper {
   final SecurePassphraseService _passphraseService;
 
   static const String _dbName = 'noor.db';
-  static const int _dbVersion = 1;
+  static const int _dbVersion = 2;
 
   Database? _database;
 
@@ -62,6 +63,7 @@ class DatabaseHelper {
       version: _dbVersion,
       password: passphrase,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -73,11 +75,23 @@ class DatabaseHelper {
       ...quranCreateStatements,
       ...widgetPositionCreateStatements,
       ...pilgrimageCreateStatements,
+      ...prayerTrackerCreateStatements,
     ]) {
       await db.execute(statement);
     }
     for (final statement in azkarSeedStatements) {
       await db.execute(statement);
+    }
+  }
+
+  /// Installs that already created a version-1 database are missing the
+  /// prayer/fasting tracker tables added in version 2 — `IF NOT EXISTS`
+  /// makes this safe to run even if a future statement set overlaps.
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      for (final statement in prayerTrackerCreateStatements) {
+        await db.execute(statement);
+      }
     }
   }
 
