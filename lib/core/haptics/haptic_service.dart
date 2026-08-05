@@ -1,30 +1,49 @@
+// Bismillahir Rahmanir Raheem — watermark: ALLAH
+//
+// Centralized haptic feedback. Cubits call this service instead of
+// touching `HapticFeedback` directly, so vibration behavior stays
+// consistent and testable (mockable) across features.
+
+import 'dart:async';
 import 'package:flutter/services.dart';
 
-/// Centralizes all tactile feedback so UI widgets and Cubits never
-/// call `HapticFeedback` directly (rule 5 in .clinerules).
+/// Milestone counts that trigger a heavier confirmation pulse during
+/// tasbih (dhikr) counting, per `.clinerules` §6.
+const List<int> kTasbihMilestones = [33, 66, 100];
+
+/// Provides haptic feedback for interactive counters.
+///
+/// Kept dependency-free (no plugins beyond Flutter's own `services.dart`)
+/// so it works fully offline and needs no platform channel setup beyond
+/// what Flutter ships with.
 class HapticService {
-  HapticService._();
-  static final HapticService instance = HapticService._();
+  const HapticService();
 
-  static const Set<int> _milestones = {33, 66, 100};
+  /// Light tap feedback — fired on every single tasbih count.
+  void tap() {
+    HapticFeedback.lightImpact();
+  }
 
-  /// Call on every tap increment. Light impact for a normal count,
-  /// escalating to a double heavy pulse on milestone counts.
-  Future<void> onCount(int newCount) async {
-    if (_milestones.contains(newCount)) {
-      await _milestonePulse();
+  /// Heavier double-pulse feedback for milestone counts (33, 66, 100).
+  ///
+  /// Fires a medium impact, a brief pause, then a heavy impact so the
+  /// user can feel the milestone without looking at the screen.
+  Future<void> milestonePulse() async {
+    HapticFeedback.mediumImpact();
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+    HapticFeedback.heavyImpact();
+  }
+
+  /// Convenience: fires the correct feedback for a given new [count].
+  Future<void> feedbackForCount(int count) async {
+    if (kTasbihMilestones.contains(count)) {
+      await milestonePulse();
     } else {
-      await HapticFeedback.lightImpact();
+      tap();
     }
   }
 
-  Future<void> _milestonePulse() async {
-    await HapticFeedback.heavyImpact();
-    await Future.delayed(const Duration(milliseconds: 120));
-    await HapticFeedback.heavyImpact();
-  }
-
-  Future<void> onReset() async {
-    await HapticFeedback.mediumImpact();
-  }
+  /// Whether [count] lands on a milestone. Exposed so UI can trigger a
+  /// visual pulse in sync with the haptic one.
+  bool isMilestone(int count) => kTasbihMilestones.contains(count);
 }

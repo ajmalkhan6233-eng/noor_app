@@ -1,34 +1,43 @@
+// Bismillahir Rahmanir Raheem — watermark: ALLAH
+
 import 'package:equatable/equatable.dart';
 
+/// Immutable state for the tasbih (dhikr counter) feature.
 class TasbihState extends Equatable {
-  final int count;
-  final int? target;
-  final String dhikrLabel;
-
   const TasbihState({
-    required this.count,
-    required this.dhikrLabel,
+    this.count = 0,
+    this.dhikrLabel = 'SubhanAllah',
     this.target,
+    this.justHitMilestone = false,
   });
 
-  factory TasbihState.initial() => const TasbihState(
-        count: 0,
-        dhikrLabel: 'SubhanAllah',
-      );
+  /// Current tap count.
+  final int count;
 
-  static const Set<int> _milestones = {33, 66, 100};
+  /// Label of the dhikr currently being counted (e.g. "SubhanAllah").
+  final String dhikrLabel;
 
-  bool get isMilestone => _milestones.contains(count);
-  bool get reachedTarget => target != null && count >= target!;
+  /// Optional target count (e.g. 33, 99, 100) for progress display.
+  final int? target;
 
-  TasbihState copyWith({int? count, int? target, String? dhikrLabel}) {
+  /// True for a single emitted frame right after a milestone (33/66/100)
+  /// is reached, so the UI can trigger a matching visual pulse.
+  final bool justHitMilestone;
+
+  TasbihState copyWith({
+    int? count,
+    String? dhikrLabel,
+    int? target,
+    bool? justHitMilestone,
+  }) {
     return TasbihState(
       count: count ?? this.count,
-      target: target ?? this.target,
       dhikrLabel: dhikrLabel ?? this.dhikrLabel,
+      target: target ?? this.target,
+      justHitMilestone: justHitMilestone ?? false,
     );
   }
 
   @override
-  List<Object?> get props => [count, target, dhikrLabel];
+  List<Object?> get props => [count, dhikrLabel, target, justHitMilestone];
 }

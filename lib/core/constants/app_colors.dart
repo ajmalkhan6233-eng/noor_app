@@ -1,29 +1,41 @@
+// Bismillahir Rahmanir Raheem — watermark: ALLAH
+//
+// Centralized design tokens. Never hardcode hex colors in widgets —
+// import and use these instead, so the palette stays consistent and
+// easy to re-theme.
+//
+// Design anchor: fine paper and ink, not a dark dashboard. Warm
+// cream, dark text, colour used sparingly and only where it carries
+// meaning. Calm, spacious, premium.
+
 import 'package:flutter/material.dart';
 
-/// Noor design tokens.
-///
-/// Base palette stays Deep Emerald / Metallic Gold (the established
-/// brand identity). The "glass" / "glow" tokens below let widgets
-/// achieve a cosmic, tactile feel — blurred glass panels, glowing
-/// borders, particle-like shockwaves — natively in Flutter, without
-/// pulling in any web-only library. Do not hardcode hex values
-/// elsewhere; reference these constants.
-class AppColors {
-  AppColors._();
+/// Static color palette for `noor`.
+abstract final class AppColors {
+  /// App background — warm cream paper.
+  static const Color paper = Color(0xFFF2EFE7);
 
-  // Core surfaces
-  static const Color background = Color(0xFF0A1912);
-  static const Color cardSurface = Color(0xFF132A20);
-  static const Color gold = Color(0xFFD4AF37);
+  /// Cards — white, raised off the paper with a hairline + soft
+  /// shadow, never a filled color block.
+  static const Color card = Color(0xFFFFFFFF);
 
-  // Glass / glow accent layer (HUD overlays, milestone pulses,
-  // tactile feedback states). Layered on top of the emerald base.
-  static const Color glassBorder = Color(0x33D4AF37); // 20% gold stroke
-  static const Color glowSoft = Color(0x1AD4AF37); // 10% gold glow
-  static const Color glowMilestone = Color(0x8CD4AF37); // 55% gold glow
+  /// Primary text.
+  static const Color ink = Color(0xFF16211C);
 
-  // Semantic text
-  static const Color textPrimary = Color(0xFFF5EEDC);
-  static const Color textSecondary = Color(0xFFB8C9BE);
-  static const Color hudText = Color(0xFFF5EEDC);
+  /// Secondary text — captions, section labels.
+  static const Color sage = Color(0xFF6E7B72);
+
+  /// 1px borders and dividers.
+  static const Color hairline = Color(0xFFE3DFD4);
+
+  /// Primary accent — active states, prayer names, progress. The only
+  /// colour used for interaction; punctuation, not paint.
+  static const Color emerald = Color(0xFF14603C);
+
+  /// Dimmed/inactive accent (unselected track, soft marks).
+  static const Color emeraldSoft = Color(0xFFAFC6BA);
+
+  /// Reserved exclusively for the الله calligraphy — never used for
+  /// buttons, chips, links, or any other UI element.
+  static const Color gold = Color(0xFFB8912F);
 }
