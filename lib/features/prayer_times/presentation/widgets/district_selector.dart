@@ -1,67 +1,54 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // A third, fully offline location option alongside GPS and manual
-// coordinates: pick one of Sri Lanka's 25 districts. Selecting one
-// sets PrayerCubit's coordinates and persists the district name via
-// SettingsCubit so it shows as selected again after a restart.
+// coordinates: pick one of Sri Lanka's 25 districts. Pure/reusable —
+// the caller supplies the currently selected name and what happens on
+// selection, so both Prayer Times and the Qibla GPS-fallback share
+// this one dropdown rather than each having their own.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import '../../../settings/logic/settings_cubit/settings_cubit.dart';
-import '../../../settings/logic/settings_cubit/settings_state.dart';
 import '../../data/sri_lanka_district.dart';
-import '../../logic/prayer_cubit/prayer_cubit.dart';
 
-/// Dropdown of Sri Lankan districts — a no-permission, no-GPS
-/// alternative to entering coordinates by hand.
 class DistrictSelector extends StatelessWidget {
-  const DistrictSelector({super.key});
+  const DistrictSelector({
+    super.key,
+    required this.selectedDistrict,
+    required this.onSelected,
+  });
 
-  void _select(BuildContext context, SriLankaDistrict district) {
-    context.read<PrayerCubit>().setManualLocation(
-      district.latitude,
-      district.longitude,
-    );
-    context.read<SettingsCubit>().setSelectedDistrict(district.name);
-  }
+  final String? selectedDistrict;
+  final ValueChanged<SriLankaDistrict> onSelected;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<SettingsCubit, SettingsState>(
-      builder: (context, state) {
-        final selected = state.settings.selectedDistrict;
-        return AppCard(
-          child: Semantics(
-            label: l10n.districtSelectorSemanticLabel,
-            value: selected ?? l10n.noneSelectedLabel,
-            child: DropdownButtonFormField<String>(
-              initialValue: selected,
-              isExpanded: true,
-              decoration: InputDecoration(labelText: l10n.districtFieldLabel),
-              dropdownColor: AppColors.card,
-              hint: Text(l10n.chooseDistrictHint),
-              items: [
-                for (final district in sriLankaDistricts)
-                  DropdownMenuItem(
-                    value: district.name,
-                    child: Text(district.name),
-                  ),
-              ],
-              onChanged: (name) {
-                if (name == null) return;
-                final match = sriLankaDistricts.where((d) => d.name == name);
-                if (match.isEmpty) return;
-                _select(context, match.first);
-              },
-            ),
-          ),
-        );
-      },
+    return AppCard(
+      child: Semantics(
+        label: l10n.districtSelectorSemanticLabel,
+        value: selectedDistrict ?? l10n.noneSelectedLabel,
+        child: DropdownButtonFormField<String>(
+          initialValue: selectedDistrict,
+          isExpanded: true,
+          decoration: InputDecoration(labelText: l10n.districtFieldLabel),
+          dropdownColor: AppColors.card,
+          hint: Text(l10n.chooseDistrictHint),
+          items: [
+            for (final district in sriLankaDistricts)
+              DropdownMenuItem(
+                value: district.name,
+                child: Text(district.name),
+              ),
+          ],
+          onChanged: (name) {
+            final district = findSriLankaDistrict(name);
+            if (district != null) onSelected(district);
+          },
+        ),
+      ),
     );
   }
 }

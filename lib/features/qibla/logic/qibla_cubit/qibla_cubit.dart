@@ -1,7 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Presentation only dispatches `start()` and reads state — location,
-// compass, tilt, and qibla math all stay out of the widget tree.
+// Presentation only dispatches `start()`/`setManualLocation()` and
+// reads state — location, compass, tilt, and qibla math all stay out
+// of the widget tree.
 
 import 'dart:async';
 
@@ -13,6 +14,8 @@ import '../../../../core/sensors/compass_service.dart';
 import '../../../../core/sensors/magnetic_declination.dart';
 import '../../../../core/sensors/tilt_service.dart';
 import '../../../../core/utils/angle_math.dart';
+import '../../../prayer_times/data/sri_lanka_district.dart';
+import '../../../settings/data/settings_repository.dart';
 import '../../data/qibla_calculator.dart';
 import 'qibla_state.dart';
 
@@ -21,37 +24,59 @@ class QiblaCubit extends Cubit<QiblaState> {
     LocationService? locationService,
     CompassService? compassService,
     TiltService? tiltService,
+    SettingsRepository? settingsRepository,
   }) : _locationService = locationService ?? const LocationService(),
        _compassService = compassService ?? CompassService(),
        _tiltService = tiltService ?? TiltService(),
+       _settingsRepository = settingsRepository ?? SettingsRepository(),
        super(const QiblaState());
 
   final LocationService _locationService;
   final CompassService _compassService;
   final TiltService _tiltService;
+  final SettingsRepository _settingsRepository;
   StreamSubscription<CompassReading>? _compassSubscription;
   StreamSubscription<TiltReading>? _tiltSubscription;
 
-  /// Resolves the device location, computes the static bearing and
-  /// distance to the Kaaba, then starts listening to the compass and
-  /// the accelerometer (for the compass's tilt effect).
+  /// Resolves a location automatically — a cached or bounded GPS fix
+  /// first, then a previously chosen Sri Lankan district — so this
+  /// always settles within a few seconds rather than hanging on GPS
+  /// indefinitely. Only if neither is available does it surface an
+  /// error, for the district-picker fallback UI to resolve.
   Future<void> start() async {
     emit(state.copyWith(isResolvingLocation: true, locationError: null));
-    final coordinates = await _locationService.getCurrentCoordinates();
-    if (coordinates == null) {
-      emit(
-        state.copyWith(
-          isResolvingLocation: false,
-          locationError: 'Enable location to see the qibla direction.',
-        ),
-      );
+
+    final coordinates = await _locationService.autoFetchCoordinates();
+    if (coordinates != null) {
+      _applyLocation(coordinates.latitude, coordinates.longitude);
       return;
     }
 
-    final latitude = coordinates.latitude;
-    final longitude = coordinates.longitude;
-    final declination = MagneticDeclination.estimate(latitude, longitude);
+    final appSettings = await _settingsRepository.load();
+    final district = findSriLankaDistrict(appSettings.selectedDistrict);
+    if (district != null) {
+      _applyLocation(district.latitude, district.longitude);
+      return;
+    }
 
+    emit(
+      state.copyWith(
+        isResolvingLocation: false,
+        locationError:
+            'Enable location, or choose a district below, to see the '
+            'qibla direction.',
+      ),
+    );
+  }
+
+  /// Lets the district-picker fallback set a location directly when
+  /// GPS was unavailable and no district was already known.
+  void setManualLocation(double latitude, double longitude) {
+    _applyLocation(latitude, longitude);
+  }
+
+  void _applyLocation(double latitude, double longitude) {
+    final declination = MagneticDeclination.estimate(latitude, longitude);
     emit(
       state.copyWith(
         latitude: latitude,
@@ -62,8 +87,11 @@ class QiblaCubit extends Cubit<QiblaState> {
         locationError: null,
       ),
     );
+    _listen(declination);
+  }
 
-    await _compassSubscription?.cancel();
+  void _listen(double declination) {
+    _compassSubscription?.cancel();
     _compassSubscription = _compassService.readings.listen((reading) {
       final trueHeading = reading.headingDegrees == null
           ? null
@@ -76,7 +104,7 @@ class QiblaCubit extends Cubit<QiblaState> {
       );
     });
 
-    await _tiltSubscription?.cancel();
+    _tiltSubscription?.cancel();
     _tiltSubscription = _tiltService.readings.listen((reading) {
       emit(state.copyWith(tiltX: reading.x, tiltY: reading.y));
     });

@@ -9,10 +9,12 @@ import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../logic/qibla_cubit/qibla_cubit.dart';
 import '../logic/qibla_cubit/qibla_state.dart';
 import 'widgets/calibration_prompt.dart';
 import 'widgets/qibla_compass_area.dart';
+import 'widgets/qibla_district_fallback.dart';
 import 'widgets/qibla_info_panel.dart';
 
 /// Qibla-compass screen: a needle toward the Kaaba (only ever shown
@@ -25,8 +27,11 @@ class QiblaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => QiblaCubit()..start(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => QiblaCubit()..start()),
+        BlocProvider(create: (_) => SettingsCubit()..load()),
+      ],
       child: const _QiblaView(),
     );
   }
@@ -78,14 +83,21 @@ class _QiblaViewState extends State<_QiblaView> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Semantics(
-            liveRegion: true,
-            label: state.locationError,
-            child: Text(
-              state.locationError!,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.sage),
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                liveRegion: true,
+                label: state.locationError,
+                child: Text(
+                  state.locationError!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.sage),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const QiblaDistrictFallback(),
+            ],
           ),
         ),
       );

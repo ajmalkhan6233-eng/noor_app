@@ -1,9 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Presentation only dispatches (`useGps`, `setManualLocation`) and
-// reads state — GPS calls and prayer math both stay out of the widget
-// tree. Calculation method/madhab/adjustments are never set here —
-// they're read once from Settings on load; change them in Settings.
+// Presentation only dispatches and reads state — GPS calls and prayer
+// math stay out of the widget tree. Calculation settings are read
+// once from Settings on load; change them there, not here.
 
 import 'dart:async';
 
@@ -35,10 +34,9 @@ class PrayerCubit extends Cubit<PrayerState> {
   final SettingsRepository _settingsRepository;
   final PrayerNotificationCoordinator _notificationCoordinator;
 
-  /// Reads the persisted calculation settings — always the single
-  /// source of truth — before anything is calculated. Also re-applies
-  /// a previously selected Sri Lankan district, if any, so the last
-  /// chosen location survives an app restart.
+  /// Re-applies a previously chosen district, if any — sticky, never
+  /// silently overridden by GPS later. Otherwise auto-fetches GPS
+  /// (bounded, see [_autoFetchLocation]) instead of waiting for a tap.
   Future<void> loadSettings() async {
     final appSettings = await _settingsRepository.load();
     emit(
@@ -49,34 +47,45 @@ class PrayerCubit extends Cubit<PrayerState> {
         silentMode: appSettings.silentMode,
       ),
     );
-    final districtName = appSettings.selectedDistrict;
-    if (districtName != null) {
-      final matches = sriLankaDistricts.where((d) => d.name == districtName);
-      if (matches.isNotEmpty) {
-        final district = matches.first;
-        emit(
-          state.copyWith(
-            latitude: district.latitude,
-            longitude: district.longitude,
-            usingGps: false,
-          ),
-        );
-      }
+    final district = findSriLankaDistrict(appSettings.selectedDistrict);
+    if (district != null) {
+      emit(
+        state.copyWith(
+          latitude: district.latitude,
+          longitude: district.longitude,
+          usingGps: false,
+        ),
+      );
     }
-    _recalculate();
+    if (state.hasCoordinates) {
+      _recalculate();
+    } else {
+      await _autoFetchLocation();
+    }
   }
 
-  /// Resolves the device's GPS location. Never called automatically —
-  /// only in response to an explicit user action — and manual entry
-  /// remains fully usable whether or not this succeeds.
-  Future<void> useGps() async {
+  /// Explicit tap — forces a fresh reading, bypassing the auto cache.
+  Future<void> useGps() => _resolveLocation(forceFresh: true);
+
+  /// On first open: cached fix if known, else a bounded GPS attempt
+  /// (see [LocationService]) that never hangs — the always-visible
+  /// manual/district selectors are the fallback on failure.
+  Future<void> _autoFetchLocation() => _resolveLocation(forceFresh: false);
+
+  Future<void> _resolveLocation({required bool forceFresh}) async {
     emit(state.copyWith(isResolvingLocation: true, locationError: null));
-    final coordinates = await _locationService.getCurrentCoordinates();
+    final coordinates = forceFresh
+        ? await _locationService.getCurrentCoordinates()
+        : await _locationService.autoFetchCoordinates();
     if (coordinates == null) {
+      // Auto-fetch fails silently into the selectors below; only a
+      // manual tap gets an explicit message, as a direct response.
       emit(
         state.copyWith(
           isResolvingLocation: false,
-          locationError: 'Enter your coordinates below to see prayer times.',
+          locationError: forceFresh
+              ? 'Enter your coordinates below to see prayer times.'
+              : null,
         ),
       );
       return;
@@ -93,8 +102,7 @@ class PrayerCubit extends Cubit<PrayerState> {
     _recalculate();
   }
 
-  /// Sets coordinates directly — fully sufficient on its own, with no
-  /// GPS permission ever required.
+  /// Fully sufficient on its own — no GPS permission ever required.
   void setManualLocation(double latitude, double longitude) {
     if (latitude.abs() > 90 || longitude.abs() > 180) {
       emit(
@@ -128,10 +136,8 @@ class PrayerCubit extends Cubit<PrayerState> {
       settings: state.settings,
     );
     emit(state.copyWith(result: result));
+    // Fire-and-forget: never blocks display or crashes the cubit.
     if (result is PrayerTimesComputed) {
-      // Fire-and-forget: notification/silent-mode scheduling never
-      // blocks prayer-time display, and failures here (e.g. no device
-      // to run platform channels against) must never crash the cubit.
       unawaited(
         _notificationCoordinator
             .scheduleForDay(

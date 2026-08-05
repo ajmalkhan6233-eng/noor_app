@@ -61,3 +61,14 @@ const List<SriLankaDistrict> sriLankaDistricts = [
   SriLankaDistrict(name: 'Ratnapura', latitude: 6.6828, longitude: 80.4012),
   SriLankaDistrict(name: 'Kegalle', latitude: 7.2513, longitude: 80.3464),
 ];
+
+/// Looks up a district by exact name — `null` if [name] is `null` or
+/// matches none of [sriLankaDistricts]. Shared by every location
+/// fallback (Prayer Times, Qibla) so the lookup lives in one place.
+SriLankaDistrict? findSriLankaDistrict(String? name) {
+  if (name == null) return null;
+  for (final district in sriLankaDistricts) {
+    if (district.name == name) return district;
+  }
+  return null;
+}

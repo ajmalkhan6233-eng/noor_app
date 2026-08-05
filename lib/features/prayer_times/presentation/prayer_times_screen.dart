@@ -13,9 +13,9 @@ import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
 import '../logic/prayer_cubit/prayer_state.dart';
 import 'monthly_timetable_screen.dart';
-import 'widgets/district_selector.dart';
 import 'widgets/high_latitude_notice.dart';
 import 'widgets/location_selector.dart';
+import 'widgets/prayer_district_field.dart';
 import 'widgets/prayer_hero.dart';
 import 'widgets/prayer_times_list.dart';
 
@@ -82,7 +82,7 @@ class _PrayerTimesView extends StatelessWidget {
                   const SizedBox(height: 16),
                   const LocationSelector(),
                   const SizedBox(height: 16),
-                  const DistrictSelector(),
+                  const PrayerDistrictField(),
                   const SizedBox(height: 16),
                   _activeSettingsCaption(context, state.settings),
                 ],
