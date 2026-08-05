@@ -20,8 +20,8 @@ import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../prayer_times/presentation/widgets/prayer_times_list.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
-import '../../settings/presentation/widgets/notification_toggles_section.dart';
 import 'widgets/dashboard_header.dart';
+import 'widgets/edit_location_dialog.dart';
 import 'widgets/next_prayer_card.dart';
 import 'widgets/quick_action_row.dart';
 
@@ -44,28 +44,7 @@ class _HomeView extends StatelessWidget {
   const _HomeView();
 
   Future<void> _editLocation(BuildContext context, String? current) async {
-    final controller = TextEditingController(text: current);
-    final result = await showDialog<String>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Location name'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: const InputDecoration(hintText: 'e.g. Amman, Jordan'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(controller.text),
-            child: const Text('Save'),
-          ),
-        ],
-      ),
-    );
+    final result = await showEditLocationDialog(context, current: current);
     if (result != null && context.mounted) {
       await context.read<SettingsCubit>().setLocationLabel(
         result.trim().isEmpty ? null : result.trim(),
@@ -98,12 +77,9 @@ class _HomeView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      _prayerSection(prayerState),
+                      _prayerSection(context, prayerState, settingsState),
                       const SizedBox(height: 20),
                       const QuickActionRow(),
-                      const SizedBox(height: 24),
-                      const SectionHeader('Notifications'),
-                      const AppCard(child: NotificationTogglesSection()),
                       const SizedBox(height: 16),
                       _buildStamp(),
                     ],
@@ -126,7 +102,11 @@ class _HomeView extends StatelessWidget {
     );
   }
 
-  Widget _prayerSection(PrayerState state) {
+  Widget _prayerSection(
+    BuildContext context,
+    PrayerState state,
+    SettingsState settingsState,
+  ) {
     final result = state.result;
     if (result is! PrayerTimesComputed) {
       return const AppCard(
@@ -143,7 +123,17 @@ class _HomeView extends StatelessWidget {
         NextPrayerCard(times: result),
         const SizedBox(height: 16),
         const SectionHeader('Today'),
-        AppCard(child: PrayerTimesList(times: result)),
+        AppCard(
+          child: PrayerTimesList(
+            times: result,
+            notifications: settingsState.settings.notifications,
+            onToggleNotification: (prayer, enabled) => context
+                .read<SettingsCubit>()
+                .setNotifications(
+                  settingsState.settings.notifications.withPrayer(prayer, enabled),
+                ),
+          ),
+        ),
       ],
     );
   }

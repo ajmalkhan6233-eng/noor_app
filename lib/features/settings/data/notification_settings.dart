@@ -34,6 +34,26 @@ class NotificationSettings {
     }
   }
 
+  /// Returns a copy with [name]'s toggle set to [value] — the inverse
+  /// of [forPrayer], for callers that only know the prayer by name
+  /// (e.g. building one toggle per row in a list).
+  NotificationSettings withPrayer(String name, bool value) {
+    switch (name) {
+      case 'Fajr':
+        return copyWith(fajr: value);
+      case 'Dhuhr':
+        return copyWith(dhuhr: value);
+      case 'Asr':
+        return copyWith(asr: value);
+      case 'Maghrib':
+        return copyWith(maghrib: value);
+      case 'Isha':
+        return copyWith(isha: value);
+      default:
+        return this;
+    }
+  }
+
   NotificationSettings copyWith({
     bool? fajr,
     bool? dhuhr,

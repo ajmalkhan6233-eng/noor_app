@@ -1,0 +1,41 @@
+// Bismillahir Rahmanir Raheem — watermark: ALLAH
+//
+// Split out of PrayerTimesList to keep that file under the project's
+// line-count convention. A compact inline toggle — replaces the
+// large full-width notification-toggles card that used to sit
+// separately on the Home dashboard.
+
+import 'package:flutter/material.dart';
+
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/semantics_helpers.dart';
+
+class PrayerNotificationBell extends StatelessWidget {
+  const PrayerNotificationBell({
+    super.key,
+    required this.prayerName,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final String prayerName;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: SemanticButton(
+        label: '$prayerName notification',
+        hint: enabled ? 'Double tap to turn off' : 'Double tap to turn on',
+        onTap: onTap,
+        child: Icon(
+          enabled ? Icons.notifications_active : Icons.notifications_off_outlined,
+          size: 18,
+          color: enabled ? AppColors.emerald : AppColors.sage,
+        ),
+      ),
+    );
+  }
+}
