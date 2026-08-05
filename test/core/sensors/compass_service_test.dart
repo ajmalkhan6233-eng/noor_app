@@ -76,5 +76,26 @@ void main() {
       await subscription.cancel();
       await controller.close();
     });
+
+    test('default smoothing factor damps noise more than a single reading', () async {
+      final controller = StreamController<CompassEvent>();
+      final service = CompassService(eventsProvider: () => controller.stream);
+      expect(service.smoothingFactor, 0.12);
+
+      final readings = <CompassReading>[];
+      final subscription = service.readings.listen(readings.add);
+
+      controller.add(_event(heading: 0, accuracy: 5));
+      controller.add(_event(heading: 100, accuracy: 5));
+      await Future<void>.delayed(Duration.zero);
+
+      // Moves only 12% of the way toward a sudden 100-degree jump —
+      // real magnetometer noise (a few degrees of jitter) is damped
+      // to a fraction of a degree per event, not visible as a twitch.
+      expect(readings[1].headingDegrees, closeTo(12, 1e-9));
+
+      await subscription.cancel();
+      await controller.close();
+    });
   });
 }

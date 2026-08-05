@@ -31,14 +31,14 @@ class QiblaInfoPanel extends StatelessWidget {
             bearingText,
             style: const TextStyle(
               color: AppColors.emerald,
-              fontSize: 40,
+              fontSize: 24,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             '$distanceText to the Kaaba',
-            style: const TextStyle(color: AppColors.sage),
+            style: const TextStyle(color: AppColors.sage, fontSize: 14),
           ),
         ],
       ),

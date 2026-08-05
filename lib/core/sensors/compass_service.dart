@@ -13,13 +13,15 @@ import 'compass_reading.dart';
 /// [CompassReading]s.
 class CompassService {
   CompassService({
-    this.smoothingFactor = 0.25,
+    this.smoothingFactor = 0.12,
     this.lowAccuracyThresholdDegrees = 15,
     Stream<CompassEvent>? Function()? eventsProvider,
   }) : _eventsProvider = eventsProvider ?? (() => FlutterCompass.events);
 
   /// Fraction (`0`–`1`) moved toward each new raw heading per event —
-  /// lower is smoother but slower to respond.
+  /// lower is smoother but slower to respond. 0.12 trades a little lag
+  /// for enough damping that raw magnetometer noise (visible as needle
+  /// jitter at the previous, more reactive 0.25) doesn't show through.
   final double smoothingFactor;
 
   /// Reported deviation (degrees) above which a reading counts as

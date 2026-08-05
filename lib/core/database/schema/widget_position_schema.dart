@@ -10,6 +10,7 @@ const List<String> widgetPositionCreateStatements = [
     widget_key TEXT PRIMARY KEY,
     dx REAL NOT NULL,
     dy REAL NOT NULL,
+    scale REAL NOT NULL DEFAULT 1.0,
     updated_at TEXT NOT NULL
   )
   ''',

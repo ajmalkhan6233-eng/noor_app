@@ -69,6 +69,9 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
       size: const Size(220, 220),
       widgetKey: 'qibla_compass',
       controller: widget.positionController,
+      resizable: true,
+      minScale: 0.7,
+      maxScale: 1.6,
       child: QiblaNeedle(
         rotationDegrees: rotation,
         dimmed: !trustworthy,
