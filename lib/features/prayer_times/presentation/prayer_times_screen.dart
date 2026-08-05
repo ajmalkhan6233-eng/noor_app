@@ -16,7 +16,6 @@ import '../logic/prayer_cubit/prayer_state.dart';
 import 'monthly_timetable_screen.dart';
 import 'widgets/high_latitude_notice.dart';
 import 'widgets/location_selector.dart';
-import 'widgets/prayer_district_field.dart';
 import 'widgets/prayer_hero.dart';
 import 'widgets/prayer_times_list.dart';
 
@@ -84,8 +83,6 @@ class _PrayerTimesView extends StatelessWidget {
                   const PrayerTrackerCard(),
                   const SizedBox(height: 16),
                   const LocationSelector(),
-                  const SizedBox(height: 16),
-                  const PrayerDistrictField(),
                   const SizedBox(height: 16),
                   _activeSettingsCaption(context, state.settings),
                 ],
