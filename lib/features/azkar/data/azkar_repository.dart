@@ -1,8 +1,9 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Only this file touches the `azkar_*` tables. `azkar_items` starts
-// empty (see `azkar_schema.dart`) — TODO: import a properly sourced
-// collection; every row that lands there carries a mandatory `source`.
+// Only this file touches the `azkar_*` tables. `azkar_items` is
+// populated by AzkarImportService from checksum-verified, attributed
+// datasets (see `assets/azkar/README.md`); every row carries a
+// mandatory `source`.
 
 import '../../../core/database/database_helper.dart';
 import 'azkar_category.dart';

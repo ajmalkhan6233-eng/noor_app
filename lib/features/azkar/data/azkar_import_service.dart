@@ -15,6 +15,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../../../core/database/database_helper.dart';
 import 'azkar_import_status.dart';
+import 'azkar_supplementary_import.dart';
 
 class AzkarImportService {
   AzkarImportService({DatabaseHelper? databaseHelper})
@@ -34,7 +35,10 @@ class AzkarImportService {
   Future<AzkarImportStatus> ensureImported() async {
     final db = await _dbHelper.database;
     final existing = await db.query('azkar_import_meta', where: 'id = 1');
-    if (existing.isNotEmpty) return const AzkarImported();
+    if (existing.isNotEmpty) {
+      await ensureAzkarSupplementaryImported(db);
+      return const AzkarImported();
+    }
 
     final ByteData arData;
     final ByteData enData;
@@ -86,6 +90,7 @@ class AzkarImportService {
       'imported_en_sha256': enDigest,
       'imported_at': DateTime.now().toIso8601String(),
     });
+    await ensureAzkarSupplementaryImported(db);
     return const AzkarImported();
   }
 
