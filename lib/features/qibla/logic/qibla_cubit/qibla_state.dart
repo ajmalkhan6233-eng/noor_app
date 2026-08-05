@@ -5,6 +5,10 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/sensors/compass_reading.dart';
 import '../../../../core/utils/angle_math.dart';
 
+/// How close the needle must sit to dead-on before the compass counts
+/// as "locked" onto the qibla direction.
+const double kQiblaLockThresholdDegrees = 3;
+
 /// Immutable state for the qibla-compass feature.
 class QiblaState extends Equatable {
   const QiblaState({
@@ -51,6 +55,18 @@ class QiblaState extends Equatable {
   double? get needleRotationDegrees {
     if (bearingDegrees == null || headingDegrees == null) return null;
     return AngleMath.normalise(bearingDegrees! - headingDegrees!);
+  }
+
+  /// True once the device is facing the qibla closely enough, with a
+  /// compass reading trustworthy enough to believe it — the moment a
+  /// confirmation burst should fire.
+  bool get isLocked {
+    final rotation = needleRotationDegrees;
+    if (rotation == null || compassAccuracy != CompassAccuracy.good) {
+      return false;
+    }
+    return AngleMath.difference(rotation, 0).abs() <=
+        kQiblaLockThresholdDegrees;
   }
 
   QiblaState copyWith({
