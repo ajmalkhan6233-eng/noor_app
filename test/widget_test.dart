@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:noor/app.dart';
 import 'package:noor/core/constants/app_strings.dart';
+import 'package:noor/core/constants/build_info.dart';
 import 'package:noor/core/constants/splash_config.dart';
 import 'package:noor/features/home/presentation/home_dashboard.dart';
 
@@ -30,5 +31,10 @@ void main() {
     }
 
     expect(find.byType(HomeDashboard), findsOneWidget);
+
+    // The build stamp must always be visible on Home, without digging
+    // — it's the only way anyone can confirm which commit an installed
+    // APK actually contains. Never remove this coverage.
+    expect(find.text(BuildInfo.label), findsOneWidget);
   });
 }

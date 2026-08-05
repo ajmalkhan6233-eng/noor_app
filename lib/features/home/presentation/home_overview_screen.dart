@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/constants/build_info.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
@@ -103,6 +104,8 @@ class _HomeView extends StatelessWidget {
                       const SizedBox(height: 24),
                       const SectionHeader('Notifications'),
                       const AppCard(child: NotificationTogglesSection()),
+                      const SizedBox(height: 16),
+                      _buildStamp(),
                     ],
                   ),
                 ],
@@ -110,6 +113,15 @@ class _HomeView extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildStamp() {
+    return Center(
+      child: Semantics(
+        label: BuildInfo.label,
+        child: const Text(BuildInfo.label, style: AppTypography.caption),
       ),
     );
   }

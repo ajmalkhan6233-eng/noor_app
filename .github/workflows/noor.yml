@@ -157,8 +157,16 @@ jobs:
       - name: Pass 2 - build release APK
         run: |
           set -o pipefail
-          flutter build apk --release --no-pub \
-            --build-number ${{ github.run_number }} 2>&1 | tee /tmp/build.log
+          # Guarantees a fully fresh build — no possibility of Pass 1's
+          # (pre-override) build/ output, or anything else, silently
+          # carrying through into what actually gets published below.
+          flutter clean
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          flutter build apk --release \
+            --build-number "$GITHUB_RUN_NUMBER" \
+            --dart-define=BUILD_SHA="$SHORT_SHA" \
+            --dart-define=BUILD_NUMBER="$GITHUB_RUN_NUMBER" \
+            2>&1 | tee /tmp/build.log
 
       - name: Publish GitHub Release
         if: success()
@@ -167,10 +175,11 @@ jobs:
         run: |
           cp build/app/outputs/flutter-apk/app-release.apk \
              "noor-v${{ github.run_number }}.apk"
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
           gh release create "build-${{ github.run_number }}" \
             "noor-v${{ github.run_number }}.apk" \
-            --title "noor build ${{ github.run_number }}" \
-            --notes "Cosmic splash and qibla calculator. Debug-signed."
+            --title "noor build ${{ github.run_number }} ($SHORT_SHA)" \
+            --notes "On-screen build stamp (Home tab, bottom): Build $SHORT_SHA · #${{ github.run_number }}. Debug-signed."
 
       - name: Success summary
         if: success()
