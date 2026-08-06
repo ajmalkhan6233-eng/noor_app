@@ -1,0 +1,97 @@
+# Bismillahir Rahmanir Raheem - watermark: ALLAH
+#
+# Fast VISUAL-ONLY preview build, separate from noor.yml's native
+# release pipeline. Builds `flutter build web` and deploys it to
+# GitHub Pages on every push to main.
+#
+# This is for eyeballing colors, text size, layout, and spacing
+# quickly. It is NOT a substitute for testing the real APK: the
+# compass, GPS, haptics, and the encrypted SQLite database (via
+# sqflite_sqlcipher) do not behave the same on web as they do on a
+# real Android device — some of those features may not work at all
+# in this preview. Use noor.yml's release APK for anything beyond a
+# quick visual check.
+
+name: Web Preview (visual only)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build web preview and deploy to Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: noor-web-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: noor-web-${{ runner.os }}-
+
+      - name: Ensure asset folders exist
+        run: mkdir -p assets/database
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Build web (release)
+        run: |
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          flutter build web --release \
+            --base-href "/${{ github.event.repository.name }}/" \
+            --dart-define=BUILD_SHA="$SHORT_SHA" \
+            --dart-define=BUILD_NUMBER="$GITHUB_RUN_NUMBER"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Summary
+        run: |
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          {
+            echo "## Web preview deployed"
+            echo ""
+            echo "**VISUAL CHECKS ONLY.** This is a Flutter web build for"
+            echo "quickly eyeballing colors, text size, layout, and spacing."
+            echo "It is NOT a substitute for testing the real APK — the"
+            echo "compass, GPS, haptics, and the encrypted local database"
+            echo "do not behave like the real app here, and some features"
+            echo "may not work at all in a browser. Use noor.yml's release"
+            echo "APK (Releases tab) for anything beyond a quick visual look."
+            echo ""
+            echo "- Build stamp: Build $SHORT_SHA · #${{ github.run_number }}"
+            echo "- URL: ${{ steps.deployment.outputs.page_url }}"
+          } >> "$GITHUB_STEP_SUMMARY"
