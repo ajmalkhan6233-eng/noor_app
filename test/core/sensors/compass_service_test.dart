@@ -29,6 +29,32 @@ void main() {
       expect(reading.accuracy, CompassAccuracy.unavailable);
     });
 
+    test('holds the last known heading through a transient null reading', () async {
+      final controller = StreamController<CompassEvent>();
+      final service = CompassService(eventsProvider: () => controller.stream);
+
+      final readings = <CompassReading>[];
+      final subscription = service.readings.listen(readings.add);
+
+      controller.add(_event(heading: 120, accuracy: 5));
+      // A magnetometer hiccup — flutter_compass emits these on real
+      // devices during interference/recalibration, not "no compass".
+      controller.add(CompassEvent.fromList(null));
+      controller.add(_event(heading: 121, accuracy: 5));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(readings[0].headingDegrees, closeTo(120, 1e-9));
+      // Must NOT be null — that's what made the needle vanish/reappear
+      // (flicker) on every transient hiccup. Held at the last value.
+      expect(readings[1].headingDegrees, closeTo(120, 1e-9));
+      expect(readings[1].accuracy, CompassAccuracy.uncalibrated);
+      // Smoothing resumes normally once real readings continue.
+      expect(readings[2].headingDegrees, isNotNull);
+
+      await subscription.cancel();
+      await controller.close();
+    });
+
     test('classifies a null accuracy as uncalibrated', () async {
       final service = CompassService(
         eventsProvider: () => Stream.value(_event(heading: 90)),

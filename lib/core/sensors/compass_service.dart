@@ -56,6 +56,21 @@ class CompassService {
   CompassReading _toReading(CompassEvent event) {
     final rawHeading = event.heading;
     if (rawHeading == null) {
+      // A single event with no heading is a transient magnetometer
+      // hiccup (interference, brief recalibration) on real devices,
+      // not "no compass" — flutter_compass emits these routinely
+      // indoors. Reporting null here made the whole needle vanish and
+      // reappear every time, which read as constant flicker no amount
+      // of smoothing (which only ever applied to non-null readings)
+      // could fix. Hold the last known heading instead, downgraded to
+      // uncalibrated so QiblaState.isLocked still won't fire on it.
+      final held = _smoothedHeading;
+      if (held != null) {
+        return CompassReading(
+          headingDegrees: held,
+          accuracy: CompassAccuracy.uncalibrated,
+        );
+      }
       return const CompassReading(
         headingDegrees: null,
         accuracy: CompassAccuracy.unavailable,
