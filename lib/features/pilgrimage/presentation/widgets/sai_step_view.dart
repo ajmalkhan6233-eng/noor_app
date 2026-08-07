@@ -14,6 +14,7 @@ import '../../logic/session_cubit/session_cubit.dart';
 import '../../logic/session_cubit/session_state.dart';
 import 'direction_card.dart';
 import 'pilgrimage_counter_button.dart';
+import 'pilgrimage_dua_card.dart';
 
 class SaiStepView extends StatelessWidget {
   const SaiStepView({super.key, required this.profile, required this.state});
@@ -36,6 +37,8 @@ class SaiStepView extends StatelessWidget {
           Text(l10n.roundProgressLabel(count), style: const TextStyle(color: AppColors.sage)),
           const SizedBox(height: 16),
           DirectionCard(direction: state.saiDirection, experienceLevel: profile.experienceLevel),
+          const SizedBox(height: 16),
+          PilgrimageDuaCard(duaKey: 'sai', title: l10n.saiDuaSectionTitle),
           const SizedBox(height: 16),
           Expanded(
             child: Center(

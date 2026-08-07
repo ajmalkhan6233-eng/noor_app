@@ -736,4 +736,15 @@ class AppLocalizationsSi extends AppLocalizations {
   @override
   String get womenTawafNote =>
       'කාන්තාවන් තවාෆ් පුරාවටම සාමාන්‍ය වේගයෙන් ඇවිද, උරහිස් දෙකම ආවරණය කර සිටිති — ඉද්තිබා සහ රමල් ඔවුන්ට අදාළ නොවේ.';
+
+  @override
+  String get tawafDuaSectionTitle => 'පාඨනය කළ යුතු දුආව';
+
+  @override
+  String get saiDuaSectionTitle => 'පාඨනය කළ යුතු දික්ර්';
+
+  @override
+  String reciteCountLabel(int count) {
+    return '×$count වර පාඨනය කරන්න';
+  }
 }

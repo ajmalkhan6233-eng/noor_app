@@ -259,5 +259,9 @@
   "talbiyahSectionTitle": "Talbiyah",
   "guideReferenceLabel": "Reference",
   "rabbanaSectionTitle": "Suggested supplication — Qur'an 2:201",
-  "womenTawafNote": "Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them."
+  "womenTawafNote": "Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them.",
+  "tawafDuaSectionTitle": "Dua to recite",
+  "saiDuaSectionTitle": "Dhikr to recite",
+  "reciteCountLabel": "Recite ×{count}",
+  "@reciteCountLabel": {"placeholders": {"count": {"type": "int"}}}
 }

@@ -736,4 +736,15 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get womenTawafNote =>
       'பெண்கள் தவாஃப் முழுவதும் இயல்பான வேகத்தில் நடந்து, இரு தோள்களையும் மூடியிருப்பார்கள் — இத்திபாவும் ரமலும் அவர்களுக்குப் பொருந்தாது.';
+
+  @override
+  String get tawafDuaSectionTitle => 'ஓதவேண்டிய துஆ';
+
+  @override
+  String get saiDuaSectionTitle => 'ஓதவேண்டிய திக்ர்';
+
+  @override
+  String reciteCountLabel(int count) {
+    return '×$count முறை ஓதவும்';
+  }
 }

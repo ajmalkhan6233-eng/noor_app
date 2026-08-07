@@ -723,4 +723,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get womenTawafNote =>
       'Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them.';
+
+  @override
+  String get tawafDuaSectionTitle => 'Dua to recite';
+
+  @override
+  String get saiDuaSectionTitle => 'Dhikr to recite';
+
+  @override
+  String reciteCountLabel(int count) {
+    return 'Recite ×$count';
+  }
 }

@@ -13,6 +13,7 @@ import '../../data/pilgrim_profile.dart';
 import '../../logic/session_cubit/session_cubit.dart';
 import '../../logic/session_cubit/session_state.dart';
 import 'pilgrimage_counter_button.dart';
+import 'pilgrimage_dua_card.dart';
 import 'reminder_card.dart';
 
 class TawafStepView extends StatelessWidget {
@@ -35,8 +36,11 @@ class TawafStepView extends StatelessWidget {
           const SizedBox(height: 4),
           Text(l10n.circuitProgressLabel(count), style: const TextStyle(color: AppColors.sage)),
           const SizedBox(height: 16),
-          if (state.isMale)
+          if (state.isMale) ...[
             ReminderCard(reminders: state.tawafReminders, experienceLevel: profile.experienceLevel),
+            const SizedBox(height: 16),
+          ],
+          PilgrimageDuaCard(duaKey: 'tawaf', title: l10n.tawafDuaSectionTitle),
           const SizedBox(height: 16),
           Expanded(
             child: Center(

@@ -54,6 +54,7 @@ flutter:
     - assets/quran_translations/
     - assets/azkar/
     - assets/talbiyah/
+    - assets/pilgrimage/
   fonts:
     - family: Cormorant Garamond
       fonts:

@@ -232,5 +232,9 @@
   "talbiyahSectionTitle": "තල්බියා",
   "guideReferenceLabel": "මූලාශ්‍රය",
   "rabbanaSectionTitle": "යෝජිත ප්‍රාර්ථනාව — කුර්ආන් 2:201",
-  "womenTawafNote": "කාන්තාවන් තවාෆ් පුරාවටම සාමාන්‍ය වේගයෙන් ඇවිද, උරහිස් දෙකම ආවරණය කර සිටිති — ඉද්තිබා සහ රමල් ඔවුන්ට අදාළ නොවේ."
+  "womenTawafNote": "කාන්තාවන් තවාෆ් පුරාවටම සාමාන්‍ය වේගයෙන් ඇවිද, උරහිස් දෙකම ආවරණය කර සිටිති — ඉද්තිබා සහ රමල් ඔවුන්ට අදාළ නොවේ.",
+  "tawafDuaSectionTitle": "පාඨනය කළ යුතු දුආව",
+  "saiDuaSectionTitle": "පාඨනය කළ යුතු දික්ර්",
+  "reciteCountLabel": "×{count} වර පාඨනය කරන්න",
+  "@reciteCountLabel": {"placeholders": {"count": {"type": "int"}}}
 }

@@ -1366,6 +1366,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Women walk at a normal pace throughout Tawaf, with both shoulders covered — Idtiba and Ramal do not apply to them.'**
   String get womenTawafNote;
+
+  /// No description provided for @tawafDuaSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dua to recite'**
+  String get tawafDuaSectionTitle;
+
+  /// No description provided for @saiDuaSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr to recite'**
+  String get saiDuaSectionTitle;
+
+  /// No description provided for @reciteCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite ×{count}'**
+  String reciteCountLabel(int count);
 }
 
 class _AppLocalizationsDelegate
