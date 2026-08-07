@@ -26,23 +26,12 @@ import 'widgets/edit_location_dialog.dart';
 import 'widgets/next_prayer_card.dart';
 import 'widgets/quick_action_row.dart';
 
+/// PrayerCubit and SettingsCubit are provided once by HomeDashboard
+/// (the tab shell) and shared across every tab, so location/settings
+/// changes made anywhere (e.g. the top bar's location pill) are
+/// immediately visible here too.
 class HomeOverviewScreen extends StatelessWidget {
   const HomeOverviewScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
-        BlocProvider(create: (_) => SettingsCubit()..load()),
-      ],
-      child: const _HomeView(),
-    );
-  }
-}
-
-class _HomeView extends StatelessWidget {
-  const _HomeView();
 
   Future<void> _editLocation(BuildContext context, String? current) async {
     final result = await showEditLocationDialog(context, current: current);

@@ -158,6 +158,9 @@
   "languageTamil": "தமிழ்",
   "languageSinhala": "සිංහල",
   "languagePickerSemanticLabel": "යෙදුම් භාෂාව",
+  "switchLanguageHint": "යෙදුමේ භාෂාව මෙයට මාරු කිරීමට දෙවරක් තට්ටු කරන්න",
+  "themeToggleSemanticLabel": "තේමාව",
+  "themeToggleHint": "අඳුරු, ආලෝක සහ පද්ධති තේමා අතර මාරු කිරීමට දෙවරක් තට්ටු කරන්න",
 
   "pilgrimageLabel": "හජ් සහ උම්රා",
   "pilgrimageMoreRowHint": "හජ් සහ උම්රා ට්‍රැකරය විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",

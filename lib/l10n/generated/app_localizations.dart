@@ -959,6 +959,24 @@ abstract class AppLocalizations {
   /// **'App language'**
   String get languagePickerSemanticLabel;
 
+  /// No description provided for @switchLanguageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to switch the app\'s language to this'**
+  String get switchLanguageHint;
+
+  /// No description provided for @themeToggleSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get themeToggleSemanticLabel;
+
+  /// No description provided for @themeToggleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to switch between dark, light, and system theme'**
+  String get themeToggleHint;
+
   /// No description provided for @pilgrimageLabel.
   ///
   /// In en, this message translates to:

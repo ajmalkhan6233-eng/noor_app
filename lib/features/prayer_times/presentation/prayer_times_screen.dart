@@ -8,7 +8,6 @@ import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../prayer_tracker/presentation/widgets/prayer_tracker_card.dart';
-import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
@@ -23,23 +22,10 @@ import 'widgets/prayer_times_list.dart';
 /// and next-prayer countdown lead, then the day's five prayers plus
 /// sunrise, then location entry, then the active method/madhab as a
 /// quiet closing caption.
+/// PrayerCubit and SettingsCubit are provided once by HomeDashboard
+/// (the tab shell) and shared across every tab.
 class PrayerTimesScreen extends StatelessWidget {
   const PrayerTimesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
-        BlocProvider(create: (_) => SettingsCubit()..load()),
-      ],
-      child: const _PrayerTimesView(),
-    );
-  }
-}
-
-class _PrayerTimesView extends StatelessWidget {
-  const _PrayerTimesView();
 
   void _openMonthlyTimetable(BuildContext context, PrayerState state) {
     if (!state.hasCoordinates) return;

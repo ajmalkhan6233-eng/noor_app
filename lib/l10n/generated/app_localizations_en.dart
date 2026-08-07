@@ -495,6 +495,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languagePickerSemanticLabel => 'App language';
 
   @override
+  String get switchLanguageHint =>
+      'Double tap to switch the app\'s language to this';
+
+  @override
+  String get themeToggleSemanticLabel => 'Theme';
+
+  @override
+  String get themeToggleHint =>
+      'Double tap to switch between dark, light, and system theme';
+
+  @override
   String get pilgrimageLabel => 'Hajj & Umrah';
 
   @override

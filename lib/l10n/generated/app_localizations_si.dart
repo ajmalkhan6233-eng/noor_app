@@ -503,6 +503,17 @@ class AppLocalizationsSi extends AppLocalizations {
   String get languagePickerSemanticLabel => 'යෙදුම් භාෂාව';
 
   @override
+  String get switchLanguageHint =>
+      'යෙදුමේ භාෂාව මෙයට මාරු කිරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String get themeToggleSemanticLabel => 'තේමාව';
+
+  @override
+  String get themeToggleHint =>
+      'අඳුරු, ආලෝක සහ පද්ධති තේමා අතර මාරු කිරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
   String get pilgrimageLabel => 'හජ් සහ උම්රා';
 
   @override

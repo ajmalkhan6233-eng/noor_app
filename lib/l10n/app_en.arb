@@ -177,6 +177,9 @@
   "languageTamil": "தமிழ்",
   "languageSinhala": "සිංහල",
   "languagePickerSemanticLabel": "App language",
+  "switchLanguageHint": "Double tap to switch the app's language to this",
+  "themeToggleSemanticLabel": "Theme",
+  "themeToggleHint": "Double tap to switch between dark, light, and system theme",
 
   "pilgrimageLabel": "Hajj & Umrah",
   "pilgrimageMoreRowHint": "Double tap to open the Hajj and Umrah tracker",

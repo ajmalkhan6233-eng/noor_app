@@ -504,6 +504,17 @@ class AppLocalizationsTa extends AppLocalizations {
   String get languagePickerSemanticLabel => 'பயன்பாட்டு மொழி';
 
   @override
+  String get switchLanguageHint =>
+      'பயன்பாட்டு மொழியை இதற்கு மாற்ற இருமுறை தட்டவும்';
+
+  @override
+  String get themeToggleSemanticLabel => 'தோற்றம்';
+
+  @override
+  String get themeToggleHint =>
+      'இருள், வெளிச்சம், கணினி தீம் இடையே மாற்ற இருமுறை தட்டவும்';
+
+  @override
   String get pilgrimageLabel => 'ஹஜ் & உம்ரா';
 
   @override

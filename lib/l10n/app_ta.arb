@@ -158,6 +158,9 @@
   "languageTamil": "தமிழ்",
   "languageSinhala": "සිංහල",
   "languagePickerSemanticLabel": "பயன்பாட்டு மொழி",
+  "switchLanguageHint": "பயன்பாட்டு மொழியை இதற்கு மாற்ற இருமுறை தட்டவும்",
+  "themeToggleSemanticLabel": "தோற்றம்",
+  "themeToggleHint": "இருள், வெளிச்சம், கணினி தீம் இடையே மாற்ற இருமுறை தட்டவும்",
 
   "pilgrimageLabel": "ஹஜ் & உம்ரா",
   "pilgrimageMoreRowHint": "ஹஜ் மற்றும் உம்ரா கண்காணிப்பானைத் திறக்க இருமுறை தட்டவும்",
