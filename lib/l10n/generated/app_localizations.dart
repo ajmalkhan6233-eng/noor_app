@@ -112,6 +112,18 @@ abstract class AppLocalizations {
   /// **'More'**
   String get moreTab;
 
+  /// No description provided for @quranTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Al Quran'**
+  String get quranTabLabel;
+
+  /// No description provided for @duasTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duas & Dhikr'**
+  String get duasTabLabel;
+
   /// No description provided for @settingsSemanticLabel.
   ///
   /// In en, this message translates to:

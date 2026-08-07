@@ -15,6 +15,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moreTab => 'More';
 
   @override
+  String get quranTabLabel => 'Al Quran';
+
+  @override
+  String get duasTabLabel => 'Duas & Dhikr';
+
+  @override
   String get settingsSemanticLabel => 'Settings';
 
   @override

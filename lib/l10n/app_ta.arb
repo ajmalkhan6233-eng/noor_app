@@ -3,6 +3,8 @@
 
   "homeTab": "முகப்பு",
   "moreTab": "மேலும்",
+  "quranTabLabel": "அல் குர்ஆன்",
+  "duasTabLabel": "துஆக்கள் & திக்ர்",
   "settingsSemanticLabel": "அமைப்புகள்",
   "settingsHint": "அமைப்புகளைத் திறக்க இருமுறை தட்டவும்",
   "openItemHint": "{label} திறக்க இருமுறை தட்டவும்",

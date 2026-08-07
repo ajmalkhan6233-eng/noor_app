@@ -3,6 +3,8 @@
 
   "homeTab": "මුල් පිටුව",
   "moreTab": "තවත්",
+  "quranTabLabel": "අල් කුර්ආන්",
+  "duasTabLabel": "දුආ සහ දික්ර්",
   "settingsSemanticLabel": "සැකසුම්",
   "settingsHint": "සැකසුම් විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",
   "openItemHint": "{label} විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",

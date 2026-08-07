@@ -3,6 +3,8 @@
 
   "homeTab": "Home",
   "moreTab": "More",
+  "quranTabLabel": "Al Quran",
+  "duasTabLabel": "Duas & Dhikr",
   "settingsSemanticLabel": "Settings",
   "settingsHint": "Double tap to open Settings",
   "openItemHint": "Double tap to open {label}",
