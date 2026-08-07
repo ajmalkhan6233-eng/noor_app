@@ -251,6 +251,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationNameDialogTitle => 'Location name';
 
   @override
+  String get editLocationNameHint => 'Double tap to edit your location name';
+
+  @override
+  String locationLabelSemanticValue(String label) {
+    return 'Location: $label';
+  }
+
+  @override
   String get locationNameHint => 'e.g. Amman, Jordan';
 
   @override
@@ -754,6 +762,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todaysPrayersLabel => 'Today\'s prayers';
+
+  @override
+  String get assalamuAlaikumGreeting => 'Assalamu Alaikum';
+
+  @override
+  String dayStreakBadgeLabel(int days) {
+    return '$days DAY STREAK';
+  }
+
+  @override
+  String goalsProgressLabel(int completed, int total, int percent) {
+    return '$completed/$total goals · $percent%';
+  }
+
+  @override
+  String get suhoorLabel => 'Suhoor';
+
+  @override
+  String get iftarLabel => 'Iftar';
+
+  @override
+  String get ayahOfTheDayTitle => 'Ayah of the Day';
+
+  @override
+  String get copyLabel => 'Copy';
+
+  @override
+  String get copiedConfirmationLabel => 'Copied to clipboard';
+
+  @override
+  String get fullQuranCtaLabel => 'Full Quran';
+
+  @override
+  String get dailyGoalsSectionTitle => 'Today\'s Spiritual Goals';
 
   @override
   String get noPrayerStreakMessage => 'No current prayer streak';

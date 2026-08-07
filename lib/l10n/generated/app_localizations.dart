@@ -526,6 +526,18 @@ abstract class AppLocalizations {
   /// **'Location name'**
   String get locationNameDialogTitle;
 
+  /// No description provided for @editLocationNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to edit your location name'**
+  String get editLocationNameHint;
+
+  /// No description provided for @locationLabelSemanticValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Location: {label}'**
+  String locationLabelSemanticValue(String label);
+
   /// No description provided for @locationNameHint.
   ///
   /// In en, this message translates to:
@@ -1420,6 +1432,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today\'s prayers'**
   String get todaysPrayersLabel;
+
+  /// No description provided for @assalamuAlaikumGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Assalamu Alaikum'**
+  String get assalamuAlaikumGreeting;
+
+  /// No description provided for @dayStreakBadgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} DAY STREAK'**
+  String dayStreakBadgeLabel(int days);
+
+  /// No description provided for @goalsProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed}/{total} goals · {percent}%'**
+  String goalsProgressLabel(int completed, int total, int percent);
+
+  /// No description provided for @suhoorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Suhoor'**
+  String get suhoorLabel;
+
+  /// No description provided for @iftarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Iftar'**
+  String get iftarLabel;
+
+  /// No description provided for @ayahOfTheDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayah of the Day'**
+  String get ayahOfTheDayTitle;
+
+  /// No description provided for @copyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copyLabel;
+
+  /// No description provided for @copiedConfirmationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedConfirmationLabel;
+
+  /// No description provided for @fullQuranCtaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Quran'**
+  String get fullQuranCtaLabel;
+
+  /// No description provided for @dailyGoalsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Spiritual Goals'**
+  String get dailyGoalsSectionTitle;
 
   /// No description provided for @noPrayerStreakMessage.
   ///

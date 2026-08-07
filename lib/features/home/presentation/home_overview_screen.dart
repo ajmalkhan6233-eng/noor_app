@@ -1,36 +1,36 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The Home tab: header, next-prayer card, quick actions, today's
-// prayer list, and notification toggles — the one screen that
-// gathers everything someone checks first, so those toggles aren't
-// buried in Settings.
+// The Home tab (Section 3 of the UI Structure Pass): hero card, streak
+// capsule, next-prayer countdown capsule, Suhoor/Iftar row, Ayah of
+// the Day card, daily spiritual goals list, quick actions, today's
+// prayer list with notification toggles, and the build stamp.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_typography.dart';
-import '../../../core/constants/build_info.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
-import '../../../core/presentation/widgets/app_card.dart';
-import '../../../core/presentation/widgets/section_header.dart';
-import '../../../core/presentation/widgets/web_preview_badge.dart';
-import '../../../l10n/generated/app_localizations.dart';
-import '../../prayer_times/data/prayer_times_result.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
-import '../../prayer_times/presentation/widgets/prayer_times_list.dart';
+import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
+import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
-import 'widgets/dashboard_header.dart';
+import 'widgets/ayah_of_day_card.dart';
+import 'widgets/daily_goals_list.dart';
 import 'widgets/edit_location_dialog.dart';
-import 'widgets/next_prayer_card.dart';
+import 'widgets/hero_card.dart';
+import 'widgets/home_build_stamp.dart';
+import 'widgets/prayer_summary_section.dart';
 import 'widgets/quick_action_row.dart';
+import 'widgets/streak_capsule.dart';
 
 /// PrayerCubit and SettingsCubit are provided once by HomeDashboard
 /// (the tab shell) and shared across every tab, so location/settings
 /// changes made anywhere (e.g. the top bar's location pill) are
-/// immediately visible here too.
+/// immediately visible here too. PrayerTrackerCubit is Home-tab-local
+/// (StreakCapsule and DailyGoalsList both read the one instance
+/// provided below, so they never drift out of sync with each other).
 class HomeOverviewScreen extends StatelessWidget {
   const HomeOverviewScreen({super.key});
 
@@ -45,91 +45,53 @@ class HomeOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.paper,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: BlocBuilder<SettingsCubit, SettingsState>(
-            builder: (context, settingsState) => BlocBuilder<
-              PrayerCubit,
-              PrayerState
-            >(
-              builder: (context, prayerState) => ListView(
-                children: [
-                  StaggeredFadeIn(
+    return BlocProvider(
+      create: (_) => PrayerTrackerCubit()..load(),
+      child: Scaffold(
+        backgroundColor: AppColors.paper,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: BlocBuilder<SettingsCubit, SettingsState>(
+              builder: (context, settingsState) => BlocBuilder<PrayerCubit, PrayerState>(
+                builder: (context, prayerState) => BlocBuilder<PrayerTrackerCubit, PrayerTrackerState>(
+                  builder: (context, trackerState) => ListView(
                     children: [
-                      DashboardHeader(
-                        locationLabel: settingsState.settings.locationLabel,
-                        hijriOffsetDays: settingsState.settings.hijriOffsetDays,
-                        onEditLocation: () => _editLocation(
-                          context,
-                          settingsState.settings.locationLabel,
-                        ),
+                      StaggeredFadeIn(
+                        children: [
+                          HeroCard(
+                            locationLabel: settingsState.settings.locationLabel,
+                            hijriOffsetDays: settingsState.settings.hijriOffsetDays,
+                            onEditLocation: () => _editLocation(
+                              context,
+                              settingsState.settings.locationLabel,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          StreakCapsule(
+                            streakDays: trackerState.prayerStreak,
+                            completedCount: trackerState.completedPrayers.length,
+                          ),
+                          const SizedBox(height: 16),
+                          PrayerSummarySection(state: prayerState, settingsState: settingsState),
+                          const SizedBox(height: 20),
+                          AyahOfDayCard(),
+                          const SizedBox(height: 20),
+                          const DailyGoalsList(),
+                          const SizedBox(height: 20),
+                          const QuickActionRow(),
+                          const SizedBox(height: 16),
+                          const HomeBuildStamp(),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                      _prayerSection(context, prayerState, settingsState),
-                      const SizedBox(height: 20),
-                      const QuickActionRow(),
-                      const SizedBox(height: 16),
-                      _buildStamp(),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildStamp() {
-    return Center(
-      child: Column(
-        children: [
-          const WebPreviewBadge(),
-          Semantics(
-            label: BuildInfo.label,
-            child: const Text(BuildInfo.label, style: AppTypography.caption),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _prayerSection(
-    BuildContext context,
-    PrayerState state,
-    SettingsState settingsState,
-  ) {
-    final result = state.result;
-    if (result is! PrayerTimesComputed) {
-      return AppCard(
-        child: Text(
-          AppLocalizations.of(context)!.setLocationOnPrayerTabMessage,
-          style: AppTypography.caption,
-        ),
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        NextPrayerCard(times: result),
-        const SizedBox(height: 16),
-        SectionHeader(AppLocalizations.of(context)!.todayLabel),
-        AppCard(
-          child: PrayerTimesList(
-            times: result,
-            notifications: settingsState.settings.notifications,
-            onToggleNotification: (prayer, enabled) => context
-                .read<SettingsCubit>()
-                .setNotifications(
-                  settingsState.settings.notifications.withPrayer(prayer, enabled),
-                ),
-          ),
-        ),
-      ],
     );
   }
 }

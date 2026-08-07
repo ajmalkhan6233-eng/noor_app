@@ -1,8 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The one card shape used everywhere: white on cream, 20px radius, a
-// 1px hairline border, and a very soft shadow — paper lifted off the
-// page, never a filled colour block.
+// The one card shape used everywhere: card surface on near-black,
+// 20px radius, a 1px hairline border (cyan by default), and a soft
+// shadow — never a flat filled block. Featured cards can pass
+// [borderColor]/[glowColor] (e.g. gold) per the locked palette's
+// "gold border on featured/dua cards" rule — plain cards leave both
+// null and get the ordinary cyan hairline with no glow.
 
 import 'package:flutter/material.dart';
 
@@ -13,10 +16,20 @@ class AppCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(12),
+    this.borderColor,
+    this.glowColor,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
+
+  /// Border colour override — defaults to [AppColors.hairline].
+  final Color? borderColor;
+
+  /// When set, adds a soft coloured glow behind the card (e.g.
+  /// [AppColors.gold] for a streak capsule, [AppColors.accentSecondary]
+  /// for a countdown capsule).
+  final Color? glowColor;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +38,16 @@ class AppCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.ink.withValues(alpha: 0.05),
+            color: AppColors.paper.withValues(alpha: 0.4),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
+          if (glowColor != null)
+            BoxShadow(
+              color: glowColor!.withValues(alpha: 0.35),
+              blurRadius: 20,
+              spreadRadius: 1,
+            ),
         ],
       ),
       // A dedicated Material — rather than relying on a distant
@@ -42,7 +61,7 @@ class AppCard extends StatelessWidget {
           padding: padding,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.hairline),
+            border: Border.all(color: borderColor ?? AppColors.hairline),
           ),
           child: child,
         ),

@@ -118,6 +118,35 @@ class QuranRepository {
     return _toAyahs(rows).first;
   }
 
+  /// Deterministic "ayah of the day": the same verse for everyone on
+  /// a given calendar day, picked only from rows that already carry a
+  /// verified translation (never a blind pick that might land on an
+  /// Arabic-only row with no translation to show). Returns `null` if
+  /// the Quran hasn't been imported yet — callers must show their own
+  /// "not loaded" state, never invented text.
+  Future<QuranAyah?> ayahOfTheDay({DateTime? date}) async {
+    final db = await _dbHelper.database;
+    final countRows = await db.rawQuery(
+      'SELECT COUNT(*) AS c FROM quran_ayahs WHERE translation IS NOT NULL',
+    );
+    final total = countRows.first['c'] as int? ?? 0;
+    if (total == 0) return null;
+
+    final day = date ?? DateTime.now();
+    final dayOfYear = day.difference(DateTime(day.year, 1, 1)).inDays;
+    final offset = (day.year * 1000 + dayOfYear) % total;
+
+    final rows = await db.query(
+      'quran_ayahs',
+      where: 'translation IS NOT NULL',
+      orderBy: 'surah_id ASC, ayah_number ASC',
+      limit: 1,
+      offset: offset,
+    );
+    if (rows.isEmpty) return null;
+    return _toAyahs(rows).first;
+  }
+
   Future<QuranReadingPosition?> lastRead() async {
     final db = await _dbHelper.database;
     final rows = await db.query('quran_last_read', where: 'id = 1');

@@ -255,6 +255,15 @@ class AppLocalizationsSi extends AppLocalizations {
   String get locationNameDialogTitle => 'ස්ථානයේ නම';
 
   @override
+  String get editLocationNameHint =>
+      'ඔබේ ස්ථානයේ නම සංස්කරණය කිරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String locationLabelSemanticValue(String label) {
+    return 'ස්ථානය: $label';
+  }
+
+  @override
   String get locationNameHint => 'උදා. අම්මාන්, ජෝර්දානය';
 
   @override
@@ -767,6 +776,40 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get todaysPrayersLabel => 'අද සලාත්';
+
+  @override
+  String get assalamuAlaikumGreeting => 'අස්සලාමු අලෙයිකුම්';
+
+  @override
+  String dayStreakBadgeLabel(int days) {
+    return '$days දින අඛණ්ඩතාවය';
+  }
+
+  @override
+  String goalsProgressLabel(int completed, int total, int percent) {
+    return '$completed/$total ඉලක්ක · $percent%';
+  }
+
+  @override
+  String get suhoorLabel => 'සුහූර්';
+
+  @override
+  String get iftarLabel => 'ඉෆ්තාර්';
+
+  @override
+  String get ayahOfTheDayTitle => 'අද දිනයේ වැකිය';
+
+  @override
+  String get copyLabel => 'පිටපත් කරන්න';
+
+  @override
+  String get copiedConfirmationLabel => 'පසුරු පුවරුවට පිටපත් කරන ලදී';
+
+  @override
+  String get fullQuranCtaLabel => 'සම්පූර්ණ කුර්ආනය';
+
+  @override
+  String get dailyGoalsSectionTitle => 'අද දිනයේ අධ්‍යාත්මික ඉලක්ක';
 
   @override
   String get noPrayerStreakMessage => 'දැනට සලාත් අඛණ්ඩතාවක් නැත';
