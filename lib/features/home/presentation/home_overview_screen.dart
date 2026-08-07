@@ -14,6 +14,7 @@ import '../../../core/constants/build_info.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
+import '../../../core/presentation/widgets/web_preview_badge.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../prayer_times/data/prayer_times_result.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
@@ -85,9 +86,14 @@ class HomeOverviewScreen extends StatelessWidget {
 
   Widget _buildStamp() {
     return Center(
-      child: Semantics(
-        label: BuildInfo.label,
-        child: const Text(BuildInfo.label, style: AppTypography.caption),
+      child: Column(
+        children: [
+          const WebPreviewBadge(),
+          Semantics(
+            label: BuildInfo.label,
+            child: const Text(BuildInfo.label, style: AppTypography.caption),
+          ),
+        ],
       ),
     );
   }
