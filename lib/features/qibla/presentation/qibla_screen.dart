@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
-import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -109,31 +108,32 @@ class _QiblaViewState extends State<_QiblaView> {
       );
     }
 
-    return Column(
+    return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(24),
-          child: StaggeredFadeIn(
-            children: [
-              AppCard(
-                padding: const EdgeInsets.all(20),
-                child: QiblaInfoPanel(
-                  bearingDegrees: state.bearingDegrees!,
-                  distanceKm: state.distanceKm!,
-                ),
+        Column(
+          children: [
+            if (state.compassAccuracy != CompassAccuracy.good &&
+                state.compassAccuracy != CompassAccuracy.unavailable)
+              const Padding(
+                padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+                child: StaggeredFadeIn(children: [CalibrationPrompt()]),
               ),
-              if (state.compassAccuracy != CompassAccuracy.good &&
-                  state.compassAccuracy != CompassAccuracy.unavailable) ...[
-                const SizedBox(height: 16),
-                const CalibrationPrompt(),
-              ],
-            ],
-          ),
+            Expanded(
+              child: QiblaCompassArea(
+                state: state,
+                positionController: _compassPosition,
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: QiblaCompassArea(
-            state: state,
-            positionController: _compassPosition,
+        Positioned(
+          top: 12,
+          right: 12,
+          child: SafeArea(
+            child: QiblaInfoPanel(
+              bearingDegrees: state.bearingDegrees!,
+              distanceKm: state.distanceKm!,
+            ),
           ),
         ),
       ],

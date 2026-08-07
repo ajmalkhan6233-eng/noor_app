@@ -1,9 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // GPS auto-fetches on load (see PrayerCubit.loadSettings) — a
-// first-time user never has to do anything. This widget only ever
-// shows raw lat/lng entry or the district picker when GPS hasn't
-// resolved yet, or once the user explicitly asks to change location.
+// first-time user never has to do anything. The district picker is
+// the only fallback shown when GPS hasn't resolved yet, or once the
+// user explicitly asks to change location. Raw lat/lng entry was
+// removed — nobody unfamiliar with coordinates could make sense of
+// it, and GPS + district already cover every real case.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,6 @@ import '../../../settings/logic/settings_cubit/settings_state.dart';
 import '../../logic/prayer_cubit/prayer_cubit.dart';
 import '../../logic/prayer_cubit/prayer_state.dart';
 import 'district_selector.dart';
-import 'manual_coordinates_entry.dart';
 
 class LocationSelector extends StatefulWidget {
   const LocationSelector({super.key});
@@ -29,7 +30,6 @@ class LocationSelector extends StatefulWidget {
 
 class _LocationSelectorState extends State<LocationSelector> {
   var _expanded = false;
-  var _showManualEntry = false;
 
   void _useGps(BuildContext context) {
     context.read<PrayerCubit>().useGps();
@@ -111,27 +111,6 @@ class _LocationSelectorState extends State<LocationSelector> {
               },
             ),
           ),
-          const SizedBox(height: 8),
-          SemanticButton(
-            label: _showManualEntry ? l10n.hideManualEntryLabel : l10n.enterManuallyLabel,
-            onTap: () => setState(() => _showManualEntry = !_showManualEntry),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text(
-                _showManualEntry ? l10n.hideManualEntryLabel : l10n.enterManuallyLabel,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.sage, fontSize: 13),
-              ),
-            ),
-          ),
-          if (_showManualEntry)
-            ManualCoordinatesEntry(
-              onApply: (lat, lng) {
-                context.read<PrayerCubit>().setManualLocation(lat, lng);
-                context.read<SettingsCubit>().setSelectedDistrict(null);
-                setState(() => _expanded = false);
-              },
-            ),
         ],
       ),
     );
