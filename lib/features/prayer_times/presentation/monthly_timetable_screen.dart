@@ -49,7 +49,11 @@ class _MonthlyTimetableView extends StatelessWidget {
   Widget build(BuildContext context) {
     final today = DateTime.now();
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      // A dense data table reads better a touch lighter than the
+      // app's usual near-black background. Blended halfway between
+      // the locked paper/card tones rather than a new colour, so the
+      // AppCard rows below still stand out against it.
+      backgroundColor: Color.lerp(AppColors.paper, AppColors.card, 0.5),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.monthlyTimetableScreenTitle),
       ),

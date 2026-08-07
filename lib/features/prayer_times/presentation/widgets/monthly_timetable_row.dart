@@ -12,6 +12,18 @@ import '../../data/prayer_times_result.dart';
 import '../../logic/monthly_timetable_cubit/monthly_timetable_state.dart';
 import 'prayer_time_format.dart';
 
+/// Short, unambiguous column labels — long enough to read at a glance,
+/// short enough that 5 prayers still fit one row without wrapping
+/// awkwardly. Replaces the old single-letter labels (F/D/A/M/I), which
+/// were too easy to misread against each other.
+const Map<String, String> _prayerAbbreviations = {
+  'Fajr': 'Fajr',
+  'Dhuhr': 'Dhr',
+  'Asr': 'Asr',
+  'Maghrib': 'Mgh',
+  'Isha': 'Isha',
+};
+
 class MonthlyTimetableRow extends StatelessWidget {
   const MonthlyTimetableRow({super.key, required this.day, required this.isToday});
 
@@ -68,7 +80,7 @@ class MonthlyTimetableRow extends StatelessWidget {
       children: [
         for (final (name, time) in result.prayerEntries)
           Text(
-            '${name[0]} ${formatClock(time)}',
+            '${_prayerAbbreviations[name] ?? name} ${formatClock(time)}',
             style: AppTypography.caption,
           ),
       ],
