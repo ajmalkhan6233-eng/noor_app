@@ -80,7 +80,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     date.month == today.month &&
                     date.day == today.day;
                 return CalendarDayCell(
-                  gregorianDay: day,
+                  gregorianDate: date,
                   hijri: hijri,
                   isToday: isToday,
                 );

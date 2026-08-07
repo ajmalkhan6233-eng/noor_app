@@ -2,7 +2,10 @@
 //
 // One day cell: Gregorian day number and Hijri day number side by
 // side, tinted for Ramadan, and marked for Eid al-Fitr, Eid al-Adha,
-// Ashura, and the White Days.
+// Ashura, and the White Days — plus a small cyan dot for Sri Lankan
+// public holidays/Poya days (see sri_lanka_holiday.dart for coverage
+// caveats: a partial, honestly-labelled seed, not the full official
+// calendar).
 
 import 'package:flutter/material.dart';
 
@@ -10,18 +13,21 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../core/utils/islamic_occasion.dart';
+import '../../../../core/utils/sri_lanka_holiday.dart';
 
 class CalendarDayCell extends StatelessWidget {
   const CalendarDayCell({
     super.key,
-    required this.gregorianDay,
+    required this.gregorianDate,
     required this.hijri,
     required this.isToday,
   });
 
-  final int gregorianDay;
+  final DateTime gregorianDate;
   final HijriDate hijri;
   final bool isToday;
+
+  int get gregorianDay => gregorianDate.day;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +37,13 @@ class CalendarDayCell extends StatelessWidget {
     final hasMajorOccasion = occasions.any(
       (o) => o != IslamicOccasion.ramadan && o != IslamicOccasion.whiteDays,
     );
+    final holidays = sriLankaHolidaysOn(gregorianDate);
+    final hasHoliday = holidays.isNotEmpty;
 
     final label = [
       '$gregorianDay ${hijri.formatted}',
       if (occasions.isNotEmpty) occasions.map((o) => o.label).join(', '),
+      if (holidays.isNotEmpty) holidays.map((h) => h.name).join(', '),
     ].join(', ');
 
     return Semantics(
@@ -70,22 +79,39 @@ class CalendarDayCell extends StatelessWidget {
                 color: isToday ? AppColors.paper : AppColors.sage,
               ),
             ),
-            if (hasMajorOccasion || isWhiteDay) ...[
+            if (hasMajorOccasion || isWhiteDay || hasHoliday) ...[
               const SizedBox(height: 2),
-              Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: hasMajorOccasion
-                      ? (isToday ? AppColors.paper : AppColors.emerald)
-                      : Colors.transparent,
-                  border: isWhiteDay && !hasMajorOccasion
-                      ? Border.all(
-                          color: isToday ? AppColors.paper : AppColors.emerald,
-                        )
-                      : null,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (hasMajorOccasion || isWhiteDay)
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: hasMajorOccasion
+                            ? (isToday ? AppColors.paper : AppColors.emerald)
+                            : Colors.transparent,
+                        border: isWhiteDay && !hasMajorOccasion
+                            ? Border.all(
+                                color: isToday ? AppColors.paper : AppColors.emerald,
+                              )
+                            : null,
+                      ),
+                    ),
+                  if (hasHoliday) ...[
+                    if (hasMajorOccasion || isWhiteDay) const SizedBox(width: 3),
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isToday ? AppColors.paper : AppColors.accentSecondary,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ],
           ],

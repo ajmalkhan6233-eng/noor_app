@@ -19,12 +19,19 @@ class CalendarLegend extends StatelessWidget {
           _item('Ramadan', tint: true),
           _item('Eid / Ashura', dot: true),
           _item('White Days', ring: true),
+          _item('Sri Lanka holiday / Poya', cyanDot: true),
         ],
       ),
     );
   }
 
-  Widget _item(String label, {bool tint = false, bool dot = false, bool ring = false}) {
+  Widget _item(
+    String label, {
+    bool tint = false,
+    bool dot = false,
+    bool ring = false,
+    bool cyanDot = false,
+  }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -37,7 +44,9 @@ class CalendarLegend extends StatelessWidget {
                 ? AppColors.emerald.withValues(alpha: 0.2)
                 : dot
                     ? AppColors.emerald
-                    : Colors.transparent,
+                    : cyanDot
+                        ? AppColors.accentSecondary
+                        : Colors.transparent,
             border: ring ? Border.all(color: AppColors.emerald) : null,
           ),
         ),
