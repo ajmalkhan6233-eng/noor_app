@@ -24,6 +24,7 @@ class UmrahGuideScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final steps = umrahGuideSteps(l10n);
     return Scaffold(
       backgroundColor: AppColors.paper,
       appBar: AppBar(title: Text(l10n.umrahGuideLabel)),
@@ -36,13 +37,13 @@ class UmrahGuideScreen extends StatelessWidget {
               children: [
                 StaggeredFadeIn(
                   children: [
-                    for (var i = 0; i < umrahGuideSteps.length; i++)
+                    for (var i = 0; i < steps.length; i++)
                       Padding(
                         padding: EdgeInsets.only(
-                          bottom: i == umrahGuideSteps.length - 1 ? 0 : 16,
+                          bottom: i == steps.length - 1 ? 0 : 16,
                         ),
                         child: GuideStepCard(
-                          step: umrahGuideSteps[i],
+                          step: steps[i],
                           trailing: _trailingFor(i),
                         ),
                       ),

@@ -741,6 +741,34 @@ class AppLocalizationsTa extends AppLocalizations {
       'சரிபார்க்கப்பட்ட மூலத்திலிருந்து இந்த வழிகாட்டி உரை இன்னும் ஏற்றப்படவில்லை';
 
   @override
+  String get guideBodyEnglishOnlyNote =>
+      'முழு விளக்கமும் தற்போது ஆங்கிலத்தில் மட்டுமே கிடைக்கிறது';
+
+  @override
+  String get umrahStep1Title => '1. குளியல் மற்றும் இஹ்ராம்';
+
+  @override
+  String get umrahStep2Title => '2. நியாத் (எண்ணம்)';
+
+  @override
+  String get umrahStep3Title => '3. தல்பியா';
+
+  @override
+  String get umrahStep4Title => '4. தவாஃப் (ஏழு சுற்றுகள்)';
+
+  @override
+  String get umrahStep5Title => '5. மகாம் இப்ராஹீமில் தொழுகை';
+
+  @override
+  String get umrahStep6Title => '6. ஸம்ஸம் நீர்';
+
+  @override
+  String get umrahStep7Title => '7. ஸயீ (ஏழு சுற்றுகள்)';
+
+  @override
+  String get umrahStep8Title => '8. ஹல்க் அல்லது தக்ஸீர்';
+
+  @override
   String guideStepLabel(int number) {
     return 'படி $number';
   }

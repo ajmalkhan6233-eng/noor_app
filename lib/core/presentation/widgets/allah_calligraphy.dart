@@ -1,10 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// الله rendered in Amiri, gold, with a genuine embossed effect: a
-// light highlight offset up-left and a soft dark shadow offset
-// down-right, so it reads as raised from the paper. Purely
-// decorative — never wrapped in a tappable area, never overlapping
-// other content.
+// الله rendered in Amiri, gold, with a genuine engraved effect: a
+// dark shadow offset up-left (as if light isn't reaching that edge)
+// and a soft light highlight offset down-right (catching the raised
+// far edge), so it reads as pressed into the surface rather than
+// sitting on top of it. Purely decorative — never wrapped in a
+// tappable area, never overlapping other content.
 
 import 'package:flutter/material.dart';
 
@@ -30,14 +31,14 @@ class AllahCalligraphy extends StatelessWidget {
             color: AppColors.gold,
             shadows: [
               Shadow(
-                color: Colors.white.withValues(alpha: 0.85),
-                offset: const Offset(-1, -1),
-                blurRadius: 0.6,
+                color: AppColors.paper.withValues(alpha: 0.85),
+                offset: const Offset(-1.4, -1.4),
+                blurRadius: 1.4,
               ),
               Shadow(
-                color: AppColors.paper.withValues(alpha: 0.8),
-                offset: const Offset(1.2, 1.4),
-                blurRadius: 2.2,
+                color: Colors.white.withValues(alpha: 0.5),
+                offset: const Offset(1.2, 1.2),
+                blurRadius: 1.8,
               ),
             ],
           ),

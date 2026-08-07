@@ -47,10 +47,12 @@ Rules that came with this palette:
 
 ## 4. The Allah calligraphy mark
 
-الله in Amiri, gold (`#B8912F`), embossed: light highlight offset
-up-left, soft dark shadow offset down-right, so it reads as raised from the
-paper. Centred in the header of every main screen. Two hard constraints:
-never overlaps content, never sits in a tappable area.
+الله in Amiri, gold (`#FFB703`), engraved: a dark shadow offset
+up-left (as if light isn't reaching that edge) and a soft light highlight
+offset down-right (catching the raised far edge), so it reads as pressed
+into the surface rather than sitting on top of it. Shown in the persistent
+top bar and the splash screen. Two hard constraints: never overlaps
+content, never sits in a tappable area.
 
 ## 5. Navigation & layout
 

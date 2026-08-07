@@ -1,9 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Plain data holder for one instructional step or day of the Hajj/Umrah
-// guide. All `title`/`body` text in this feature's *.dart data files is
-// factual, plainly-written English prose describing what to do and
-// when — never a religious pronouncement, never Arabic/Tamil/Sinhala.
+// guide. `body` text in this feature's *.dart data files is factual,
+// plainly-written English prose describing what to do and when — kept
+// English-only per CLAUDE.md rule 7 until a verified Tamil/Sinhala
+// source exists (see GuideStepCard's locale note). `title` may be a
+// localised short structural label (e.g. umrah_guide_steps.dart).
 
 class GuideStep {
   const GuideStep({required this.title, required this.body});

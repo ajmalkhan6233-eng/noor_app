@@ -63,9 +63,10 @@ class AboutSourcesCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           const Text(
-            'Talbiyah (Hajj/Umrah guide): from asellam/HisnElMuslim on '
-            'GitHub, MIT licence. Text drawn from Hisn al-Muslim by '
-            'Said bin Ali bin Wahf Al-Qahthani; see '
+            'Talbiyah (Hajj/Umrah guide): text repackaged from '
+            'asellam/HisnElMuslim on GitHub; original content from Hisn '
+            'al-Muslim by Said bin Ali bin Wahf Al-Qahthani, circulated '
+            'freely for non-commercial Islamic use. See '
             'assets/talbiyah/README.md for full provenance.',
             style: AppTypography.caption,
           ),

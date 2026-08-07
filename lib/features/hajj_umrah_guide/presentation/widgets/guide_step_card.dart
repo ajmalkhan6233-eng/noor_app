@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/guide_step.dart';
 
 class GuideStepCard extends StatelessWidget {
@@ -22,6 +23,7 @@ class GuideStepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,6 +38,17 @@ class GuideStepCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(step.body, style: const TextStyle(color: AppColors.sage, height: 1.4)),
+          if (!isEnglish) ...[
+            const SizedBox(height: 6),
+            Text(
+              AppLocalizations.of(context)!.guideBodyEnglishOnlyNote,
+              style: const TextStyle(
+                color: AppColors.sage,
+                fontStyle: FontStyle.italic,
+                fontSize: 11,
+              ),
+            ),
+          ],
           if (trailing != null) ...[const SizedBox(height: 12), trailing!],
         ],
       ),

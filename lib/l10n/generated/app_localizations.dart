@@ -1373,6 +1373,60 @@ abstract class AppLocalizations {
   /// **'Guide text not yet loaded from a verified source'**
   String get guideTextNotLoadedMessage;
 
+  /// No description provided for @guideBodyEnglishOnlyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Full description available in English only for now'**
+  String get guideBodyEnglishOnlyNote;
+
+  /// No description provided for @umrahStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Ghusl and ihram'**
+  String get umrahStep1Title;
+
+  /// No description provided for @umrahStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Niyyah (intention)'**
+  String get umrahStep2Title;
+
+  /// No description provided for @umrahStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Talbiyah'**
+  String get umrahStep3Title;
+
+  /// No description provided for @umrahStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Tawaf (seven circuits)'**
+  String get umrahStep4Title;
+
+  /// No description provided for @umrahStep5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Prayer at Maqam Ibrahim'**
+  String get umrahStep5Title;
+
+  /// No description provided for @umrahStep6Title.
+  ///
+  /// In en, this message translates to:
+  /// **'6. Zamzam water'**
+  String get umrahStep6Title;
+
+  /// No description provided for @umrahStep7Title.
+  ///
+  /// In en, this message translates to:
+  /// **'7. Sa\'i (seven passages)'**
+  String get umrahStep7Title;
+
+  /// No description provided for @umrahStep8Title.
+  ///
+  /// In en, this message translates to:
+  /// **'8. Halq or taqsir'**
+  String get umrahStep8Title;
+
   /// No description provided for @guideStepLabel.
   ///
   /// In en, this message translates to:

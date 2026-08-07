@@ -727,6 +727,34 @@ class AppLocalizationsEn extends AppLocalizations {
       'Guide text not yet loaded from a verified source';
 
   @override
+  String get guideBodyEnglishOnlyNote =>
+      'Full description available in English only for now';
+
+  @override
+  String get umrahStep1Title => '1. Ghusl and ihram';
+
+  @override
+  String get umrahStep2Title => '2. Niyyah (intention)';
+
+  @override
+  String get umrahStep3Title => '3. Talbiyah';
+
+  @override
+  String get umrahStep4Title => '4. Tawaf (seven circuits)';
+
+  @override
+  String get umrahStep5Title => '5. Prayer at Maqam Ibrahim';
+
+  @override
+  String get umrahStep6Title => '6. Zamzam water';
+
+  @override
+  String get umrahStep7Title => '7. Sa\'i (seven passages)';
+
+  @override
+  String get umrahStep8Title => '8. Halq or taqsir';
+
+  @override
   String guideStepLabel(int number) {
     return 'Step $number';
   }

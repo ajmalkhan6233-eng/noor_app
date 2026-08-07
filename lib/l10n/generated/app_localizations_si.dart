@@ -741,6 +741,34 @@ class AppLocalizationsSi extends AppLocalizations {
       'සත්‍යාපිත මූලාශ්‍රයකින් මෙම මාර්ගෝපදේශ පෙළ තවම පූරණය කර නැත';
 
   @override
+  String get guideBodyEnglishOnlyNote =>
+      'සම්පූර්ණ විස්තරය දැනට ඉංග්‍රීසියෙන් පමණක් ලබාගත හැක';
+
+  @override
+  String get umrahStep1Title => '1. ගුස්ල් සහ ඉහ්‍රාම්';
+
+  @override
+  String get umrahStep2Title => '2. නියියා (චේතනාව)';
+
+  @override
+  String get umrahStep3Title => '3. තල්බියා';
+
+  @override
+  String get umrahStep4Title => '4. තවාෆ් (වටරවුම් හතක්)';
+
+  @override
+  String get umrahStep5Title => '5. මකාම් ඉබ්‍රාහීම්හිදී සලාතය';
+
+  @override
+  String get umrahStep6Title => '6. සම්සම් ජලය';
+
+  @override
+  String get umrahStep7Title => '7. සායි (ගමන් හතක්)';
+
+  @override
+  String get umrahStep8Title => '8. හල්ක් හෝ තක්සීර්';
+
+  @override
   String guideStepLabel(int number) {
     return 'පියවර $number';
   }
