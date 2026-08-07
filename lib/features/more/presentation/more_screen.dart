@@ -43,7 +43,7 @@ class MoreScreen extends StatelessWidget {
                     children: [
                       _row(context, Icons.explore, l10n.qiblaScreenTitle, const QiblaScreen()),
                       _divider(),
-                      _row(context, Icons.fingerprint, l10n.tasbihScreenTitle, const TasbihScreen()),
+                      _row(context, Icons.blur_circular, l10n.tasbihScreenTitle, const TasbihScreen()),
                       _divider(),
                       _row(context, Icons.calendar_month, l10n.calendarLabel, const CalendarScreen()),
                       _divider(),

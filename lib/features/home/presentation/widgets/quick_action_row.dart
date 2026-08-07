@@ -18,7 +18,7 @@ class QuickActionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _action(context, Icons.fingerprint, 'Tasbih', const TasbihScreen()),
+        _action(context, Icons.blur_circular, 'Tasbih', const TasbihScreen()),
         _action(context, Icons.explore, 'Qibla', const QiblaScreen()),
         _action(context, Icons.calendar_month, 'Calendar', const CalendarScreen()),
         _action(context, Icons.savings_outlined, 'Zakat', const ZakatScreen()),
