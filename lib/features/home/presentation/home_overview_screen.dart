@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
@@ -31,8 +32,21 @@ import 'widgets/streak_capsule.dart';
 /// immediately visible here too. PrayerTrackerCubit is Home-tab-local
 /// (StreakCapsule and DailyGoalsList both read the one instance
 /// provided below, so they never drift out of sync with each other).
-class HomeOverviewScreen extends StatelessWidget {
+class HomeOverviewScreen extends StatefulWidget {
   const HomeOverviewScreen({super.key});
+
+  @override
+  State<HomeOverviewScreen> createState() => _HomeOverviewScreenState();
+}
+
+class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   Future<void> _editLocation(BuildContext context, String? current) async {
     final result = await showEditLocationDialog(context, current: current);
@@ -56,15 +70,19 @@ class HomeOverviewScreen extends StatelessWidget {
               builder: (context, settingsState) => BlocBuilder<PrayerCubit, PrayerState>(
                 builder: (context, prayerState) => BlocBuilder<PrayerTrackerCubit, PrayerTrackerState>(
                   builder: (context, trackerState) => ListView(
+                    controller: _scrollController,
                     children: [
                       StaggeredFadeIn(
                         children: [
-                          HeroCard(
-                            locationLabel: settingsState.settings.locationLabel,
-                            hijriOffsetDays: settingsState.settings.hijriOffsetDays,
-                            onEditLocation: () => _editLocation(
-                              context,
-                              settingsState.settings.locationLabel,
+                          ParallaxLayer(
+                            controller: _scrollController,
+                            child: HeroCard(
+                              locationLabel: settingsState.settings.locationLabel,
+                              hijriOffsetDays: settingsState.settings.hijriOffsetDays,
+                              onEditLocation: () => _editLocation(
+                                context,
+                                settingsState.settings.locationLabel,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 16),

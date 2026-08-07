@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/azkar_import_status.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
@@ -27,8 +28,21 @@ class AzkarScreen extends StatelessWidget {
   }
 }
 
-class _AzkarView extends StatelessWidget {
+class _AzkarView extends StatefulWidget {
   const _AzkarView();
+
+  @override
+  State<_AzkarView> createState() => _AzkarViewState();
+}
+
+class _AzkarViewState extends State<_AzkarView> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +53,10 @@ class _AzkarView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            const AzkarCategorySelector(),
+            ParallaxLayer(
+              controller: _scrollController,
+              child: const AzkarCategorySelector(),
+            ),
             const SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<AzkarCubit, AzkarState>(
@@ -56,6 +73,7 @@ class _AzkarView extends StatelessWidget {
                     );
                   }
                   return ListView(
+                    controller: _scrollController,
                     children: [
                       StaggeredFadeIn(
                         children: [
