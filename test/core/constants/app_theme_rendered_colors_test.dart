@@ -23,7 +23,7 @@ String _hex(Color c) =>
         .toUpperCase();
 
 void main() {
-  testWidgets('live theme resolves scaffold background to exactly #FFF2EFE7', (
+  testWidgets('live theme resolves scaffold background to exactly #FF05070B', (
     tester,
   ) async {
     late Color resolved;
@@ -39,10 +39,10 @@ void main() {
       ),
     );
 
-    expect(_hex(resolved), '#FFF2EFE7');
+    expect(_hex(resolved), '#FF05070B');
   });
 
-  testWidgets('live theme resolves card colour to exactly #FFFFFFFF, no tint', (
+  testWidgets('live theme resolves card colour to exactly #FF0D1117, no tint', (
     tester,
   ) async {
     late Color cardColor;
@@ -63,12 +63,12 @@ void main() {
       ),
     );
 
-    expect(_hex(cardColor), '#FFFFFFFF');
-    expect(_hex(colorSchemeSurface), '#FFFFFFFF');
-    expect(surfaceTint, Colors.transparent, reason: 'M3 must not auto-tint cards green');
+    expect(_hex(cardColor), '#FF0D1117');
+    expect(_hex(colorSchemeSurface), '#FF0D1117');
+    expect(surfaceTint, Colors.transparent, reason: 'M3 must not auto-tint cards');
   });
 
-  testWidgets('live theme resolves primary text colour to exactly #FF16211C', (
+  testWidgets('live theme resolves primary text colour to exactly #FFEDEFF2', (
     tester,
   ) async {
     late Color inkColor;
@@ -84,6 +84,6 @@ void main() {
       ),
     );
 
-    expect(_hex(inkColor), '#FF16211C');
+    expect(_hex(inkColor), '#FFEDEFF2');
   });
 }

@@ -35,7 +35,7 @@ class AllahCalligraphy extends StatelessWidget {
                 blurRadius: 0.6,
               ),
               Shadow(
-                color: AppColors.ink.withValues(alpha: 0.4),
+                color: AppColors.paper.withValues(alpha: 0.8),
                 offset: const Offset(1.2, 1.4),
                 blurRadius: 2.2,
               ),

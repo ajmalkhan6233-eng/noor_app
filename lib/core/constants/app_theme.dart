@@ -1,9 +1,9 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // One place where every Switch/Slider/Dropdown/Card/BottomNavigationBar
-// in the app picks up the paper-and-ink palette — so individual
-// screens never need to restyle a default Material control by hand.
-// The app is light-only by design; buildDarkTheme/buildLightTheme
+// in the app picks up the locked near-black/gold/cyan palette — so
+// individual screens never need to restyle a default Material control
+// by hand. The app is dark-only by design; buildDarkTheme/buildLightTheme
 // both return the same theme so the existing theme-mode setting still
 // resolves to something, without a second, contradictory palette.
 
@@ -15,7 +15,7 @@ import 'app_typography.dart';
 ThemeData buildAppTheme() {
   return ThemeData(
     useMaterial3: true,
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     fontFamily: AppTypography.bodyFamily,
     // Falls back to the bundled Noto Sans Tamil/Sinhala faces for any
     // glyph Inter can't render — the mechanism that makes Tamil/
@@ -28,10 +28,10 @@ ThemeData buildAppTheme() {
     cardColor: AppColors.card,
     dividerColor: AppColors.hairline,
     // Material 3 tints elevated surfaces with colorScheme.surfaceTint
-    // by default. Cards must render flat white — no tint.
+    // by default. Cards must render flat, exactly AppColors.card — no tint.
     colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.emerald,
-      brightness: Brightness.light,
+      seedColor: AppColors.gold,
+      brightness: Brightness.dark,
       surface: AppColors.card,
     ).copyWith(surfaceTint: Colors.transparent),
     appBarTheme: const AppBarTheme(
@@ -53,21 +53,21 @@ ThemeData buildAppTheme() {
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
         (states) => states.contains(WidgetState.selected)
-            ? AppColors.emerald
+            ? AppColors.gold
             : AppColors.sage,
       ),
       trackColor: WidgetStateProperty.resolveWith(
         (states) => states.contains(WidgetState.selected)
-            ? AppColors.emeraldSoft
+            ? AppColors.goldBorder
             : AppColors.hairline,
       ),
       trackOutlineColor: const WidgetStatePropertyAll(AppColors.hairline),
     ),
     sliderTheme: const SliderThemeData(
-      activeTrackColor: AppColors.emerald,
+      activeTrackColor: AppColors.gold,
       inactiveTrackColor: AppColors.hairline,
-      thumbColor: AppColors.emerald,
-      overlayColor: Color(0x2214603C),
+      thumbColor: AppColors.gold,
+      overlayColor: Color(0x22FFB703),
     ),
     dropdownMenuTheme: const DropdownMenuThemeData(
       textStyle: TextStyle(color: AppColors.ink),
@@ -79,12 +79,12 @@ ThemeData buildAppTheme() {
         borderSide: BorderSide(color: AppColors.hairline),
       ),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.emerald),
+        borderSide: BorderSide(color: AppColors.gold),
       ),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.paper,
-      selectedItemColor: AppColors.emerald,
+      selectedItemColor: AppColors.gold,
       unselectedItemColor: AppColors.sage,
       type: BottomNavigationBarType.fixed,
     ),
@@ -93,9 +93,9 @@ ThemeData buildAppTheme() {
       surfaceTintColor: Colors.transparent,
     ),
     snackBarTheme: const SnackBarThemeData(
-      backgroundColor: AppColors.ink,
-      contentTextStyle: TextStyle(color: AppColors.paper),
-      actionTextColor: AppColors.emerald,
+      backgroundColor: AppColors.card,
+      contentTextStyle: TextStyle(color: AppColors.ink),
+      actionTextColor: AppColors.gold,
     ),
     listTileTheme: const ListTileThemeData(
       textColor: AppColors.ink,
@@ -119,12 +119,12 @@ ThemeData buildAppTheme() {
       bodyLarge: TextStyle(color: AppColors.ink),
       bodyMedium: TextStyle(color: AppColors.ink),
       bodySmall: TextStyle(color: AppColors.sage),
-      labelLarge: TextStyle(color: AppColors.emerald),
+      labelLarge: TextStyle(color: AppColors.gold),
     ),
   );
 }
 
-/// The app is light-only; both resolve to the same theme so the
+/// The app is dark-only; both resolve to the same theme so the
 /// existing theme-mode preference has no visible effect rather than
 /// contradicting the brand.
 ThemeData buildDarkTheme() => buildAppTheme();
