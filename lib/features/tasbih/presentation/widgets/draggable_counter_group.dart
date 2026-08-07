@@ -1,15 +1,16 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The dhikr label and the counter button move together as one
-// draggable unit — the label always follows the counter, never left
-// behind at a fixed spot.
+// Centred orb + its dhikr label. No longer draggable-to-reposition —
+// the orb's own pull/tilt/spring-back gesture (TasbihOrb) needs the
+// same pan gesture a free-drag reposition would, and the two can't
+// coexist on one touch target without fighting over it. The tactile
+// pull-and-snap is the more valuable interaction of the two.
 
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/presentation/widgets/draggable_floating.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import 'haptic_counter_button.dart';
+import 'tasbih_orb.dart';
 
 class DraggableCounterGroup extends StatelessWidget {
   const DraggableCounterGroup({
@@ -27,9 +28,7 @@ class DraggableCounterGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableFloating(
-      size: const Size(240, 280),
-      widgetKey: 'tasbih_counter',
+    return Center(
       child: SizedBox(
         width: 240,
         child: Column(
@@ -46,7 +45,7 @@ class DraggableCounterGroup extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            HapticCounterButton(count: count, pulsing: pulsing, onTap: onTap),
+            TasbihOrb(count: count, pulsing: pulsing, onTap: onTap),
           ],
         ),
       ),
