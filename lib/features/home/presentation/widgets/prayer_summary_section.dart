@@ -19,6 +19,7 @@ import '../../../prayer_times/presentation/widgets/prayer_times_list.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 import 'next_prayer_countdown_capsule.dart';
+import 'prayer_times_strip.dart';
 import 'suhoor_iftar_row.dart';
 
 class PrayerSummarySection extends StatelessWidget {
@@ -44,6 +45,8 @@ class PrayerSummarySection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         NextPrayerCountdownCapsule(times: result),
+        const SizedBox(height: 16),
+        PrayerTimesStrip(times: result),
         const SizedBox(height: 16),
         SuhoorIftarRow(times: result),
         const SizedBox(height: 16),
