@@ -604,6 +604,60 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get languageSectionHeader;
 
+  /// No description provided for @countrySectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get countrySectionHeader;
+
+  /// No description provided for @countryPickerSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get countryPickerSemanticLabel;
+
+  /// No description provided for @comingSoonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoonLabel;
+
+  /// No description provided for @countryComingSoonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available yet — Sri Lanka is the only fully working country right now'**
+  String get countryComingSoonHint;
+
+  /// No description provided for @countrySriLanka.
+  ///
+  /// In en, this message translates to:
+  /// **'Sri Lanka'**
+  String get countrySriLanka;
+
+  /// No description provided for @countryIndia.
+  ///
+  /// In en, this message translates to:
+  /// **'India'**
+  String get countryIndia;
+
+  /// No description provided for @countryMalaysia.
+  ///
+  /// In en, this message translates to:
+  /// **'Malaysia'**
+  String get countryMalaysia;
+
+  /// No description provided for @countryUnitedKingdom.
+  ///
+  /// In en, this message translates to:
+  /// **'United Kingdom'**
+  String get countryUnitedKingdom;
+
+  /// No description provided for @countryUnitedStates.
+  ///
+  /// In en, this message translates to:
+  /// **'United States'**
+  String get countryUnitedStates;
+
   /// No description provided for @themeSemanticLabel.
   ///
   /// In en, this message translates to:

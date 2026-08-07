@@ -293,6 +293,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageSectionHeader => 'Language';
 
   @override
+  String get countrySectionHeader => 'Country';
+
+  @override
+  String get countryPickerSemanticLabel => 'Country';
+
+  @override
+  String get comingSoonLabel => 'Coming soon';
+
+  @override
+  String get countryComingSoonHint =>
+      'Not available yet — Sri Lanka is the only fully working country right now';
+
+  @override
+  String get countrySriLanka => 'Sri Lanka';
+
+  @override
+  String get countryIndia => 'India';
+
+  @override
+  String get countryMalaysia => 'Malaysia';
+
+  @override
+  String get countryUnitedKingdom => 'United Kingdom';
+
+  @override
+  String get countryUnitedStates => 'United States';
+
+  @override
   String get themeSemanticLabel => 'Theme';
 
   @override

@@ -300,6 +300,34 @@ class AppLocalizationsTa extends AppLocalizations {
   String get languageSectionHeader => 'மொழி';
 
   @override
+  String get countrySectionHeader => 'நாடு';
+
+  @override
+  String get countryPickerSemanticLabel => 'நாடு';
+
+  @override
+  String get comingSoonLabel => 'விரைவில்';
+
+  @override
+  String get countryComingSoonHint =>
+      'இன்னும் கிடைக்கவில்லை — தற்போது இலங்கை மட்டுமே முழுமையாக செயல்படுகிறது';
+
+  @override
+  String get countrySriLanka => 'இலங்கை';
+
+  @override
+  String get countryIndia => 'இந்தியா';
+
+  @override
+  String get countryMalaysia => 'மலேசியா';
+
+  @override
+  String get countryUnitedKingdom => 'ஐக்கிய இராச்சியம்';
+
+  @override
+  String get countryUnitedStates => 'அமெரிக்க ஐக்கிய நாடுகள்';
+
+  @override
   String get themeSemanticLabel => 'தீம்';
 
   @override

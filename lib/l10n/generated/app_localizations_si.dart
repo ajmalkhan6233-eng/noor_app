@@ -298,6 +298,34 @@ class AppLocalizationsSi extends AppLocalizations {
   String get languageSectionHeader => 'භාෂාව';
 
   @override
+  String get countrySectionHeader => 'රට';
+
+  @override
+  String get countryPickerSemanticLabel => 'රට';
+
+  @override
+  String get comingSoonLabel => 'ඉක්මනින්';
+
+  @override
+  String get countryComingSoonHint =>
+      'තවම ලබා ගත නොහැක — දැනට සම්පූර්ණයෙන් ක්‍රියාත්මක වන්නේ ශ්‍රී ලංකාව පමණි';
+
+  @override
+  String get countrySriLanka => 'ශ්‍රී ලංකාව';
+
+  @override
+  String get countryIndia => 'ඉන්දියාව';
+
+  @override
+  String get countryMalaysia => 'මැලේසියාව';
+
+  @override
+  String get countryUnitedKingdom => 'එක්සත් රාජධානිය';
+
+  @override
+  String get countryUnitedStates => 'එක්සත් ජනපදය';
+
+  @override
   String get themeSemanticLabel => 'තේමාව';
 
   @override
