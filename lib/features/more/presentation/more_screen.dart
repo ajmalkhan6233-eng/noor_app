@@ -29,7 +29,7 @@ class MoreScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text('More')),
+      appBar: AppBar(title: Text(l10n.moreTab)),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
@@ -41,13 +41,13 @@ class MoreScreen extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   child: Column(
                     children: [
-                      _row(context, Icons.explore, 'Qibla', const QiblaScreen()),
+                      _row(context, Icons.explore, l10n.qiblaScreenTitle, const QiblaScreen()),
                       _divider(),
-                      _row(context, Icons.fingerprint, 'Tasbih', const TasbihScreen()),
+                      _row(context, Icons.fingerprint, l10n.tasbihScreenTitle, const TasbihScreen()),
                       _divider(),
-                      _row(context, Icons.calendar_month, 'Calendar', const CalendarScreen()),
+                      _row(context, Icons.calendar_month, l10n.calendarLabel, const CalendarScreen()),
                       _divider(),
-                      _row(context, Icons.savings_outlined, 'Zakat calculator', const ZakatScreen()),
+                      _row(context, Icons.savings_outlined, l10n.zakatCalculatorLabel, const ZakatScreen()),
                       _divider(),
                       _row(context, Icons.mosque, l10n.pilgrimageLabel, const PilgrimageHomeScreen()),
                       _divider(),
@@ -62,9 +62,9 @@ class MoreScreen extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 child: Column(
                   children: [
-                    _row(context, Icons.settings_outlined, 'Settings', const SettingsScreen()),
+                    _row(context, Icons.settings_outlined, l10n.settingsSemanticLabel, const SettingsScreen()),
                     _divider(),
-                    _row(context, Icons.info_outline, 'About', const AboutScreen()),
+                    _row(context, Icons.info_outline, l10n.aboutLabel, const AboutScreen()),
                   ],
                 ),
               ),
@@ -80,7 +80,7 @@ class MoreScreen extends StatelessWidget {
   Widget _row(BuildContext context, IconData icon, String label, Widget destination) {
     return SemanticButton(
       label: label,
-      hint: 'Double tap to open $label',
+      hint: AppLocalizations.of(context)!.openHint,
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (_) => destination),
       ),

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class PrayerNotificationBell extends StatelessWidget {
   const PrayerNotificationBell({
@@ -24,11 +25,12 @@ class PrayerNotificationBell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: SemanticButton(
-        label: '$prayerName notification',
-        hint: enabled ? 'Double tap to turn off' : 'Double tap to turn on',
+        label: l10n.notificationToggleSemanticLabel(prayerName),
+        hint: enabled ? l10n.turnOffNotificationHint : l10n.turnOnNotificationHint,
         onTap: onTap,
         child: Icon(
           enabled ? Icons.notifications_active : Icons.notifications_off_outlined,

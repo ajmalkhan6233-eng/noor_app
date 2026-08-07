@@ -43,12 +43,13 @@ class _LocationSelectorState extends State<LocationSelector> {
       builder: (context, state) {
         final showOptions =
             _expanded || (!state.hasCoordinates && !state.isResolvingLocation);
-        return showOptions ? _optionsCard(context, state, l10n) : _statusRow(state);
+        return showOptions ? _optionsCard(context, state, l10n) : _statusRow(context, state);
       },
     );
   }
 
-  Widget _statusRow(PrayerState state) {
+  Widget _statusRow(BuildContext context, PrayerState state) {
+    final l10n = AppLocalizations.of(context)!;
     return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
@@ -57,15 +58,15 @@ class _LocationSelectorState extends State<LocationSelector> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              state.usingGps ? 'Location: current (GPS)' : 'Location set',
+              state.usingGps ? l10n.locationSetViaGpsLabel : l10n.locationSetLabel,
               style: AppTypography.caption,
             ),
           ),
           SemanticButton(
-            label: 'Change location',
-            hint: 'Double tap to change how your location is set',
+            label: l10n.changeLocationSemanticLabel,
+            hint: l10n.changeLocationHint,
             onTap: () => setState(() => _expanded = true),
-            child: const Text('Change', style: TextStyle(color: AppColors.emerald)),
+            child: Text(l10n.changeLabel, style: const TextStyle(color: AppColors.emerald)),
           ),
         ],
       ),
@@ -112,12 +113,12 @@ class _LocationSelectorState extends State<LocationSelector> {
           ),
           const SizedBox(height: 8),
           SemanticButton(
-            label: _showManualEntry ? 'Hide manual entry' : 'Enter manually (advanced)',
+            label: _showManualEntry ? l10n.hideManualEntryLabel : l10n.enterManuallyLabel,
             onTap: () => setState(() => _showManualEntry = !_showManualEntry),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
               child: Text(
-                _showManualEntry ? 'Hide manual entry' : 'Enter manually (advanced)',
+                _showManualEntry ? l10n.hideManualEntryLabel : l10n.enterManuallyLabel,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: AppColors.sage, fontSize: 13),
               ),

@@ -1384,6 +1384,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recite ×{count}'**
   String reciteCountLabel(int count);
+
+  /// No description provided for @todaysPrayersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s prayers'**
+  String get todaysPrayersLabel;
+
+  /// No description provided for @noPrayerStreakMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No current prayer streak'**
+  String get noPrayerStreakMessage;
+
+  /// No description provided for @prayerStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer streak: {count}d'**
+  String prayerStreakLabel(int count);
+
+  /// No description provided for @fastingTodayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting today'**
+  String get fastingTodayLabel;
+
+  /// No description provided for @markFastingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to mark today as fasted'**
+  String get markFastingHint;
+
+  /// No description provided for @unmarkFastingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to unmark today as fasted'**
+  String get unmarkFastingHint;
+
+  /// No description provided for @noFastingStreakMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No current fasting streak'**
+  String get noFastingStreakMessage;
+
+  /// No description provided for @fastingStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting streak: {count}d'**
+  String fastingStreakLabel(int count);
+
+  /// No description provided for @markPrayerDoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to mark {label} done'**
+  String markPrayerDoneHint(String label);
+
+  /// No description provided for @unmarkPrayerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to unmark {label}'**
+  String unmarkPrayerHint(String label);
+
+  /// No description provided for @locationSetViaGpsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location: current (GPS)'**
+  String get locationSetViaGpsLabel;
+
+  /// No description provided for @locationSetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location set'**
+  String get locationSetLabel;
+
+  /// No description provided for @changeLocationSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Change location'**
+  String get changeLocationSemanticLabel;
+
+  /// No description provided for @changeLocationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to change how your location is set'**
+  String get changeLocationHint;
+
+  /// No description provided for @changeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get changeLabel;
+
+  /// No description provided for @enterManuallyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter manually (advanced)'**
+  String get enterManuallyLabel;
+
+  /// No description provided for @hideManualEntryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide manual entry'**
+  String get hideManualEntryLabel;
+
+  /// No description provided for @turnOffNotificationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to turn off'**
+  String get turnOffNotificationHint;
+
+  /// No description provided for @turnOnNotificationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to turn on'**
+  String get turnOnNotificationHint;
+
+  /// No description provided for @setLocationOnPrayerTabMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your location on the Prayer Times tab to see today\'s schedule here.'**
+  String get setLocationOnPrayerTabMessage;
 }
 
 class _AppLocalizationsDelegate

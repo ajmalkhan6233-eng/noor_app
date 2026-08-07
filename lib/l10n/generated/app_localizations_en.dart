@@ -734,4 +734,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String reciteCountLabel(int count) {
     return 'Recite ×$count';
   }
+
+  @override
+  String get todaysPrayersLabel => 'Today\'s prayers';
+
+  @override
+  String get noPrayerStreakMessage => 'No current prayer streak';
+
+  @override
+  String prayerStreakLabel(int count) {
+    return 'Prayer streak: ${count}d';
+  }
+
+  @override
+  String get fastingTodayLabel => 'Fasting today';
+
+  @override
+  String get markFastingHint => 'Double tap to mark today as fasted';
+
+  @override
+  String get unmarkFastingHint => 'Double tap to unmark today as fasted';
+
+  @override
+  String get noFastingStreakMessage => 'No current fasting streak';
+
+  @override
+  String fastingStreakLabel(int count) {
+    return 'Fasting streak: ${count}d';
+  }
+
+  @override
+  String markPrayerDoneHint(String label) {
+    return 'Double tap to mark $label done';
+  }
+
+  @override
+  String unmarkPrayerHint(String label) {
+    return 'Double tap to unmark $label';
+  }
+
+  @override
+  String get locationSetViaGpsLabel => 'Location: current (GPS)';
+
+  @override
+  String get locationSetLabel => 'Location set';
+
+  @override
+  String get changeLocationSemanticLabel => 'Change location';
+
+  @override
+  String get changeLocationHint =>
+      'Double tap to change how your location is set';
+
+  @override
+  String get changeLabel => 'Change';
+
+  @override
+  String get enterManuallyLabel => 'Enter manually (advanced)';
+
+  @override
+  String get hideManualEntryLabel => 'Hide manual entry';
+
+  @override
+  String get turnOffNotificationHint => 'Double tap to turn off';
+
+  @override
+  String get turnOnNotificationHint => 'Double tap to turn on';
+
+  @override
+  String get setLocationOnPrayerTabMessage =>
+      'Set your location on the Prayer Times tab to see today\'s schedule here.';
 }

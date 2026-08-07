@@ -747,4 +747,76 @@ class AppLocalizationsTa extends AppLocalizations {
   String reciteCountLabel(int count) {
     return '×$count முறை ஓதவும்';
   }
+
+  @override
+  String get todaysPrayersLabel => 'இன்றைய தொழுகைகள்';
+
+  @override
+  String get noPrayerStreakMessage => 'தற்போது தொடர் தொழுகை இல்லை';
+
+  @override
+  String prayerStreakLabel(int count) {
+    return 'தொழுகை தொடர்: $count நாள்';
+  }
+
+  @override
+  String get fastingTodayLabel => 'இன்று நோன்பு';
+
+  @override
+  String get markFastingHint =>
+      'இன்று நோன்பு நோற்றதாகக் குறிக்க இருமுறை தட்டவும்';
+
+  @override
+  String get unmarkFastingHint =>
+      'இன்றைய நோன்பு குறியீட்டை நீக்க இருமுறை தட்டவும்';
+
+  @override
+  String get noFastingStreakMessage => 'தற்போது தொடர் நோன்பு இல்லை';
+
+  @override
+  String fastingStreakLabel(int count) {
+    return 'நோன்பு தொடர்: $count நாள்';
+  }
+
+  @override
+  String markPrayerDoneHint(String label) {
+    return '$label முடிந்ததாகக் குறிக்க இருமுறை தட்டவும்';
+  }
+
+  @override
+  String unmarkPrayerHint(String label) {
+    return '$label குறியீட்டை நீக்க இருமுறை தட்டவும்';
+  }
+
+  @override
+  String get locationSetViaGpsLabel => 'இருப்பிடம்: நடப்பு (GPS)';
+
+  @override
+  String get locationSetLabel => 'இருப்பிடம் அமைக்கப்பட்டது';
+
+  @override
+  String get changeLocationSemanticLabel => 'இருப்பிடத்தை மாற்று';
+
+  @override
+  String get changeLocationHint =>
+      'இருப்பிடம் அமைக்கும் முறையை மாற்ற இருமுறை தட்டவும்';
+
+  @override
+  String get changeLabel => 'மாற்று';
+
+  @override
+  String get enterManuallyLabel => 'கைமுறையாக உள்ளிடவும் (மேம்பட்டது)';
+
+  @override
+  String get hideManualEntryLabel => 'கைமுறை உள்ளீட்டை மறை';
+
+  @override
+  String get turnOffNotificationHint => 'நிறுத்த இருமுறை தட்டவும்';
+
+  @override
+  String get turnOnNotificationHint => 'இயக்க இருமுறை தட்டவும்';
+
+  @override
+  String get setLocationOnPrayerTabMessage =>
+      'இன்றைய நேர அட்டவணையைக் காண, தொழுகை நேரம் தாவலில் உங்கள் இருப்பிடத்தை அமைக்கவும்.';
 }

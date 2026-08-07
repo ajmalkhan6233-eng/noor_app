@@ -12,6 +12,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/prayer_tracker_repository.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
@@ -33,6 +34,7 @@ class _PrayerTrackerCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<PrayerTrackerCubit, PrayerTrackerState>(
       builder: (context, state) {
         final cubit = context.read<PrayerTrackerCubit>();
@@ -40,7 +42,7 @@ class _PrayerTrackerCardView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionHeader("Today's prayers"),
+              SectionHeader(l10n.todaysPrayersLabel),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -56,18 +58,16 @@ class _PrayerTrackerCardView extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 state.prayerStreak == 0
-                    ? 'No current prayer streak'
-                    : 'Prayer streak: ${state.prayerStreak} day${state.prayerStreak == 1 ? '' : 's'}',
+                    ? l10n.noPrayerStreakMessage
+                    : l10n.prayerStreakLabel(state.prayerStreak),
                 style: AppTypography.caption,
               ),
               const SizedBox(height: 16),
               const Divider(color: AppColors.hairline, height: 1),
               const SizedBox(height: 16),
               SemanticButton(
-                label: 'Fasting today',
-                hint: state.fastingToday
-                    ? 'Double tap to unmark today as fasted'
-                    : 'Double tap to mark today as fasted',
+                label: l10n.fastingTodayLabel,
+                hint: state.fastingToday ? l10n.unmarkFastingHint : l10n.markFastingHint,
                 onTap: cubit.toggleFasting,
                 child: Row(
                   children: [
@@ -81,15 +81,15 @@ class _PrayerTrackerCardView extends StatelessWidget {
                       size: 20,
                     ),
                     const SizedBox(width: 12),
-                    const Text('Fasting today', style: TextStyle(color: AppColors.ink)),
+                    Text(l10n.fastingTodayLabel, style: const TextStyle(color: AppColors.ink)),
                   ],
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 state.fastingStreak == 0
-                    ? 'No current fasting streak'
-                    : 'Fasting streak: ${state.fastingStreak} day${state.fastingStreak == 1 ? '' : 's'}',
+                    ? l10n.noFastingStreakMessage
+                    : l10n.fastingStreakLabel(state.fastingStreak),
                 style: AppTypography.caption,
               ),
             ],
@@ -113,9 +113,10 @@ class _PrayerChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SemanticButton(
       label: label,
-      hint: done ? 'Double tap to unmark $label' : 'Double tap to mark $label done',
+      hint: done ? l10n.unmarkPrayerHint(label) : l10n.markPrayerDoneHint(label),
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

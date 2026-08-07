@@ -14,6 +14,7 @@ import '../../../core/constants/build_info.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../prayer_times/data/prayer_times_result.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
@@ -109,10 +110,9 @@ class _HomeView extends StatelessWidget {
   ) {
     final result = state.result;
     if (result is! PrayerTimesComputed) {
-      return const AppCard(
+      return AppCard(
         child: Text(
-          'Set your location on the Prayer Times tab to see today\'s '
-          'schedule here.',
+          AppLocalizations.of(context)!.setLocationOnPrayerTabMessage,
           style: AppTypography.caption,
         ),
       );
@@ -122,7 +122,7 @@ class _HomeView extends StatelessWidget {
       children: [
         NextPrayerCard(times: result),
         const SizedBox(height: 16),
-        const SectionHeader('Today'),
+        SectionHeader(AppLocalizations.of(context)!.todayLabel),
         AppCard(
           child: PrayerTimesList(
             times: result,
