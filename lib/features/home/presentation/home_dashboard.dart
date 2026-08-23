@@ -6,6 +6,7 @@
 // Semantics label independent of its visible text label.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
