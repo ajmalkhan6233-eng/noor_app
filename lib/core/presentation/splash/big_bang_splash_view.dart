@@ -74,6 +74,7 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                   particles: _particles!,
                   color: AppColors.gold,
                   softColor: AppColors.accentSecondary,
+                  growing: true,
                 ),
               ),
             ),

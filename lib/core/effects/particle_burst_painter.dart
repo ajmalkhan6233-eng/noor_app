@@ -69,12 +69,22 @@ class ParticleBurstPainter extends CustomPainter {
     required this.particles,
     required this.color,
     this.softColor = AppColors.accentSecondary,
+    this.growing = false,
   });
 
   final Offset center;
   final double progress;
   final List<BurstParticle> particles;
   final Color color;
+
+  /// False (default, every existing caller — Tasbih, Tawaf/Sa'i, Qibla
+  /// lock): particles start at full size/brightness and fade out as
+  /// they travel, an "ignition then dissolve" read. True (the splash's
+  /// Big Bang only): inverted — particles start small and dim at
+  /// centre and grow larger/brighter as they expand outward, an
+  /// "emerging from nothing" read that suits an opening moment better
+  /// than a completion one.
+  final bool growing;
 
   /// Colour for particles where [BurstParticle.soft] is true. Defaults
   /// to the locked cyan accent (every caller — Tasbih, Tawaf/Sa'i,
@@ -106,12 +116,13 @@ class ParticleBurstPainter extends CustomPainter {
         center.dx + math.cos(particle.angle) * particle.distance * eased,
         center.dy + math.sin(particle.angle) * particle.distance * eased,
       );
-      final opacity = (1 - local) * 0.9;
+      final opacity = growing ? local * 0.9 : (1 - local) * 0.9;
       if (opacity <= 0) continue;
+      final radiusScale = growing ? 0.2 + local * 0.8 : (1 - local * 0.4);
 
       canvas.drawCircle(
         offset,
-        particle.radius * (1 - local * 0.4),
+        particle.radius * radiusScale,
         Paint()
           ..color = (particle.soft ? softColor : color)
               .withValues(alpha: opacity),

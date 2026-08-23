@@ -1,11 +1,15 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The one card shape used everywhere: card surface on near-black,
-// 20px radius, a 1px hairline border (cyan by default), and a soft
-// shadow — never a flat filled block. Featured cards can pass
-// [borderColor]/[glowColor] (e.g. gold) per the locked palette's
-// "gold border on featured/dua cards" rule — plain cards leave both
-// null and get the ordinary cyan hairline with no glow.
+// The one card shape used everywhere: a real glass panel (BackdropFilter
+// blur over whatever sits behind it — the persistent CosmicBackground
+// layer, see home_dashboard.dart) on near-black, 20px radius, a 1px
+// hairline border (cyan by default), and a soft shadow — never a flat
+// filled block. Featured cards can pass [borderColor]/[glowColor]
+// (e.g. gold) per the locked palette's "gold border on featured/dua
+// cards" rule — plain cards leave both null and get the ordinary cyan
+// hairline with no glow.
+
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -50,20 +54,35 @@ class AppCard extends StatelessWidget {
             ),
         ],
       ),
-      // A dedicated Material — rather than relying on a distant
-      // ancestor — so any ListTile/InkWell/etc. inside the card paints
-      // its ink effects here, not hidden beneath the shadow's
-      // DecoratedBox.
-      child: Material(
-        color: AppColors.card,
+      // ClipRRect + BackdropFilter is what makes this an actual glass
+      // panel rather than just a translucent-looking flat colour — it
+      // blurs whatever is genuinely behind the card (the cosmic
+      // background, other scrolled-under content) in real time.
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: padding,
-          decoration: BoxDecoration(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+          // A dedicated Material — rather than relying on a distant
+          // ancestor — so any ListTile/InkWell/etc. inside the card
+          // paints its ink effects here, not hidden beneath the
+          // shadow's DecoratedBox. Semi-transparent (not solid) so the
+          // blur behind it is actually visible through the card.
+          child: Material(
+            color: AppColors.card.withValues(alpha: 0.65),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: borderColor ?? AppColors.hairline),
+            child: Container(
+              padding: padding,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: (borderColor ?? AppColors.hairline).withValues(
+                    alpha: 0.6,
+                  ),
+                ),
+              ),
+              child: child,
+            ),
           ),
-          child: child,
         ),
       ),
     );

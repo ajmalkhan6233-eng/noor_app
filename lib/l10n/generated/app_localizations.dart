@@ -1738,6 +1738,15 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set your location on the Prayer Times tab to see today\'s schedule here.'**
   String get setLocationOnPrayerTabMessage;
+
+  /// No description provided for @religiousContentNoteHeader.
+  String get religiousContentNoteHeader;
+
+  /// No description provided for @religiousContentNoteBody.
+  String get religiousContentNoteBody;
+
+  /// No description provided for @religiousContentQuietNote.
+  String get religiousContentQuietNote;
 }
 
 class _AppLocalizationsDelegate

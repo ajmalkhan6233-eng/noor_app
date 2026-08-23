@@ -934,4 +934,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get setLocationOnPrayerTabMessage =>
       'Set your location on the Prayer Times tab to see today\'s schedule here.';
+
+  @override
+  String get religiousContentNoteHeader => 'A note on religious content';
+
+  @override
+  String get religiousContentNoteBody =>
+      'The Qur\'an text and Azkar in this app are sourced from verified references — the Tanzil Project for the Qur\'an, Hisn al-Muslim for Azkar — and checked carefully against those sources. Even so, we are only human, and no effort is free of error. This content is currently being reviewed with local Islamic scholarship, a process that is ongoing and will continue even after release. If you notice anything that needs correction, please reach out to us — we welcome it. We approach this work with humility, and ask Allah\'s forgiveness for any unintentional mistake.';
+
+  @override
+  String get religiousContentQuietNote =>
+      'This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know.';
 }

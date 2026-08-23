@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/widgets/religious_content_quiet_note.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/quran_import_status.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
@@ -33,7 +34,7 @@ class _QuranView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(l10n.quranScreenTitle),
         actions: [
@@ -70,7 +71,13 @@ class _QuranView extends StatelessWidget {
             if (!state.isImported) {
               return QuranImportNotice(status: state.importStatus!);
             }
-            return SurahIndex(state: state);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const ReligiousContentQuietNote(),
+                Expanded(child: SurahIndex(state: state)),
+              ],
+            );
           },
         ),
       ),

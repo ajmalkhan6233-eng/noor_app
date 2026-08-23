@@ -40,7 +40,7 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(l10n.moreTab)),
       body: ListView(
         controller: _scrollController,

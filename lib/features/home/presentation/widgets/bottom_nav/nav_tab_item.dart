@@ -18,6 +18,7 @@ class NavTabItem extends StatelessWidget {
     required this.label,
     required this.active,
     required this.onTap,
+    this.showLabel = true,
   });
 
   final IconData icon;
@@ -25,13 +26,19 @@ class NavTabItem extends StatelessWidget {
   final bool active;
   final VoidCallback onTap;
 
+  /// False in the nav dock's compact (scrolled-down) state — icon
+  /// only, no [Expanded] wrapper, since the compact dock sizes itself
+  /// to content (MainAxisSize.min) rather than filling the width.
+  final bool showLabel;
+
   @override
   Widget build(BuildContext context) {
     final duration = Motion.effective(context, Motion.short);
-    return Expanded(
-      child: SemanticButton(
-        label: label,
-        onTap: onTap,
+    final content = SemanticButton(
+      label: label,
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: showLabel ? 0 : 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -59,21 +66,24 @@ class NavTabItem extends StatelessWidget {
                 size: 22,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: active ? FontWeight.w700 : FontWeight.w400,
-                color: active ? AppColors.gold : AppColors.sage,
+            if (showLabel) ...[
+              const SizedBox(height: 4),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: active ? FontWeight.w700 : FontWeight.w400,
+                  color: active ? AppColors.gold : AppColors.sage,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
+    return showLabel ? Expanded(child: content) : content;
   }
 }

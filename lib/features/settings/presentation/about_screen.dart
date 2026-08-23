@@ -34,6 +34,8 @@ class AboutScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const AboutSourcesCard(),
               const SizedBox(height: 16),
+              _religiousContentNoteCard(l10n),
+              const SizedBox(height: 16),
               _fontCreditsCard(),
               const SizedBox(height: 16),
               _licencesLink(context),
@@ -56,6 +58,19 @@ class AboutScreen extends StatelessWidget {
             'Fully offline: no ads, no analytics, no remote telemetry.',
             style: TextStyle(color: AppColors.sage),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _religiousContentNoteCard(AppLocalizations l10n) {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeader(l10n.religiousContentNoteHeader),
+          const SizedBox(height: 8),
+          Text(l10n.religiousContentNoteBody, style: AppTypography.caption),
         ],
       ),
     );

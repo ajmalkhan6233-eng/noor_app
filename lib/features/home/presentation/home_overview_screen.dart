@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
@@ -64,7 +63,7 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
     return BlocProvider(
       create: (_) => PrayerTrackerCubit()..load(),
       child: Scaffold(
-        backgroundColor: AppColors.paper,
+        backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),
