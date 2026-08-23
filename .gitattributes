@@ -1,0 +1,19 @@
+# Pin these bundled content assets to LF so SHA-256 integrity gates
+# (QuranImportService, AzkarImportService, TalbiyahRepository,
+# PilgrimageDuaRepository) never silently break on a Windows checkout.
+# Without this, core.autocrlf=true rewrites plain LF text assets to
+# CRLF on clone/checkout, changing their bytes and permanently failing
+# verification (import refused, feature shows an empty/stuck state)
+# even though the committed content is correct — the bug is in the
+# checkout, not the data.
+#
+# NOT applied to assets/quran/tanzil-quran-data.xml: that file's
+# canonical committed content has some pre-existing CRLF line endings
+# by original upstream design, and forcing eol=lf on it would rewrite
+# those and break its own hash gate. That file already round-trips
+# correctly under core.autocrlf, so it's deliberately left alone here.
+assets/quran/tanzil-uthmani.txt text eol=lf
+assets/quran_translations/*.txt text eol=lf
+assets/azkar/*.json text eol=lf
+assets/talbiyah/*.json text eol=lf
+assets/pilgrimage/*.json text eol=lf
