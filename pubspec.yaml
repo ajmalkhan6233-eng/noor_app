@@ -39,6 +39,10 @@ dependencies:
   # Parses the bundled Tanzil surah-metadata XML (offline, no network)
   xml: ^6.5.0
 
+  # Local-asset Adhan playback only — never streams, never fetches
+  # remote audio (see assets/audio/adhan/README.md for provenance)
+  audioplayers: ^5.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,6 +59,7 @@ flutter:
     - assets/azkar/
     - assets/talbiyah/
     - assets/pilgrimage/
+    - assets/audio/adhan/
   fonts:
     - family: Cormorant Garamond
       fonts:

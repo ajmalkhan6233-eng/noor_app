@@ -389,6 +389,17 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
+  String previewAdhanSemanticLabel(String label) {
+    return '$label தொழுகை அழைப்பை முன்னோட்டமிடவும்';
+  }
+
+  @override
+  String get playPreviewHint => 'இயக்க இருமுறை தட்டவும்';
+
+  @override
+  String get stopPreviewHint => 'நிறுத்த இருமுறை தட்டவும்';
+
+  @override
   String get aboutNoorSemanticLabel => 'நூர் பற்றி';
 
   @override

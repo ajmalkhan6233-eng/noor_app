@@ -382,6 +382,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String previewAdhanSemanticLabel(String label) {
+    return 'Preview $label Adhan';
+  }
+
+  @override
+  String get playPreviewHint => 'Double tap to play';
+
+  @override
+  String get stopPreviewHint => 'Double tap to stop';
+
+  @override
   String get aboutNoorSemanticLabel => 'About noor';
 
   @override

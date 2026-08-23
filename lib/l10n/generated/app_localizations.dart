@@ -754,6 +754,24 @@ abstract class AppLocalizations {
   /// **'{label} notification'**
   String notificationToggleSemanticLabel(String label);
 
+  /// No description provided for @previewAdhanSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview {label} Adhan'**
+  String previewAdhanSemanticLabel(String label);
+
+  /// No description provided for @playPreviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to play'**
+  String get playPreviewHint;
+
+  /// No description provided for @stopPreviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to stop'**
+  String get stopPreviewHint;
+
   /// No description provided for @aboutNoorSemanticLabel.
   ///
   /// In en, this message translates to:

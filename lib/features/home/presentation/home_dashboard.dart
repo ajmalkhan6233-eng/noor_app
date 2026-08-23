@@ -12,6 +12,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
 import '../../azkar/presentation/azkar_screen.dart';
 import '../../more/presentation/more_screen.dart';
+import '../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/presentation/prayer_times_screen.dart';
 import '../../quran/presentation/quran_screen.dart';
@@ -44,6 +45,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
       providers: [
         BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
         BlocProvider(create: (_) => SettingsCubit()..load()),
+        BlocProvider(create: (_) => AdhanPreviewCubit()),
       ],
       child: Scaffold(
         backgroundColor: AppColors.paper,

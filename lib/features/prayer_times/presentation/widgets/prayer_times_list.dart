@@ -10,6 +10,7 @@ import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../settings/data/notification_settings.dart';
 import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
+import 'adhan_preview_button.dart';
 import 'prayer_notification_bell.dart';
 import 'prayer_time_format.dart';
 
@@ -108,6 +109,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
         children: [
           Row(
             children: [
+              if (name != 'Sunrise') AdhanPreviewButton(prayerName: name),
               if (showBell)
                 PrayerNotificationBell(
                   prayerName: name,

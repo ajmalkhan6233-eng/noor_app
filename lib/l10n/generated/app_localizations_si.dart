@@ -389,6 +389,17 @@ class AppLocalizationsSi extends AppLocalizations {
   }
 
   @override
+  String previewAdhanSemanticLabel(String label) {
+    return '$label අදාන් පෙරදසුන';
+  }
+
+  @override
+  String get playPreviewHint => 'වාදනය කිරීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String get stopPreviewHint => 'නැවැත්වීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
   String get aboutNoorSemanticLabel => 'නූර් පිළිබඳ';
 
   @override
