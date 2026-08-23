@@ -26,10 +26,32 @@
 // official list (from the Government Printing Department gazette, or
 // a source you can point this session at) rather than guessing
 // remaining dates — Poya days are lunar and shift yearly.
+//
+// UNRESOLVED CONFLICT (2026-08-23, do not silently pick a side): a
+// later search pass found several outlets (DailyNews, Ada Derana)
+// reporting Vesak Full Moon Poya Day as **1 May 2026**, with a
+// separate "Adhi Poson Full Moon Poya Day" on 30 May — but this file
+// already had Vesak on 30 May from an earlier, differently-sourced
+// pass, and that's also the date given in this loop's own planning
+// brief. gazette.lk (the authoritative source) only offers this as a
+// PDF this session's fetch tooling couldn't read. Left as 30 May
+// below, unchanged, until someone can open the actual gazette PDF
+// and confirm one way or the other — do not trust either search
+// summary as final.
+//
+// Also still missing, not fabricated: Deepavali (no confirmed 2026
+// date surfaced), and full confirmation of Eid-ul-Fitr/Eid al-Adha
+// (added below with an approximate flag per the moon-sighting note in
+// this loop's planning brief — Islamic lunar dates aren't fixed in
+// advance the way solar-calendar Poya days are).
 
 class SriLankaHoliday {
   const SriLankaHoliday({required this.name, required this.isPoya});
 
+  /// For moon-sighting-dependent Islamic dates (Eid, Milad-un-Nabi),
+  /// the name itself carries "(approximate)" — they aren't fixed this
+  /// far in advance the way solar-calendar Poya days are, and only
+  /// `.name` is ever shown to the user (see calendar_day_cell.dart).
   final String name;
   final bool isPoya;
 }
@@ -54,17 +76,57 @@ List<SriLankaHoliday> sriLankaHolidaysOn(DateTime date) {
   // 2026 movable dates confirmed via search (see file header) — do
   // not extend this block for other years without a real source.
   if (date.year == 2026) {
+    if (date.month == 1 && date.day == 3) {
+      holidays.add(const SriLankaHoliday(name: 'Duruthu Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 1 && date.day == 15) {
+      holidays.add(const SriLankaHoliday(name: 'Tamil Thai Pongal Day', isPoya: false));
+    }
+    if (date.month == 2 && date.day == 1) {
+      holidays.add(const SriLankaHoliday(name: 'Navam Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 2 && date.day == 15) {
+      holidays.add(const SriLankaHoliday(name: 'Maha Shivaratri Day', isPoya: false));
+    }
     if (date.month == 3 && date.day == 2) {
       holidays.add(const SriLankaHoliday(name: 'Medin Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 3 && date.day == 21) {
+      holidays.add(const SriLankaHoliday(name: 'Eid-ul-Fitr (approximate)', isPoya: false));
+    }
+    if (date.month == 4 && date.day == 1) {
+      holidays.add(const SriLankaHoliday(name: 'Bak Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 4 && date.day == 3) {
+      holidays.add(const SriLankaHoliday(name: 'Good Friday', isPoya: false));
     }
     if (date.month == 4 && (date.day == 13 || date.day == 14)) {
       holidays.add(const SriLankaHoliday(name: 'Sinhala & Tamil New Year', isPoya: false));
     }
+    // Vesak: 30 May per this file's earlier sourcing pass and this
+    // loop's planning brief — a later search pass disagreed (1 May).
+    // See the UNRESOLVED CONFLICT note above; left as-is pending
+    // someone confirming against the actual gazette PDF.
     if (date.month == 5 && date.day == 30) {
       holidays.add(const SriLankaHoliday(name: 'Vesak Full Moon Poya Day', isPoya: true));
     }
+    if (date.month == 5 && date.day == 28) {
+      holidays.add(const SriLankaHoliday(name: 'Eid al-Adha (approximate)', isPoya: false));
+    }
     if (date.month == 6 && date.day == 29) {
       holidays.add(const SriLankaHoliday(name: 'Poson Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 7 && date.day == 29) {
+      holidays.add(const SriLankaHoliday(name: 'Esala Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 8 && date.day == 26) {
+      holidays.add(const SriLankaHoliday(name: 'Milad-un-Nabi (approximate)', isPoya: false));
+    }
+    if (date.month == 8 && date.day == 27) {
+      holidays.add(const SriLankaHoliday(name: 'Nikini Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 9 && date.day == 26) {
+      holidays.add(const SriLankaHoliday(name: 'Binara Full Moon Poya Day', isPoya: true));
     }
   }
 
