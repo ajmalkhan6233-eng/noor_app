@@ -60,12 +60,19 @@ class ParticleBurstPainter extends CustomPainter {
     required this.progress,
     required this.particles,
     required this.color,
+    this.softColor = AppColors.emeraldSoft,
   });
 
   final Offset center;
   final double progress;
   final List<BurstParticle> particles;
   final Color color;
+
+  /// Colour for particles where [BurstParticle.soft] is true. Defaults
+  /// to the legacy dimmed-emerald so existing callers (Tasbih, Tawaf/
+  /// Sa'i) don't change — pass a real dimmed variant of [color]
+  /// instead for any new, non-legacy use.
+  final Color softColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -97,7 +104,7 @@ class ParticleBurstPainter extends CustomPainter {
         offset,
         particle.radius * (1 - local * 0.4),
         Paint()
-          ..color = (particle.soft ? AppColors.emeraldSoft : color)
+          ..color = (particle.soft ? softColor : color)
               .withValues(alpha: opacity),
       );
     }

@@ -1,14 +1,15 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Launch screen: a calm, still greeting fades in, holds, fades out,
-// then calls [onFinished] so the caller can swap in the dashboard.
+// Launch screen: BigBangSplashView's particle burst plays, holds,
+// then this fades out and calls [onFinished] so the caller can swap
+// in the dashboard.
 
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../constants/splash_config.dart';
-import 'splash/plain_splash_view.dart';
+import 'splash/big_bang_splash_view.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.onFinished});
@@ -56,7 +57,10 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: AppColors.paper,
       body: Semantics(
         label: AppStrings.splashGreeting,
-        child: FadeTransition(opacity: _fade, child: const PlainSplashView()),
+        child: FadeTransition(
+          opacity: _fade,
+          child: const BigBangSplashView(),
+        ),
       ),
     );
   }
