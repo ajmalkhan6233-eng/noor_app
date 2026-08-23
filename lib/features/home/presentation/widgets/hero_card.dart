@@ -1,10 +1,16 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Section 3 of the UI Structure Pass: the Home tab's hero card —
-// location + Hijri pills, an "Assalamu Alaikum" greeting in the
-// display serif, and today's Gregorian date underneath. Replaces the
-// old DashboardHeader (whose calligraphy now lives in the persistent
-// top bar instead, so it isn't repeated here).
+// location + Hijri pills, an "Assalamu Alaikum" greeting, and today's
+// Gregorian date underneath. Replaces the old DashboardHeader (whose
+// calligraphy now lives in the persistent top bar instead, so it
+// isn't repeated here).
+//
+// Deliberately compact, not the shared AppTypography.heroDisplay size
+// (44px, used for the prayer countdown/Zakat total/About app name) —
+// a large "Assalamu Alaikum" here was taking up roughly half the
+// visible screen on a phone, crowding out the actually time-sensitive
+// content (next prayer, streak) below it.
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +43,34 @@ class HeroCard extends StatelessWidget {
     ).format(DateTime.now());
 
     return AppCard(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.assalamuAlaikumGreeting,
+                  style: const TextStyle(
+                    fontFamily: AppTypography.displayFamily,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: AppColors.ink,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(dateSubtitle, style: AppTypography.caption),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
           Wrap(
-            spacing: 8,
-            runSpacing: 8,
+            alignment: WrapAlignment.end,
+            spacing: 6,
+            runSpacing: 6,
             children: [
               _pill(
                 icon: Icons.location_on_outlined,
@@ -57,10 +84,6 @@ class HeroCard extends StatelessWidget {
               _pill(icon: Icons.brightness_2_outlined, label: hijri.formatted),
             ],
           ),
-          const SizedBox(height: 16),
-          Text(l10n.assalamuAlaikumGreeting, style: AppTypography.heroDisplay),
-          const SizedBox(height: 4),
-          Text(dateSubtitle, style: AppTypography.caption),
         ],
       ),
     );

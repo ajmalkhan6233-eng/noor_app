@@ -25,7 +25,6 @@ import 'widgets/hero_card.dart';
 import 'widgets/home_build_stamp.dart';
 import 'widgets/location_label.dart';
 import 'widgets/prayer_summary_section.dart';
-import 'widgets/quick_action_row.dart';
 import 'widgets/streak_capsule.dart';
 
 /// PrayerCubit and SettingsCubit are provided once by HomeDashboard
@@ -102,8 +101,6 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                           AyahOfDayCard(),
                           const SizedBox(height: 20),
                           const DailyGoalsList(),
-                          const SizedBox(height: 20),
-                          const QuickActionRow(),
                           const SizedBox(height: 16),
                           const HomeBuildStamp(),
                         ],

@@ -25,12 +25,12 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   const AppTopBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(120);
+  Size get preferredSize => const Size.fromHeight(104);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       decoration: const BoxDecoration(
         color: AppColors.paper,
         border: Border(bottom: BorderSide(color: AppColors.hairline)),
@@ -53,7 +53,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

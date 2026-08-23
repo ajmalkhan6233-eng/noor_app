@@ -78,17 +78,25 @@ To prevent a repeat:
   or summary. If you can't name the specific value that changed,
   nothing changed.
 
-## Monetization Timeline (revised 2026-08-23)
+## Monetization Timeline (revised 2026-08-24)
 Launch **free** on the Play Store listing, not paid — build trust and
-reviews first. After an establishing period, flip the listing from
-free to paid in Play Console. This is a store-level setting change
-only: no app rebuild, no code change, nothing in this repo needs to
-know which mode is active. Existing installs stay free forever; new
-installs pay from that point on. Still locked: no IAP, no billing
-library, no ads, no INTERNET permission, ever — see
-noor-monetization-guardrails. This revises (does not replace) the
-one-time-paid-app model in the Non-Negotiable Architecture section
-above; the destination is the same, only the launch sequencing
+reviews first. **Launch window: 1 month** (concrete number set
+2026-08-24; previously "an establishing period" — same decision, just
+dated). After that month, flip the listing from free to paid in Play
+Console. This is a store-level setting change only: no app rebuild, no
+code change, nothing in this repo needs to know which mode is active.
+Existing installs stay free forever; new installs pay from that point
+on. Still locked: no IAP, no billing/subscription library, no ads, no
+INTERNET permission, ever — see noor-monetization-guardrails. A later
+request to "implement paywall architecture / subscription model
+infrastructure" (2026-08-24) was declined for this exact reason — it
+would require Play Billing (network + a billing SDK), which
+contradicts this app's offline-first, zero-network architecture and
+this locked model. If in-app monetization is ever genuinely wanted,
+that's a new architecture decision to make explicitly and knowingly —
+not something to slide in as a "spec update." This revises (does not
+replace) the one-time-paid-app model in the Non-Negotiable Architecture
+section above; the destination is the same, only the launch sequencing
 changed.
 
 ## Language Scope (v1) (added 2026-08-23)
