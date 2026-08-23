@@ -9,6 +9,7 @@ import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'licences_screen.dart';
 import 'widgets/about_sources_card.dart';
 import 'widgets/font_credit.dart';
@@ -20,9 +21,10 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text('About')),
+      appBar: AppBar(title: Text(l10n.aboutLabel)),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
@@ -107,7 +109,7 @@ class AboutScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(
             children: [
-              Icon(Icons.description_outlined, color: AppColors.emerald),
+              Icon(Icons.description_outlined, color: AppColors.gold),
               SizedBox(width: 12),
               Text(
                 'Open source licences',

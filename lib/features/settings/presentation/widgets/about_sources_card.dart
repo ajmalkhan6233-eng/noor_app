@@ -11,65 +11,48 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class AboutSourcesCard extends StatelessWidget {
   const AboutSourcesCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader('Text sources'),
-          const Text(
-            'Quran text: Tanzil Quran Text (Uthmani, version 1.0.2), '
-            'Copyright © Tanzil.net, licensed under Creative Commons '
-            'Attribution 3.0. Unmodified verbatim copy; see '
-            'assets/quran/README.md for full provenance and '
-            'verification details.',
-            style: AppTypography.caption,
-          ),
+          SectionHeader(l10n.textSourcesHeader),
+          Text(l10n.quranSourceAttribution, style: AppTypography.caption),
           const SizedBox(height: 8),
           SemanticButton(
-            label: 'Copy tanzil.net link',
-            hint: 'Double tap to copy the Tanzil Project web address',
+            label: l10n.copyTanzilLinkSemanticLabel,
+            hint: l10n.copyTanzilLinkHint,
             onTap: () async {
               await Clipboard.setData(
                 const ClipboardData(text: 'https://tanzil.net'),
               );
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Copied tanzil.net')),
+                  SnackBar(content: Text(l10n.copiedTanzilMessage)),
                 );
               }
             },
             child: const Text(
               'tanzil.net',
               style: TextStyle(
-                color: AppColors.emerald,
+                color: AppColors.gold,
                 decoration: TextDecoration.underline,
               ),
             ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            'English translation: Saheeh International (Umm Muhammad), '
-            'via Tanzil.net. Tanzil restricts translations to '
-            'non-commercial use, permitted here as noor is free and '
-            'ad-free; see assets/quran_translations/README.md for full '
-            'provenance and license detail.',
-            style: AppTypography.caption,
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'Talbiyah (Hajj/Umrah guide): text repackaged from '
-            'asellam/HisnElMuslim on GitHub; original content from Hisn '
-            'al-Muslim by Said bin Ali bin Wahf Al-Qahthani, circulated '
-            'freely for non-commercial Islamic use. See '
-            'assets/talbiyah/README.md for full provenance.',
-            style: AppTypography.caption,
-          ),
+          Text(l10n.englishTranslationAttribution, style: AppTypography.caption),
+          // No Talbiyah attribution here: that text was exclusive to
+          // the Hajj/Umrah guide feature, cut from v1 (CLAUDE.md's
+          // Deferred section) — assets/talbiyah/ isn't bundled in the
+          // app anymore (see pubspec.yaml), so nothing needs crediting.
         ],
       ),
     );

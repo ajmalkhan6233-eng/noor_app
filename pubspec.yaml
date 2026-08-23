@@ -57,7 +57,11 @@ flutter:
     - assets/quran/
     - assets/quran_translations/
     - assets/azkar/
-    - assets/talbiyah/
+    # assets/talbiyah/ intentionally NOT bundled: only the cut-from-v1
+    # Hajj/Umrah guide feature used it (see CLAUDE.md's Deferred
+    # section) — nothing in the shipped app loads it, so there's no
+    # reason to ship the bytes or owe its attribution. Files stay in
+    # the repo; just excluded from the APK.
     - assets/pilgrimage/
     - assets/audio/adhan/
   fonts:

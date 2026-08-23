@@ -144,7 +144,7 @@
   "donateLabel": "Donate",
   "donateHint": "Double tap for ways to support this project",
   "supportNoorTitle": "Support noor",
-  "supportNoorMessage": "noor will always be free, offline, and ad-free. If you would like to support its development, details are on the project page. JazakAllahu khairan.",
+  "supportNoorMessage": "noor is offline and ad-free — always. If you would like to support its development, details are on the project page. JazakAllahu khairan.",
 
   "appTagline": "A clean, privacy-first, ad-free Islamic utility app. Fully offline: no ads, no analytics, no remote telemetry.",
   "typefacesHeader": "Typefaces",
@@ -167,6 +167,7 @@
   "copyTanzilLinkSemanticLabel": "Copy tanzil.net link",
   "copyTanzilLinkHint": "Double tap to copy the Tanzil Project web address",
   "copiedTanzilMessage": "Copied tanzil.net",
+  "englishTranslationAttribution": "English translation: Saheeh International (Umm Muhammad), via Tanzil.net. Tanzil restricts translations to non-commercial use; see assets/quran_translations/README.md for full provenance and license detail.",
 
   "goldSilverHeader": "Gold & silver",
   "goldGramsLabel": "Gold (grams)",

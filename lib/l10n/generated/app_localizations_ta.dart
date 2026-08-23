@@ -482,6 +482,10 @@ class AppLocalizationsTa extends AppLocalizations {
   String get copiedTanzilMessage => 'tanzil.net நகலெடுக்கப்பட்டது';
 
   @override
+  String get englishTranslationAttribution =>
+      'ஆங்கில மொழிபெயர்ப்பு: சஹீஹ் இன்டர்நேஷனல் (உம்மு முஹம்மது), Tanzil.net வழியாக. Tanzil மொழிபெயர்ப்புகளை வணிகரீதியற்ற பயன்பாட்டிற்கு மட்டுமே கட்டுப்படுத்துகிறது; முழு மூலம் மற்றும் உரிம விவரங்களுக்கு assets/quran_translations/README.md ஐப் பார்க்கவும்.';
+
+  @override
   String get goldSilverHeader => 'தங்கம் & வெள்ளி';
 
   @override

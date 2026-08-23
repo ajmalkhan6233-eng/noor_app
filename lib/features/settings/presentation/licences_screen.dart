@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'widgets/licence_package_tile.dart';
 
 class _PackageLicence {
@@ -45,9 +46,10 @@ class _LicencesScreenState extends State<LicencesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text('Open source licences')),
+      appBar: AppBar(title: Text(l10n.openSourceLicencesLabel)),
       body: FutureBuilder<List<_PackageLicence>>(
         future: _future,
         builder: (context, snapshot) {
@@ -58,10 +60,10 @@ class _LicencesScreenState extends State<LicencesScreen> {
           }
           final packages = snapshot.data!;
           if (packages.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'No third-party licences to show.',
-                style: TextStyle(color: AppColors.sage),
+                l10n.noLicencesMessage,
+                style: const TextStyle(color: AppColors.sage),
               ),
             );
           }

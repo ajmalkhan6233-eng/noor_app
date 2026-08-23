@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/app_card.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../data/zakat_calculator.dart';
 import 'widgets/zakat_number_field.dart';
 import 'widgets/zakat_result_card.dart';
@@ -27,10 +28,11 @@ class _ZakatScreenState extends State<ZakatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final result = ZakatCalculator.calculate(_inputs);
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text('Zakat calculator')),
+      appBar: AppBar(title: Text(l10n.zakatCalculatorLabel)),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
@@ -38,28 +40,28 @@ class _ZakatScreenState extends State<ZakatScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Gold & silver', style: AppTypography.caption),
+                Text(l10n.goldSilverHeader, style: AppTypography.caption),
                 const SizedBox(height: 8),
                 ZakatNumberField(
-                  label: 'Gold (grams)',
+                  label: l10n.goldGramsLabel,
                   onChanged: (v) => setState(
                     () => _inputs = _inputs.copyWith(goldGrams: v),
                   ),
                 ),
                 ZakatNumberField(
-                  label: 'Gold price per gram (today)',
+                  label: l10n.goldPriceLabel,
                   onChanged: (v) => setState(
                     () => _inputs = _inputs.copyWith(goldPricePerGram: v),
                   ),
                 ),
                 ZakatNumberField(
-                  label: 'Silver (grams)',
+                  label: l10n.silverGramsLabel,
                   onChanged: (v) => setState(
                     () => _inputs = _inputs.copyWith(silverGrams: v),
                   ),
                 ),
                 ZakatNumberField(
-                  label: 'Silver price per gram (today)',
+                  label: l10n.silverPriceLabel,
                   onChanged: (v) => setState(
                     () => _inputs = _inputs.copyWith(silverPricePerGram: v),
                   ),
@@ -72,31 +74,28 @@ class _ZakatScreenState extends State<ZakatScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Other assets & liabilities',
-                  style: AppTypography.caption,
-                ),
+                Text(l10n.otherAssetsHeader, style: AppTypography.caption),
                 const SizedBox(height: 8),
                 ZakatNumberField(
-                  label: 'Cash & savings',
+                  label: l10n.cashSavingsLabel,
                   onChanged: (v) =>
                       setState(() => _inputs = _inputs.copyWith(cash: v)),
                 ),
                 ZakatNumberField(
-                  label: 'Receivables owed to you',
+                  label: l10n.receivablesLabel,
                   onChanged: (v) => setState(
                     () => _inputs = _inputs.copyWith(receivables: v),
                   ),
                 ),
                 ZakatNumberField(
-                  label: 'Business inventory value',
+                  label: l10n.businessInventoryLabel,
                   onChanged: (v) => setState(
                     () =>
                         _inputs = _inputs.copyWith(businessInventoryValue: v),
                   ),
                 ),
                 ZakatNumberField(
-                  label: 'Liabilities (debts due now)',
+                  label: l10n.liabilitiesLabel,
                   onChanged: (v) => setState(
                     () => _inputs = _inputs.copyWith(liabilities: v),
                   ),

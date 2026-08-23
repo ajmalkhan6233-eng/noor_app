@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/zakat_calculator.dart';
 
 class ZakatResultCard extends StatelessWidget {
@@ -14,20 +15,25 @@ class ZakatResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final nisabLabel = result.nisabThreshold == 0
-        ? 'Enter a gold or silver price to see the nisab threshold.'
-        : 'Nisab threshold: ${result.nisabThreshold.toStringAsFixed(2)} — '
-              '${result.nisabMet ? "met" : "not yet met"}.';
+        ? l10n.nisabPromptMessage
+        : l10n.nisabThresholdMessage(
+            result.nisabThreshold.toStringAsFixed(2),
+            result.nisabMet ? l10n.nisabMetLabel : l10n.nisabNotMetLabel,
+          );
 
     return Semantics(
-      label:
-          'Net wealth ${result.netWealth.toStringAsFixed(2)}. $nisabLabel '
-          'Zakat due: ${result.zakatDue.toStringAsFixed(2)}.',
+      label: l10n.zakatSummarySemanticLabel(
+        result.netWealth.toStringAsFixed(2),
+        nisabLabel,
+        result.zakatDue.toStringAsFixed(2),
+      ),
       child: AppCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Net wealth', style: AppTypography.caption),
+            Text(l10n.netWealthLabel, style: AppTypography.caption),
             const SizedBox(height: 4),
             Text(
               result.netWealth.toStringAsFixed(2),
@@ -38,7 +44,7 @@ class ZakatResultCard extends StatelessWidget {
             const SizedBox(height: 16),
             const Divider(color: AppColors.hairline, height: 1),
             const SizedBox(height: 16),
-            const Text('Zakat due (2.5%)', style: AppTypography.caption),
+            Text(l10n.zakatDueLabel, style: AppTypography.caption),
             const SizedBox(height: 4),
             Text(
               result.zakatDue.toStringAsFixed(2),

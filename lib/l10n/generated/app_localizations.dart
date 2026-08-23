@@ -916,6 +916,12 @@ abstract class AppLocalizations {
   /// **'Copied tanzil.net'**
   String get copiedTanzilMessage;
 
+  /// No description provided for @englishTranslationAttribution.
+  ///
+  /// In en, this message translates to:
+  /// **'English translation: Saheeh International (Umm Muhammad), via Tanzil.net. Tanzil restricts translations to non-commercial use; see assets/quran_translations/README.md for full provenance and license detail.'**
+  String get englishTranslationAttribution;
+
   /// No description provided for @goldSilverHeader.
   ///
   /// In en, this message translates to:

@@ -473,6 +473,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copiedTanzilMessage => 'Copied tanzil.net';
 
   @override
+  String get englishTranslationAttribution =>
+      'English translation: Saheeh International (Umm Muhammad), via Tanzil.net. Tanzil restricts translations to non-commercial use; see assets/quran_translations/README.md for full provenance and license detail.';
+
+  @override
   String get goldSilverHeader => 'Gold & silver';
 
   @override
