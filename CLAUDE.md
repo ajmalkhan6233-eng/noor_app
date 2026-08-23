@@ -1,96 +1,132 @@
-# CLAUDE.md — standing rules for this repo
+# noor — Claude Code Project Directive
 
-Bismillahir Rahmanir Raheem — watermark: ALLAH
+## Stack
+Flutter (Dart), native Android. NOT web, NOT React, NOT Three.js/WebGL —
+ignore any prior doc that says otherwise; this app has no JS runtime.
+State: flutter_bloc / Cubit. DB: sqflite_sqlcipher. Prayer math: adhan.
 
-These are standing rules for every future Claude Code session working
-on **noor**, not a one-time task list. They exist because each one was
-learned the hard way in an earlier session — read the "why" under each
-one before assuming it doesn't apply to what you're doing.
+## Non-Negotiable Architecture
+1. Offline-first, absolute: zero ad SDKs, zero analytics, zero remote
+   network calls, zero INTERNET permission in AndroidManifest.xml.
+2. No Play Billing / IAP library, ever. Monetization is handled entirely
+   at the Play Store listing level — one-time paid app price, plus Play
+   Console promo codes for free grants. Nothing billing-related lives in
+   code, and nothing in the app should require network access.
+3. Feature-first structure: lib/features/<feature>/{data,logic,presentation}
+4. lib/core/ holds only cross-feature singletons: constants, database,
+   haptics, location, utils.
+5. No Dart file exceeds 150 lines. Split before you hit the limit.
+6. UI widgets never call the database or calculation logic directly —
+   only through a Cubit/Bloc, which calls a repository.
+7. Every interactive widget carries an explicit Semantics() with label,
+   value (where relevant), and hint. VoiceOver/TalkBack must work on
+   every screen.
 
-See also `.clinerules` for the underlying architecture rules (offline-
-first, 150-line file limit, decoupled layers, etc.) — this file is
-about *process*, that one is about *code shape*.
+## Visual Direction (Cosmic Expansion — reinterpreted for Flutter)
+Locked tokens. Do not use Emerald / #0A1912 / #D4AF37 — that palette is
+retired, superseded by this one:
+- Obsidian background: #05070B
+- Card surface: #0D1117
+- Gold accent: #FFB703
+- Cyan accent: #00F2FE
 
-## 1. Report on every part of a multi-part request, explicitly
+Glass panels: BackdropFilter(blur ~16) + 1px border at ~20% opacity cyan.
+Particle / glow / shockwave effects: CustomPainter or Rive — never
+Three.js/WebGL, that stack does not exist in this app. Motion: implicit
+animations (AnimatedContainer, flutter_animate) for spring-like easing,
+not Framer Motion. See root NOOR file for the full "living universe" art
+direction — treat it as intent to translate into native widgets, not as
+literal library names.
 
-When given a multi-part prompt (numbered tasks, a list of gaps, several
-requested commits), report back on **every part** before considering
-the work done — even "investigated, found nothing changed" is a real
-report. Never silently drop part of a request because it turned out to
-need no code change, or because a later part took longer to verify.
+## Deferred — Not Now (tracked, not scope for this loop)
+- Masjid/community directory + chat: real vision, but it's a separate
+  app (own backend, own privacy policy, own moderation plan). Do not
+  build any part of this inside noor. Revisit only when explicitly
+  told to.
+- Additional halal revenue ideas beyond the locked model (paid-app +
+  Play Console promo codes): content packs, licensing the codebase to
+  other communities, etc. Not scoped, not started. Locked model only
+  for this loop: one-time paid app, no IAP, no ads.
 
-*Why:* a splash-screen investigation was completed correctly but its
-finding wasn't surfaced to the user for two full requests running —
-the work existed, but from the user's side it looked ignored.
+## Anti-Drift Rule (design changes must be provably different)
+Past design requests produced no visible change across ~20-30 attempts.
+To prevent a repeat:
+- Never mark a design/UI task done from source-reading alone. Take a
+  screenshot (or update the GitHub Pages preview) before and after,
+  and confirm the diff is real.
+- Bump the build stamp (commit hash + run number) on every change so
+  "already implemented" can be checked against what's actually
+  installed, not assumed from the repo.
+- If a requested change doesn't visibly appear after a build, treat
+  that as a bug to fix (stale cache, wrong widget referenced, hot
+  reload not picking it up) — not as "done, ship it anyway."
+- Quote the exact token/value changed (e.g. "gold 0xFFB703 applied to
+  CTA border, was AppColors.cardSurface before") in the commit message
+  or summary. If you can't name the specific value that changed,
+  nothing changed.
 
-## 2. Don't trust source-reading alone once a real device disagreed
+## Religious Content
+Never generate Quranic text, Arabic duas, or Tamil/Sinhala religious
+text. Quran text: Tanzil Project only, verified before commit. Azkar
+gaps: cross-check Hisn al-Muslim before adding any new entry. If a
+source can't be verified, leave it flagged rather than filling it in.
 
-Never claim something is "already correct" based on reading source
-code alone when there's any prior report of it looking wrong on a real
-device or in a real build. Prove it with an actual widget test, golden
-test, rendered-pixel check, or equivalent. Source-reading has missed
-real problems on this project more than once — code that looks right
-and code that renders right are not the same claim.
+## Token Efficiency
+No conversational filler, no restating the task. Output working code
+directly, in complete modular blocks. Stop when the checklist item
+below is done — don't scope-creep into the next one uninvited.
 
-If the strongest available proof (e.g. `RenderRepaintBoundary.toImage`
-pixel capture) hangs or is unavailable in the sandbox, fall back to the
-next-most-direct check (e.g. inspecting the actual resolved `TextStyle`
-built by the live widget tree) and say plainly which level of proof you
-actually got — don't silently downgrade to a source read and call it
-verified.
+---
 
-## 3. "Pushed" is not "confirmed working" — wait for CI to go green
+## Build Loop
+Work top to bottom. Commit after each checked-off item. Report status
+against this list, not a summary of unrelated work.
 
-Always confirm CI actually finished and went green (through the real
-APK build and release-publish steps, not just analyze/tests) before
-reporting something as done. A push that triggers a build is the start
-of verification, not the end of it.
+### Phase 1 — Fix known breakage
+- [ ] Al Quran tab stuck on loading spinner
+- [ ] Duas & Dhikr tab stuck on loading spinner
+- [ ] Ayah of the Day showing empty despite prior completion report
+- [ ] Location detection not prompting on first launch
+- [ ] Every Arabic string (Quran ayat, Azkar, dua text) checked against
+      its Tanzil Project / Hisn al-Muslim source — verbatim, no
+      re-typing from memory, shadda/diacritic errors specifically
+      checked for (see 04_ISLAMIC_ENGINE notes on prior shadda defect)
+- [ ] Confirm audio actually plays, per tab, per reciter — not just
+      that a play button renders. Root-cause any tab where audio is
+      silent; do not close this item on a UI-looks-right check alone
 
-## 4. Never break the on-screen build identifier
+Add a build stamp (commit hash + run number) visible in debug builds.
+Past "already implemented" claims have traced back to stale installs —
+verify against what's actually on the device, not the source tree.
 
-The build stamp (commit short-SHA + CI run number, currently shown at
-the bottom of the Home dashboard via `BuildInfo`) exists specifically
-so a human looking at an installed APK can tell which commit it
-actually contains. Keep it working and visible on every build. If a
-change touches `BuildInfo`, the CI workflow's `--dart-define` wiring,
-or the Home dashboard layout, verify the stamp still renders before
-calling that change done — `test/widget_test.dart` asserts on it for
-exactly this reason; don't weaken or remove that assertion.
+### Phase 2 — Close out the running polish batch
+- [ ] Tasbih orb color / drag behavior
+- [ ] Monthly Timetable labels
+- [ ] Islamic Calendar: Sri Lankan holidays
+- [ ] Parallax effects pass
+- [ ] Country picker UI
+- [ ] Umrah Guide translation gap
+- [ ] About page attribution
+- [ ] "Allah" calligraphy emboss treatment
+- [ ] Splash screen — Big Bang concept
+- [ ] Per-prayer alarm toggles
+- [ ] Adhan mute toggle
+- [ ] Proactive location permission prompt
+- [ ] App-wide icon weight pass
 
-## 5. Check recent history before touching shared/core files
+### Phase 3 — Release readiness
+- [ ] Confirm database passphrase is Keystore-backed (see the TODO in
+      database_helper.dart — do not ship the placeholder passphrase)
+- [ ] Migrate APK build to AAB
+- [ ] Release signing keystore generated and stored safely
+- [ ] Privacy policy page/link added (required even for a no-network app)
+- [ ] Confirm manifest has no INTERNET permission and no billing
+      dependency anywhere in the dependency tree
 
-Before editing colors, the database schema/helper, or other shared
-constants (`app_colors.dart`, `database_helper.dart`, anything in
-`core/constants/`), check whether a recent commit already changed that
-file for a reason — `git log -p` on the specific file, not just the
-overall repo. An old patch or a stale local copy silently overwriting
-newer working code has caused a real (if brief and never-shipped)
-regression here before.
+### Phase 4 — Submission
+- [ ] Google Play developer account registered
+- [ ] App priced (paid, one-time) in Play Console
+- [ ] Closed testing track live: 12 testers minimum, 14 days
+- [ ] Submit for review
 
-## 6. Prefer several small, separately-verified commits over one big one
-
-Even when a single prompt asks for many things at once, split the work
-into small, independently committed and independently tested changes:
-`flutter analyze` + `flutter test` before each commit, one commit per
-logical change, push and confirm CI green before moving to the next.
-One failing or half-finished piece should never block or hide the
-others — and when reporting back, each piece gets its own clear
-done/not-done/blocked line (see rule 1).
-
-## 7. Religious text is never AI-generated — always sourced and verified
-
-Quran text and translations, azkar, duas, and Hajj/Umrah rite
-descriptions are never authored or paraphrased by the assistant, in
-any language, at any confidence level. Every such string ships from a
-verified, appropriately-licensed source (Tanzil, a specific attributed
-GitHub mirror, Hisn al-Muslim, etc.), imported with the same
-checksum-verification and attribution discipline already used for the
-existing Quran text (`assets/quran/`, `assets/quran_translations/`)
-and the Talbiyah (`assets/talbiyah/`) — SHA-256 the exact bytes,
-record where they came from and under what license in that asset
-directory's `README.md`, and refuse to display anything that doesn't
-verify. If no suitably-licensed source can be found for a given
-category or language, ship nothing for it and say so plainly — an
-empty "not loaded yet" state is always correct; invented or translated-
-by-the-assistant text is never acceptable, regardless of how confident
-or plausible it looks.
+Do not jump to a later phase while an earlier item is still open.
