@@ -3,6 +3,12 @@
          or app update — no boot-time network or background service,
          just re-arming already-computed local alarms. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Device-local GPS only (see LocationService) — used for prayer
+         times and Qibla direction. Without these declared, Android has
+         nothing to prompt for: Geolocator.requestPermission() can only
+         return `denied` silently, no system dialog ever appears. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- Required (Android 6+) before ringer mode can be changed for
          Silent Mode — the user must grant this explicitly in system
          settings; see SilentModeChannel/MainActivity. -->
