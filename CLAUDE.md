@@ -98,6 +98,26 @@ Existing Sinhala strings/infrastructure stay in the repo and keep
 being maintained where already present; the gap is in coverage
 completeness, not architecture.
 
+## Update & Release Safety
+- Every release: bump the version in pubspec.yaml (both the version
+  name and the build number) before tagging.
+- Ship as AAB, not APK, once Phase 3's AAB migration is done — this is
+  what lets the Play Store send users only the changed bytes on an
+  update, not the whole app again.
+- Any change to the local database schema (new table, new column,
+  changed structure) must come with a matching migration in
+  DatabaseHelper's upgrade path — never assume a fresh-install-only
+  setup is enough once real users have real data saved. An update must
+  never silently drop or corrupt someone's existing streak data, Zakat
+  settings, or bookmarks.
+- All 189+ tests must be green before any release is tagged.
+- Recommend a staged rollout in Play Console for every update after
+  the initial launch (release to ~10% of users, watch Android Vitals
+  for crash reports for a day or two, then expand) — note this is a
+  Play Console setting done at publish time, not app code, so just
+  flag it as a reminder each release, don't try to build it into the
+  app.
+
 ## Religious Content
 Never generate Quranic text, Arabic duas, or Tamil/Sinhala religious
 text. Quran text: Tanzil Project only, verified before commit. Azkar

@@ -9,13 +9,7 @@ import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../security/secure_passphrase_service.dart';
-import 'schema/azkar_schema.dart';
-import 'schema/pilgrimage_schema.dart';
-import 'schema/prayer_tracker_schema.dart';
-import 'schema/quran_schema.dart';
-import 'schema/settings_schema.dart';
-import 'schema/tasbih_schema.dart';
-import 'schema/widget_position_schema.dart';
+import 'database_migrations.dart';
 
 /// Singleton factory for the app's encrypted local database.
 ///
@@ -40,7 +34,7 @@ class DatabaseHelper {
   final SecurePassphraseService _passphraseService;
 
   static const String _dbName = 'noor.db';
-  static const int _dbVersion = 2;
+  static const int _dbVersion = latestSchemaVersion;
 
   Database? _database;
 
@@ -67,33 +61,15 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> _onCreate(Database db, int version) async {
-    for (final statement in [
-      ...tasbihCreateStatements,
-      ...settingsCreateStatements,
-      ...azkarCreateStatements,
-      ...quranCreateStatements,
-      ...widgetPositionCreateStatements,
-      ...pilgrimageCreateStatements,
-      ...prayerTrackerCreateStatements,
-    ]) {
-      await db.execute(statement);
-    }
-    for (final statement in azkarSeedStatements) {
-      await db.execute(statement);
-    }
-  }
+  // Actual schema logic lives in database_migrations.dart, as plain
+  // top-level functions — that's what lets migration_test.dart
+  // exercise the real create/upgrade path without needing this
+  // class's real encrypted-DB bootstrap (secure passphrase, platform
+  // channels), which isn't available under `flutter test`.
+  Future<void> _onCreate(Database db, int version) => createNoorSchema(db, version);
 
-  /// Installs that already created a version-1 database are missing the
-  /// prayer/fasting tracker tables added in version 2 — `IF NOT EXISTS`
-  /// makes this safe to run even if a future statement set overlaps.
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      for (final statement in prayerTrackerCreateStatements) {
-        await db.execute(statement);
-      }
-    }
-  }
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) =>
+      upgradeNoorSchema(db, oldVersion, newVersion);
 
   /// Closes the database (mainly useful for tests).
   Future<void> close() async {
