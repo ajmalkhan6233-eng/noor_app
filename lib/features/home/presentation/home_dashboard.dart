@@ -4,13 +4,26 @@
 // plus bottom navigation across Home / Prayer Times / Al Quran / Duas
 // & Dhikr / More (NoorBottomNav). Each tab's icon carries an explicit
 // Semantics label independent of its visible text label.
+//
+// NOTE: CosmicBackground + a Stack/NotificationListener wrapper here
+// were tried and reverted in the same session — wiring the persistent
+// particle layer behind this shell broke Home tab rendering in CI
+// (HeroCard and the build-stamp text stopped being found by 3
+// different widget tests, reproducibly, across multiple attempts)
+// without a working local Flutter install available to debug it
+// interactively. Reverted to protect the release per CLAUDE.md's
+// "Update & Release Safety" rule (tests must be green before tagging)
+// rather than ship red or guess further blind. CosmicBackground itself
+// (lib/core/presentation/widgets/cosmic_background.dart) is untouched
+// and still valid, standalone, working code — it just isn't wired in
+// here. Needs someone with local Flutter tooling to find the actual
+// interaction and re-wire it properly.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
-import '../../../core/presentation/widgets/cosmic_background.dart';
 import '../../azkar/presentation/azkar_screen.dart';
 import '../../more/presentation/more_screen.dart';
 import '../../prayer_times/logic/adhan_preview_cubit.dart';
@@ -32,24 +45,6 @@ class HomeDashboard extends StatefulWidget {
 class _HomeDashboardState extends State<HomeDashboard> {
   int _selectedIndex = 0;
 
-  // The nav dock compresses while the active tab's content scrolls
-  // down (more to read, chrome should get out of the way) and
-  // expands again on scroll-up or a tap — a single listener here
-  // catches scroll notifications bubbling up from whichever tab's
-  // scrollable is currently active, rather than wiring each of the
-  // 5 tabs' own ScrollControllers individually.
-  var _navExpanded = true;
-
-  bool _onScrollNotification(UserScrollNotification notification) {
-    final direction = notification.direction;
-    if (direction == ScrollDirection.reverse && _navExpanded) {
-      setState(() => _navExpanded = false);
-    } else if (direction == ScrollDirection.forward && !_navExpanded) {
-      setState(() => _navExpanded = true);
-    }
-    return false;
-  }
-
   static const _screens = [
     HomeOverviewScreen(),
     PrayerTimesScreen(),
@@ -66,29 +61,18 @@ class _HomeDashboardState extends State<HomeDashboard> {
         BlocProvider(create: (_) => SettingsCubit()..load()),
         BlocProvider(create: (_) => AdhanPreviewCubit()),
       ],
-      child: Stack(
-        children: [
-          // The persistent particle layer every tab sits on top of —
-          // painted once here, not per-screen, so switching tabs never
-          // restarts its drift.
-          const Positioned.fill(child: CosmicBackground()),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: const AppTopBar(),
-            body: NotificationListener<UserScrollNotification>(
-              onNotification: _onScrollNotification,
-              child: FadeTabSwitcher(index: _selectedIndex, children: _screens),
-            ),
-            bottomNavigationBar: NoorBottomNav(
-              selectedIndex: _selectedIndex,
-              expanded: _navExpanded,
-              onTap: (index) => setState(() {
-                _selectedIndex = index;
-                _navExpanded = true;
-              }),
-            ),
-          ),
-        ],
+      child: Scaffold(
+        backgroundColor: AppColors.paper,
+        appBar: const AppTopBar(),
+        body: FadeTabSwitcher(index: _selectedIndex, children: _screens),
+        // expanded defaults true, so the dock always shows labels for
+        // now — the scroll-driven compress/expand logic in
+        // NoorBottomNav/NavTabItem is intact and ready to be driven
+        // again once the background-layer interaction is diagnosed.
+        bottomNavigationBar: NoorBottomNav(
+          selectedIndex: _selectedIndex,
+          onTap: (index) => setState(() => _selectedIndex = index),
+        ),
       ),
     );
   }

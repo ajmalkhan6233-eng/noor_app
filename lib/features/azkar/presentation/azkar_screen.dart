@@ -48,7 +48,7 @@ class _AzkarViewState extends State<_AzkarView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.paper,
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.azkarScreenTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),

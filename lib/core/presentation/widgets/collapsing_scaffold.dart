@@ -23,13 +23,13 @@ class CollapsingScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.paper,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar.large(
             title: Text(title),
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.paper,
             foregroundColor: AppColors.ink,
             surfaceTintColor: Colors.transparent,
             stretch: true,
