@@ -41,13 +41,23 @@ Future<void> _pumpPastSplash(WidgetTester tester) async {
   expect(find.byType(HomeDashboard), findsOneWidget);
 }
 
+/// A handful of real, separate frames — tester.pump(duration) advances
+/// the simulated clock but still only processes one frame, so a
+/// single large-duration pump doesn't give a nested BlocBuilder chain
+/// the several distinct rebuild passes it may need.
+Future<void> _settle(WidgetTester tester, {int frames = 8}) async {
+  for (var i = 0; i < frames; i++) {
+    await tester.pump(const Duration(milliseconds: 50));
+  }
+}
+
 void main() {
   testWidgets('Home tab renders HeroCard and StreakCapsule without throwing', (
     tester,
   ) async {
     await tester.pumpWidget(const NoorApp());
     await _pumpPastSplash(tester);
-    await tester.pump(const Duration(milliseconds: 300));
+    await _settle(tester);
 
     expect(tester.takeException(), isNull);
     expect(find.byType(HeroCard), findsOneWidget);
@@ -61,7 +71,7 @@ void main() {
     await _pumpPastSplash(tester);
 
     await tester.tap(find.byIcon(Icons.access_time));
-    await tester.pump(const Duration(milliseconds: 300));
+    await _settle(tester);
 
     expect(tester.takeException(), isNull);
     expect(find.byType(PrayerTimesScreen), findsOneWidget);
@@ -72,9 +82,9 @@ void main() {
     await _pumpPastSplash(tester);
 
     await tester.tap(find.byIcon(Icons.more_horiz));
-    await tester.pump(const Duration(milliseconds: 300));
+    await _settle(tester);
     await tester.tap(find.byIcon(Icons.blur_circular));
-    await tester.pump(const Duration(milliseconds: 300));
+    await _settle(tester);
 
     expect(tester.takeException(), isNull);
     expect(find.byType(TasbihScreen), findsOneWidget);
@@ -85,9 +95,9 @@ void main() {
     await _pumpPastSplash(tester);
 
     await tester.tap(find.byIcon(Icons.more_horiz));
-    await tester.pump(const Duration(milliseconds: 300));
+    await _settle(tester);
     await tester.tap(find.byIcon(Icons.calendar_month));
-    await tester.pump(const Duration(milliseconds: 300));
+    await _settle(tester);
 
     expect(tester.takeException(), isNull);
     expect(find.byType(CalendarScreen), findsOneWidget);

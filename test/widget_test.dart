@@ -32,6 +32,15 @@ void main() {
 
     expect(find.byType(HomeDashboard), findsOneWidget);
 
+    // HomeDashboard mounting doesn't guarantee its first tab's own
+    // nested BlocBuilder chain (Settings -> Prayer -> PrayerTracker)
+    // has finished its first build yet — each tester.pump() call is
+    // one frame, not "wait N ms", so loop a few real frames rather
+    // than trusting a single pump(duration) call to cover it.
+    for (var i = 0; i < 10 && find.text(BuildInfo.label).evaluate().isEmpty; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
     // The build stamp must always be visible on Home, without digging
     // — it's the only way anyone can confirm which commit an installed
     // APK actually contains. Never remove this coverage.
