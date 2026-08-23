@@ -16,6 +16,7 @@ import '../../../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../../../prayer_times/presentation/widgets/location_selector.dart';
 import '../../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../../settings/logic/settings_cubit/settings_state.dart';
+import '../location_label.dart';
 
 class LocationPill extends StatelessWidget {
   const LocationPill({super.key});
@@ -41,10 +42,8 @@ class LocationPill extends StatelessWidget {
       builder: (context, settingsState) {
         return BlocBuilder<PrayerCubit, PrayerState>(
           builder: (context, prayerState) {
-            final label = settingsState.settings.selectedDistrict ??
-                (prayerState.usingGps
-                    ? l10n.locationSetViaGpsLabel
-                    : l10n.locationSetLabel);
+            final label = resolveLocationLabel(settingsState, prayerState, l10n) ??
+                l10n.locationSetLabel;
             return SemanticButton(
               label: l10n.changeLocationSemanticLabel,
               hint: l10n.changeLocationHint,

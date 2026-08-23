@@ -23,13 +23,26 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../../quran/data/quran_ayah.dart';
 import '../../../quran/data/quran_repository.dart';
 import '../../../quran/data/quran_surah.dart';
-import '../../../quran/presentation/quran_screen.dart';
+import 'ayah_of_day_cta.dart';
 
-class AyahOfDayCard extends StatelessWidget {
-  AyahOfDayCard({super.key, QuranRepository? repository})
-    : _repository = repository ?? QuranRepository();
+class AyahOfDayCard extends StatefulWidget {
+  const AyahOfDayCard({super.key, QuranRepository? repository})
+    : _repository = repository;
 
-  final QuranRepository _repository;
+  final QuranRepository? _repository;
+
+  @override
+  State<AyahOfDayCard> createState() => _AyahOfDayCardState();
+}
+
+class _AyahOfDayCardState extends State<AyahOfDayCard> {
+  late final QuranRepository _repository = widget._repository ?? QuranRepository();
+
+  // Created once here rather than inline in build()'s FutureBuilder —
+  // a FutureBuilder(future: _load()) directly in build() creates a
+  // brand-new Future (and re-queries the database) on every rebuild,
+  // not just the first. See noor-animation-performance.
+  late final Future<(QuranAyah?, List<QuranSurah>)> _future = _load();
 
   Future<(QuranAyah?, List<QuranSurah>)> _load() async {
     final ayah = await _repository.ayahOfTheDay();
@@ -50,7 +63,7 @@ class AyahOfDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return FutureBuilder<(QuranAyah?, List<QuranSurah>)>(
-      future: _load(),
+      future: _future,
       builder: (context, snapshot) {
         final ayah = snapshot.data?.$1;
         final surahs = snapshot.data?.$2 ?? const <QuranSurah>[];
@@ -71,7 +84,12 @@ class AyahOfDayCard extends StatelessWidget {
               else ...[
                 _reference(ayah, surahs),
                 const SizedBox(height: 12),
-                Text(ayah.arabicText, textAlign: TextAlign.right, style: AppTypography.arabic),
+                Text(
+                  ayah.arabicText,
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.right,
+                  style: AppTypography.arabic,
+                ),
                 if (ayah.translation != null && ayah.translation!.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(ayah.translation!, style: AppTypography.caption),
@@ -92,7 +110,7 @@ class AyahOfDayCard extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    _fullQuranCta(context, l10n),
+                    AyahOfDayCta(l10n: l10n),
                   ],
                 ),
               ],
@@ -110,28 +128,6 @@ class AyahOfDayCard extends StatelessWidget {
     return Text(
       '$name ${ayah.surahId}:${ayah.ayahNumber}',
       style: const TextStyle(color: AppColors.sage, fontSize: 12, letterSpacing: 0.4),
-    );
-  }
-
-  Widget _fullQuranCta(BuildContext context, AppLocalizations l10n) {
-    return SemanticButton(
-      label: l10n.fullQuranCtaLabel,
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const QuranScreen()),
-      ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(
-            colors: [AppColors.gold, AppColors.accentSecondary],
-          ),
-        ),
-        child: Text(
-          l10n.fullQuranCtaLabel,
-          style: const TextStyle(color: AppColors.paper, fontWeight: FontWeight.w700, fontSize: 12),
-        ),
-      ),
     );
   }
 }

@@ -34,14 +34,22 @@ class BurstParticle {
 
   /// [intensity] (0–1) scales both particle count and travel — a
   /// small value gives a handful of short-throw sparks (qibla lock);
-  /// near 1 gives a fuller burst (tasbih milestone).
-  static List<BurstParticle> generate(double intensity) {
+  /// near 1 gives a fuller burst (tasbih milestone). [maxDistance]
+  /// caps how far a particle can travel in logical pixels — defaults
+  /// to the original fixed 28–74px range (in-context effects like the
+  /// Tasbih/Tawaf-Sa'i bursts stay unchanged); pass a screen-derived
+  /// value for a full-screen effect like the splash burst so it reads
+  /// as a genuine expansion rather than a fixed-size sparkle on a
+  /// much bigger canvas.
+  static List<BurstParticle> generate(double intensity, {double maxDistance = 74}) {
     final random = math.Random();
     final count = (6 + intensity * 14).round();
+    final minDistance = maxDistance * 0.38;
+    final spread = maxDistance - minDistance;
     return List.generate(count, (i) {
       return BurstParticle(
         angle: random.nextDouble() * 2 * math.pi,
-        distance: (28 + random.nextDouble() * 46) * (0.4 + intensity * 0.6),
+        distance: (minDistance + random.nextDouble() * spread) * (0.4 + intensity * 0.6),
         radius: 2 + random.nextDouble() * 3,
         delay: random.nextDouble() * 0.25,
         soft: i.isEven,

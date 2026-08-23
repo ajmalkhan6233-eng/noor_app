@@ -17,11 +17,13 @@ import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dar
 import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
+import '../../../l10n/generated/app_localizations.dart' show AppLocalizations;
 import 'widgets/ayah_of_day_card.dart';
 import 'widgets/daily_goals_list.dart';
 import 'widgets/edit_location_dialog.dart';
 import 'widgets/hero_card.dart';
 import 'widgets/home_build_stamp.dart';
+import 'widgets/location_label.dart';
 import 'widgets/prayer_summary_section.dart';
 import 'widgets/quick_action_row.dart';
 import 'widgets/streak_capsule.dart';
@@ -77,7 +79,11 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                           ParallaxLayer(
                             controller: _scrollController,
                             child: HeroCard(
-                              locationLabel: settingsState.settings.locationLabel,
+                              locationLabel: resolveLocationLabel(
+                                settingsState,
+                                prayerState,
+                                AppLocalizations.of(context)!,
+                              ),
                               hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                               onEditLocation: () => _editLocation(
                                 context,

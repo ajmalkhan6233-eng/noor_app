@@ -59,10 +59,13 @@ class _NextPrayerCountdownCapsuleState extends State<NextPrayerCountdownCapsule>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final next = _nextEntry() ?? ('Fajr', widget.times.fajr);
-    final countdown = _nextEntry() == null
-        ? '00:00:00'
-        : _formatRemaining(next.$2.difference(_now));
+    // After Isha, there's no later entry left today — the next Fajr
+    // is tomorrow. This widget only has today's computed times, so
+    // tomorrow's Fajr is approximated as the same clock time one day
+    // later (prayer times shift by at most a couple of minutes
+    // day-to-day, close enough for a live countdown display).
+    final next = _nextEntry() ?? ('Fajr', widget.times.fajr.add(const Duration(days: 1)));
+    final countdown = _formatRemaining(next.$2.difference(_now));
 
     return AppCard(
       padding: const EdgeInsets.all(16),

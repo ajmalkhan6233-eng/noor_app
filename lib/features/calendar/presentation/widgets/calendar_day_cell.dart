@@ -51,8 +51,11 @@ class CalendarDayCell extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
+          // Today: gold fill (light) so the dark AppColors.paper text
+          // below stays readable — a solid emerald fill (dark) behind
+          // dark text was inverted-contrast, effectively unreadable.
           color: isToday
-              ? AppColors.emerald
+              ? AppColors.gold
               : isRamadan
                   ? AppColors.emerald.withValues(alpha: 0.08)
                   : AppColors.card,

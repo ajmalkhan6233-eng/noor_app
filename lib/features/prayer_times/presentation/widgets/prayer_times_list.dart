@@ -10,8 +10,7 @@ import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../settings/data/notification_settings.dart';
 import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
-import 'adhan_preview_button.dart';
-import 'prayer_notification_bell.dart';
+import 'prayer_row_leading_controls.dart';
 import 'prayer_time_format.dart';
 
 /// The five daily prayers plus sunrise, in chronological order. The
@@ -109,13 +108,14 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
         children: [
           Row(
             children: [
-              if (name != 'Sunrise') AdhanPreviewButton(prayerName: name),
-              if (showBell)
-                PrayerNotificationBell(
-                  prayerName: name,
-                  enabled: bellOn,
-                  onTap: () => widget.onToggleNotification!(name, !bellOn),
-                ),
+              PrayerRowLeadingControls(
+                name: name,
+                showBell: showBell,
+                bellOn: bellOn,
+                onToggleBell: showBell
+                    ? () => widget.onToggleNotification!(name, !bellOn)
+                    : null,
+              ),
               Semantics(
                 label: label,
                 child: ExcludeSemantics(

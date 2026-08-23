@@ -26,12 +26,11 @@ class BigBangSplashView extends StatefulWidget {
 class _BigBangSplashViewState extends State<BigBangSplashView>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  late final List<BurstParticle> _particles;
+  List<BurstParticle>? _particles;
 
   @override
   void initState() {
     super.initState();
-    _particles = BurstParticle.generate(1.0);
     _controller = AnimationController(
       vsync: this,
       duration: SplashConfig.burstDuration,
@@ -54,6 +53,12 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
           constraints.maxWidth / 2,
           constraints.maxHeight / 2,
         );
+        // Screen-derived so the burst reads as a genuine expansion on
+        // every device size, not a fixed-size sparkle lost on a large
+        // screen. Cached (not regenerated every build) so the particle
+        // set stays stable across the animation.
+        final maxDistance = constraints.shortestSide * 0.42;
+        _particles ??= BurstParticle.generate(1.0, maxDistance: maxDistance);
         return Stack(
           alignment: Alignment.center,
           children: [
@@ -64,7 +69,7 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                 painter: ParticleBurstPainter(
                   center: center,
                   progress: _controller.value,
-                  particles: _particles,
+                  particles: _particles!,
                   color: AppColors.gold,
                   softColor: AppColors.accentSecondary,
                 ),

@@ -51,16 +51,16 @@ class LanguagePills extends StatelessWidget {
         AppLocaleController.instance.locale.value = option.locale;
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
         decoration: BoxDecoration(
           color: active ? AppColors.gold : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           border: active ? null : Border.all(color: AppColors.hairline),
         ),
         child: Text(
           _shortLabel(option),
           style: TextStyle(
-            fontSize: 11,
+            fontSize: 10,
             fontWeight: FontWeight.w600,
             color: active ? AppColors.paper : AppColors.sage,
           ),

@@ -1,8 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Persistent top bar shown identically above every bottom-nav tab:
-// location pill — centered Allah calligraphy + NOOR wordmark — theme
-// toggle — language pills — settings gear. Lives above HomeDashboard's
+// Persistent top bar shown identically above every bottom-nav tab.
+// Two rows so nothing can collide with the centered Allah calligraphy
+// on narrow screens (360-430px): a top identity row (location pill,
+// centered Allah + NOOR wordmark, settings gear) with only two small
+// controls on either side of the mark, then a second row underneath
+// for the theme toggle and language pills — previously all five
+// controls fought for space in one Stack-over-Row, which on narrow
+// screens let the right-side cluster (toggle + 3 language pills +
+// gear) run into the centered wordmark. Lives above HomeDashboard's
 // FadeTabSwitcher so its own state (and the PrayerCubit/SettingsCubit
 // it and the tabs share) survives tab switches.
 
@@ -19,7 +25,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   const AppTopBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(88);
+  Size get preferredSize => const Size.fromHeight(120);
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +37,29 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: const Stack(
-          alignment: Alignment.center,
+        child: const Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            NoorWordmark(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Stack(
+              alignment: Alignment.center,
               children: [
-                LocationPill(),
+                NoorWordmark(),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ThemeToggleButton(),
-                    SizedBox(width: 10),
-                    LanguagePills(),
-                    SizedBox(width: 10),
+                    LocationPill(),
                     SettingsGearButton(),
                   ],
                 ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ThemeToggleButton(),
+                SizedBox(width: 10),
+                LanguagePills(),
               ],
             ),
           ],

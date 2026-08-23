@@ -74,14 +74,22 @@ class MonthlyTimetableRow extends StatelessWidget {
     );
   }
 
+  // Fixed-width columns (not the previous Wrap, which let each cell's
+  // text length shift where the next one started) so every row's
+  // Fajr/Dhuhr/Asr/Maghrib/Isha times land in the same horizontal
+  // position as the row above and below it.
   Widget _times(PrayerTimesComputed result) {
-    return Wrap(
-      spacing: 10,
+    return Row(
       children: [
         for (final (name, time) in result.prayerEntries)
-          Text(
-            '${_prayerAbbreviations[name] ?? name} ${formatClock(time)}',
-            style: AppTypography.caption,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_prayerAbbreviations[name] ?? name, style: AppTypography.caption),
+                Text(formatClock(time), style: AppTypography.time.copyWith(fontSize: 12)),
+              ],
+            ),
           ),
       ],
     );
