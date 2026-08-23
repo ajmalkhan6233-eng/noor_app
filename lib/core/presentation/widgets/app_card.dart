@@ -1,15 +1,24 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The one card shape used everywhere: a real glass panel (BackdropFilter
-// blur over whatever sits behind it — the persistent CosmicBackground
-// layer, see home_dashboard.dart) on near-black, 20px radius, a 1px
-// hairline border (cyan by default), and a soft shadow — never a flat
-// filled block. Featured cards can pass [borderColor]/[glowColor]
-// (e.g. gold) per the locked palette's "gold border on featured/dua
-// cards" rule — plain cards leave both null and get the ordinary cyan
-// hairline with no glow.
-
-import 'dart:ui';
+// The one card shape used everywhere: card surface on near-black,
+// 20px radius, a 1px hairline border (cyan by default), and a soft
+// shadow — never a flat filled block. Featured cards can pass
+// [borderColor]/[glowColor] (e.g. gold) per the locked palette's
+// "gold border on featured/dua cards" rule — plain cards leave both
+// null and get the ordinary cyan hairline with no glow.
+//
+// NOTE: a BackdropFilter-based real glass-blur version of this was
+// tried and reverted in the same session — it (or something entangled
+// with it) broke Home tab rendering in CI (HeroCard, which every
+// card-using widget depends on, stopped being found by 3 different
+// widget tests, reproducibly). No working local Flutter install on
+// this machine to confirm BackdropFilter specifically was the cause
+// vs. something else in that same commit, so flagging rather than
+// re-attempting blind: BackdropFilter is a known source of rendering
+// pipeline issues under flutter_test specifically (as opposed to a
+// real device), which is a plausible explanation. Revisit with local
+// Flutter tooling available to verify against a real device/golden
+// render, not just CI's headless test run.
 
 import 'package:flutter/material.dart';
 
@@ -54,35 +63,20 @@ class AppCard extends StatelessWidget {
             ),
         ],
       ),
-      // ClipRRect + BackdropFilter is what makes this an actual glass
-      // panel rather than just a translucent-looking flat colour — it
-      // blurs whatever is genuinely behind the card (the cosmic
-      // background, other scrolled-under content) in real time.
-      child: ClipRRect(
+      // A dedicated Material — rather than relying on a distant
+      // ancestor — so any ListTile/InkWell/etc. inside the card paints
+      // its ink effects here, not hidden beneath the shadow's
+      // DecoratedBox.
+      child: Material(
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          // A dedicated Material — rather than relying on a distant
-          // ancestor — so any ListTile/InkWell/etc. inside the card
-          // paints its ink effects here, not hidden beneath the
-          // shadow's DecoratedBox. Semi-transparent (not solid) so the
-          // blur behind it is actually visible through the card.
-          child: Material(
-            color: AppColors.card.withValues(alpha: 0.65),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: padding,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: (borderColor ?? AppColors.hairline).withValues(
-                    alpha: 0.6,
-                  ),
-                ),
-              ),
-              child: child,
-            ),
+            border: Border.all(color: borderColor ?? AppColors.hairline),
           ),
+          child: child,
         ),
       ),
     );

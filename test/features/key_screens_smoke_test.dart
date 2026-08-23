@@ -21,6 +21,7 @@ import 'package:noor/core/constants/splash_config.dart';
 import 'package:noor/features/home/presentation/home_dashboard.dart';
 import 'package:noor/features/home/presentation/widgets/hero_card.dart';
 import 'package:noor/features/home/presentation/widgets/streak_capsule.dart';
+import 'package:noor/features/more/presentation/more_screen.dart';
 import 'package:noor/features/prayer_times/presentation/prayer_times_screen.dart';
 import 'package:noor/features/tasbih/presentation/tasbih_screen.dart';
 import 'package:noor/features/calendar/presentation/calendar_screen.dart';
@@ -83,7 +84,15 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.more_horiz));
     await _settle(tester);
-    await tester.tap(find.byIcon(Icons.blur_circular));
+    // Home's own QuickActionRow shortcut uses the same icon as More's
+    // row and stays alive in the tree (tabs aren't disposed on
+    // switch), so byIcon alone matches 2 widgets — scope to MoreScreen.
+    await tester.tap(
+      find.descendant(
+        of: find.byType(MoreScreen),
+        matching: find.byIcon(Icons.blur_circular),
+      ),
+    );
     await _settle(tester);
 
     expect(tester.takeException(), isNull);
@@ -96,7 +105,12 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.more_horiz));
     await _settle(tester);
-    await tester.tap(find.byIcon(Icons.calendar_month));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(MoreScreen),
+        matching: find.byIcon(Icons.calendar_month),
+      ),
+    );
     await _settle(tester);
 
     expect(tester.takeException(), isNull);
