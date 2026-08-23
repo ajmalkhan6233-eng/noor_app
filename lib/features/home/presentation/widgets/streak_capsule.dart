@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/presentation/widgets/kinetic_digits.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../prayer_tracker/data/prayer_tracker_repository.dart';
 
@@ -41,8 +42,9 @@ class StreakCapsule extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.dayStreakBadgeLabel(streakDays),
+                KineticDigits(
+                  text: l10n.dayStreakBadgeLabel(streakDays),
+                  semanticsLabel: l10n.dayStreakBadgeLabel(streakDays),
                   style: const TextStyle(
                     color: AppColors.gold,
                     fontWeight: FontWeight.w700,

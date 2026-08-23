@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/presentation/widgets/kinetic_digits.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../prayer_times/data/prayer_times_result.dart';
 import '../../../prayer_times/presentation/widgets/prayer_time_format.dart';
@@ -90,8 +91,8 @@ class _NextPrayerCountdownCapsuleState extends State<NextPrayerCountdownCapsule>
             child: Semantics(
               liveRegion: true,
               label: '${l10n.nextPrayerLabel}: ${next.$1}, $countdown',
-              child: Text(
-                countdown,
+              child: KineticDigits(
+                text: countdown,
                 style: const TextStyle(
                   fontFeatures: [FontFeature.tabularFigures()],
                   fontSize: 36,
