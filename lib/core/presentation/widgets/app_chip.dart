@@ -63,13 +63,13 @@ class _AppChipState extends State<AppChip> {
               color: widget.selected ? AppColors.card : Colors.transparent,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: widget.selected ? AppColors.emerald : AppColors.hairline,
+                color: widget.selected ? AppColors.gold : AppColors.hairline,
               ),
             ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: widget.selected ? AppColors.emerald : AppColors.sage,
+                color: widget.selected ? AppColors.gold : AppColors.sage,
                 fontSize: 13,
               ),
             ),

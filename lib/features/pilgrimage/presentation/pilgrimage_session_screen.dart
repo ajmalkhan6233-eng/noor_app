@@ -58,7 +58,7 @@ class _PilgrimageSessionView extends StatelessWidget {
   Widget _body(BuildContext context, PilgrimageSessionState state) {
     switch (state.status) {
       case PilgrimageSessionStatus.loading:
-        return const Center(child: CircularProgressIndicator(color: AppColors.emerald));
+        return const Center(child: CircularProgressIndicator(color: AppColors.gold));
       case PilgrimageSessionStatus.needsSetup:
         return Padding(
           padding: const EdgeInsets.all(24),

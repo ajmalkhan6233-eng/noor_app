@@ -1,10 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Paints the compass as a physical object: a raised bezel (gradient +
-// drop shadow that shifts with device tilt), a recessed face (an
-// inset-shadow ring at its rim), engraved degree ticks, cardinal
-// labels, an emerald Kaaba marker, and a gradient-filled needle that
-// casts its own soft shadow onto the face via Canvas.drawShadow.
+// Paints the compass as a physical object: a raised dark
+// titanium/obsidian bezel (gradient + drop shadow that shifts with
+// device tilt) with a subtle gold metallic rim reflection, a recessed
+// face (an inset-shadow ring at its rim), engraved degree ticks,
+// cardinal labels, a gold Kaaba marker (the fixed landmark), and a
+// cyan gradient-filled needle (the live pointer — deliberately a
+// different locked token than the marker so the two aren't the same
+// colour) that casts its own soft shadow onto the face via
+// Canvas.drawShadow.
 
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -67,7 +71,11 @@ class CompassFacePainter extends CustomPainter {
         ..shader = ui.Gradient.radial(
           center + lightOffset,
           radius * 1.4,
-          [Colors.white, AppColors.hairline],
+          // Dark titanium/obsidian metal with a subtle gold rim
+          // reflection at the light-facing edge — was a plain white
+          // highlight, which read as generic chrome rather than the
+          // app's own dark-metal-with-gold-accent material.
+          [AppColors.gold.withValues(alpha: 0.35), AppColors.card],
         ),
     );
     canvas.drawCircle(
@@ -103,7 +111,7 @@ class CompassFacePainter extends CustomPainter {
     final rect = Rect.fromCenter(center: pos, width: 10, height: 10);
     canvas.drawRRect(
       RRect.fromRectAndRadius(rect, const Radius.circular(2)),
-      Paint()..color = AppColors.emerald,
+      Paint()..color = AppColors.gold,
     );
   }
 
@@ -133,8 +141,8 @@ class CompassFacePainter extends CustomPainter {
       path,
       Paint()
         ..shader = ui.Gradient.linear(rect.topCenter, rect.bottomCenter, [
-          AppColors.emerald.withValues(alpha: alpha),
-          AppColors.emerald.withValues(alpha: alpha * 0.7),
+          AppColors.accentSecondary.withValues(alpha: alpha),
+          AppColors.accentSecondary.withValues(alpha: alpha * 0.7),
         ]),
     );
     canvas.restore();

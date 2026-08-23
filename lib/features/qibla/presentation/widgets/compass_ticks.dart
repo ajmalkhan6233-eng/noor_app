@@ -50,7 +50,7 @@ void _drawLabel(Canvas canvas, Offset center, String text, {bool bold = false}) 
         fontFamily: AppTypography.bodyFamily,
         fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
         fontSize: bold ? 15 : 13,
-        color: bold ? AppColors.emerald : AppColors.sage,
+        color: bold ? AppColors.gold : AppColors.sage,
       ),
     ),
     textDirection: TextDirection.ltr,

@@ -72,7 +72,7 @@ class _TasbihView extends StatelessWidget {
                           child: Text(
                             l10n.resetLabel,
                             style: const TextStyle(
-                              color: AppColors.emerald,
+                              color: AppColors.gold,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),

@@ -44,7 +44,7 @@ class ZakatResultCard extends StatelessWidget {
               result.zakatDue.toStringAsFixed(2),
               style: AppTypography.heroDisplay.copyWith(
                 fontSize: 36,
-                color: result.nisabMet ? AppColors.emerald : AppColors.sage,
+                color: result.nisabMet ? AppColors.gold : AppColors.sage,
               ),
             ),
           ],

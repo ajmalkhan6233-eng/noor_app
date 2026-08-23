@@ -53,7 +53,7 @@ class _LicencesScreenState extends State<LicencesScreen> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.emerald),
+              child: CircularProgressIndicator(color: AppColors.gold),
             );
           }
           final packages = snapshot.data!;

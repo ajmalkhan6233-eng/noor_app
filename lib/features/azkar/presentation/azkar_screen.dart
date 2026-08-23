@@ -63,7 +63,7 @@ class _AzkarViewState extends State<_AzkarView> {
                 builder: (context, state) {
                   if (state.isLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(color: AppColors.emerald),
+                      child: CircularProgressIndicator(color: AppColors.gold),
                     );
                   }
                   if (state.items.isEmpty) {

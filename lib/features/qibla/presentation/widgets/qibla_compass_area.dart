@@ -60,7 +60,7 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
     final rotation = state.needleRotationDegrees;
     if (rotation == null) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.emerald),
+        child: CircularProgressIndicator(color: AppColors.gold),
       );
     }
 

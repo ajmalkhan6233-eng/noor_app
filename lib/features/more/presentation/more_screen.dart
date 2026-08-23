@@ -103,7 +103,7 @@ class _MoreScreenState extends State<MoreScreen> {
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.emerald, size: 20),
+            Icon(icon, color: AppColors.gold, size: 20),
             const SizedBox(width: 16),
             Expanded(
               child: Text(label, style: const TextStyle(color: AppColors.ink)),

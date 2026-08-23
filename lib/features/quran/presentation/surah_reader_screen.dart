@@ -63,7 +63,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
           builder: (context, state) {
             if (state.currentSurahId != widget.surahId) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.emerald),
+                child: CircularProgressIndicator(color: AppColors.gold),
               );
             }
             _maybeScrollToLastRead(state);

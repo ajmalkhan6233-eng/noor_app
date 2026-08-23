@@ -104,7 +104,7 @@ class _QiblaViewState extends State<_QiblaView> {
 
     if (state.bearingDegrees == null || state.distanceKm == null) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.emerald),
+        child: CircularProgressIndicator(color: AppColors.gold),
       );
     }
 

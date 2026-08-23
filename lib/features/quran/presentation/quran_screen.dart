@@ -64,7 +64,7 @@ class _QuranView extends StatelessWidget {
             }
             if (state.isLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.emerald),
+                child: CircularProgressIndicator(color: AppColors.gold),
               );
             }
             if (!state.isImported) {
