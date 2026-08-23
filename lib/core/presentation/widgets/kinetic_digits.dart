@@ -43,7 +43,7 @@ class KineticDigits extends StatelessWidget {
     final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (final char in text.characters)
+        for (final char in text.split(''))
           AnimatedSwitcher(
             duration: duration,
             switchInCurve: Curves.easeOutCubic,
@@ -65,8 +65,4 @@ class KineticDigits extends StatelessWidget {
     if (label == null) return ExcludeSemantics(child: row);
     return Semantics(label: label, child: ExcludeSemantics(child: row));
   }
-}
-
-extension _Characters on String {
-  Iterable<String> get characters => split('');
 }

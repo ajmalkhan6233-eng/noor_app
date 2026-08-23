@@ -6,6 +6,8 @@
 // point. Falls back to the calm, still PlainSplashView under reduced
 // motion (a burst has no meaningful "settled" instant to jump to).
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
@@ -57,7 +59,7 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
         // every device size, not a fixed-size sparkle lost on a large
         // screen. Cached (not regenerated every build) so the particle
         // set stays stable across the animation.
-        final maxDistance = constraints.shortestSide * 0.42;
+        final maxDistance = math.min(constraints.maxWidth, constraints.maxHeight) * 0.42;
         _particles ??= BurstParticle.generate(1.0, maxDistance: maxDistance);
         return Stack(
           alignment: Alignment.center,
