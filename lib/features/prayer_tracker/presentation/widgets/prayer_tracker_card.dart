@@ -76,7 +76,7 @@ class _PrayerTrackerCardView extends StatelessWidget {
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
                       color: state.fastingToday
-                          ? AppColors.emerald
+                          ? AppColors.gold
                           : AppColors.sage,
                       size: 20,
                     ),
@@ -123,7 +123,7 @@ class _PrayerChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: done ? AppColors.card : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: done ? AppColors.emerald : AppColors.hairline),
+          border: Border.all(color: done ? AppColors.gold : AppColors.hairline),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -131,12 +131,12 @@ class _PrayerChip extends StatelessWidget {
             Icon(
               done ? Icons.check_circle : Icons.radio_button_unchecked,
               size: 16,
-              color: done ? AppColors.emerald : AppColors.sage,
+              color: done ? AppColors.gold : AppColors.sage,
             ),
             const SizedBox(width: 6),
             Text(
               label,
-              style: TextStyle(color: done ? AppColors.emerald : AppColors.sage, fontSize: 13),
+              style: TextStyle(color: done ? AppColors.gold : AppColors.sage, fontSize: 13),
             ),
           ],
         ),

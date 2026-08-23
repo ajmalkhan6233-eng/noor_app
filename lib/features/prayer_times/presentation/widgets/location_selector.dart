@@ -54,7 +54,7 @@ class _LocationSelectorState extends State<LocationSelector> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
-          const Icon(Icons.my_location, color: AppColors.emerald, size: 18),
+          const Icon(Icons.my_location, color: AppColors.gold, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -66,7 +66,7 @@ class _LocationSelectorState extends State<LocationSelector> {
             label: l10n.changeLocationSemanticLabel,
             hint: l10n.changeLocationHint,
             onTap: () => setState(() => _expanded = true),
-            child: Text(l10n.changeLabel, style: const TextStyle(color: AppColors.emerald)),
+            child: Text(l10n.changeLabel, style: const TextStyle(color: AppColors.gold)),
           ),
         ],
       ),
@@ -87,7 +87,7 @@ class _LocationSelectorState extends State<LocationSelector> {
               child: Text(
                 state.isResolvingLocation ? l10n.locatingLabel : l10n.useMyLocationLabel,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.emerald, fontWeight: FontWeight.w600),
+                style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w600),
               ),
             ),
           ),

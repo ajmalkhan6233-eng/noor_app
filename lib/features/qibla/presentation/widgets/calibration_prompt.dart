@@ -21,7 +21,7 @@ class CalibrationPrompt extends StatelessWidget {
         child: Text(
           message,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: AppColors.emerald),
+          style: const TextStyle(color: AppColors.gold),
         ),
       ),
     );

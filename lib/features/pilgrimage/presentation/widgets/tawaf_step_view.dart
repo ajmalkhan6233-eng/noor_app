@@ -57,7 +57,7 @@ class TawafStepView extends StatelessWidget {
             Semantics(
               liveRegion: true,
               label: l10n.tawafCompleteMessage,
-              child: Text(l10n.tawafCompleteMessage, style: const TextStyle(color: AppColors.emerald, fontWeight: FontWeight.w600)),
+              child: Text(l10n.tawafCompleteMessage, style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w600)),
             ),
             const SizedBox(height: 12),
             SemanticButton(
@@ -68,7 +68,7 @@ class TawafStepView extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: AppColors.emerald, borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
                 child: Text(l10n.continueToSaiButtonLabel, style: const TextStyle(color: AppColors.card, fontWeight: FontWeight.w600)),
               ),
             ),

@@ -54,7 +54,7 @@ class _NewSessionFormState extends State<NewSessionForm> {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 14),
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: AppColors.emerald, borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
             child: Text(l10n.startSessionButtonLabel, style: const TextStyle(color: AppColors.card, fontWeight: FontWeight.w600)),
           ),
         ),
@@ -73,7 +73,7 @@ class _NewSessionFormState extends State<NewSessionForm> {
           children: [
             Icon(
               selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-              color: AppColors.emerald,
+              color: AppColors.gold,
               size: 18,
             ),
             const SizedBox(width: 12),

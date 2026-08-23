@@ -41,13 +41,13 @@ class CalendarLegend extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: tint
-                ? AppColors.emerald.withValues(alpha: 0.2)
+                ? AppColors.gold.withValues(alpha: 0.2)
                 : dot
-                    ? AppColors.emerald
+                    ? AppColors.gold
                     : cyanDot
                         ? AppColors.accentSecondary
                         : Colors.transparent,
-            border: ring ? Border.all(color: AppColors.emerald) : null,
+            border: ring ? Border.all(color: AppColors.gold) : null,
           ),
         ),
         const SizedBox(width: 6),

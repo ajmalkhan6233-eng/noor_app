@@ -60,13 +60,13 @@ class _PilgrimageCounterButtonState extends State<PilgrimageCounterButton> {
           shape: BoxShape.circle,
           color: AppColors.card,
           border: Border.all(
-            color: _isFinished ? AppColors.emerald : AppColors.emeraldSoft,
+            color: _isFinished ? AppColors.gold : AppColors.accentSecondary,
             width: widget.pulsing || _isFinished ? 5 : 3,
           ),
           boxShadow: widget.pulsing
               ? [
                   BoxShadow(
-                    color: AppColors.emerald.withValues(alpha: 0.5),
+                    color: AppColors.gold.withValues(alpha: 0.5),
                     blurRadius: 24,
                     spreadRadius: 2,
                   ),

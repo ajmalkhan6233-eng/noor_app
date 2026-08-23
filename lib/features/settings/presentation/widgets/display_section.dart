@@ -46,7 +46,7 @@ class DisplaySection extends StatelessWidget {
               value: '${settings.arabicFontScale.toStringAsFixed(2)}x',
               slider: true,
               child: Slider(
-                activeColor: AppColors.emerald,
+                activeColor: AppColors.gold,
                 min: 0.75,
                 max: 2.0,
                 divisions: 25,
@@ -70,7 +70,7 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays - 1),
-                      child: const Icon(Icons.remove, color: AppColors.emerald),
+                      child: const Icon(Icons.remove, color: AppColors.gold),
                     ),
                     SizedBox(
                       width: 32,
@@ -85,7 +85,7 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays + 1),
-                      child: const Icon(Icons.add, color: AppColors.emerald),
+                      child: const Icon(Icons.add, color: AppColors.gold),
                     ),
                   ],
                 ),

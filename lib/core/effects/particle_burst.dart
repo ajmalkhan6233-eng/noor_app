@@ -23,7 +23,7 @@ abstract final class ParticleBurst {
     BuildContext context, {
     double intensity = 1.0,
     Offset? anchor,
-    Color color = AppColors.emerald,
+    Color color = AppColors.gold,
   }) {
     if (Motion.reduced(context)) return;
 

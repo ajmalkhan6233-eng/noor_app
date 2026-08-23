@@ -57,11 +57,11 @@ class CalendarDayCell extends StatelessWidget {
           color: isToday
               ? AppColors.gold
               : isRamadan
-                  ? AppColors.emerald.withValues(alpha: 0.08)
+                  ? AppColors.gold.withValues(alpha: 0.08)
                   : AppColors.card,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: hasMajorOccasion ? AppColors.emerald : AppColors.hairline,
+            color: hasMajorOccasion ? AppColors.gold : AppColors.hairline,
             width: hasMajorOccasion ? 1.5 : 1,
           ),
         ),
@@ -94,11 +94,11 @@ class CalendarDayCell extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: hasMajorOccasion
-                            ? (isToday ? AppColors.paper : AppColors.emerald)
+                            ? (isToday ? AppColors.paper : AppColors.gold)
                             : Colors.transparent,
                         border: isWhiteDay && !hasMajorOccasion
                             ? Border.all(
-                                color: isToday ? AppColors.paper : AppColors.emerald,
+                                color: isToday ? AppColors.paper : AppColors.gold,
                               )
                             : null,
                       ),

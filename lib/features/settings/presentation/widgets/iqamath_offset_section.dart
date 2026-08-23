@@ -72,7 +72,7 @@ class IqamathOffsetSection extends StatelessWidget {
               SemanticButton(
                 label: 'Decrease $label iqamath offset',
                 onTap: () => change(-1),
-                child: const Icon(Icons.remove, color: AppColors.emerald),
+                child: const Icon(Icons.remove, color: AppColors.gold),
               ),
               SizedBox(
                 width: 48,
@@ -85,7 +85,7 @@ class IqamathOffsetSection extends StatelessWidget {
               SemanticButton(
                 label: 'Increase $label iqamath offset',
                 onTap: () => change(1),
-                child: const Icon(Icons.add, color: AppColors.emerald),
+                child: const Icon(Icons.add, color: AppColors.gold),
               ),
             ],
           ),

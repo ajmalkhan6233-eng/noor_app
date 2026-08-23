@@ -67,7 +67,7 @@ class _SurahIndexState extends State<SurahIndex> {
                       child: Text(
                         'Continue: Surah ${state.lastRead!.surahId}, '
                         'Ayah ${state.lastRead!.ayahNumber}',
-                        style: const TextStyle(color: AppColors.emerald),
+                        style: const TextStyle(color: AppColors.gold),
                       ),
                     ),
                   ),

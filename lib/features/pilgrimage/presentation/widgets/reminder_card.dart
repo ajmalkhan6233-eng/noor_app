@@ -64,12 +64,12 @@ class ReminderCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.emeraldSoft.withValues(alpha: 0.3),
+        color: AppColors.accentSecondary.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         label,
-        style: const TextStyle(color: AppColors.emerald, fontSize: 12),
+        style: const TextStyle(color: AppColors.gold, fontSize: 12),
       ),
     );
   }

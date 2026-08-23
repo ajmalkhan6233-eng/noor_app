@@ -35,12 +35,15 @@ abstract final class AppColors {
   /// locked spec's "gold border on featured/dua cards" rule.
   static const Color goldBorder = Color(0x33FFB703);
 
-  /// Legacy accent, still used by screens not yet migrated to the
-  /// gold/cyan palette (Qibla, Tasbih, azkar, etc.). Do not use this
-  /// for any new screen — use [gold].
+  /// Legacy accent — fully migrated to gold/cyan everywhere in v1 as
+  /// of the final pre-release palette pass. The only remaining
+  /// reference is inside the cut-from-v1 Hajj/Umrah guide feature
+  /// (unreachable from the UI, see CLAUDE.md's Deferred section), kept
+  /// only so that dead-but-present code still compiles. Do not use
+  /// this for any new or active screen — use [gold].
   static const Color emerald = Color(0xFF14603C);
 
-  /// Dimmed/inactive variant of [emerald], same migration note.
+  /// Dimmed/inactive variant of [emerald], same retirement note.
   static const Color emeraldSoft = Color(0xFFAFC6BA);
 
   /// Primary accent — dominant, used most: active nav states, gold

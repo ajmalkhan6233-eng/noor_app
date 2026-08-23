@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 /// User-selectable theme preference. The palette itself is always
-/// the emerald/gold seed (`AppColors.emerald`) — this only chooses
+/// the emerald/gold seed (`AppColors.gold`) — this only chooses
 /// which brightness Flutter derives from it, or defers to the OS.
 enum AppThemeModeOption { dark, light, system }
 

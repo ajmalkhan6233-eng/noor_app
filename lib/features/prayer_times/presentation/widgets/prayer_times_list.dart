@@ -98,7 +98,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
-            color: isCurrent ? AppColors.emerald : Colors.transparent,
+            color: isCurrent ? AppColors.gold : Colors.transparent,
             width: 2,
           ),
         ),

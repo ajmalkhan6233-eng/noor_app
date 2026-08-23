@@ -68,7 +68,7 @@ class ParticleBurstPainter extends CustomPainter {
     required this.progress,
     required this.particles,
     required this.color,
-    this.softColor = AppColors.emeraldSoft,
+    this.softColor = AppColors.accentSecondary,
   });
 
   final Offset center;
@@ -77,9 +77,10 @@ class ParticleBurstPainter extends CustomPainter {
   final Color color;
 
   /// Colour for particles where [BurstParticle.soft] is true. Defaults
-  /// to the legacy dimmed-emerald so existing callers (Tasbih, Tawaf/
-  /// Sa'i) don't change — pass a real dimmed variant of [color]
-  /// instead for any new, non-legacy use.
+  /// to the locked cyan accent (every caller — Tasbih, Tawaf/Sa'i,
+  /// Qibla lock, the splash burst — now shares the same gold/cyan
+  /// pairing; legacy emerald was retired app-wide in the final
+  /// pre-release palette pass).
   final Color softColor;
 
   @override

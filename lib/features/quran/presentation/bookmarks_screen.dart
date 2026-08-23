@@ -79,7 +79,7 @@ class BookmarksScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           child: Row(
             children: [
-              const Icon(Icons.bookmark, color: AppColors.emerald, size: 20),
+              const Icon(Icons.bookmark, color: AppColors.gold, size: 20),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(label, style: const TextStyle(color: AppColors.ink)),

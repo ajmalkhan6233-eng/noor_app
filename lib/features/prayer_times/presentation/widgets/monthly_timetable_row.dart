@@ -1,7 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // One day's row in the monthly timetable: date, then the five prayer
-// times. Today's row carries the same thin emerald left rule used for
+// times. Today's row carries the same thin gold left rule used for
 // the current prayer elsewhere in the app.
 
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class MonthlyTimetableRow extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-              color: isToday ? AppColors.emerald : Colors.transparent,
+              color: isToday ? AppColors.gold : Colors.transparent,
               width: 2,
             ),
           ),

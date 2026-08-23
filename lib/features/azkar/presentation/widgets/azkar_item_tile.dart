@@ -117,13 +117,13 @@ class _CounterButtonState extends State<_CounterButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: widget.done ? AppColors.emerald : AppColors.hairline,
+            color: widget.done ? AppColors.gold : AppColors.hairline,
           ),
         ),
         child: Text(
           '${widget.count} / ${widget.repeatCount}',
           style: TextStyle(
-            color: widget.done ? AppColors.emerald : AppColors.ink,
+            color: widget.done ? AppColors.gold : AppColors.ink,
             fontWeight: FontWeight.w600,
           ),
         ),

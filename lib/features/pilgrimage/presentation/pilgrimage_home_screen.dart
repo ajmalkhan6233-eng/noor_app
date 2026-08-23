@@ -78,9 +78,9 @@ class _PilgrimageHomeView extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.person_add_alt, color: AppColors.emerald),
+                          const Icon(Icons.person_add_alt, color: AppColors.gold),
                           const SizedBox(width: 8),
-                          Text(l10n.addProfileLabel, style: const TextStyle(color: AppColors.emerald)),
+                          Text(l10n.addProfileLabel, style: const TextStyle(color: AppColors.gold)),
                         ],
                       ),
                     ),
@@ -119,7 +119,7 @@ class _PilgrimageHomeView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         child: Row(
           children: [
-            const Icon(Icons.person_outline, color: AppColors.emerald, size: 20),
+            const Icon(Icons.person_outline, color: AppColors.gold, size: 20),
             const SizedBox(width: 16),
             Expanded(child: Text(profile.displayName, style: const TextStyle(color: AppColors.ink))),
             const Icon(Icons.chevron_right, color: AppColors.sage, size: 18),

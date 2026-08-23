@@ -76,7 +76,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
       toggled: value,
       child: SwitchListTile(
         contentPadding: EdgeInsets.zero,
-        activeThumbColor: AppColors.emerald,
+        activeThumbColor: AppColors.gold,
         title: Text(label, style: const TextStyle(color: AppColors.ink)),
         value: value,
         onChanged: (v) => context.read<SettingsCubit>().setSilentMode(apply(v)),
@@ -104,7 +104,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
             SemanticButton(
               label: 'Decrease extra silent minutes',
               onTap: () => change(-1),
-              child: const Icon(Icons.remove, color: AppColors.emerald),
+              child: const Icon(Icons.remove, color: AppColors.gold),
             ),
             SizedBox(
               width: 48,
@@ -117,7 +117,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
             SemanticButton(
               label: 'Increase extra silent minutes',
               onTap: () => change(1),
-              child: const Icon(Icons.add, color: AppColors.emerald),
+              child: const Icon(Icons.add, color: AppColors.gold),
             ),
           ],
         ),
@@ -137,7 +137,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
         child: Text(
           'Grant Do Not Disturb access',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.emerald),
+          style: TextStyle(color: AppColors.gold),
         ),
       ),
     );

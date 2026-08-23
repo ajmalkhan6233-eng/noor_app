@@ -36,7 +36,7 @@ class AdhanPreviewButton extends StatelessWidget {
             child: Icon(
               isPlaying ? Icons.stop_circle_outlined : Icons.play_circle_outline,
               size: 18,
-              color: isPlaying ? AppColors.emerald : AppColors.sage,
+              color: isPlaying ? AppColors.gold : AppColors.sage,
             ),
           ),
         );

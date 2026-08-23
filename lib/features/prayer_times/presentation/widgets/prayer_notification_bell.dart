@@ -35,7 +35,7 @@ class PrayerNotificationBell extends StatelessWidget {
         child: Icon(
           enabled ? Icons.notifications_active : Icons.notifications_off_outlined,
           size: 18,
-          color: enabled ? AppColors.emerald : AppColors.sage,
+          color: enabled ? AppColors.gold : AppColors.sage,
         ),
       ),
     );

@@ -51,7 +51,7 @@ class _CompletionStepViewState extends State<CompletionStepView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.check_circle, key: _iconKey, color: AppColors.emerald, size: 64),
+            Icon(Icons.check_circle, key: _iconKey, color: AppColors.gold, size: 64),
             const SizedBox(height: 16),
             Text(l10n.completionScreenTitle, style: const TextStyle(color: AppColors.ink, fontSize: 22, fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),
@@ -66,7 +66,7 @@ class _CompletionStepViewState extends State<CompletionStepView> {
               onTap: () => Navigator.of(context).pop(),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                decoration: BoxDecoration(color: AppColors.emerald, borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
                 child: Text(l10n.doneButtonLabel, style: const TextStyle(color: AppColors.card, fontWeight: FontWeight.w600)),
               ),
             ),

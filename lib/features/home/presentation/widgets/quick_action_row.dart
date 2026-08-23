@@ -50,7 +50,7 @@ class QuickActionRow extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.hairline),
               ),
-              child: Icon(icon, color: AppColors.emerald),
+              child: Icon(icon, color: AppColors.gold),
             ),
             const SizedBox(height: 6),
             Text(label, style: const TextStyle(color: AppColors.sage, fontSize: 12)),

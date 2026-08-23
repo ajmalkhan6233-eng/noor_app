@@ -60,7 +60,7 @@ class SaiStepView extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: AppColors.emerald, borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
                 child: Text(l10n.completeSessionButtonLabel, style: const TextStyle(color: AppColors.card, fontWeight: FontWeight.w600)),
               ),
             ),
