@@ -16,6 +16,7 @@ import 'monthly_timetable_screen.dart';
 import 'widgets/high_latitude_notice.dart';
 import 'widgets/location_selector.dart';
 import 'widgets/prayer_hero.dart';
+import 'widgets/prayer_loading_skeleton.dart';
 import 'widgets/prayer_times_list.dart';
 
 /// Prayer-times screen — the app's hero screen: the astrolabe ring
@@ -95,6 +96,7 @@ class PrayerTimesScreen extends StatelessWidget {
   Widget _buildResult(BuildContext context, PrayerState state) {
     final result = state.result;
     return switch (result) {
+      null when state.isResolvingLocation => const PrayerLoadingSkeleton(),
       null => Center(
         child: Text(
           AppLocalizations.of(context)!.enterLocationPrompt,

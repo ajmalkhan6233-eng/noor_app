@@ -15,6 +15,7 @@ import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../prayer_times/data/prayer_times_result.dart';
 import '../../../prayer_times/logic/prayer_cubit/prayer_state.dart';
+import '../../../prayer_times/presentation/widgets/prayer_loading_skeleton.dart';
 import '../../../prayer_times/presentation/widgets/prayer_times_list.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
@@ -37,6 +38,7 @@ class PrayerSummarySection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final result = state.result;
     if (result is! PrayerTimesComputed) {
+      if (state.isResolvingLocation) return const PrayerLoadingSkeleton();
       return AppCard(
         child: Text(l10n.setLocationOnPrayerTabMessage, style: AppTypography.caption),
       );
