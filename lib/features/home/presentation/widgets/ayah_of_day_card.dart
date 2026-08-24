@@ -77,6 +77,7 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
     return FutureBuilder<(QuranAyah?, List<QuranSurah>)>(
       future: _future,
       builder: (context, snapshot) {
+        final stillLoading = snapshot.connectionState != ConnectionState.done;
         final ayah = snapshot.data?.$1;
         final surahs = snapshot.data?.$2 ?? const <QuranSurah>[];
 
@@ -88,7 +89,18 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
             children: [
               Text(l10n.ayahOfTheDayTitle, style: AppTypography.sectionHeader),
               const SizedBox(height: 12),
-              if (ayah == null)
+              if (stillLoading)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
+                    ),
+                  ),
+                )
+              else if (ayah == null)
                 Text(
                   l10n.guideTextNotLoadedMessage,
                   style: const TextStyle(color: AppColors.sage, fontStyle: FontStyle.italic),

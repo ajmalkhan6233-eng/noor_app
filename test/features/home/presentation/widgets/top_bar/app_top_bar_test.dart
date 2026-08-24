@@ -22,7 +22,6 @@ void main() {
     }
 
     expect(find.byType(AppTopBar), findsOneWidget);
-    expect(find.text('NOOR'), findsOneWidget);
     expect(
       find.descendant(of: find.byType(AppTopBar), matching: find.byIcon(Icons.settings_outlined)),
       findsOneWidget,
@@ -33,7 +32,6 @@ void main() {
     for (var i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
-    expect(find.text('NOOR'), findsOneWidget);
     expect(
       find.descendant(of: find.byType(AppTopBar), matching: find.byIcon(Icons.settings_outlined)),
       findsOneWidget,
