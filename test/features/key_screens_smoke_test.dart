@@ -53,7 +53,7 @@ Future<void> _settle(WidgetTester tester, {int frames = 8}) async {
 }
 
 void main() {
-  testWidgets('Home tab renders HeroCard and StreakCapsule without throwing', (
+  testWidgets('Home tab renders HeroCard without throwing', (
     tester,
   ) async {
     await tester.pumpWidget(const NoorApp());
@@ -62,7 +62,9 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.byType(HeroCard), findsOneWidget);
-    expect(find.byType(StreakCapsule), findsOneWidget);
+    // Streak tracker is cut from v1 (CLAUDE.md Deferred, 2026-08-23) —
+    // confirm it's genuinely gone from Home, not just untested.
+    expect(find.byType(StreakCapsule), findsNothing);
   });
 
   testWidgets('Prayer Times tab opens from the bottom nav without throwing', (

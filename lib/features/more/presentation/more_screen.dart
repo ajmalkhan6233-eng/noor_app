@@ -13,7 +13,6 @@ import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
-import '../../pilgrimage/presentation/pilgrimage_home_screen.dart';
 import '../../qibla/presentation/qibla_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
@@ -63,11 +62,10 @@ class _MoreScreenState extends State<MoreScreen> {
                         _row(context, Icons.calendar_month, l10n.calendarLabel, const CalendarScreen()),
                         _divider(),
                         _row(context, Icons.savings_outlined, l10n.zakatCalculatorLabel, const ZakatScreen()),
-                        _divider(),
-                        _row(context, Icons.mosque, l10n.pilgrimageLabel, const PilgrimageHomeScreen()),
-                        // Hajj/Umrah guide feature is cut from v1 (see
-                        // CLAUDE.md Deferred section) — its screens
-                        // stay in the repo but aren't exposed here.
+                        // Hajj/Umrah/pilgrimage guide feature is cut
+                        // from v1 (see CLAUDE.md Deferred section) —
+                        // its screens stay in the repo but aren't
+                        // exposed here.
                       ],
                     ),
                   ),
