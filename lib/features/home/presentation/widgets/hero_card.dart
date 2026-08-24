@@ -11,6 +11,15 @@
 // a large "Assalamu Alaikum" here was taking up roughly half the
 // visible screen on a phone, crowding out the actually time-sensitive
 // content (next prayer, streak) below it.
+//
+// KNOWN ISSUE (web preview only, unconfirmed on real device): the
+// greeting/date text renders one character per line in the GitHub
+// Pages CanvasKit build. Measured the actual LayoutBuilder constraints
+// feeding this Row — a normal w=338, plenty of room — so it isn't a
+// width-collapse/missing-Expanded bug in this file. Looks like a
+// CanvasKit web-rendering artifact rather than a real defect; needs
+// checking against the real APK (Flutter/device tooling, not
+// available here) before spending more time on it.
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
