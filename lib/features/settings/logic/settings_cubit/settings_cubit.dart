@@ -88,6 +88,10 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> setPreReminderMinutes(int minutes) =>
       _update((s) => s.copyWith(preReminderMinutes: minutes));
 
+  /// Local-only display name — no account, nothing sent anywhere.
+  Future<void> setProfileName(String name) =>
+      _update((s) => s.copyWith(profileName: name));
+
   Future<void> setHasSeenLocationOnboarding() =>
       _update((s) => s.copyWith(hasSeenLocationOnboarding: true));
 

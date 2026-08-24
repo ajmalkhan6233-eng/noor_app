@@ -20,6 +20,7 @@ class QiblaState extends Equatable {
     this.locationError,
     this.headingDegrees,
     this.compassAccuracy = CompassAccuracy.unavailable,
+    this.displayAccuracy = CompassAccuracy.unavailable,
     this.tiltX = 0,
     this.tiltY = 0,
   });
@@ -41,6 +42,15 @@ class QiblaState extends Equatable {
   /// will, on a device with no magnetometer).
   final double? headingDegrees;
   final CompassAccuracy compassAccuracy;
+
+  /// Same accuracy classification, but debounced with hysteresis
+  /// (see QiblaCubit) before it changes — [compassAccuracy] itself
+  /// stays raw/immediate for [isLocked], which genuinely should react
+  /// the instant a reading turns good. UI that mounts/unmounts a whole
+  /// widget on this boundary (CalibrationPrompt, the needle's dim)
+  /// should read this one instead, or a single noisy sample flickers
+  /// it in and out.
+  final CompassAccuracy displayAccuracy;
 
   /// Device tilt from the accelerometer, -1..1 per axis — purely a
   /// visual cue for the compass's light-sweep effect.
@@ -78,6 +88,7 @@ class QiblaState extends Equatable {
     String? locationError,
     double? headingDegrees,
     CompassAccuracy? compassAccuracy,
+    CompassAccuracy? displayAccuracy,
     double? tiltX,
     double? tiltY,
   }) {
@@ -90,6 +101,7 @@ class QiblaState extends Equatable {
       locationError: locationError,
       headingDegrees: headingDegrees,
       compassAccuracy: compassAccuracy ?? this.compassAccuracy,
+      displayAccuracy: displayAccuracy ?? this.displayAccuracy,
       tiltX: tiltX ?? this.tiltX,
       tiltY: tiltY ?? this.tiltY,
     );
@@ -105,6 +117,7 @@ class QiblaState extends Equatable {
     locationError,
     headingDegrees,
     compassAccuracy,
+    displayAccuracy,
     tiltX,
     tiltY,
   ];

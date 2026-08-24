@@ -11,14 +11,13 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../logic/settings_cubit/settings_cubit.dart';
 import '../logic/settings_cubit/settings_state.dart';
 import 'widgets/about_donate_section.dart';
+import 'widgets/advanced_timing_section.dart';
 import 'widgets/country_section.dart';
 import 'widgets/display_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
-import 'widgets/iqamath_offset_section.dart';
 import 'widgets/language_section.dart';
 import 'widgets/location_section.dart';
 import 'widgets/method_madhab_section.dart';
-import 'widgets/prayer_adjustments_section.dart';
 import 'widgets/pre_reminder_section.dart';
 import 'widgets/silent_mode_section.dart';
 
@@ -71,11 +70,7 @@ class _SettingsView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  SectionHeader(l10n.manualAdjustmentsSectionHeader),
-                  const AppCard(child: PrayerAdjustmentsSection()),
-                  const SizedBox(height: 16),
-                  SectionHeader(l10n.iqamathOffsetsSectionHeader),
-                  const AppCard(child: IqamathOffsetSection()),
+                  const AppCard(child: AdvancedTimingSection()),
                   const SizedBox(height: 16),
                   SectionHeader(l10n.preReminderSectionHeader),
                   const AppCard(child: PreReminderSection()),

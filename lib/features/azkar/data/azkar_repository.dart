@@ -48,6 +48,47 @@ class AzkarRepository {
     ];
   }
 
+  /// Every item across every category whose transliteration or
+  /// translation contains [query] (case-insensitive) — lets someone
+  /// type e.g. "sleep" and find the relevant dua without knowing
+  /// which category it lives in first.
+  Future<List<(AzkarCategory category, AzkarItem item)>> searchItems(String query) async {
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) return [];
+
+    final db = await _dbHelper.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT azkar_items.*, azkar_categories.category_key AS category_key
+      FROM azkar_items
+      JOIN azkar_categories ON azkar_categories.id = azkar_items.category_id
+      WHERE LOWER(azkar_items.transliteration) LIKE ?
+         OR LOWER(azkar_items.translation) LIKE ?
+      ORDER BY azkar_categories.id ASC, azkar_items.display_order ASC
+      ''',
+      ['%${trimmed.toLowerCase()}%', '%${trimmed.toLowerCase()}%'],
+    );
+
+    final results = <(AzkarCategory, AzkarItem)>[];
+    for (final row in rows) {
+      final matches = AzkarCategory.values.where((c) => c.dbKey == row['category_key']);
+      if (matches.isEmpty) continue;
+      final category = matches.first;
+      results.add((
+        category,
+        AzkarItem(
+          id: row['id']! as int,
+          arabicText: row['arabic_text']! as String,
+          transliteration: row['transliteration'] as String?,
+          translation: row['translation'] as String?,
+          repeatCount: row['repeat_count']! as int,
+          source: row['source']! as String,
+        ),
+      ));
+    }
+    return results;
+  }
+
   /// Current repetition count for [itemId] (0 if never started).
   Future<int> progressFor(int itemId) async {
     final db = await _dbHelper.database;

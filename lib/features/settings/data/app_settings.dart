@@ -26,6 +26,7 @@ class AppSettings {
     this.preReminderEnabled = false,
     this.preReminderMinutes = 10,
     this.hasSeenLocationOnboarding = false,
+    this.profileName,
   });
 
   final PrayerSettings prayerSettings;
@@ -72,6 +73,10 @@ class AppSettings {
   /// rule.
   final bool hasSeenLocationOnboarding;
 
+  /// Local-only display name, entered in the Progress screen — never
+  /// leaves the device, no account, no sign-in. `null` until set.
+  final String? profileName;
+
   AppSettings copyWith({
     PrayerSettings? prayerSettings,
     NotificationSettings? notifications,
@@ -85,6 +90,7 @@ class AppSettings {
     bool? preReminderEnabled,
     int? preReminderMinutes,
     bool? hasSeenLocationOnboarding,
+    String? profileName,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -100,6 +106,7 @@ class AppSettings {
       preReminderEnabled: preReminderEnabled ?? this.preReminderEnabled,
       preReminderMinutes: preReminderMinutes ?? this.preReminderMinutes,
       hasSeenLocationOnboarding: hasSeenLocationOnboarding ?? this.hasSeenLocationOnboarding,
+      profileName: profileName ?? this.profileName,
     );
   }
 
@@ -121,6 +128,7 @@ class AppSettings {
       preReminderEnabled: preReminderEnabled,
       preReminderMinutes: preReminderMinutes,
       hasSeenLocationOnboarding: hasSeenLocationOnboarding,
+      profileName: profileName,
     );
   }
 }

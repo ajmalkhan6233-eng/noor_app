@@ -1,23 +1,17 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The app shell shown after the splash: persistent top bar (AppTopBar)
-// plus bottom navigation across Home / Prayer Times / Al Quran / Duas
-// & Dhikr / More (NoorBottomNav). Each tab's icon carries an explicit
-// Semantics label independent of its visible text label.
+// The app shell shown after the splash: bottom navigation across
+// Home / Prayer Times / Al Quran / Duas & Dhikr / More (NoorBottomNav),
+// with the persistent cosmic particle background behind all 5 tabs.
+// Each tab's icon carries an explicit Semantics label independent of
+// its visible text label.
 //
-// NOTE: CosmicBackground + a Stack/NotificationListener wrapper here
-// were tried and reverted in the same session — wiring the persistent
-// particle layer behind this shell broke Home tab rendering in CI
-// (HeroCard and the build-stamp text stopped being found by 3
-// different widget tests, reproducibly, across multiple attempts)
-// without a working local Flutter install available to debug it
-// interactively. Reverted to protect the release per CLAUDE.md's
-// "Update & Release Safety" rule (tests must be green before tagging)
-// rather than ship red or guess further blind. CosmicBackground itself
-// (lib/core/presentation/widgets/cosmic_background.dart) is untouched
-// and still valid, standalone, working code — it just isn't wired in
-// here. Needs someone with local Flutter tooling to find the actual
-// interaction and re-wire it properly.
+// No top bar here any more (2026-08-24 live-device review): the old
+// AppTopBar carried only a settings gear, which duplicated the
+// Settings row already on the More tab and cost every screen a
+// stacked-on-top-of-its-own-AppBar row of vertical space for a
+// control that already existed one tap away. Settings is reached from
+// More only now.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +29,6 @@ import '../../quran/presentation/quran_screen.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import 'home_overview_screen.dart';
 import 'widgets/bottom_nav/noor_bottom_nav.dart';
-import 'widgets/top_bar/app_top_bar.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -70,7 +63,6 @@ class _HomeDashboardState extends State<HomeDashboard> {
       ],
       child: Scaffold(
         backgroundColor: AppColors.paper,
-        appBar: const AppTopBar(),
         body: Stack(
           children: [
             const Positioned.fill(child: CosmicBackground()),

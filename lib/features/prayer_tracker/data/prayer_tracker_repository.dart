@@ -90,6 +90,26 @@ class PrayerTrackerRepository {
     return streak;
   }
 
+  /// One entry per day from [start] to [end] inclusive (both dates
+  /// truncated to midnight), oldest first — backs the local Progress
+  /// screen's weekly/monthly view. Purely local reads of data already
+  /// collected by the tracker; nothing here is a new data source.
+  Future<List<({DateTime date, int completedCount, bool fasted})>> historyForRange(
+    DateTime start,
+    DateTime end,
+  ) async {
+    final results = <({DateTime date, int completedCount, bool fasted})>[];
+    var day = DateTime(start.year, start.month, start.day);
+    final last = DateTime(end.year, end.month, end.day);
+    while (!day.isAfter(last)) {
+      final completed = await completedPrayersOn(day);
+      final fasted = await isFastingDay(day);
+      results.add((date: day, completedCount: completed.length, fasted: fasted));
+      day = day.add(const Duration(days: 1));
+    }
+    return results;
+  }
+
   static String _dateKey(DateTime date) {
     final y = date.year.toString().padLeft(4, '0');
     final m = date.month.toString().padLeft(2, '0');

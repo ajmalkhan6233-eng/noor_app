@@ -16,6 +16,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/prayer_tracker_repository.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
+import '../progress_screen.dart';
 
 // Reads the PrayerTrackerCubit provided by HomeDashboard (shared with
 // Home's StreakCapsule/DailyGoalsList) rather than creating its own —
@@ -83,6 +84,21 @@ class PrayerTrackerCard extends StatelessWidget {
                     ? l10n.noFastingStreakMessage
                     : l10n.fastingStreakLabel(state.fastingStreak),
                 style: AppTypography.caption,
+              ),
+              const SizedBox(height: 12),
+              SemanticButton(
+                label: 'View your progress',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const ProgressScreen()),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.bar_chart, color: AppColors.gold, size: 16),
+                    SizedBox(width: 6),
+                    Text('View your progress', style: TextStyle(color: AppColors.gold)),
+                  ],
+                ),
               ),
             ],
           ),

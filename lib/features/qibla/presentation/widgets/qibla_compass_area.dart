@@ -44,7 +44,7 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
   @override
   Widget build(BuildContext context) {
     final state = widget.state;
-    if (state.compassAccuracy == CompassAccuracy.unavailable) {
+    if (state.displayAccuracy == CompassAccuracy.unavailable) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -64,9 +64,12 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
       );
     }
 
-    final trustworthy = state.compassAccuracy == CompassAccuracy.good;
+    final trustworthy = state.displayAccuracy == CompassAccuracy.good;
     return DraggableFloating(
-      size: const Size(220, 220),
+      // Bumped up from 220 (2026-08-24 live-device review: "make the
+      // compass a little bit big") — still pinch-resizable 0.7x-1.6x
+      // from here via minScale/maxScale below.
+      size: const Size(272, 272),
       widgetKey: 'qibla_compass',
       controller: widget.positionController,
       resizable: true,

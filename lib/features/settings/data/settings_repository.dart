@@ -79,6 +79,7 @@ class SettingsRepository {
       preReminderEnabled: (row['pre_reminder_enabled']! as int) != 0,
       preReminderMinutes: row['pre_reminder_minutes']! as int,
       hasSeenLocationOnboarding: (row['has_seen_location_onboarding']! as int) != 0,
+      profileName: row['profile_name'] as String?,
     );
   }
 
@@ -125,6 +126,7 @@ class SettingsRepository {
       'pre_reminder_enabled': settings.preReminderEnabled ? 1 : 0,
       'pre_reminder_minutes': settings.preReminderMinutes,
       'has_seen_location_onboarding': settings.hasSeenLocationOnboarding ? 1 : 0,
+      'profile_name': settings.profileName,
     };
 
     final existing = await db.query('app_settings', where: 'id = 1');

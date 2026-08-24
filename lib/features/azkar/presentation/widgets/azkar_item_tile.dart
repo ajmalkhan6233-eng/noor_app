@@ -60,11 +60,6 @@ class AzkarItemTile extends StatelessWidget {
                     style: const TextStyle(color: AppColors.sage, fontSize: 12),
                   ),
                 ],
-                const SizedBox(height: 4),
-                Text(
-                  'Source: ${item.source}',
-                  style: const TextStyle(color: AppColors.sage, fontSize: 11),
-                ),
                 const SizedBox(height: 12),
                 _CounterButton(
                   count: count,

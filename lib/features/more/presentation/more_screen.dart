@@ -5,6 +5,7 @@
 // the dashboard's shortcuts for anyone who lands here first.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
@@ -13,6 +14,7 @@ import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
+import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../qibla/presentation/qibla_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
@@ -77,7 +79,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 padding: EdgeInsets.zero,
                 child: Column(
                   children: [
-                    _row(context, Icons.settings_outlined, l10n.settingsSemanticLabel, const SettingsScreen()),
+                    _settingsRow(context, l10n),
                     _divider(),
                     _row(context, Icons.info_outline, l10n.aboutLabel, const AboutScreen()),
                   ],
@@ -91,6 +93,38 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget _divider() => const Divider(color: AppColors.hairline, height: 1);
+
+  // Settings gets its own row (rather than the generic _row) because
+  // it's the one destination that can change something this tab shell
+  // itself cares about — location, calculation method — and this used
+  // to reload PrayerCubit after the settings gear button closed
+  // (removed 2026-08-24, that reload behaviour moves here with it).
+  Widget _settingsRow(BuildContext context, AppLocalizations l10n) {
+    final prayerCubit = context.read<PrayerCubit>();
+    return SemanticButton(
+      label: l10n.settingsSemanticLabel,
+      hint: l10n.openHint,
+      onTap: () async {
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
+        );
+        await prayerCubit.loadSettings();
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        child: Row(
+          children: [
+            const Icon(Icons.settings_outlined, color: AppColors.gold, size: 20),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(l10n.settingsSemanticLabel, style: const TextStyle(color: AppColors.ink)),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.sage, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _row(BuildContext context, IconData icon, String label, Widget destination) {
     return SemanticButton(

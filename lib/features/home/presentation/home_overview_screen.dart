@@ -1,11 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // The Home tab, reordered per the 2026-08-24 live-device review:
-// greeting once, live clock, the astrolabe countdown ring (moved here
-// from Prayer Times), the smart iqamah line, the full prayer-times
-// row, today's prayer checklist, Sunnah fasting (moved down from
-// where it used to lead), then Ayah of the Day last. The debug build
-// stamp moved to the About screen — see BuildStampFooter.
+// a one-time fading greeting (see HeroCard), quick Silent Mode/
+// reminder toggles, the astrolabe countdown ring (moved here from
+// Prayer Times, now with the live clock built into it — see
+// PrayerHero), the smart iqamah line, the full prayer-times row,
+// today's prayer checklist, Ayah of the Day, then Sunnah Fasting last
+// (moved down twice now per follow-up feedback — from leading the
+// screen originally, to below the checklist, to last). The debug
+// build stamp moved to the About screen — see BuildStampFooter.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +23,6 @@ import 'widgets/ayah_of_day_card.dart';
 import 'widgets/daily_goals_list.dart';
 import 'widgets/hero_card.dart';
 import 'widgets/home_quick_toggles.dart';
-import 'widgets/live_clock.dart';
 import 'widgets/prayer_summary_section.dart';
 import 'widgets/sunnah_fasting_card.dart';
 
@@ -61,19 +63,17 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const LiveClock(),
-                      const SizedBox(height: 12),
                       const HomeQuickToggles(),
                       const SizedBox(height: 12),
                       PrayerSummarySection(state: prayerState, settingsState: settingsState),
                       const SizedBox(height: 20),
                       const DailyGoalsList(),
+                      const SizedBox(height: 20),
+                      AyahOfDayCard(),
                       const SizedBox(height: 16),
                       SunnahFastingCard(
                         hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                       ),
-                      const SizedBox(height: 20),
-                      AyahOfDayCard(),
                     ],
                   ),
                 ],

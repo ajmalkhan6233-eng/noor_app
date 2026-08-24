@@ -112,8 +112,8 @@ class _QiblaViewState extends State<_QiblaView> {
       children: [
         Column(
           children: [
-            if (state.compassAccuracy != CompassAccuracy.good &&
-                state.compassAccuracy != CompassAccuracy.unavailable)
+            if (state.displayAccuracy != CompassAccuracy.good &&
+                state.displayAccuracy != CompassAccuracy.unavailable)
               const Padding(
                 padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
                 child: StaggeredFadeIn(children: [CalibrationPrompt()]),

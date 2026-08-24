@@ -12,6 +12,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/motion.dart';
 import '../../data/prayer_times_result.dart';
 import 'astrolabe_ring.dart';
+import 'prayer_time_format.dart';
 
 class PrayerHero extends StatefulWidget {
   const PrayerHero({super.key, required this.times});
@@ -41,23 +42,27 @@ class _PrayerHeroState extends State<PrayerHero> {
     super.dispose();
   }
 
-  (String name, DateTime time)? _nextEntry() {
+  (String name, DateTime time) _nextEntry() {
     for (final entry in widget.times.prayerEntries) {
       if (entry.$2.isAfter(_now)) return entry;
     }
-    return null;
+    // After Isha, there's no later entry left today — the next Fajr is
+    // tomorrow. Only today's computed times are available here, so
+    // tomorrow's Fajr is approximated as the same clock time one day
+    // later (prayer times shift by at most a couple of minutes
+    // day-to-day, close enough for a live countdown). A static
+    // "tomorrow" label with no countdown was a real regression here
+    // (2026-08-24 live-device review) — the whole point of this ring
+    // is a live countdown someone can glance at to see how long is
+    // left, and that's exactly the case right after Isha.
+    return ('Fajr', widget.times.fajr.add(const Duration(days: 1)));
   }
 
   @override
   Widget build(BuildContext context) {
     final next = _nextEntry();
-    final heroName = next?.$1 ?? 'Fajr';
-    final countdown = next == null
-        ? 'tomorrow'
-        : _formatRemaining(next.$2.difference(_now));
-    final label = next == null
-        ? 'Isha has passed; next prayer is tomorrow\'s Fajr'
-        : 'Next prayer: ${next.$1}, in $countdown';
+    final countdown = _formatRemaining(next.$2.difference(_now));
+    final label = 'Next prayer: ${next.$1}, in $countdown';
 
     return Column(
       children: [
@@ -68,9 +73,22 @@ class _PrayerHeroState extends State<PrayerHero> {
           label: label,
           child: Column(
             children: [
-              Text(heroName, style: AppTypography.heroDisplay),
+              Text(next.$1, style: AppTypography.heroDisplay),
               const SizedBox(height: 4),
-              _countdownText(context, countdown),
+              // Countdown to the next prayer, with the current clock
+              // time right beside it — the whole point of glancing at
+              // this screen is usually "how long until I miss it",
+              // which needs both numbers side by side, not the clock
+              // living somewhere else on the page (2026-08-24
+              // live-device review).
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _countdownText(context, countdown),
+                  const SizedBox(width: 10),
+                  Text('now ${formatClock(_now)}', style: _nowStyle),
+                ],
+              ),
             ],
           ),
         ),
@@ -82,6 +100,12 @@ class _PrayerHeroState extends State<PrayerHero> {
     color: AppColors.sage,
     fontFeatures: [FontFeature.tabularFigures()],
     letterSpacing: 1,
+  );
+
+  static const _nowStyle = TextStyle(
+    color: AppColors.gold,
+    fontSize: 12,
+    fontFeatures: [FontFeature.tabularFigures()],
   );
 
   /// The seconds digits fade as they change rather than jumping; the

@@ -11,20 +11,22 @@
 // transliteration column exists, and only the English translation is
 // imported — so all three are omitted rather than invented. Revisit
 // once transliteration + TA/SI translation sourcing is done.
+//
+// The Copy button and "Full Quran" CTA that used to sit under the
+// ayah were removed (2026-08-24 live-device review) — this card is
+// meant as a quick daily read, not another entry point into the
+// reader (that already exists on the Al Quran tab itself).
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
-import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../quran/data/quran_ayah.dart';
 import '../../../quran/data/quran_import_service.dart';
 import '../../../quran/data/quran_repository.dart';
 import '../../../quran/data/quran_surah.dart';
-import 'ayah_of_day_cta.dart';
 
 class AyahOfDayCard extends StatefulWidget {
   const AyahOfDayCard({
@@ -60,15 +62,6 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
     final ayah = await _repository.ayahOfTheDay();
     final surahs = await _repository.surahs();
     return (ayah, surahs);
-  }
-
-  void _copy(BuildContext context, QuranAyah ayah) {
-    final l10n = AppLocalizations.of(context)!;
-    final text = [ayah.arabicText, if (ayah.translation != null) ayah.translation!].join('\n\n');
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.copiedConfirmationLabel)),
-    );
   }
 
   @override
@@ -118,25 +111,6 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
                   const SizedBox(height: 8),
                   Text(ayah.translation!, style: AppTypography.caption),
                 ],
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    SemanticButton(
-                      label: l10n.copyLabel,
-                      onTap: () => _copy(context, ayah),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.copy_outlined, color: AppColors.gold, size: 16),
-                          const SizedBox(width: 4),
-                          Text(l10n.copyLabel, style: const TextStyle(color: AppColors.gold)),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    AyahOfDayCta(l10n: l10n),
-                  ],
-                ),
               ],
             ],
           ),

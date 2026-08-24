@@ -86,8 +86,8 @@ class _QiblaNeedleState extends State<QiblaNeedle> with SingleTickerProviderStat
         alignment: Alignment.center,
         transform: transform,
         child: SizedBox(
-          width: 220,
-          height: 220,
+          width: 272,
+          height: 272,
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, _) => CustomPaint(

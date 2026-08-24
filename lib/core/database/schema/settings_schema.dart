@@ -41,7 +41,8 @@ const List<String> settingsCreateStatements = [
     language_code TEXT NOT NULL DEFAULT 'en',
     pre_reminder_enabled INTEGER NOT NULL DEFAULT 0,
     pre_reminder_minutes INTEGER NOT NULL DEFAULT 10,
-    has_seen_location_onboarding INTEGER NOT NULL DEFAULT 0
+    has_seen_location_onboarding INTEGER NOT NULL DEFAULT 0,
+    profile_name TEXT
   )
   ''',
 ];

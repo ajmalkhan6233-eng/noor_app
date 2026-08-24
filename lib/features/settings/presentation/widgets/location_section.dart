@@ -4,7 +4,8 @@
 // a Sri Lankan district. Settings doesn't share Prayer Times/Qibla's
 // PrayerCubit (it's a separate pushed route, outside that provider
 // scope), so this talks to LocationService and SettingsCubit directly;
-// SettingsGearButton re-syncs PrayerCubit when this screen closes.
+// MoreScreen's Settings row re-syncs PrayerCubit when this screen
+// closes.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
