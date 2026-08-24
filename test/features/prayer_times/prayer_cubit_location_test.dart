@@ -14,6 +14,7 @@ class _FakeLocationService extends LocationService {
   @override
   Future<Coordinates?> getCurrentCoordinates({
     Duration timeout = const Duration(seconds: 10),
+    bool promptIfNeeded = true,
   }) async => result;
 
   @override
