@@ -29,6 +29,7 @@ import '../../more/presentation/more_screen.dart';
 import '../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/presentation/prayer_times_screen.dart';
+import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../quran/presentation/quran_screen.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import 'home_overview_screen.dart';
@@ -60,6 +61,11 @@ class _HomeDashboardState extends State<HomeDashboard> {
         BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
         BlocProvider(create: (_) => SettingsCubit()..load()),
         BlocProvider(create: (_) => AdhanPreviewCubit()),
+        // Shared by Home's DailyGoalsList and Prayer Times'
+        // PrayerTrackerCard — one instance so marking a prayer done on
+        // either tab shows up on the other immediately, instead of
+        // each tab holding its own stale copy.
+        BlocProvider(create: (_) => PrayerTrackerCubit()..load()),
       ],
       child: Scaffold(
         backgroundColor: AppColors.paper,

@@ -17,20 +17,12 @@ import '../../data/prayer_tracker_repository.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 
+// Reads the PrayerTrackerCubit provided by HomeDashboard (shared with
+// Home's StreakCapsule/DailyGoalsList) rather than creating its own —
+// so marking a prayer done here shows up on the Home tab immediately
+// instead of each tab holding its own stale copy.
 class PrayerTrackerCard extends StatelessWidget {
   const PrayerTrackerCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PrayerTrackerCubit()..load(),
-      child: const _PrayerTrackerCardView(),
-    );
-  }
-}
-
-class _PrayerTrackerCardView extends StatelessWidget {
-  const _PrayerTrackerCardView();
 
   @override
   Widget build(BuildContext context) {

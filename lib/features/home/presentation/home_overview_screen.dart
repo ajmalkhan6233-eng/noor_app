@@ -25,10 +25,11 @@ import 'widgets/prayer_summary_section.dart';
 import 'widgets/streak_capsule.dart';
 import 'widgets/sunnah_fasting_card.dart';
 
-/// PrayerCubit and SettingsCubit are provided once by HomeDashboard
-/// (the tab shell) and shared across every tab. PrayerTrackerCubit is Home-tab-local
-/// (StreakCapsule and DailyGoalsList both read the one instance
-/// provided below, so they never drift out of sync with each other).
+/// PrayerCubit, SettingsCubit, and PrayerTrackerCubit are all provided
+/// once by HomeDashboard (the tab shell) and shared across every tab
+/// — PrayerTrackerCubit specifically so StreakCapsule/DailyGoalsList
+/// here and PrayerTrackerCard on the Prayer Times tab never drift out
+/// of sync with each other.
 class HomeOverviewScreen extends StatefulWidget {
   const HomeOverviewScreen({super.key});
 
@@ -47,48 +48,45 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PrayerTrackerCubit()..load(),
-      child: Scaffold(
-        backgroundColor: AppColors.paper,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: BlocBuilder<SettingsCubit, SettingsState>(
-              builder: (context, settingsState) => BlocBuilder<PrayerCubit, PrayerState>(
-                builder: (context, prayerState) => BlocBuilder<PrayerTrackerCubit, PrayerTrackerState>(
-                  builder: (context, trackerState) => ListView(
-                    controller: _scrollController,
-                    children: [
-                      StaggeredFadeIn(
-                        children: [
-                          ParallaxLayer(
-                            controller: _scrollController,
-                            child: HeroCard(
-                              hijriOffsetDays: settingsState.settings.hijriOffsetDays,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          StreakCapsule(
-                            streakDays: trackerState.prayerStreak,
-                            completedCount: trackerState.completedPrayers.length,
-                          ),
-                          const SizedBox(height: 16),
-                          SunnahFastingCard(
+    return Scaffold(
+      backgroundColor: AppColors.paper,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, settingsState) => BlocBuilder<PrayerCubit, PrayerState>(
+              builder: (context, prayerState) => BlocBuilder<PrayerTrackerCubit, PrayerTrackerState>(
+                builder: (context, trackerState) => ListView(
+                  controller: _scrollController,
+                  children: [
+                    StaggeredFadeIn(
+                      children: [
+                        ParallaxLayer(
+                          controller: _scrollController,
+                          child: HeroCard(
                             hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                           ),
-                          const SizedBox(height: 16),
-                          PrayerSummarySection(state: prayerState, settingsState: settingsState),
-                          const SizedBox(height: 20),
-                          AyahOfDayCard(),
-                          const SizedBox(height: 20),
-                          const DailyGoalsList(),
-                          const SizedBox(height: 16),
-                          const HomeBuildStamp(),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        const SizedBox(height: 16),
+                        StreakCapsule(
+                          streakDays: trackerState.prayerStreak,
+                          completedCount: trackerState.completedPrayers.length,
+                        ),
+                        const SizedBox(height: 16),
+                        SunnahFastingCard(
+                          hijriOffsetDays: settingsState.settings.hijriOffsetDays,
+                        ),
+                        const SizedBox(height: 16),
+                        PrayerSummarySection(state: prayerState, settingsState: settingsState),
+                        const SizedBox(height: 20),
+                        AyahOfDayCard(),
+                        const SizedBox(height: 20),
+                        const DailyGoalsList(),
+                        const SizedBox(height: 16),
+                        const HomeBuildStamp(),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

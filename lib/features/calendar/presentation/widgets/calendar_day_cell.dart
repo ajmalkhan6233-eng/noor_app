@@ -13,6 +13,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../core/utils/islamic_occasion.dart';
+import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../core/utils/sri_lanka_holiday.dart';
 
 class CalendarDayCell extends StatelessWidget {
@@ -21,11 +22,13 @@ class CalendarDayCell extends StatelessWidget {
     required this.gregorianDate,
     required this.hijri,
     required this.isToday,
+    required this.onTap,
   });
 
   final DateTime gregorianDate;
   final HijriDate hijri;
   final bool isToday;
+  final VoidCallback onTap;
 
   int get gregorianDay => gregorianDate.day;
 
@@ -46,8 +49,10 @@ class CalendarDayCell extends StatelessWidget {
       if (holidays.isNotEmpty) holidays.map((h) => h.name).join(', '),
     ].join(', ');
 
-    return Semantics(
+    return SemanticButton(
       label: label,
+      hint: 'Double tap for full details',
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
