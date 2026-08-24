@@ -44,10 +44,7 @@ class HeroCard extends StatelessWidget {
 
     return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          debugPrint('HERO_CARD_DEBUG constraints=$constraints');
-          return Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
@@ -88,8 +85,6 @@ class HeroCard extends StatelessWidget {
             ],
           ),
         ],
-          );
-        },
       ),
     );
   }
