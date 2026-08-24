@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/location/location_service.dart';
 import '../../../settings/data/settings_repository.dart';
+import '../../data/coordinate_bounds.dart';
 import '../../data/prayer_notification_coordinator.dart';
 import '../../data/prayer_repository.dart';
 import '../../data/prayer_times_result.dart';
@@ -45,6 +46,8 @@ class PrayerCubit extends Cubit<PrayerState> {
         notifications: appSettings.notifications,
         iqamathOffsets: appSettings.iqamathOffsets,
         silentMode: appSettings.silentMode,
+        preReminderEnabled: appSettings.preReminderEnabled,
+        preReminderMinutes: appSettings.preReminderMinutes,
       ),
     );
     final district = findSriLankaDistrict(appSettings.selectedDistrict);
@@ -83,9 +86,7 @@ class PrayerCubit extends Cubit<PrayerState> {
       emit(
         state.copyWith(
           isResolvingLocation: false,
-          locationError: forceFresh
-              ? 'Enter your coordinates below to see prayer times.'
-              : null,
+          locationError: forceFresh ? manualEntryPromptMessage : null,
         ),
       );
       return;
@@ -104,14 +105,8 @@ class PrayerCubit extends Cubit<PrayerState> {
 
   /// Fully sufficient on its own — no GPS permission ever required.
   void setManualLocation(double latitude, double longitude) {
-    if (latitude.abs() > 90 || longitude.abs() > 180) {
-      emit(
-        state.copyWith(
-          locationError:
-              'Enter a latitude between -90 and 90, and a longitude '
-              'between -180 and 180.',
-        ),
-      );
+    if (!isValidCoordinate(latitude, longitude)) {
+      emit(state.copyWith(locationError: invalidCoordinateMessage));
       return;
     }
     emit(
@@ -145,6 +140,8 @@ class PrayerCubit extends Cubit<PrayerState> {
               notifications: state.notifications,
               iqamathOffsets: state.iqamathOffsets,
               silentMode: state.silentMode,
+              preReminderEnabled: state.preReminderEnabled,
+              preReminderMinutes: state.preReminderMinutes,
             )
             .catchError((_) {}),
       );

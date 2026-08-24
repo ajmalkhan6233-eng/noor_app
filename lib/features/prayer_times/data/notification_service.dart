@@ -1,8 +1,10 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Local-only adhan/iqamath reminders — `zonedSchedule` fires entirely
-// on-device via AlarmManager, no server, no push token, no network.
-// Only this file touches `flutter_local_notifications`.
+// Local-only adhan/iqamath/reminder notifications — `zonedSchedule`
+// fires entirely on-device via AlarmManager, no server, no push
+// token, no network. Only this file touches
+// `flutter_local_notifications`; id/slot mapping lives in
+// notification_slots.dart to keep this file under the line limit.
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
@@ -10,15 +12,11 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../settings/data/notification_settings.dart';
 import 'iqamath_offsets.dart';
+import 'notification_slots.dart';
 import 'prayer_times_result.dart';
 
-/// Notification ids are stable per-prayer so re-scheduling the same
-/// day simply replaces the earlier alarm instead of stacking a new
-/// one beside it.
-enum _PrayerSlot { fajr, dhuhr, asr, maghrib, isha }
-
-/// Schedules local "time to pray" notifications for adhan and, when an
-/// iqamath offset exists, a second reminder at the congregation time.
+/// Schedules local "time to pray" notifications for adhan, iqamath
+/// (when it has an offset), and an optional reminder before adhan.
 class NotificationService {
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
     : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
@@ -40,17 +38,20 @@ class NotificationService {
     );
   }
 
-  /// Schedules adhan (and iqamath, when it has an offset) notifications
-  /// for every enabled prayer in [times], respecting [notifications]'
-  /// per-prayer toggle. Sunrise never gets a notification.
+  /// Schedules adhan/iqamath/reminder notifications for every enabled
+  /// prayer in [times], respecting [notifications]' per-prayer toggle.
+  /// Sunrise never gets a notification. The pre-adhan reminder is a
+  /// single global on/off + minutes value, not per-prayer.
   Future<void> scheduleForDay({
     required PrayerTimesComputed times,
     required NotificationSettings notifications,
     required IqamathOffsetMinutes iqamathOffsets,
+    bool preReminderEnabled = false,
+    int preReminderMinutes = 10,
   }) async {
     await initialize();
-    for (final slot in _PrayerSlot.values) {
-      final (name, adhanTime) = _entryFor(slot, times);
+    for (final slot in PrayerSlot.values) {
+      final (name, adhanTime) = entryForSlot(slot, times);
       if (!notifications.forPrayer(name)) {
         await _cancel(slot);
         continue;
@@ -64,37 +65,40 @@ class NotificationService {
         '$name iqamath',
         'Congregation for $name is starting.',
         iqamathTime,
-        isIqamath: true,
+        kind: NotificationKind.iqamath,
       );
+
+      if (preReminderEnabled) {
+        final reminderTime = adhanTime.subtract(
+          Duration(minutes: preReminderMinutes),
+        );
+        await _scheduleAt(
+          slot,
+          '$name in $preReminderMinutes min',
+          '$name will be at ${formatClockTime(adhanTime)}.',
+          reminderTime,
+          kind: NotificationKind.reminder,
+        );
+      } else {
+        await _plugin.cancel(idForSlot(slot, kind: NotificationKind.reminder));
+      }
     }
   }
 
-  (String, DateTime) _entryFor(_PrayerSlot slot, PrayerTimesComputed t) {
-    return switch (slot) {
-      _PrayerSlot.fajr => ('Fajr', t.fajr),
-      _PrayerSlot.dhuhr => ('Dhuhr', t.dhuhr),
-      _PrayerSlot.asr => ('Asr', t.asr),
-      _PrayerSlot.maghrib => ('Maghrib', t.maghrib),
-      _PrayerSlot.isha => ('Isha', t.isha),
-    };
-  }
-
-  int _idFor(_PrayerSlot slot, {bool isIqamath = false}) =>
-      slot.index * 2 + (isIqamath ? 1 : 0);
-
-  Future<void> _cancel(_PrayerSlot slot) async {
-    await _plugin.cancel(_idFor(slot));
-    await _plugin.cancel(_idFor(slot, isIqamath: true));
+  Future<void> _cancel(PrayerSlot slot) async {
+    for (final kind in NotificationKind.values) {
+      await _plugin.cancel(idForSlot(slot, kind: kind));
+    }
   }
 
   Future<void> _scheduleAt(
-    _PrayerSlot slot,
+    PrayerSlot slot,
     String title,
     String body,
     DateTime time, {
-    bool isIqamath = false,
+    NotificationKind kind = NotificationKind.adhan,
   }) async {
-    final id = _idFor(slot, isIqamath: isIqamath);
+    final id = idForSlot(slot, kind: kind);
     final scheduled = tz.TZDateTime.from(time, tz.local);
     if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) {
       await _plugin.cancel(id);

@@ -284,6 +284,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Iqamath offsets (minutes after adhan)';
 
   @override
+  String get preReminderSectionHeader => 'Pre-adhan reminder';
+
+  @override
   String get silentModeSectionHeader => 'Silent mode';
 
   @override

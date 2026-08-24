@@ -30,11 +30,15 @@ class PrayerNotificationCoordinator {
     required NotificationSettings notifications,
     required IqamathOffsetMinutes iqamathOffsets,
     required SilentModeSettings silentMode,
+    bool preReminderEnabled = false,
+    int preReminderMinutes = 10,
   }) async {
     await _notifications.scheduleForDay(
       times: times,
       notifications: notifications,
       iqamathOffsets: iqamathOffsets,
+      preReminderEnabled: preReminderEnabled,
+      preReminderMinutes: preReminderMinutes,
     );
     await _scheduleSilentWindows(times, iqamathOffsets, silentMode);
   }

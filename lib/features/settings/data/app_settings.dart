@@ -23,6 +23,8 @@ class AppSettings {
     this.silentMode = const SilentModeSettings(),
     this.selectedDistrict,
     this.locale = AppLocaleOption.english,
+    this.preReminderEnabled = false,
+    this.preReminderMinutes = 10,
   });
 
   final PrayerSettings prayerSettings;
@@ -57,6 +59,12 @@ class AppSettings {
   /// geocoding, no network); `null` until the user sets it.
   final String? locationLabel;
 
+  /// Optional local reminder fired [preReminderMinutes] before each
+  /// enabled prayer's adhan — separate from the at-prayer-time adhan
+  /// notification itself. Off by default.
+  final bool preReminderEnabled;
+  final int preReminderMinutes;
+
   AppSettings copyWith({
     PrayerSettings? prayerSettings,
     NotificationSettings? notifications,
@@ -67,6 +75,8 @@ class AppSettings {
     IqamathOffsetMinutes? iqamathOffsets,
     SilentModeSettings? silentMode,
     AppLocaleOption? locale,
+    bool? preReminderEnabled,
+    int? preReminderMinutes,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -79,6 +89,8 @@ class AppSettings {
       silentMode: silentMode ?? this.silentMode,
       selectedDistrict: selectedDistrict,
       locale: locale ?? this.locale,
+      preReminderEnabled: preReminderEnabled ?? this.preReminderEnabled,
+      preReminderMinutes: preReminderMinutes ?? this.preReminderMinutes,
     );
   }
 
@@ -97,6 +109,8 @@ class AppSettings {
       silentMode: silentMode,
       selectedDistrict: district,
       locale: locale,
+      preReminderEnabled: preReminderEnabled,
+      preReminderMinutes: preReminderMinutes,
     );
   }
 }

@@ -74,10 +74,18 @@ class SettingsCubit extends Cubit<SettingsState> {
         silentMode: s.silentMode,
         selectedDistrict: s.selectedDistrict,
         locale: s.locale,
+        preReminderEnabled: s.preReminderEnabled,
+        preReminderMinutes: s.preReminderMinutes,
       ));
 
   Future<void> setIqamathOffsets(IqamathOffsetMinutes offsets) =>
       _update((s) => s.copyWith(iqamathOffsets: offsets));
+
+  Future<void> setPreReminderEnabled(bool enabled) =>
+      _update((s) => s.copyWith(preReminderEnabled: enabled));
+
+  Future<void> setPreReminderMinutes(int minutes) =>
+      _update((s) => s.copyWith(preReminderMinutes: minutes));
 
   Future<void> setSilentMode(SilentModeSettings silentMode) =>
       _update((s) => s.copyWith(silentMode: silentMode));

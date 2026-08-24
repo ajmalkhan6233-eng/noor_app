@@ -38,6 +38,16 @@ void main() {
             for (final statement in tasbihCreateStatements) {
               await db.execute(statement);
             }
+            // Pre-version-3 shape of app_settings, before
+            // pre_reminder_enabled/pre_reminder_minutes existed — so
+            // this test actually exercises the version-3 ALTER TABLE
+            // path, not a table that already has the new columns.
+            await db.execute('''
+              CREATE TABLE app_settings (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                calculation_method TEXT NOT NULL DEFAULT 'muslimWorldLeague'
+              )
+            ''');
           },
         ),
       );
@@ -46,6 +56,10 @@ void main() {
         'count': 33,
         'target': 33,
         'updated_at': '2026-01-01T00:00:00.000',
+      });
+      await v1.insert('app_settings', {
+        'id': 1,
+        'calculation_method': 'muslimWorldLeague',
       });
       await v1.close();
 
@@ -73,6 +87,14 @@ void main() {
       });
       final completions = await upgraded.query('prayer_completions');
       expect(completions, hasLength(1));
+
+      // The version-3 migration added the pre-reminder columns with
+      // their defaults, and the pre-existing settings row survived.
+      final settingsRows = await upgraded.query('app_settings');
+      expect(settingsRows, hasLength(1));
+      expect(settingsRows.first['calculation_method'], 'muslimWorldLeague');
+      expect(settingsRows.first['pre_reminder_enabled'], 0);
+      expect(settingsRows.first['pre_reminder_minutes'], 10);
 
       await upgraded.close();
     },

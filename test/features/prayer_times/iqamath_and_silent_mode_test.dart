@@ -41,6 +41,8 @@ class _NoopNotificationService extends NotificationService {
     required PrayerTimesComputed times,
     required NotificationSettings notifications,
     required IqamathOffsetMinutes iqamathOffsets,
+    bool preReminderEnabled = false,
+    int preReminderMinutes = 10,
   }) async {}
 }
 

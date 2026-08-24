@@ -289,6 +289,9 @@ class AppLocalizationsSi extends AppLocalizations {
       'ඉකාමත් කාල පරතරය (අදාන් වලින් පසු මිනිත්තු)';
 
   @override
+  String get preReminderSectionHeader => 'අදානයට පෙර මතක් කිරීම';
+
+  @override
   String get silentModeSectionHeader => 'නිශ්ශබ්ද ප්‍රකාරය';
 
   @override

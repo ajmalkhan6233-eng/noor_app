@@ -90,6 +90,7 @@
   "calculationSectionHeader": "கணக்கீடு",
   "manualAdjustmentsSectionHeader": "கைமுறை சரிசெய்தல்கள் (நிமிடங்கள்)",
   "iqamathOffsetsSectionHeader": "இகாமத் இடைவெளிகள் (அதான் பின் நிமிடங்கள்)",
+  "preReminderSectionHeader": "அதானுக்கு முந்தைய நினைவூட்டல்",
   "silentModeSectionHeader": "மௌன பயன்முறை",
   "displaySectionHeader": "காட்சி",
   "languageSectionHeader": "மொழி",

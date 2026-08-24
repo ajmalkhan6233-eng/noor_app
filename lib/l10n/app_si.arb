@@ -90,6 +90,7 @@
   "calculationSectionHeader": "ගණනය",
   "manualAdjustmentsSectionHeader": "අතින් සකස් කිරීම් (මිනිත්තු)",
   "iqamathOffsetsSectionHeader": "ඉකාමත් කාල පරතරය (අදාන් වලින් පසු මිනිත්තු)",
+  "preReminderSectionHeader": "අදානයට පෙර මතක් කිරීම",
   "silentModeSectionHeader": "නිශ්ශබ්ද ප්‍රකාරය",
   "displaySectionHeader": "සංදර්ශනය",
   "languageSectionHeader": "භාෂාව",

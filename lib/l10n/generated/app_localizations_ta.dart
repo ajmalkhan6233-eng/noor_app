@@ -291,6 +291,9 @@ class AppLocalizationsTa extends AppLocalizations {
       'இகாமத் இடைவெளிகள் (அதான் பின் நிமிடங்கள்)';
 
   @override
+  String get preReminderSectionHeader => 'அதானுக்கு முந்தைய நினைவூட்டல்';
+
+  @override
   String get silentModeSectionHeader => 'மௌன பயன்முறை';
 
   @override

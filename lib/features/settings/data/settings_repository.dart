@@ -76,6 +76,8 @@ class SettingsRepository {
       locale: AppLocaleOptionData.fromLanguageCode(
         row['language_code'] as String? ?? 'en',
       ),
+      preReminderEnabled: (row['pre_reminder_enabled']! as int) != 0,
+      preReminderMinutes: row['pre_reminder_minutes']! as int,
     );
   }
 
@@ -119,6 +121,8 @@ class SettingsRepository {
       'silent_extra_minutes': silent.extraMinutesAfterIqamath,
       'selected_district': settings.selectedDistrict,
       'language_code': settings.locale.languageCode,
+      'pre_reminder_enabled': settings.preReminderEnabled ? 1 : 0,
+      'pre_reminder_minutes': settings.preReminderMinutes,
     };
 
     final existing = await db.query('app_settings', where: 'id = 1');

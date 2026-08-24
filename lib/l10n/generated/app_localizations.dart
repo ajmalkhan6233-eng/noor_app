@@ -586,6 +586,12 @@ abstract class AppLocalizations {
   /// **'Iqamath offsets (minutes after adhan)'**
   String get iqamathOffsetsSectionHeader;
 
+  /// No description provided for @preReminderSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-adhan reminder'**
+  String get preReminderSectionHeader;
+
   /// No description provided for @silentModeSectionHeader.
   ///
   /// In en, this message translates to:

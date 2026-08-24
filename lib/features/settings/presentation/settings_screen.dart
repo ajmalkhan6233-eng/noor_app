@@ -18,6 +18,7 @@ import 'widgets/iqamath_offset_section.dart';
 import 'widgets/language_section.dart';
 import 'widgets/method_madhab_section.dart';
 import 'widgets/prayer_adjustments_section.dart';
+import 'widgets/pre_reminder_section.dart';
 import 'widgets/silent_mode_section.dart';
 
 /// Settings: calculation preferences and display. Notification
@@ -71,6 +72,9 @@ class _SettingsView extends StatelessWidget {
                   const SizedBox(height: 16),
                   SectionHeader(l10n.iqamathOffsetsSectionHeader),
                   const AppCard(child: IqamathOffsetSection()),
+                  const SizedBox(height: 16),
+                  SectionHeader(l10n.preReminderSectionHeader),
+                  const AppCard(child: PreReminderSection()),
                   const SizedBox(height: 16),
                   SectionHeader(l10n.silentModeSectionHeader),
                   const AppCard(child: SilentModeSection()),

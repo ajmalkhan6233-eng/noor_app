@@ -101,6 +101,7 @@
   "calculationSectionHeader": "Calculation",
   "manualAdjustmentsSectionHeader": "Manual adjustments (minutes)",
   "iqamathOffsetsSectionHeader": "Iqamath offsets (minutes after adhan)",
+  "preReminderSectionHeader": "Pre-adhan reminder",
   "silentModeSectionHeader": "Silent mode",
   "displaySectionHeader": "Display",
   "languageSectionHeader": "Language",

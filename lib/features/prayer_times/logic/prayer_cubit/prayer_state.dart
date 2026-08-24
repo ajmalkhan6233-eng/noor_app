@@ -26,6 +26,8 @@ class PrayerState extends Equatable {
     this.notifications = const NotificationSettings(),
     this.iqamathOffsets = const IqamathOffsetMinutes(),
     this.silentMode = const SilentModeSettings(),
+    this.preReminderEnabled = false,
+    this.preReminderMinutes = 10,
   });
 
   final double? latitude;
@@ -47,6 +49,11 @@ class PrayerState extends Equatable {
   final IqamathOffsetMinutes iqamathOffsets;
   final SilentModeSettings silentMode;
 
+  /// Optional local reminder fired [preReminderMinutes] before each
+  /// enabled prayer's adhan — separate from the at-prayer-time toggle.
+  final bool preReminderEnabled;
+  final int preReminderMinutes;
+
   bool get hasCoordinates => latitude != null && longitude != null;
 
   PrayerState copyWith({
@@ -61,6 +68,8 @@ class PrayerState extends Equatable {
     NotificationSettings? notifications,
     IqamathOffsetMinutes? iqamathOffsets,
     SilentModeSettings? silentMode,
+    bool? preReminderEnabled,
+    int? preReminderMinutes,
   }) {
     return PrayerState(
       latitude: latitude ?? this.latitude,
@@ -74,6 +83,8 @@ class PrayerState extends Equatable {
       notifications: notifications ?? this.notifications,
       iqamathOffsets: iqamathOffsets ?? this.iqamathOffsets,
       silentMode: silentMode ?? this.silentMode,
+      preReminderEnabled: preReminderEnabled ?? this.preReminderEnabled,
+      preReminderMinutes: preReminderMinutes ?? this.preReminderMinutes,
     );
   }
 

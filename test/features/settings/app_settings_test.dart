@@ -20,6 +20,20 @@ void main() {
       expect(updated.hijriOffsetDays, original.hijriOffsetDays);
     });
 
+    test('pre-reminder fields default off and update independently', () {
+      const original = AppSettings();
+      expect(original.preReminderEnabled, isFalse);
+      expect(original.preReminderMinutes, 10);
+
+      final updated = original.copyWith(
+        preReminderEnabled: true,
+        preReminderMinutes: 15,
+      );
+      expect(updated.preReminderEnabled, isTrue);
+      expect(updated.preReminderMinutes, 15);
+      expect(updated.themeMode, original.themeMode);
+    });
+
     test('nested prayer settings update independently', () {
       const original = AppSettings();
       final updated = original.copyWith(

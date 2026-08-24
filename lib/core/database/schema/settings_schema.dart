@@ -38,7 +38,9 @@ const List<String> settingsCreateStatements = [
     silent_isha INTEGER NOT NULL DEFAULT 0,
     silent_extra_minutes INTEGER NOT NULL DEFAULT 5,
     selected_district TEXT,
-    language_code TEXT NOT NULL DEFAULT 'en'
+    language_code TEXT NOT NULL DEFAULT 'en',
+    pre_reminder_enabled INTEGER NOT NULL DEFAULT 0,
+    pre_reminder_minutes INTEGER NOT NULL DEFAULT 10
   )
   ''',
 ];
