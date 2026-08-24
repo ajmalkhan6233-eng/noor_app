@@ -144,10 +144,23 @@ Work top to bottom. Commit after each checked-off item. Report status
 against this list, not a summary of unrelated work.
 
 ### Phase 1 — Fix known breakage
-- [ ] Al Quran tab stuck on loading spinner
-- [ ] Duas & Dhikr tab stuck on loading spinner
-- [ ] Ayah of the Day showing empty despite prior completion report
-- [ ] Location detection not prompting on first launch
+- [x] Al Quran tab stuck on loading spinner — fixed by `cac8419`
+      (`.gitattributes` pins Quran/Azkar assets to `eol=lf`; Windows
+      CRLF checkout was failing the SHA-256 import gate). Verified
+      current working-tree asset hashes match the expected constants.
+- [x] Duas & Dhikr tab stuck on loading spinner — same root cause and
+      fix as above (`cac8419`).
+- [x] Ayah of the Day showing empty despite prior completion report —
+      same root cause, plus a real latent gap now fixed: the Home card
+      built its own `QuranRepository` without ever calling
+      `QuranImportService.ensureImported()`, so on a fresh install
+      (before the user opened the Al Quran tab) it stayed empty even
+      after `cac8419`. `AyahOfDayCard` now calls `ensureImported()`
+      itself before querying.
+- [x] Location detection not prompting on first launch — verified:
+      `HomeDashboard` eagerly runs `PrayerCubit()..loadSettings()`,
+      which falls through to `LocationService.autoFetchCoordinates()`
+      and the real OS permission dialog when no district is set yet.
 - [ ] Every Arabic string (Quran ayat, Azkar, dua text) checked against
       its Tanzil Project / Hisn al-Muslim source — verbatim, no
       re-typing from memory, shadda/diacritic errors specifically

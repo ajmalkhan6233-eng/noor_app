@@ -21,15 +21,21 @@ import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../quran/data/quran_ayah.dart';
+import '../../../quran/data/quran_import_service.dart';
 import '../../../quran/data/quran_repository.dart';
 import '../../../quran/data/quran_surah.dart';
 import 'ayah_of_day_cta.dart';
 
 class AyahOfDayCard extends StatefulWidget {
-  const AyahOfDayCard({super.key, QuranRepository? repository})
-    : _repository = repository;
+  const AyahOfDayCard({
+    super.key,
+    QuranRepository? repository,
+    QuranImportService? importService,
+  }) : _repository = repository,
+       _importService = importService;
 
   final QuranRepository? _repository;
+  final QuranImportService? _importService;
 
   @override
   State<AyahOfDayCard> createState() => _AyahOfDayCardState();
@@ -37,6 +43,8 @@ class AyahOfDayCard extends StatefulWidget {
 
 class _AyahOfDayCardState extends State<AyahOfDayCard> {
   late final QuranRepository _repository = widget._repository ?? QuranRepository();
+  late final QuranImportService _importService =
+      widget._importService ?? QuranImportService();
 
   // Created once here rather than inline in build()'s FutureBuilder —
   // a FutureBuilder(future: _load()) directly in build() creates a
@@ -45,6 +53,10 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
   late final Future<(QuranAyah?, List<QuranSurah>)> _future = _load();
 
   Future<(QuranAyah?, List<QuranSurah>)> _load() async {
+    // Home may render before the user has ever opened the Al Quran
+    // tab, so the DB import can't be assumed done — ensure it here too
+    // rather than depending on QuranCubit.init() having already run.
+    await _importService.ensureImported();
     final ayah = await _repository.ayahOfTheDay();
     final surahs = await _repository.surahs();
     return (ayah, surahs);
