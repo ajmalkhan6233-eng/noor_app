@@ -12,6 +12,7 @@ import '../../../core/presentation/widgets/section_header.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'licences_screen.dart';
+import 'privacy_policy_screen.dart';
 import 'widgets/about_sources_card.dart';
 import 'widgets/font_credit.dart';
 
@@ -38,6 +39,8 @@ class AboutScreen extends StatelessWidget {
               _religiousContentNoteCard(l10n),
               const SizedBox(height: 16),
               _fontCreditsCard(),
+              const SizedBox(height: 16),
+              _privacyPolicyLink(context),
               const SizedBox(height: 16),
               _licencesLink(context),
               const SizedBox(height: 16),
@@ -110,6 +113,32 @@ class AboutScreen extends StatelessWidget {
             style: AppTypography.caption,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _privacyPolicyLink(BuildContext context) {
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: SemanticButton(
+        label: 'Privacy Policy',
+        hint: 'Double tap to view the privacy policy',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const PrivacyPolicyScreen()),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Row(
+            children: [
+              Icon(Icons.privacy_tip_outlined, color: AppColors.gold),
+              SizedBox(width: 12),
+              Text(
+                'Privacy Policy',
+                style: TextStyle(color: AppColors.ink),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
