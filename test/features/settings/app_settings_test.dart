@@ -34,6 +34,14 @@ void main() {
       expect(updated.themeMode, original.themeMode);
     });
 
+    test('hasSeenLocationOnboarding defaults false and sticks once set', () {
+      const original = AppSettings();
+      expect(original.hasSeenLocationOnboarding, isFalse);
+
+      final updated = original.copyWith(hasSeenLocationOnboarding: true);
+      expect(updated.hasSeenLocationOnboarding, isTrue);
+    });
+
     test('nested prayer settings update independently', () {
       const original = AppSettings();
       final updated = original.copyWith(

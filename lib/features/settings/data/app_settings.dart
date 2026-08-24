@@ -25,6 +25,7 @@ class AppSettings {
     this.locale = AppLocaleOption.english,
     this.preReminderEnabled = false,
     this.preReminderMinutes = 10,
+    this.hasSeenLocationOnboarding = false,
   });
 
   final PrayerSettings prayerSettings;
@@ -65,6 +66,12 @@ class AppSettings {
   final bool preReminderEnabled;
   final int preReminderMinutes;
 
+  /// True once the one-time, first-launch location explanation has
+  /// been shown (regardless of whether the user granted or skipped
+  /// it) — never shown again after that, per the locked "ask once"
+  /// rule.
+  final bool hasSeenLocationOnboarding;
+
   AppSettings copyWith({
     PrayerSettings? prayerSettings,
     NotificationSettings? notifications,
@@ -77,6 +84,7 @@ class AppSettings {
     AppLocaleOption? locale,
     bool? preReminderEnabled,
     int? preReminderMinutes,
+    bool? hasSeenLocationOnboarding,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -91,6 +99,7 @@ class AppSettings {
       locale: locale ?? this.locale,
       preReminderEnabled: preReminderEnabled ?? this.preReminderEnabled,
       preReminderMinutes: preReminderMinutes ?? this.preReminderMinutes,
+      hasSeenLocationOnboarding: hasSeenLocationOnboarding ?? this.hasSeenLocationOnboarding,
     );
   }
 
@@ -111,6 +120,7 @@ class AppSettings {
       locale: locale,
       preReminderEnabled: preReminderEnabled,
       preReminderMinutes: preReminderMinutes,
+      hasSeenLocationOnboarding: hasSeenLocationOnboarding,
     );
   }
 }

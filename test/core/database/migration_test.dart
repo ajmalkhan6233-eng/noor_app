@@ -96,6 +96,11 @@ void main() {
       expect(settingsRows.first['pre_reminder_enabled'], 0);
       expect(settingsRows.first['pre_reminder_minutes'], 10);
 
+      // The version-4 migration added the onboarding-seen flag,
+      // defaulting to 0 (not seen) for pre-existing installs — a real
+      // upgrading user still gets the one-time explanation once.
+      expect(settingsRows.first['has_seen_location_onboarding'], 0);
+
       await upgraded.close();
     },
   );

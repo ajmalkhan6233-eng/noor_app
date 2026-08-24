@@ -76,6 +76,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         locale: s.locale,
         preReminderEnabled: s.preReminderEnabled,
         preReminderMinutes: s.preReminderMinutes,
+        hasSeenLocationOnboarding: s.hasSeenLocationOnboarding,
       ));
 
   Future<void> setIqamathOffsets(IqamathOffsetMinutes offsets) =>
@@ -86,6 +87,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> setPreReminderMinutes(int minutes) =>
       _update((s) => s.copyWith(preReminderMinutes: minutes));
+
+  Future<void> setHasSeenLocationOnboarding() =>
+      _update((s) => s.copyWith(hasSeenLocationOnboarding: true));
 
   Future<void> setSilentMode(SilentModeSettings silentMode) =>
       _update((s) => s.copyWith(silentMode: silentMode));

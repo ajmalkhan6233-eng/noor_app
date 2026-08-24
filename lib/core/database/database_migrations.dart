@@ -27,7 +27,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 3;
+const int latestSchemaVersion = 4;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -65,5 +65,10 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       'ALTER TABLE app_settings ADD COLUMN pre_reminder_minutes INTEGER NOT NULL DEFAULT 10',
     );
   }
-  // Next migration: add `if (oldVersion < 4) { ... }` here.
+  if (oldVersion < 4) {
+    await db.execute(
+      'ALTER TABLE app_settings ADD COLUMN has_seen_location_onboarding INTEGER NOT NULL DEFAULT 0',
+    );
+  }
+  // Next migration: add `if (oldVersion < 5) { ... }` here.
 }
