@@ -19,6 +19,7 @@ class QuranState extends Equatable {
     this.currentSurahId,
     this.currentAyahs = const [],
     this.arabicFontScale = 1.0,
+    this.fullQuranAyahs,
   });
 
   /// `null` while the initial import check is still running.
@@ -36,6 +37,11 @@ class QuranState extends Equatable {
   final List<QuranAyah> currentAyahs;
   final double arabicFontScale;
 
+  /// `null` until the continuous full-Quran view has been opened once
+  /// — loaded on demand rather than eagerly on [QuranCubit.init], so
+  /// opening the per-surah index (the common case) doesn't pay for it.
+  final List<QuranAyah>? fullQuranAyahs;
+
   bool get isImported => importStatus is QuranImported;
 
   QuranState copyWith({
@@ -49,6 +55,7 @@ class QuranState extends Equatable {
     int? currentSurahId,
     List<QuranAyah>? currentAyahs,
     double? arabicFontScale,
+    List<QuranAyah>? fullQuranAyahs,
   }) {
     return QuranState(
       importStatus: importStatus ?? this.importStatus,
@@ -61,6 +68,7 @@ class QuranState extends Equatable {
       currentSurahId: currentSurahId ?? this.currentSurahId,
       currentAyahs: currentAyahs ?? this.currentAyahs,
       arabicFontScale: arabicFontScale ?? this.arabicFontScale,
+      fullQuranAyahs: fullQuranAyahs ?? this.fullQuranAyahs,
     );
   }
 
@@ -76,5 +84,6 @@ class QuranState extends Equatable {
     currentSurahId,
     currentAyahs,
     arabicFontScale,
+    fullQuranAyahs,
   ];
 }

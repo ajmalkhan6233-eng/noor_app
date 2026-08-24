@@ -1,41 +1,85 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
+//
+// A vertical list of category rows — icon, label, chevron — each
+// opening its own AzkarCategoryScreen. Replaced the horizontal chip
+// selector + single flat list (2026-08-24 live-device review:
+// "categorized, not one flat list", matching the reference app's
+// grouped-row pattern for its Daily/Azkar sections).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/presentation/widgets/app_chip.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_category.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
-import '../../logic/azkar_cubit/azkar_state.dart';
+import '../azkar_category_screen.dart';
 
-/// Horizontally-scrollable chip row across the five azkar categories.
+extension _AzkarCategoryIcon on AzkarCategory {
+  IconData get icon {
+    switch (this) {
+      case AzkarCategory.morning:
+        return Icons.wb_sunny_outlined;
+      case AzkarCategory.evening:
+        return Icons.nights_stay_outlined;
+      case AzkarCategory.afterPrayer:
+        return Icons.self_improvement_outlined;
+      case AzkarCategory.sleep:
+        return Icons.bedtime_outlined;
+      case AzkarCategory.travel:
+        return Icons.flight_outlined;
+    }
+  }
+}
+
 class AzkarCategorySelector extends StatelessWidget {
   const AzkarCategorySelector({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AzkarCubit, AzkarState>(
-      builder: (context, state) {
-        return SizedBox(
-          height: 44,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (final category in AzkarCategory.values)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: AppChip(
-                    label: category.label,
-                    semanticLabel: '${category.label} azkar',
-                    selected: state.category == category,
-                    onTap: () =>
-                        context.read<AzkarCubit>().selectCategory(category),
-                  ),
-                ),
-            ],
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          for (final category in AzkarCategory.values) ...[
+            _row(context, category),
+            if (category != AzkarCategory.values.last)
+              const Divider(color: AppColors.hairline, height: 1),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _row(BuildContext context, AzkarCategory category) {
+    return SemanticButton(
+      label: '${category.label} azkar',
+      hint: 'Double tap to open',
+      onTap: () {
+        final cubit = context.read<AzkarCubit>();
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => BlocProvider.value(
+              value: cubit,
+              child: AzkarCategoryScreen(category: category),
+            ),
           ),
         );
       },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(category.icon, color: AppColors.gold, size: 20),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(category.label, style: const TextStyle(color: AppColors.ink)),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.sage, size: 20),
+          ],
+        ),
+      ),
     );
   }
 }

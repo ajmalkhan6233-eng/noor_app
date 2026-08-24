@@ -38,6 +38,19 @@ class QuranRepository {
     );
   }
 
+  /// Every ayah in the whole Quran, in canonical order — backs the
+  /// continuous full-Quran reading view. ~6,236 rows of short text;
+  /// loading it all up front is well within a phone's memory budget,
+  /// and simpler/more reliable than paging across surah boundaries.
+  Future<List<QuranAyah>> allAyahs() async {
+    final db = await _dbHelper.database;
+    final rows = await db.query(
+      'quran_ayahs',
+      orderBy: 'surah_id ASC, ayah_number ASC',
+    );
+    return _toAyahs(rows);
+  }
+
   Future<List<QuranAyah>> ayahsForSurah(int surahId) async {
     final db = await _dbHelper.database;
     final rows = await db.query(

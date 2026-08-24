@@ -58,6 +58,12 @@ class QuranCubit extends Cubit<QuranState> {
     );
   }
 
+  Future<void> loadFullQuran() async {
+    if (state.fullQuranAyahs != null) return;
+    final ayahs = await _repository.allAyahs();
+    emit(state.copyWith(fullQuranAyahs: ayahs));
+  }
+
   Future<void> openSurah(int surahId) async {
     final ayahs = await _repository.ayahsForSurah(surahId);
     emit(state.copyWith(currentSurahId: surahId, currentAyahs: ayahs));

@@ -8,6 +8,7 @@ import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../logic/quran_cubit/quran_cubit.dart';
 import '../../logic/quran_cubit/quran_state.dart';
+import '../full_quran_screen.dart';
 import '../surah_reader_screen.dart';
 import 'quran_search_bar.dart';
 import 'quran_search_result_tile.dart';
@@ -60,6 +61,26 @@ class _SurahIndexState extends State<SurahIndex> {
           child: Column(
             children: [
               const QuranSearchBar(),
+              const SizedBox(height: 8),
+              Semantics(
+                button: true,
+                label: 'Read the full Quran, one continuous view',
+                child: TextButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<QuranCubit>(),
+                        child: const FullQuranScreen(),
+                      ),
+                    ),
+                  ),
+                  icon: const Icon(Icons.menu_book_outlined, color: AppColors.gold, size: 18),
+                  label: const Text(
+                    'Read the full Quran',
+                    style: TextStyle(color: AppColors.gold),
+                  ),
+                ),
+              ),
               if (state.lastRead != null) ...[
                 const SizedBox(height: 8),
                 Semantics(
