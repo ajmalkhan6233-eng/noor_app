@@ -16,6 +16,7 @@ import 'widgets/display_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
 import 'widgets/iqamath_offset_section.dart';
 import 'widgets/language_section.dart';
+import 'widgets/location_section.dart';
 import 'widgets/method_madhab_section.dart';
 import 'widgets/prayer_adjustments_section.dart';
 import 'widgets/pre_reminder_section.dart';
@@ -56,6 +57,9 @@ class _SettingsView extends StatelessWidget {
             children: [
               StaggeredFadeIn(
                 children: [
+                  SectionHeader(l10n.locationSectionHeader),
+                  const AppCard(child: LocationSection()),
+                  const SizedBox(height: 16),
                   SectionHeader(l10n.calculationSectionHeader),
                   AppCard(
                     child: Column(

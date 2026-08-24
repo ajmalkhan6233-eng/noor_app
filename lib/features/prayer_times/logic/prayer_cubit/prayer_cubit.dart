@@ -35,9 +35,17 @@ class PrayerCubit extends Cubit<PrayerState> {
   final SettingsRepository _settingsRepository;
   final PrayerNotificationCoordinator _notificationCoordinator;
 
-  /// Re-applies a previously chosen district, if any — sticky, never
-  /// silently overridden by GPS later. Otherwise auto-fetches GPS
-  /// (bounded, see [_autoFetchLocation]) instead of waiting for a tap.
+  /// Re-reads every setting from the DB and re-resolves location —
+  /// called on first load (HomeDashboard mount) and every time the
+  /// Settings screen closes, since Settings is the only place location
+  /// is ever changed now and doesn't share this cubit. Always re-runs
+  /// resolution (not just when coordinates are still unknown) so a
+  /// district change or a fresh GPS fix made in Settings takes effect
+  /// immediately rather than waiting for the next app launch.
+  /// District, if set, always wins — sticky, never silently overridden
+  /// by GPS. [_autoFetchLocation] is cheap to call even when a fix is
+  /// already known: it returns the cached one instead of touching GPS
+  /// again.
   Future<void> loadSettings() async {
     final appSettings = await _settingsRepository.load();
     emit(
@@ -59,8 +67,6 @@ class PrayerCubit extends Cubit<PrayerState> {
           usingGps: false,
         ),
       );
-    }
-    if (state.hasCoordinates) {
       _recalculate();
     } else {
       await _autoFetchLocation();

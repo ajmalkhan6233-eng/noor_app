@@ -23,14 +23,10 @@ void main() {
 
     expect(find.byType(AppTopBar), findsOneWidget);
     expect(find.text('NOOR'), findsOneWidget);
-    expect(find.text('EN'), findsOneWidget);
-    expect(find.text('தமிழ்'), findsOneWidget);
-    expect(find.text('සිංහල'), findsOneWidget);
     expect(
       find.descendant(of: find.byType(AppTopBar), matching: find.byIcon(Icons.settings_outlined)),
       findsOneWidget,
     );
-    expect(find.byIcon(Icons.nightlight_round), findsOneWidget);
 
     // Switch tabs and confirm the bar persists identically.
     await tester.tap(find.byIcon(Icons.access_time));

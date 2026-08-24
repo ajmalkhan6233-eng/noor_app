@@ -309,6 +309,21 @@ class AppLocalizationsTa extends AppLocalizations {
       'இன்று வெள்ளை நாளும், பரிந்துரைக்கப்பட்ட வார நாள் நோன்பும் சேர்ந்த நாள் — நோன்பு நோற்க மிகவும் சிறந்த நாள்.';
 
   @override
+  String get locationSectionHeader => 'இருப்பிடம்';
+
+  @override
+  String get manageLocationInSettingsLabel =>
+      'அமைப்புகளில் இருப்பிடத்தை நிர்வகிக்கவும்';
+
+  @override
+  String get locationResolveFailedMessage =>
+      'உங்கள் இருப்பிடத்தை கண்டறிய முடியவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது கீழே ஒரு மாவட்டத்தைத் தேர்ந்தெடுக்கவும்.';
+
+  @override
+  String get usingGpsAutoResolveMessage =>
+      'GPS பயன்படுத்தப்படுகிறது — நீங்கள் ஆப்ஸை திறக்கும் ஒவ்வொரு முறையும் தானாக தீர்மானிக்கப்படும்.';
+
+  @override
   String get silentModeSectionHeader => 'மௌன பயன்முறை';
 
   @override
@@ -432,7 +447,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get supportNoorMessage =>
-      'நூர் எப்போதும் இலவசமாகவும், ஆஃப்லைனாகவும், விளம்பரமின்றியும் இருக்கும். அதன் வளர்ச்சிக்கு ஆதரவளிக்க விரும்பினால், விவரங்கள் திட்டப் பக்கத்தில் உள்ளன. ஜசாகல்லாஹு கைரன்.';
+      'நூர் எப்போதும் ஆஃப்லைனாகவும், விளம்பரமின்றியும் இருக்கும். அதன் வளர்ச்சிக்கு ஆதரவளிக்க விரும்பினால், விவரங்கள் திட்டப் பக்கத்தில் உள்ளன. ஜசாகல்லாஹு கைரன்.';
 
   @override
   String get appTagline =>

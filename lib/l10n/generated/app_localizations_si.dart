@@ -307,6 +307,21 @@ class AppLocalizationsSi extends AppLocalizations {
       'අද සුදු දිනයක් මෙන්ම නිර්දේශිත සතියේ උපවාස දිනයක්ද වේ — උපවාසය සඳහා විශේෂයෙන් අනුග්‍රහයට ලක් වූ දිනයකි.';
 
   @override
+  String get locationSectionHeader => 'ස්ථානය';
+
+  @override
+  String get manageLocationInSettingsLabel =>
+      'සැකසුම්වල ස්ථානය කළමනාකරණය කරන්න';
+
+  @override
+  String get locationResolveFailedMessage =>
+      'ඔබේ ස්ථානය සොයාගත නොහැකි විය. නැවත උත්සාහ කරන්න, හෝ පහත දිස්ත්‍රික්කයක් තෝරන්න.';
+
+  @override
+  String get usingGpsAutoResolveMessage =>
+      'GPS භාවිතා කරමින් — ඔබ යෙදුම විවෘත කරන සෑම වතාවකම ස්වයංක්‍රීයව විසඳේ.';
+
+  @override
   String get silentModeSectionHeader => 'නිශ්ශබ්ද ප්‍රකාරය';
 
   @override
@@ -432,7 +447,7 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get supportNoorMessage =>
-      'නූර් සැමවිටම නොමිලේ, අන්තර්ජාල රහිතව සහ දැන්වීම් රහිතව පවතිනු ඇත. එහි සංවර්ධනයට සහාය දැක්වීමට කැමති නම්, විස්තර ව්‍යාපෘති පිටුවේ ඇත. ජසාකල්ලාහු කයිරන්.';
+      'නූර් සැමවිටම අන්තර්ජාල රහිතව සහ දැන්වීම් රහිතව පවතිනු ඇත. එහි සංවර්ධනයට සහාය දැක්වීමට කැමති නම්, විස්තර ව්‍යාපෘති පිටුවේ ඇත. ජසාකල්ලාහු කයිරන්.';
 
   @override
   String get appTagline =>

@@ -601,7 +601,7 @@ abstract class AppLocalizations {
   /// No description provided for @sunnahFastingWeekdayReason.
   ///
   /// In en, this message translates to:
-  /// **'Fasting today is a recommended Sunnah — Mondays and Thursdays are among the Prophet's ﷺ regular fasting days.'**
+  /// **'Fasting today is a recommended Sunnah — Mondays and Thursdays are among the Prophet\'s ﷺ regular fasting days.'**
   String get sunnahFastingWeekdayReason;
 
   /// No description provided for @sunnahFastingWhiteDayReason.
@@ -615,6 +615,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today is both a White Day and a recommended weekday fast — an especially favoured day to fast.'**
   String get sunnahFastingWhiteDayAndWeekdayReason;
+
+  /// No description provided for @locationSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get locationSectionHeader;
+
+  /// No description provided for @manageLocationInSettingsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage location in Settings'**
+  String get manageLocationInSettingsLabel;
+
+  /// No description provided for @locationResolveFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not resolve your location. Try again, or pick a district below.'**
+  String get locationResolveFailedMessage;
+
+  /// No description provided for @usingGpsAutoResolveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Using GPS — resolves automatically each time you open the app.'**
+  String get usingGpsAutoResolveMessage;
 
   /// No description provided for @silentModeSectionHeader.
   ///
@@ -829,7 +853,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportNoorMessage.
   ///
   /// In en, this message translates to:
-  /// **'noor will always be free, offline, and ad-free. If you would like to support its development, details are on the project page. JazakAllahu khairan.'**
+  /// **'noor is offline and ad-free — always. If you would like to support its development, details are on the project page. JazakAllahu khairan.'**
   String get supportNoorMessage;
 
   /// No description provided for @appTagline.
@@ -1770,12 +1794,21 @@ abstract class AppLocalizations {
   String get setLocationOnPrayerTabMessage;
 
   /// No description provided for @religiousContentNoteHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'A note on religious content'**
   String get religiousContentNoteHeader;
 
   /// No description provided for @religiousContentNoteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The Qur\'an text and Azkar in this app are sourced from verified references — the Tanzil Project for the Qur\'an, Hisn al-Muslim for Azkar — and checked carefully against those sources. Even so, we are only human, and no effort is free of error. This content is currently being reviewed with local Islamic scholarship, a process that is ongoing and will continue even after release. If you notice anything that needs correction, please reach out to us — we welcome it. We approach this work with humility, and ask Allah\'s forgiveness for any unintentional mistake.'**
   String get religiousContentNoteBody;
 
   /// No description provided for @religiousContentQuietNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know.'**
   String get religiousContentQuietNote;
 }
 

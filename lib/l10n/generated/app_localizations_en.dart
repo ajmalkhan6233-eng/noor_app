@@ -302,6 +302,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Today is both a White Day and a recommended weekday fast — an especially favoured day to fast.';
 
   @override
+  String get locationSectionHeader => 'Location';
+
+  @override
+  String get manageLocationInSettingsLabel => 'Manage location in Settings';
+
+  @override
+  String get locationResolveFailedMessage =>
+      'Could not resolve your location. Try again, or pick a district below.';
+
+  @override
+  String get usingGpsAutoResolveMessage =>
+      'Using GPS — resolves automatically each time you open the app.';
+
+  @override
   String get silentModeSectionHeader => 'Silent mode';
 
   @override
@@ -424,7 +438,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportNoorMessage =>
-      'noor will always be free, offline, and ad-free. If you would like to support its development, details are on the project page. JazakAllahu khairan.';
+      'noor is offline and ad-free — always. If you would like to support its development, details are on the project page. JazakAllahu khairan.';
 
   @override
   String get appTagline =>
