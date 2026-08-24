@@ -1,7 +1,15 @@
 # Bismillahir Rahmanir Raheem - watermark: ALLAH
-# noor - build pipeline (v7).
+# noor - build pipeline (v8).
 #
-# Builds the release APK and publishes it as a GitHub Release.
+# Builds the release APK and publishes it as a GitHub Release (for
+# sideload testing — an AAB can't be installed directly). Also builds
+# a release AAB, uploaded as a build artifact only (not a Release
+# asset) — this is the format the Play Store actually requires;
+# having it building on every push means it's ready the moment a
+# release keystore exists. Both are currently signed with Flutter's
+# default debug key (no release signingConfig is configured yet) —
+# generating and safely storing a real release keystore is a
+# CLAUDE.md Phase 3 item that needs a human to do once, not CI.
 #
 # Unit tests are BLOCKING. A wrong qibla bearing must not ship.
 
@@ -167,6 +175,24 @@ jobs:
             --dart-define=BUILD_SHA="$SHORT_SHA" \
             --dart-define=BUILD_NUMBER="$GITHUB_RUN_NUMBER" \
             2>&1 | tee /tmp/build.log
+
+      - name: Pass 3 - build release AAB (Play Store artifact)
+        run: |
+          set -o pipefail
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          flutter build appbundle --release \
+            --build-number "$GITHUB_RUN_NUMBER" \
+            --dart-define=BUILD_SHA="$SHORT_SHA" \
+            --dart-define=BUILD_NUMBER="$GITHUB_RUN_NUMBER" \
+            2>&1 | tee /tmp/build_aab.log
+
+      - name: Upload AAB artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noor-v${{ github.run_number }}-release.aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 90
 
       - name: Publish GitHub Release
         if: success()
