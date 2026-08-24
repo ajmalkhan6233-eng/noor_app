@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       backgroundColor: AppColors.paper,
       body: Semantics(
-        label: AppStrings.splashGreeting,
+        label: AppStrings.splashGreetingSemanticLabel,
         child: FadeTransition(
           opacity: _fade,
           child: const BigBangSplashView(),

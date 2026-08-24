@@ -1,7 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Horizontal prayer-times strip for Home — all 5 daily prayers with
-// times, sitting alongside NextPrayerCountdownCapsule. The upcoming
+// times, sitting below PrayerHero's countdown ring. The upcoming
 // prayer gets the gold border + cyan glow treatment, mirroring how
 // prayer_times_list.dart marks the current prayer on the Prayer Times
 // tab (there: a thin coloured rule) but recoloured to the locked

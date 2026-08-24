@@ -73,5 +73,19 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- Android 11+ package visibility: without these, url_launcher's
+             canLaunchUrl() silently returns false for the Support
+             Developer screen's WhatsApp (https://wa.me/...) and email
+             (mailto:) links, even though a browser/mail app is
+             installed and the link would work fine if launched
+             directly. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="mailto"/>
+        </intent>
     </queries>
 </manifest>

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'core/app_locale_controller.dart';
+import 'core/app_theme_controller.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
 import 'core/presentation/app_scroll_behavior.dart';
@@ -28,15 +29,15 @@ class _NoorAppState extends State<NoorApp> {
 
   bool _showSplash = true;
   bool _onboardingPushed = false;
-  ThemeMode _themeMode = ThemeMode.dark;
 
   @override
   void initState() {
     super.initState();
     SettingsRepository().load().then((settings) {
-      if (mounted) {
-        setState(() => _themeMode = settings.themeMode.flutterThemeMode);
-      }
+      // Only seed the controller if Settings hasn't already changed it
+      // (e.g. a fast theme switch while this future was pending).
+      AppThemeController.instance.themeMode.value ??=
+          settings.themeMode.flutterThemeMode;
       // Only seed the controller if Settings hasn't already changed it
       // (e.g. a fast language switch while this future was pending).
       AppLocaleController.instance.locale.value ??= settings.locale.locale;
@@ -80,20 +81,25 @@ class _NoorAppState extends State<NoorApp> {
     return ValueListenableBuilder<Locale?>(
       valueListenable: AppLocaleController.instance.locale,
       builder: (context, locale, _) {
-        return MaterialApp(
-          navigatorKey: _navigatorKey,
-          title: AppStrings.appName,
-          debugShowCheckedModeBanner: false,
-          scrollBehavior: AppScrollBehavior(),
-          themeMode: _themeMode,
-          darkTheme: buildDarkTheme(),
-          theme: buildLightTheme(),
-          locale: locale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: _showSplash
-              ? SplashScreen(onFinished: _onSplashFinished)
-              : const HomeDashboard(),
+        return ValueListenableBuilder<ThemeMode?>(
+          valueListenable: AppThemeController.instance.themeMode,
+          builder: (context, themeMode, _) {
+            return MaterialApp(
+              navigatorKey: _navigatorKey,
+              title: AppStrings.appName,
+              debugShowCheckedModeBanner: false,
+              scrollBehavior: AppScrollBehavior(),
+              themeMode: themeMode ?? ThemeMode.dark,
+              darkTheme: buildDarkTheme(),
+              theme: buildLightTheme(),
+              locale: locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: _showSplash
+                  ? SplashScreen(onFinished: _onSplashFinished)
+                  : const HomeDashboard(),
+            );
+          },
         );
       },
     );

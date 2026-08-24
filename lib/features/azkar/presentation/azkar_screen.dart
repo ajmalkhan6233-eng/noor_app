@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/parallax_layer.dart';
-import '../../../core/presentation/widgets/religious_content_quiet_note.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/azkar_import_status.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
@@ -54,7 +53,6 @@ class _AzkarViewState extends State<_AzkarView> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            const ReligiousContentQuietNote(),
             ParallaxLayer(
               controller: _scrollController,
               child: const AzkarCategorySelector(),

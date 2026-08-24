@@ -31,26 +31,33 @@ class AzkarItemTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Arabic is the primary element here, not the
+                // transliteration/translation underneath it — sized up
+                // and given more line height so it reads first
+                // (2026-08-24 live-device review: Arabic was too small
+                // relative to an over-long English block).
                 Text(
                   item.arabicText,
                   textDirection: TextDirection.rtl,
-                  style: AppTypography.arabic.copyWith(fontSize: 20),
+                  textAlign: TextAlign.right,
+                  style: AppTypography.arabic.copyWith(fontSize: 26, height: 1.7),
                 ),
                 if (item.transliteration != null) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Text(
                     item.transliteration!,
                     style: const TextStyle(
                       color: AppColors.sage,
                       fontStyle: FontStyle.italic,
+                      fontSize: 13,
                     ),
                   ),
                 ],
                 if (item.translation != null) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     item.translation!,
-                    style: const TextStyle(color: AppColors.sage),
+                    style: const TextStyle(color: AppColors.sage, fontSize: 12),
                   ),
                 ],
                 const SizedBox(height: 4),
@@ -121,10 +128,13 @@ class _CounterButtonState extends State<_CounterButton> {
           ),
         ),
         child: Text(
-          '${widget.count} / ${widget.repeatCount}',
+          widget.done
+              ? 'Done · ${widget.count} of ${widget.repeatCount}'
+              : 'Tap to count · ${widget.count} of ${widget.repeatCount}',
           style: TextStyle(
             color: widget.done ? AppColors.gold : AppColors.ink,
             fontWeight: FontWeight.w600,
+            fontSize: 13,
           ),
         ),
       ),

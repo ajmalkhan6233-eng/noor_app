@@ -1,8 +1,10 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Section 3's Suhoor/Iftar two-box row. Suhoor ends at Fajr, Iftar
-// begins at Maghrib — reuses PrayerTimesComputed directly rather than
-// a separate Ramadan-specific calculation.
+// Suhoor/Iftar two-box row. Suhoor ends at Fajr, Iftar begins at
+// Maghrib — reuses PrayerTimesComputed directly rather than a
+// separate Ramadan-specific calculation. Moved here from the home
+// feature (2026-08-24 live-device review): it now lives on the
+// Prayer Times tab only, alongside the rest of that tab's detail.
 
 import 'package:flutter/material.dart';
 
@@ -10,8 +12,8 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import '../../../prayer_times/data/prayer_times_result.dart';
-import '../../../prayer_times/presentation/widgets/prayer_time_format.dart';
+import '../../data/prayer_times_result.dart';
+import 'prayer_time_format.dart';
 
 class SuhoorIftarRow extends StatelessWidget {
   const SuhoorIftarRow({super.key, required this.times});

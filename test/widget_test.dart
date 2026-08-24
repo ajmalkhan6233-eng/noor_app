@@ -4,12 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:noor/app.dart';
 import 'package:noor/core/constants/app_strings.dart';
-import 'package:noor/core/constants/build_info.dart';
 import 'package:noor/core/constants/splash_config.dart';
 import 'package:noor/features/home/presentation/home_dashboard.dart';
 
 void main() {
-  testWidgets('NoorApp shows the greeting then the home dashboard', (
+  testWidgets('NoorApp shows the Bismillah then the home dashboard', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const NoorApp());
@@ -32,18 +31,11 @@ void main() {
 
     expect(find.byType(HomeDashboard), findsOneWidget);
 
-    // HomeDashboard mounting doesn't guarantee its first tab's own
-    // nested BlocBuilder chain (Settings -> Prayer -> PrayerTracker)
-    // has finished its first build yet — each tester.pump() call is
-    // one frame, not "wait N ms", so loop a few real frames rather
-    // than trusting a single pump(duration) call to cover it.
-    for (var i = 0; i < 10 && find.text(BuildInfo.label).evaluate().isEmpty; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
-
-    // The build stamp must always be visible on Home, without digging
-    // — it's the only way anyone can confirm which commit an installed
-    // APK actually contains. Never remove this coverage.
-    expect(find.text(BuildInfo.label), findsOneWidget);
+    // The debug build stamp used to live on Home and was asserted
+    // here — moved to the About screen (2026-08-24 live-device
+    // review: a raw "Build dev · #0" line on the screen every real
+    // user opens first read as leaked debug UI). See
+    // test/features/settings/presentation/about_screen_test.dart for
+    // its coverage now.
   });
 }

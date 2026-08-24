@@ -7,6 +7,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
+import '../../../core/presentation/widgets/build_stamp_footer.dart';
 import '../../../core/presentation/widgets/section_header.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -39,6 +40,8 @@ class AboutScreen extends StatelessWidget {
               _fontCreditsCard(),
               const SizedBox(height: 16),
               _licencesLink(context),
+              const SizedBox(height: 16),
+              const BuildStampFooter(),
             ],
           ),
         ],

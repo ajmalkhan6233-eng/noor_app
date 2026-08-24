@@ -1,12 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The Home tab: hero card, Sunnah fasting card (when it applies),
-// next-prayer countdown capsule, Suhoor/Iftar row, today's prayer
-// list, Ayah of the Day card, and the build stamp. The streak
-// tracker (StreakCapsule, daily-goal checkboxes) is cut from v1 — see
-// CLAUDE.md's Deferred section (2026-08-23) — and stays off Home;
-// PrayerTrackerCubit is still shared with Prayer Times' own tracker
-// card via HomeDashboard's provider, this screen just doesn't read it.
+// The Home tab, reordered per the 2026-08-24 live-device review:
+// greeting once, live clock, the astrolabe countdown ring (moved here
+// from Prayer Times), the smart iqamah line, the full prayer-times
+// row, today's prayer checklist, Sunnah fasting (moved down from
+// where it used to lead), then Ayah of the Day last. The debug build
+// stamp moved to the About screen — see BuildStampFooter.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +18,10 @@ import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
 import 'widgets/ayah_of_day_card.dart';
+import 'widgets/daily_goals_list.dart';
 import 'widgets/hero_card.dart';
-import 'widgets/home_build_stamp.dart';
+import 'widgets/home_quick_toggles.dart';
+import 'widgets/live_clock.dart';
 import 'widgets/prayer_summary_section.dart';
 import 'widgets/sunnah_fasting_card.dart';
 
@@ -60,16 +61,20 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                           hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                         ),
                       ),
+                      const SizedBox(height: 12),
+                      const LiveClock(),
+                      const SizedBox(height: 12),
+                      const HomeQuickToggles(),
+                      const SizedBox(height: 12),
+                      PrayerSummarySection(state: prayerState, settingsState: settingsState),
+                      const SizedBox(height: 20),
+                      const DailyGoalsList(),
                       const SizedBox(height: 16),
                       SunnahFastingCard(
                         hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                       ),
-                      const SizedBox(height: 16),
-                      PrayerSummarySection(state: prayerState, settingsState: settingsState),
                       const SizedBox(height: 20),
                       AyahOfDayCard(),
-                      const SizedBox(height: 20),
-                      const HomeBuildStamp(),
                     ],
                   ),
                 ],

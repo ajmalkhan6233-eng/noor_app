@@ -7,12 +7,23 @@
 // motion — see BigBangSplashView.
 
 abstract final class SplashConfig {
-  /// How long the burst takes to fully expand and fade.
+  /// How long the burst takes to fully expand and fade, and for the
+  /// Bismillah to settle in over its back half.
   static const Duration burstDuration = Duration(milliseconds: 900);
 
-  /// How long the greeting holds once settled, before fading into the
-  /// dashboard.
-  static const Duration holdDuration = Duration(milliseconds: 1400);
+  /// How long the Bismillah holds alone, after the burst settles and
+  /// before it starts dissolving into the NOOR wordmark.
+  static const Duration bismillahHoldDuration = Duration(milliseconds: 550);
+
+  /// How long the Bismillah-to-NOOR crossfade takes.
+  static const Duration dissolveDuration = Duration(milliseconds: 500);
+
+  /// How long the whole sequence (splash screen mounted -> caller's
+  /// onFinished) holds before fading into the dashboard. Must clear
+  /// burstDuration + bismillahHoldDuration + dissolveDuration with
+  /// enough left over for NOOR to sit alone briefly, or the outer
+  /// fade-out cuts the dissolve off mid-way.
+  static const Duration holdDuration = Duration(milliseconds: 2450);
 
   /// Fade-in and fade-out duration for the whole splash (reduced-
   /// motion path only — the burst path fades itself in via

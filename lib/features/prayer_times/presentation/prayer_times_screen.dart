@@ -3,30 +3,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
-import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../prayer_tracker/presentation/widgets/prayer_tracker_card.dart';
-import '../../settings/presentation/settings_screen.dart';
+import '../../settings/logic/settings_cubit/settings_cubit.dart';
+import '../../settings/logic/settings_cubit/settings_state.dart';
 import '../data/prayer_settings.dart';
 import '../data/prayer_times_result.dart';
 import '../logic/prayer_cubit/prayer_cubit.dart';
 import '../logic/prayer_cubit/prayer_state.dart';
 import 'monthly_timetable_screen.dart';
 import 'widgets/high_latitude_notice.dart';
-import 'widgets/prayer_hero.dart';
 import 'widgets/prayer_loading_skeleton.dart';
 import 'widgets/prayer_times_list.dart';
+import 'widgets/suhoor_iftar_row.dart';
 
-/// Prayer-times screen — the app's hero screen: the astrolabe ring
-/// and next-prayer countdown lead, then the day's five prayers plus
-/// sunrise, then a link to change location in Settings, then the
-/// active method/madhab as a quiet closing caption.
-/// PrayerCubit and SettingsCubit are provided once by HomeDashboard
-/// (the tab shell) and shared across every tab.
+/// Prayer-times screen. The astrolabe ring/countdown now leads Home
+/// instead (2026-08-24 live-device review), so this tab's own job is
+/// the detail underneath it: the full prayer list with per-prayer
+/// notification toggles, Suhoor/Iftar, and the completion tracker.
+/// No location text or link here any more — location is only ever
+/// changed from Settings, with no pointer to it left on this screen
+/// either (previously "manage location in Settings", removed
+/// entirely per explicit request). PrayerCubit and SettingsCubit are
+/// provided once by HomeDashboard (the tab shell) and shared across
+/// every tab.
 class PrayerTimesScreen extends StatelessWidget {
   const PrayerTimesScreen({super.key});
 
@@ -68,10 +71,12 @@ class PrayerTimesScreen extends StatelessWidget {
               child: StaggeredFadeIn(
                 children: [
                   _buildResult(context, state),
+                  if (state.result is PrayerTimesComputed) ...[
+                    const SizedBox(height: 16),
+                    SuhoorIftarRow(times: state.result as PrayerTimesComputed),
+                  ],
                   const SizedBox(height: 16),
                   const PrayerTrackerCard(),
-                  const SizedBox(height: 16),
-                  _manageLocationLink(context),
                   const SizedBox(height: 16),
                   _activeSettingsCaption(context, state.settings),
                 ],
@@ -79,33 +84,6 @@ class PrayerTimesScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // Location is only ever changed from Settings now — this is just a
-  // pointer there, not another picker, so there's exactly one place
-  // that can actually change it.
-  Widget _manageLocationLink(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Center(
-      child: SemanticButton(
-        label: l10n.manageLocationInSettingsLabel,
-        onTap: () async {
-          final prayerCubit = context.read<PrayerCubit>();
-          await Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
-          );
-          await prayerCubit.loadSettings();
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.location_on_outlined, color: AppColors.gold, size: 16),
-            const SizedBox(width: 6),
-            Text(l10n.manageLocationInSettingsLabel, style: const TextStyle(color: AppColors.gold)),
-          ],
-        ),
       ),
     );
   }
@@ -133,12 +111,17 @@ class PrayerTimesScreen extends StatelessWidget {
         ),
       ),
       HighLatitudeUnresolved() => const HighLatitudeNotice(),
-      PrayerTimesComputed() => Column(
-        children: [
-          PrayerHero(times: result),
-          const SizedBox(height: 20),
-          PrayerTimesList(times: result, iqamathOffsets: state.iqamathOffsets),
-        ],
+      PrayerTimesComputed() => BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, settingsState) => PrayerTimesList(
+          times: result,
+          iqamathOffsets: state.iqamathOffsets,
+          notifications: settingsState.settings.notifications,
+          onToggleNotification: (prayer, enabled) => context
+              .read<SettingsCubit>()
+              .setNotifications(
+                settingsState.settings.notifications.withPrayer(prayer, enabled),
+              ),
+        ),
       ),
     };
   }

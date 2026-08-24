@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
-import '../../../../core/presentation/widgets/parallax_layer.dart';
 import '../../logic/quran_cubit/quran_cubit.dart';
 import '../../logic/quran_cubit/quran_state.dart';
 import '../surah_reader_screen.dart';
@@ -49,31 +48,36 @@ class _SurahIndexState extends State<SurahIndex> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ParallaxLayer(
-          controller: _scrollController,
-          child: AppCard(
-            child: Column(
-              children: [
-                const QuranSearchBar(),
-                if (state.lastRead != null) ...[
-                  const SizedBox(height: 8),
-                  Semantics(
-                    label:
-                        'Continue reading: Surah ${state.lastRead!.surahId}, '
-                        'Ayah ${state.lastRead!.ayahNumber}',
-                    button: true,
-                    child: TextButton(
-                      onPressed: () => _open(context, state.lastRead!.surahId),
-                      child: Text(
-                        'Continue: Surah ${state.lastRead!.surahId}, '
-                        'Ayah ${state.lastRead!.ayahNumber}',
-                        style: const TextStyle(color: AppColors.gold),
-                      ),
+        // Deliberately NOT wrapped in ParallaxLayer: that widget
+        // shifts its child by a fraction of the ListView's own scroll
+        // offset, which only makes sense for content that scrolls
+        // *with* the list. This card is pinned above the Expanded
+        // ListView instead — applying the same scroll-driven shift to
+        // a statically-positioned sibling pushed it down over the
+        // list content as soon as the user scrolled (2026-08-24
+        // live-device review: "floating search bar overlaps").
+        AppCard(
+          child: Column(
+            children: [
+              const QuranSearchBar(),
+              if (state.lastRead != null) ...[
+                const SizedBox(height: 8),
+                Semantics(
+                  label:
+                      'Continue reading: Surah ${state.lastRead!.surahId}, '
+                      'Ayah ${state.lastRead!.ayahNumber}',
+                  button: true,
+                  child: TextButton(
+                    onPressed: () => _open(context, state.lastRead!.surahId),
+                    child: Text(
+                      'Continue: Surah ${state.lastRead!.surahId}, '
+                      'Ayah ${state.lastRead!.ayahNumber}',
+                      style: const TextStyle(color: AppColors.gold),
                     ),
                   ),
-                ],
+                ),
               ],
-            ),
+            ],
           ),
         ),
         const SizedBox(height: 16),

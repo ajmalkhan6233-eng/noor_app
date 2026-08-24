@@ -972,7 +972,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get religiousContentNoteBody =>
-      'The Qur\'an text and Azkar in this app are sourced from verified references — the Tanzil Project for the Qur\'an, Hisn al-Muslim for Azkar — and checked carefully against those sources. Even so, we are only human, and no effort is free of error. This content is currently being reviewed with local Islamic scholarship, a process that is ongoing and will continue even after release. If you notice anything that needs correction, please reach out to us — we welcome it. We approach this work with humility, and ask Allah\'s forgiveness for any unintentional mistake.';
+      'Qur\'an text is sourced from the Tanzil Project, and Azkar text from Hisn al-Muslim. Both are checked against those sources and remain under ongoing scholarly review. If you notice anything that needs correction, please contact us via Support noor.';
 
   @override
   String get religiousContentQuietNote =>

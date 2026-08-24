@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/presentation/widgets/religious_content_quiet_note.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/quran_import_status.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
@@ -74,7 +73,6 @@ class _QuranView extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ReligiousContentQuietNote(),
                 Expanded(child: SurahIndex(state: state)),
               ],
             );

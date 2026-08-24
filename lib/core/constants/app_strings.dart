@@ -11,9 +11,19 @@ abstract final class AppStrings {
   /// App display name.
   static const String appName = 'noor';
 
-  /// Mandatory splash-screen greeting, shown in full caps on launch.
-  /// A religious invocation, not UI chrome — never translated.
-  static const String splashGreeting = 'BISMILLAHIR RAHMANIR RAHEEM';
+  /// Mandatory splash-screen invocation, in Arabic script — copied
+  /// verbatim from assets/quran/tanzil-uthmani.txt line "1|1" (Tanzil
+  /// Uthmani script, Surah Al-Fatiha ayah 1), not re-typed from
+  /// memory, per CLAUDE.md's Religious Content rule. Live-device
+  /// review (2026-08-24) asked for the splash to open on Arabic, not
+  /// the earlier Latin-transliteration text — this constant's value
+  /// changed, not just its display treatment.
+  static const String splashGreeting = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+
+  /// English fallback for [splashGreeting]'s Semantics label only —
+  /// screen readers announcing raw Arabic script by codepoint is not
+  /// useful; the visible text itself always stays Arabic.
+  static const String splashGreetingSemanticLabel = 'Bismillah — In the name of Allah';
 
   /// Internal project watermark. Not shown in the UI; used only in
   /// source-file header comments per `.clinerules` §7.
