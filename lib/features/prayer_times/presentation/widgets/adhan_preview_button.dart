@@ -35,7 +35,7 @@ class AdhanPreviewButton extends StatelessWidget {
                 context.read<AdhanPreviewCubit>().togglePreview(prayerName),
             child: Icon(
               isPlaying ? Icons.stop_circle_outlined : Icons.play_circle_outline,
-              size: 18,
+              size: 24,
               color: isPlaying ? AppColors.gold : AppColors.sage,
             ),
           ),

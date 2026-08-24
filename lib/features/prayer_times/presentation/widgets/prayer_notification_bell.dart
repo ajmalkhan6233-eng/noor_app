@@ -34,7 +34,7 @@ class PrayerNotificationBell extends StatelessWidget {
         onTap: onTap,
         child: Icon(
           enabled ? Icons.notifications_active : Icons.notifications_off_outlined,
-          size: 18,
+          size: 24,
           color: enabled ? AppColors.gold : AppColors.sage,
         ),
       ),
