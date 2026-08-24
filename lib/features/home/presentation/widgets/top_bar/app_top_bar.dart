@@ -29,9 +29,9 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
         color: AppColors.paper,
         border: Border(bottom: BorderSide(color: AppColors.hairline)),
       ),
-      child: SafeArea(
+      child: const SafeArea(
         bottom: false,
-        child: const Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             NoorWordmark(),

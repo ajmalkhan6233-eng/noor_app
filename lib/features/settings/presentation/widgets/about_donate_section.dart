@@ -10,6 +10,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../about_screen.dart';
+import '../support_developer_screen.dart';
 
 class AboutDonateSection extends StatelessWidget {
   const AboutDonateSection({super.key});
@@ -31,43 +32,13 @@ class AboutDonateSection extends StatelessWidget {
           SemanticButton(
             label: 'Donate',
             hint: 'Double tap for ways to support this project',
-            onTap: () => _showDonateDialog(context),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SupportDeveloperScreen()),
+            ),
             child: const _Row(
               icon: Icons.favorite_border,
               label: 'Donate',
               muted: true,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDonateDialog(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.card,
-        title: const Text(
-          'Support noor',
-          style: TextStyle(color: AppColors.ink),
-        ),
-        content: const Text(
-          'noor will always be free, offline, and ad-free. If you would '
-          'like to support its development, details are on the project '
-          'page. JazakAllahu khairan.',
-          style: TextStyle(color: AppColors.sage),
-        ),
-        actions: [
-          Semantics(
-            label: 'Close dialog',
-            button: true,
-            child: TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
-                'Close',
-                style: TextStyle(color: AppColors.gold),
-              ),
             ),
           ),
         ],
