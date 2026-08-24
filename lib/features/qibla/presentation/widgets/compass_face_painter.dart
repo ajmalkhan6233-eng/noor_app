@@ -21,13 +21,21 @@ import 'compass_ticks.dart';
 class CompassFacePainter extends CustomPainter {
   CompassFacePainter({
     required this.rotationDegrees,
-    required this.dimmed,
+    required this.needleAlpha,
     this.tiltX = 0,
     this.tiltY = 0,
   });
 
   final double rotationDegrees;
-  final bool dimmed;
+
+  /// Eased toward 1.0 (trustworthy) or 0.35 (low confidence) by
+  /// QiblaNeedle's AnimationController — a raw bool flipped straight
+  /// into paint alpha caused a visible flicker whenever the underlying
+  /// compass accuracy classification jittered near its threshold
+  /// (2026-08-24 live-device review: "the icon is blinking, keeps on
+  /// blinking"). Smoothing the transition here removes the flicker
+  /// regardless of how often the accuracy reading itself changes.
+  final double needleAlpha;
 
   /// Device tilt (-1..1 per axis) — shifts where the bezel's light
   /// highlight falls, so light appears to move across the metal.
@@ -53,10 +61,31 @@ class CompassFacePainter extends CustomPainter {
     );
   }
 
+  /// An octagonal, faceted housing rather than a plain circle — a
+  /// distinct 3D object, not the same disc shape the needle and dial
+  /// already use (2026-08-24 live-device review asked for a different
+  /// representation than "a spinning/blinking circle"). Each facet
+  /// gets its own gradient sliver so the housing reads as machined
+  /// metal with real bevels, not a flat ring.
+  Path _octagonPath(Offset center, double radius) {
+    final path = Path();
+    for (var i = 0; i < 8; i++) {
+      final angle = (math.pi / 4) * i - math.pi / 8;
+      final point = center + Offset(math.cos(angle), math.sin(angle)) * radius;
+      if (i == 0) {
+        path.moveTo(point.dx, point.dy);
+      } else {
+        path.lineTo(point.dx, point.dy);
+      }
+    }
+    path.close();
+    return path;
+  }
+
   void _paintBezel(Canvas canvas, Offset center, double radius) {
-    canvas.drawCircle(
-      center + const Offset(0, 5),
-      radius - 1,
+    final outer = _octagonPath(center, radius);
+    canvas.drawPath(
+      _octagonPath(center + const Offset(0, 5), radius - 1),
       Paint()
         ..color = AppColors.ink.withValues(alpha: 0.14)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10),
@@ -64,9 +93,8 @@ class CompassFacePainter extends CustomPainter {
     // The highlight drifts opposite the tilt, as if light were fixed
     // overhead and the bezel were tipping under it.
     final lightOffset = Offset(-tiltX, -tiltY) * radius * 0.6;
-    canvas.drawCircle(
-      center,
-      radius,
+    canvas.drawPath(
+      outer,
       Paint()
         ..shader = ui.Gradient.radial(
           center + lightOffset,
@@ -78,9 +106,25 @@ class CompassFacePainter extends CustomPainter {
           [AppColors.gold.withValues(alpha: 0.35), AppColors.card],
         ),
     );
-    canvas.drawCircle(
-      center,
-      radius,
+    // Each facet edge gets its own thin highlight/shadow pair, so the
+    // octagon reads as bevelled metal rather than a flat cut-out.
+    for (var i = 0; i < 8; i++) {
+      final a1 = (math.pi / 4) * i - math.pi / 8;
+      final a2 = (math.pi / 4) * (i + 1) - math.pi / 8;
+      final p1 = center + Offset(math.cos(a1), math.sin(a1)) * radius;
+      final p2 = center + Offset(math.cos(a2), math.sin(a2)) * radius;
+      final facingLight = math.cos((a1 + a2) / 2) * -tiltX + math.sin((a1 + a2) / 2) * -tiltY;
+      canvas.drawLine(
+        p1,
+        p2,
+        Paint()
+          ..strokeWidth = 1.2
+          ..color = (facingLight > 0 ? AppColors.gold : AppColors.ink)
+              .withValues(alpha: 0.25),
+      );
+    }
+    canvas.drawPath(
+      outer,
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1
@@ -128,14 +172,14 @@ class CompassFacePainter extends CustomPainter {
       ..lineTo(-length * 0.13, length * 0.25)
       ..close();
 
-    if (!dimmed) {
+    if (needleAlpha > 0.7) {
       canvas.save();
       canvas.translate(2.5, 3.5);
       canvas.drawShadow(path, AppColors.ink, 3, false);
       canvas.restore();
     }
 
-    final alpha = dimmed ? 0.35 : 1.0;
+    final alpha = needleAlpha;
     final rect = path.getBounds();
     canvas.drawPath(
       path,
@@ -151,7 +195,7 @@ class CompassFacePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CompassFacePainter oldDelegate) =>
       oldDelegate.rotationDegrees != rotationDegrees ||
-      oldDelegate.dimmed != dimmed ||
+      oldDelegate.needleAlpha != needleAlpha ||
       oldDelegate.tiltX != tiltX ||
       oldDelegate.tiltY != tiltY;
 }
