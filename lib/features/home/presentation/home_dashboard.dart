@@ -24,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
+import '../../../core/presentation/widgets/cosmic_background.dart';
 import '../../azkar/presentation/azkar_screen.dart';
 import '../../more/presentation/more_screen.dart';
 import '../../prayer_times/logic/adhan_preview_cubit.dart';
@@ -70,7 +71,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
       child: Scaffold(
         backgroundColor: AppColors.paper,
         appBar: const AppTopBar(),
-        body: FadeTabSwitcher(index: _selectedIndex, children: _screens),
+        body: Stack(
+          children: [
+            const Positioned.fill(child: CosmicBackground()),
+            FadeTabSwitcher(index: _selectedIndex, children: _screens),
+          ],
+        ),
         // expanded defaults true, so the dock always shows labels for
         // now — the scroll-driven compress/expand logic in
         // NoorBottomNav/NavTabItem is intact and ready to be driven

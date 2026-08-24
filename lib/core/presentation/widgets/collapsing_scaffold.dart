@@ -14,16 +14,24 @@ class CollapsingScaffold extends StatelessWidget {
     required this.title,
     required this.slivers,
     this.actions,
+    this.transparentBody = false,
   });
 
   final String title;
   final List<Widget> slivers;
   final List<Widget>? actions;
 
+  /// When true, the Scaffold body is transparent instead of the
+  /// opaque paper background — used on tabs sitting above
+  /// HomeDashboard's persistent CosmicBackground layer, so it shows
+  /// through instead of being fully covered by each tab's own
+  /// Scaffold. The collapsing app bar itself stays opaque either way.
+  final bool transparentBody;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: transparentBody ? Colors.transparent : AppColors.paper,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [

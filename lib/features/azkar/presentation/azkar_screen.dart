@@ -21,8 +21,11 @@ class AzkarScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => AzkarCubit()..init(),
       child: Scaffold(
-        backgroundColor: AppColors.paper,
-        appBar: AppBar(title: Text(AppLocalizations.of(context)!.azkarScreenTitle)),
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: AppColors.paper,
+          title: Text(AppLocalizations.of(context)!.azkarScreenTitle),
+        ),
         body: const Padding(
           padding: EdgeInsets.all(24),
           child: AzkarCategorySelector(),

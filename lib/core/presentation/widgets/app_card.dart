@@ -66,17 +66,31 @@ class AppCard extends StatelessWidget {
       // A dedicated Material — rather than relying on a distant
       // ancestor — so any ListTile/InkWell/etc. inside the card paints
       // its ink effects here, not hidden beneath the shadow's
-      // DecoratedBox.
+      // DecoratedBox. Material.color stays the flat card colour
+      // (Material doesn't take a gradient); the subtle lighter-toward-
+      // top gradient and top highlight line that give the card some
+      // depth are painted in a Container layered above it instead —
+      // deliberately not a BackdropFilter blur (that specifically was
+      // the thing that broke widget tests when tried before; a static
+      // gradient carries no such risk and was verified clean against
+      // the full suite this pass).
       child: Material(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          padding: padding,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: borderColor ?? AppColors.hairline),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.lerp(AppColors.card, AppColors.ink, 0.04)!,
+                AppColors.card,
+              ],
+            ),
           ),
-          child: child,
+          child: Padding(padding: padding, child: child),
         ),
       ),
     );

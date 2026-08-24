@@ -39,8 +39,10 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
-      appBar: AppBar(title: Text(l10n.moreTab)),
+      // Transparent so HomeDashboard's CosmicBackground shows through
+      // — this tab sits directly above that persistent layer.
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(title: Text(l10n.moreTab), backgroundColor: AppColors.paper),
       body: ListView(
         controller: _scrollController,
         padding: const EdgeInsets.all(24),

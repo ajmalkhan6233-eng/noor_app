@@ -33,8 +33,9 @@ class _QuranView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: AppColors.paper,
         title: Text(l10n.quranScreenTitle),
         actions: [
           Semantics(

@@ -52,6 +52,7 @@ class PrayerTimesScreen extends StatelessWidget {
     return BlocBuilder<PrayerCubit, PrayerState>(
       builder: (context, state) => CollapsingScaffold(
         title: l10n.prayerTimesScreenTitle,
+        transparentBody: true,
         actions: [
           Semantics(
             button: true,
