@@ -592,6 +592,30 @@ abstract class AppLocalizations {
   /// **'Pre-adhan reminder'**
   String get preReminderSectionHeader;
 
+  /// No description provided for @sunnahFastingCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunnah Fasting Today'**
+  String get sunnahFastingCardTitle;
+
+  /// No description provided for @sunnahFastingWeekdayReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting today is a recommended Sunnah — Mondays and Thursdays are among the Prophet's ﷺ regular fasting days.'**
+  String get sunnahFastingWeekdayReason;
+
+  /// No description provided for @sunnahFastingWhiteDayReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Today is a White Day (the 13th-15th of the Hijri month) — a recommended day to fast.'**
+  String get sunnahFastingWhiteDayReason;
+
+  /// No description provided for @sunnahFastingWhiteDayAndWeekdayReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Today is both a White Day and a recommended weekday fast — an especially favoured day to fast.'**
+  String get sunnahFastingWhiteDayAndWeekdayReason;
+
   /// No description provided for @silentModeSectionHeader.
   ///
   /// In en, this message translates to:

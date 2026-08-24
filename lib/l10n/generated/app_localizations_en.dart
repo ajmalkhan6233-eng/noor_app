@@ -287,6 +287,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preReminderSectionHeader => 'Pre-adhan reminder';
 
   @override
+  String get sunnahFastingCardTitle => 'Sunnah Fasting Today';
+
+  @override
+  String get sunnahFastingWeekdayReason =>
+      'Fasting today is a recommended Sunnah — Mondays and Thursdays are among the Prophet\'s ﷺ regular fasting days.';
+
+  @override
+  String get sunnahFastingWhiteDayReason =>
+      'Today is a White Day (the 13th-15th of the Hijri month) — a recommended day to fast.';
+
+  @override
+  String get sunnahFastingWhiteDayAndWeekdayReason =>
+      'Today is both a White Day and a recommended weekday fast — an especially favoured day to fast.';
+
+  @override
   String get silentModeSectionHeader => 'Silent mode';
 
   @override

@@ -294,6 +294,21 @@ class AppLocalizationsTa extends AppLocalizations {
   String get preReminderSectionHeader => 'அதானுக்கு முந்தைய நினைவூட்டல்';
 
   @override
+  String get sunnahFastingCardTitle => 'இன்று சுன்னத் நோன்பு';
+
+  @override
+  String get sunnahFastingWeekdayReason =>
+      'இன்று நோன்பு நோற்பது சுன்னத் ஆகும் — திங்கள் மற்றும் வியாழக்கிழமைகள் நபிகள் நாயகம் ﷺ அவர்களின் வழக்கமான நோன்பு நாட்களில் அடங்கும்.';
+
+  @override
+  String get sunnahFastingWhiteDayReason =>
+      'இன்று வெள்ளை நாள் (ஹிஜ்ரி மாதத்தின் 13-15) — நோன்பு நோற்க பரிந்துரைக்கப்படும் நாள்.';
+
+  @override
+  String get sunnahFastingWhiteDayAndWeekdayReason =>
+      'இன்று வெள்ளை நாளும், பரிந்துரைக்கப்பட்ட வார நாள் நோன்பும் சேர்ந்த நாள் — நோன்பு நோற்க மிகவும் சிறந்த நாள்.';
+
+  @override
   String get silentModeSectionHeader => 'மௌன பயன்முறை';
 
   @override

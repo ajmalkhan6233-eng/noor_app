@@ -292,6 +292,21 @@ class AppLocalizationsSi extends AppLocalizations {
   String get preReminderSectionHeader => 'අදානයට පෙර මතක් කිරීම';
 
   @override
+  String get sunnahFastingCardTitle => 'අද සුන්නත් උපවාසය';
+
+  @override
+  String get sunnahFastingWeekdayReason =>
+      'අද උපවාසය කිරීම නිර්දේශිත සුන්නතයකි — සඳුදා සහ බ්‍රහස්පතින්දා නබිතුමාණන් ﷺ නිතිපතා උපවාසය කළ දින අතර වේ.';
+
+  @override
+  String get sunnahFastingWhiteDayReason =>
+      'අද සුදු දිනයකි (හිජ්රි මාසයේ 13-15) — උපවාසය සඳහා නිර්දේශිත දිනයකි.';
+
+  @override
+  String get sunnahFastingWhiteDayAndWeekdayReason =>
+      'අද සුදු දිනයක් මෙන්ම නිර්දේශිත සතියේ උපවාස දිනයක්ද වේ — උපවාසය සඳහා විශේෂයෙන් අනුග්‍රහයට ලක් වූ දිනයකි.';
+
+  @override
   String get silentModeSectionHeader => 'නිශ්ශබ්ද ප්‍රකාරය';
 
   @override

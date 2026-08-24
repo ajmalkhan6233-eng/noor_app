@@ -26,6 +26,7 @@ import 'widgets/home_build_stamp.dart';
 import 'widgets/location_label.dart';
 import 'widgets/prayer_summary_section.dart';
 import 'widgets/streak_capsule.dart';
+import 'widgets/sunnah_fasting_card.dart';
 
 /// PrayerCubit and SettingsCubit are provided once by HomeDashboard
 /// (the tab shell) and shared across every tab, so location/settings
@@ -94,6 +95,10 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                           StreakCapsule(
                             streakDays: trackerState.prayerStreak,
                             completedCount: trackerState.completedPrayers.length,
+                          ),
+                          const SizedBox(height: 16),
+                          SunnahFastingCard(
+                            hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                           ),
                           const SizedBox(height: 16),
                           PrayerSummarySection(state: prayerState, settingsState: settingsState),
