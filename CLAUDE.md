@@ -196,8 +196,17 @@ verify against what's actually on the device, not the source tree.
 - [ ] App-wide icon weight pass
 
 ### Phase 3 — Release readiness
-- [ ] Confirm database passphrase is Keystore-backed (see the TODO in
-      database_helper.dart — do not ship the placeholder passphrase)
+- [x] Database passphrase is Keystore-backed — verified 2026-08-24:
+      `database_helper.dart` calls `SecurePassphraseService.getOrCreatePassphrase()`,
+      which generates a 256-bit CSPRNG value on first launch and
+      stores it via `flutter_secure_storage` (OS Keystore/Keychain).
+      No hardcoded/placeholder passphrase exists anywhere in the repo
+      — searched directly, not assumed. This item's original TODO
+      reference in `database_helper.dart` no longer exists in the
+      file; the fix predates this checkbox being ticked. No automated
+      test yet covers this (mocking `flutter_secure_storage`'s
+      platform channel is nontrivial) — worth adding later, not a
+      blocker given the source is unambiguous.
 - [ ] Migrate APK build to AAB
 - [ ] Release signing keystore generated and stored safely
 - [ ] Privacy policy page/link added (required even for a no-network app)
