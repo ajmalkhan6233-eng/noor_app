@@ -25,17 +25,20 @@ class PrayerCountdownRow extends StatelessWidget {
   final Duration remaining;
   final DateTime now;
 
+  // Bumped again (2026-08-25: "the countdown a little more big, and
+  // the time also a little more big") — this is the one number the
+  // whole Home screen exists to answer at a glance.
   static const _countdownStyle = TextStyle(
     color: AppColors.sage,
     fontFeatures: [FontFeature.tabularFigures()],
     letterSpacing: 1,
-    fontSize: 34,
+    fontSize: 40,
     fontWeight: FontWeight.w700,
   );
 
   static const _nowStyle = TextStyle(
     color: AppColors.gold,
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: FontWeight.w600,
     fontFeatures: [FontFeature.tabularFigures()],
   );

@@ -82,8 +82,12 @@ class _HeroCardState extends State<HeroCard>
           Positioned(
             top: 0,
             right: 0,
+            // Sized up slightly (22→26) per direct feedback (2026-08-25:
+            // "little little big") — best-guess target given the note
+            // was ambiguous about which mark it meant; still a
+            // watermark, not a headline, at this opacity.
             child:
-                Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 22)),
+                Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 26)),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 40),

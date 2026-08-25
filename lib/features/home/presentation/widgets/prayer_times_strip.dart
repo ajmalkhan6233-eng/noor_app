@@ -52,15 +52,20 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
   @override
   Widget build(BuildContext context) {
     final upcoming = _upcomingName();
+    // A horizontally scrolling ListView here left Isha permanently
+    // off-screen unless someone happened to swipe (2026-08-25, flagged
+    // directly: "I have to slide left to see Isha") — a Row of 5
+    // Expanded chips guarantees all five always fit, no scroll needed.
     return SizedBox(
       height: 86,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
+      child: Row(
         children: [
           for (final (name, time) in widget.times.prayerEntries)
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: _chip(name, time, name == upcoming),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3),
+                child: _chip(name, time, name == upcoming),
+              ),
             ),
         ],
       ),
@@ -73,7 +78,7 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
       label: label,
       child: ExcludeSemantics(
         child: AppCard(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
           borderColor: upcoming ? AppColors.gold : null,
           glowColor: upcoming ? AppColors.accentSecondary : null,
           child: Column(
@@ -81,6 +86,8 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
             children: [
               Text(
                 name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: upcoming ? AppColors.gold : AppColors.sage,
                   fontSize: 12,
@@ -88,7 +95,12 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(formatClock(time), style: AppTypography.time),
+              Text(
+                formatClock(time),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.time,
+              ),
             ],
           ),
         ),
