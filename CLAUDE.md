@@ -190,8 +190,17 @@ verify against what's actually on the device, not the source tree.
 - [ ] About page attribution
 - [ ] "Allah" calligraphy emboss treatment
 - [ ] Splash screen — Big Bang concept
-- [ ] Per-prayer alarm toggles
-- [ ] Adhan mute toggle
+- [x] Per-prayer alarm toggles — verified 2026-08-25: bell icons in
+      `prayer_times_list.dart` on Home already toggle
+      `NotificationSettings.forPrayer`, and
+      `prayer_notification_coordinator.dart`/`notification_service.dart`
+      already skip scheduling for any prayer where it's off. Pre-dates
+      tonight, just wasn't checked off.
+- [x] Adhan mute toggle — Home's Silent Mode chip
+      (`home_quick_toggles.dart`) is this: master on/off for all five
+      prayers' ringer silencing, with per-prayer granularity still in
+      Settings. Fixed tonight (2026-08-25) so turning it on also
+      requests the Do Not Disturb access it depends on.
 - [ ] Proactive location permission prompt
 - [ ] App-wide icon weight pass
 

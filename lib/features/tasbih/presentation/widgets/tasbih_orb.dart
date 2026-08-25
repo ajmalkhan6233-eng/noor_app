@@ -148,13 +148,19 @@ class _TasbihOrbState extends State<TasbihOrb> with TickerProviderStateMixin {
               alignment: Alignment.center,
               transform: Matrix4.identity()
                 ..setEntry(3, 2, 0.0015)
-                ..translate(_dragOffset.dx + shake, _dragOffset.dy, 0.0)
+                ..translateByDouble(
+                  _dragOffset.dx + shake,
+                  _dragOffset.dy,
+                  0.0,
+                  1.0,
+                )
                 ..rotateX(_dragOffset.dy * 0.02)
                 ..rotateY(-_dragOffset.dx * 0.02 + idleTiltY)
-                ..scale(
+                ..scaleByDouble(
                   tapScale * idleScale,
                   tapScale * idleScale,
                   tapScale * idleScale,
+                  1.0,
                 ),
               child: child,
             );
