@@ -23,6 +23,7 @@ class QiblaState extends Equatable {
     this.displayAccuracy = CompassAccuracy.unavailable,
     this.tiltX = 0,
     this.tiltY = 0,
+    this.compassStalled = false,
   });
 
   final double? latitude;
@@ -56,6 +57,13 @@ class QiblaState extends Equatable {
   /// visual cue for the compass's light-sweep effect.
   final double tiltX;
   final double tiltY;
+
+  /// True once [QiblaCubit]'s stall timeout fires with no compass
+  /// reading having arrived yet at all — distinguishes "still loading,
+  /// give it a moment" from "this isn't going to resolve on its own",
+  /// which an unconditional spinner can't. Cleared the instant a real
+  /// reading does arrive, however late.
+  final bool compassStalled;
 
   bool get hasLocation => latitude != null && longitude != null;
 
@@ -91,6 +99,7 @@ class QiblaState extends Equatable {
     CompassAccuracy? displayAccuracy,
     double? tiltX,
     double? tiltY,
+    bool? compassStalled,
   }) {
     return QiblaState(
       latitude: latitude ?? this.latitude,
@@ -104,6 +113,7 @@ class QiblaState extends Equatable {
       displayAccuracy: displayAccuracy ?? this.displayAccuracy,
       tiltX: tiltX ?? this.tiltX,
       tiltY: tiltY ?? this.tiltY,
+      compassStalled: compassStalled ?? this.compassStalled,
     );
   }
 
@@ -120,5 +130,6 @@ class QiblaState extends Equatable {
     displayAccuracy,
     tiltX,
     tiltY,
+    compassStalled,
   ];
 }

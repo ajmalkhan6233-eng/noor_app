@@ -77,7 +77,11 @@ class PrayerTimesScreen extends StatelessWidget {
                     SuhoorIftarRow(times: state.result as PrayerTimesComputed),
                   ],
                   const SizedBox(height: 16),
-                  const PrayerTrackerCard(),
+                  PrayerTrackerCard(
+                    todayTimes: state.result is PrayerTimesComputed
+                        ? state.result as PrayerTimesComputed
+                        : null,
+                  ),
                   const SizedBox(height: 16),
                   _activeSettingsCaption(context, state.settings),
                 ],

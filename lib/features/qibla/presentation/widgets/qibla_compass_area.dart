@@ -59,6 +59,32 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
 
     final rotation = state.needleRotationDegrees;
     if (rotation == null) {
+      // A plain spinner here used to just spin forever if
+      // flutter_compass never delivered a first event on a given
+      // device — reported live as "the app is completely locked".
+      // QiblaCubit's stall timeout (5s) turns that into an actual,
+      // actionable message instead of silence.
+      if (state.compassStalled) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.explore_off_outlined, color: AppColors.sage, size: 40),
+                const SizedBox(height: 12),
+                const Text(
+                  "The compass sensor isn't responding. Try moving your "
+                  'phone in a figure-8 a few times to calibrate it, or '
+                  'reopen this screen.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.sage),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
       return const Center(
         child: CircularProgressIndicator(color: AppColors.gold),
       );

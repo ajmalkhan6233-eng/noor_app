@@ -37,6 +37,16 @@ class QiblaCubit extends Cubit<QiblaState> {
   final SettingsRepository _settingsRepository;
   StreamSubscription<CompassReading>? _compassSubscription;
   StreamSubscription<TiltReading>? _tiltSubscription;
+  Timer? _compassStallTimer;
+
+  /// If flutter_compass genuinely never delivers a first event (seen
+  /// on a real device: the needle stayed on an infinite loading spinner
+  /// indefinitely, reported as "the app is completely locked") there's
+  /// no other signal anything is wrong — [CompassAccuracy.unavailable]
+  /// only covers "no magnetometer at all", not "has one, but the
+  /// stream just isn't producing". A plain timeout is the only way to
+  /// tell "still loading" from "never going to arrive" apart.
+  static const _compassStallTimeout = Duration(seconds: 5);
 
   // Hysteresis for the good/not-good accuracy boundary specifically —
   // magnetometer accuracy readings genuinely oscillate reading to
@@ -136,7 +146,18 @@ class QiblaCubit extends Cubit<QiblaState> {
 
   void _listen(double declination) {
     _compassSubscription?.cancel();
+    _compassStallTimer?.cancel();
+    var firstReadingSeen = false;
+    _compassStallTimer = Timer(_compassStallTimeout, () {
+      if (!firstReadingSeen && !isClosed) {
+        emit(state.copyWith(compassStalled: true));
+      }
+    });
     _compassSubscription = _compassService.readings.listen((reading) {
+      if (!firstReadingSeen) {
+        firstReadingSeen = true;
+        _compassStallTimer?.cancel();
+      }
       final trueHeading = reading.headingDegrees == null
           ? null
           : AngleMath.normalise(reading.headingDegrees! + declination);
@@ -145,6 +166,7 @@ class QiblaCubit extends Cubit<QiblaState> {
           headingDegrees: trueHeading,
           compassAccuracy: reading.accuracy,
           displayAccuracy: _debouncedDisplayAccuracy(reading.accuracy),
+          compassStalled: false,
         ),
       );
     });
@@ -159,6 +181,7 @@ class QiblaCubit extends Cubit<QiblaState> {
   Future<void> close() {
     _compassSubscription?.cancel();
     _tiltSubscription?.cancel();
+    _compassStallTimer?.cancel();
     return super.close();
   }
 }
