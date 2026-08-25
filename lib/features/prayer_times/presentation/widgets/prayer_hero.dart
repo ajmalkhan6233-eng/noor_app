@@ -7,12 +7,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/presentation/motion/motion.dart';
 import '../../data/prayer_times_result.dart';
 import 'astrolabe_ring.dart';
-import 'prayer_time_format.dart';
+import 'prayer_countdown_row.dart';
 
 class PrayerHero extends StatefulWidget {
   const PrayerHero({super.key, required this.times});
@@ -61,93 +58,27 @@ class _PrayerHeroState extends State<PrayerHero> {
   @override
   Widget build(BuildContext context) {
     final next = _nextEntry();
-    final countdown = _formatRemaining(next.$2.difference(_now));
-    final label = 'Next prayer: ${next.$1}, in $countdown';
+    final remaining = next.$2.difference(_now);
+    final label = 'Next prayer: ${next.$1}, in ${_ariaCountdown(remaining)}';
 
     return Column(
       children: [
         AstrolabeRing(times: widget.times, now: _now),
-        const SizedBox(height: 12),
+        const SizedBox(height: 4),
         Semantics(
           liveRegion: true,
           label: label,
-          child: Column(
-            children: [
-              Text(
-                next.$1,
-                // heroDisplay's shared w300 weight reads as too thin/
-                // "weak" for this specific spot — the one thing this
-                // whole screen exists to answer at a glance
-                // (2026-08-24 live-device review) — bolded locally
-                // rather than changing the shared token everywhere
-                // else it's used.
-                style: AppTypography.heroDisplay.copyWith(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 4),
-              // Countdown to the next prayer, with the current clock
-              // time right beside it — the whole point of glancing at
-              // this screen is usually "how long until I miss it",
-              // which needs both numbers side by side, not the clock
-              // living somewhere else on the page (2026-08-24
-              // live-device review).
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _countdownText(context, countdown),
-                  const SizedBox(width: 10),
-                  Text('now ${formatClock(_now)}', style: _nowStyle),
-                ],
-              ),
-            ],
+          child: PrayerCountdownRow(
+            prayerName: next.$1,
+            remaining: remaining,
+            now: _now,
           ),
         ),
       ],
     );
   }
 
-  // Bumped up from the previous unset (body-text-sized) default — the
-  // countdown is the number people actually glance at this screen
-  // for, and it read too small next to the ring (2026-08-24
-  // live-device review: "the countdown, a little bigger").
-  static const _countdownStyle = TextStyle(
-    color: AppColors.sage,
-    fontFeatures: [FontFeature.tabularFigures()],
-    letterSpacing: 1,
-    fontSize: 28,
-    fontWeight: FontWeight.w700,
-  );
-
-  static const _nowStyle = TextStyle(
-    color: AppColors.gold,
-    fontSize: 14,
-    fontFeatures: [FontFeature.tabularFigures()],
-  );
-
-  /// The seconds digits fade as they change rather than jumping; the
-  /// rest of the countdown ("HH:MM:") stays static.
-  Widget _countdownText(BuildContext context, String countdown) {
-    if (countdown.length < 2) {
-      return Text(countdown, style: _countdownStyle);
-    }
-    final prefix = countdown.substring(0, countdown.length - 2);
-    final seconds = countdown.substring(countdown.length - 2);
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(prefix, style: _countdownStyle),
-        AnimatedSwitcher(
-          duration: Motion.effective(context, Motion.short),
-          child: Text(
-            seconds,
-            key: ValueKey(seconds),
-            style: _countdownStyle,
-          ),
-        ),
-      ],
-    );
-  }
-
-  String _formatRemaining(Duration remaining) {
+  String _ariaCountdown(Duration remaining) {
     final hours = remaining.inHours.toString().padLeft(2, '0');
     final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
     final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
