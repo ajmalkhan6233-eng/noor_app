@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../settings/logic/settings_cubit/settings_cubit.dart';
+import '../../settings/logic/settings_cubit/settings_state.dart';
 import '../data/azkar_category.dart';
 import '../data/azkar_import_status.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
@@ -35,37 +37,46 @@ class _AzkarCategoryScreenState extends State<AzkarCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.paper,
-      appBar: AppBar(
+    return BlocProvider(
+      create: (_) => SettingsCubit()..load(),
+      child: Scaffold(
         backgroundColor: AppColors.paper,
-        elevation: 0,
-        title: Text(widget.category.label),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: BlocBuilder<AzkarCubit, AzkarState>(
-          builder: (context, state) {
-            if (state.category != widget.category || state.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.gold),
+        appBar: AppBar(
+          backgroundColor: AppColors.paper,
+          elevation: 0,
+          title: Text(widget.category.label),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: BlocBuilder<AzkarCubit, AzkarState>(
+            builder: (context, state) {
+              if (state.category != widget.category || state.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.gold),
+                );
+              }
+              if (state.items.isEmpty) {
+                return AzkarEmptyState(
+                  verificationFailed: state.importStatus is AzkarVerificationFailed,
+                );
+              }
+              return BlocBuilder<SettingsCubit, SettingsState>(
+                builder: (context, settingsState) {
+                  final fontScale = settingsState.settings.arabicFontScale;
+                  return ListView(
+                    children: [
+                      StaggeredFadeIn(
+                        children: [
+                          for (final item in state.items)
+                            AzkarItemTile(item: item, fontScale: fontScale),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               );
-            }
-            if (state.items.isEmpty) {
-              return AzkarEmptyState(
-                verificationFailed: state.importStatus is AzkarVerificationFailed,
-              );
-            }
-            return ListView(
-              children: [
-                StaggeredFadeIn(
-                  children: [
-                    for (final item in state.items) AzkarItemTile(item: item),
-                  ],
-                ),
-              ],
-            );
-          },
+            },
+          ),
         ),
       ),
     );

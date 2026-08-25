@@ -12,11 +12,15 @@ import '../../data/azkar_item.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../../logic/azkar_cubit/azkar_state.dart';
 
-/// One dhikr with a tap-to-count repetition counter.
+/// One dhikr with a tap-to-count repetition counter. Text size follows
+/// [fontScale] from Settings — previously hardcoded, so the Quran
+/// text-size slider had no effect here even though this is the same
+/// kind of Arabic devotional text (2026-08-25 audit).
 class AzkarItemTile extends StatelessWidget {
-  const AzkarItemTile({super.key, required this.item});
+  const AzkarItemTile({super.key, required this.item, this.fontScale = 1.0});
 
   final AzkarItem item;
+  final double fontScale;
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +44,19 @@ class AzkarItemTile extends StatelessWidget {
                   item.arabicText,
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.right,
-                  style: AppTypography.arabic.copyWith(fontSize: 26, height: 1.7),
+                  style: AppTypography.arabic.copyWith(
+                    fontSize: 26 * fontScale,
+                    height: 1.7,
+                  ),
                 ),
                 if (item.transliteration != null) ...[
                   const SizedBox(height: 10),
                   Text(
                     item.transliteration!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.sage,
                       fontStyle: FontStyle.italic,
-                      fontSize: 13,
+                      fontSize: 13 * fontScale,
                     ),
                   ),
                 ],
@@ -57,7 +64,7 @@ class AzkarItemTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     item.translation!,
-                    style: const TextStyle(color: AppColors.sage, fontSize: 12),
+                    style: TextStyle(color: AppColors.sage, fontSize: 12 * fontScale),
                   ),
                 ],
                 const SizedBox(height: 12),
