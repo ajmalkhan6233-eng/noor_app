@@ -16,6 +16,32 @@
 // level, not raw canvas shaders — and this painter is left with only
 // the simple primitives (lines, filled paths, text) least likely to
 // hit the same wall.
+//
+// Update (2026-08-25, same day, later): the plain-primitives version
+// above still intermittently "blinks" on this same device — confirmed
+// with 10-shot rapid screenshot sequences and pixel-sampling (not just
+// eyeballing): in the bad frames, the pixels where the circle
+// Container and CompassFacePainter's ticks/needle should be read as
+// pure AppColors.paper (the screen background), not a dim or partial
+// render — the whole subtree is simply absent from that composited
+// frame, while only the 10x10 Kaaba marker rect still paints. Two
+// standard mitigations were tried and BOTH made it worse, not better:
+//   1. RepaintBoundary around the needle/circle Stack, then around the
+//      whole DraggableFloating subtree (outside its Transform.scale) —
+//      went from ~50% bad frames to ~93% bad, often getting stuck
+//      permanently on the marker-only state instead of recovering.
+//   2. Throttling QiblaCubit's emit to 80ms (reducing how often this
+//      painter repaints, since the raw magnetometer stream can fire
+//      much faster than the display) — same result, mostly stuck.
+// Both changes reduce how often the tree gets a full rebuild/repaint;
+// both made the bug more persistent. That's a real clue (something
+// about frequent full rebuilds seems to be what makes the correct
+// frame show up at all) but not something to act on blind — don't
+// retry either mitigation without a connected device to verify
+// against. Reverted both; this file is back to the state above.
+// Root cause still unconfirmed — most likely a genuine GPU/Skia (or
+// Impeller) layer-compositing bug specific to this device, not a Dart
+// state bug (the underlying values were always correct).
 
 import 'dart:math' as math;
 
