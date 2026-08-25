@@ -13,6 +13,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/zakat_calculator.dart';
+import '../data/zakat_price_memory.dart';
 import 'widgets/zakat_number_field.dart';
 import 'widgets/zakat_result_card.dart';
 
@@ -25,6 +26,22 @@ class ZakatScreen extends StatefulWidget {
 
 class _ZakatScreenState extends State<ZakatScreen> {
   var _inputs = const ZakatInputs();
+  final _priceMemory = ZakatPriceMemory();
+
+  @override
+  void initState() {
+    super.initState();
+    _priceMemory.loadGoldPrice().then((price) {
+      if (price != null && mounted) {
+        setState(() => _inputs = _inputs.copyWith(goldPricePerGram: price));
+      }
+    });
+    _priceMemory.loadSilverPrice().then((price) {
+      if (price != null && mounted) {
+        setState(() => _inputs = _inputs.copyWith(silverPricePerGram: price));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +67,13 @@ class _ZakatScreenState extends State<ZakatScreen> {
                 ),
                 ZakatNumberField(
                   label: l10n.goldPriceLabel,
-                  onChanged: (v) => setState(
-                    () => _inputs = _inputs.copyWith(goldPricePerGram: v),
-                  ),
+                  initialValue: _inputs.goldPricePerGram == 0
+                      ? null
+                      : _inputs.goldPricePerGram,
+                  onChanged: (v) {
+                    setState(() => _inputs = _inputs.copyWith(goldPricePerGram: v));
+                    _priceMemory.saveGoldPrice(v);
+                  },
                 ),
                 ZakatNumberField(
                   label: l10n.silverGramsLabel,
@@ -62,9 +83,13 @@ class _ZakatScreenState extends State<ZakatScreen> {
                 ),
                 ZakatNumberField(
                   label: l10n.silverPriceLabel,
-                  onChanged: (v) => setState(
-                    () => _inputs = _inputs.copyWith(silverPricePerGram: v),
-                  ),
+                  initialValue: _inputs.silverPricePerGram == 0
+                      ? null
+                      : _inputs.silverPricePerGram,
+                  onChanged: (v) {
+                    setState(() => _inputs = _inputs.copyWith(silverPricePerGram: v));
+                    _priceMemory.saveSilverPrice(v);
+                  },
                 ),
               ],
             ),

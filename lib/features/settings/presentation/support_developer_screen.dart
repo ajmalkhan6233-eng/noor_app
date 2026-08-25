@@ -60,10 +60,13 @@ class SupportDeveloperScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "noor will always stay free to use. If it has helped you and "
-              "you'd like to support its development, send a message and "
-              "the developer will personally share payment details with you. "
-              "This is a personal contribution, not a registered charity donation.",
+              "noor is built and maintained by one developer, in personal "
+              "time, with real costs behind it. If the app has been useful "
+              "to you, a donation helps keep it going and improving.\n\n"
+              "Send a message below and the developer will personally share "
+              "payment details with you. This goes directly to the "
+              "developer as an individual — it isn't a registered charity "
+              "or organisation.",
               style: AppTypography.caption.copyWith(color: AppColors.ink, fontSize: 14),
             ),
             const SizedBox(height: 24),
