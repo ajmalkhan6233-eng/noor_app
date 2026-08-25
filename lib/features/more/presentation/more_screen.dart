@@ -92,7 +92,12 @@ class MoreScreen extends StatelessWidget {
               crossAxisCount: 4,
               mainAxisSpacing: 20,
               crossAxisSpacing: 12,
-              childAspectRatio: 0.8,
+              // 0.8 left just enough room for the icon + 2 lines of
+              // label text at the default text scale — a system font
+              // size above 1.0x (live device: MIUI) pushed the label
+              // 2.3px past the cell's fixed height, so this leaves more
+              // headroom rather than assuming default scale.
+              childAspectRatio: 0.72,
               children: [for (final tile in tiles) tile],
             ),
           ],

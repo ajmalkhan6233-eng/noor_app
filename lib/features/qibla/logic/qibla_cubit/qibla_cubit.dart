@@ -154,7 +154,16 @@ class QiblaCubit extends Cubit<QiblaState> {
       }
     });
     _compassSubscription = _compassService.readings.listen((reading) {
-      if (!firstReadingSeen) {
+      // Only a reading that actually carries a heading disarms the
+      // stall timer — a device whose magnetometer stream keeps
+      // delivering events with a null heading (seen live: MIUI/Xiaomi
+      // hardware that never resolves a fused heading) used to count as
+      // "first reading seen" on the very first null event, permanently
+      // silencing the stall timer while the needle stayed stuck on an
+      // infinite spinner forever — no compass, no error, nothing
+      // actionable. Now that device correctly reaches the "sensor
+      // isn't responding" message after the timeout instead.
+      if (!firstReadingSeen && reading.headingDegrees != null) {
         firstReadingSeen = true;
         _compassStallTimer?.cancel();
       }
@@ -166,7 +175,11 @@ class QiblaCubit extends Cubit<QiblaState> {
           headingDegrees: trueHeading,
           compassAccuracy: reading.accuracy,
           displayAccuracy: _debouncedDisplayAccuracy(reading.accuracy),
-          compassStalled: false,
+          // Only a genuine heading clears the stalled flag — once the
+          // timer has already declared the compass unresponsive, a
+          // further null-heading reading must not silently flip it back
+          // to false and hide that message again.
+          compassStalled: trueHeading == null ? state.compassStalled : false,
         ),
       );
     });
