@@ -35,10 +35,36 @@ class _ProgressScreenState extends State<ProgressScreen> {
   List<({DateTime date, int completedCount, bool fasted})> _history = const [];
   bool _loading = true;
 
+  // A stable controller/focus node, not one rebuilt inline in build() —
+  // that earlier version recreated the TextEditingController on every
+  // SettingsCubit rebuild (including the one setProfileName itself
+  // triggers), which is a real bug on top of never disposing the old
+  // controller. Saves on both the keyboard's done key and on losing
+  // focus (tapping elsewhere) — previously the only way to save was an
+  // unlabelled keyboard action with no in-app confirmation (2026-08-25
+  // live-device review: "no enter button to save... check and edit").
+  final _nameController = TextEditingController();
+  final _nameFocusNode = FocusNode();
+  var _nameSeeded = false;
+
   @override
   void initState() {
     super.initState();
     _load();
+    _nameFocusNode.addListener(() {
+      if (!_nameFocusNode.hasFocus) _saveName(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _nameFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _saveName(BuildContext context) {
+    context.read<SettingsCubit>().setProfileName(_nameController.text.trim());
   }
 
   Future<void> _load() async {
@@ -94,7 +120,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
   Widget _nameCard(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
-        final controller = TextEditingController(text: state.settings.profileName ?? '');
+        // Seed the controller from persisted state exactly once — after
+        // that, the field is the source of truth so an in-flight edit
+        // is never clobbered by a rebuild from an unrelated cubit
+        // change.
+        if (!_nameSeeded) {
+          _nameController.text = state.settings.profileName ?? '';
+          _nameSeeded = true;
+        }
         return AppCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,14 +135,27 @@ class _ProgressScreenState extends State<ProgressScreen> {
               const Text('Your name (kept on this device only)', style: AppTypography.caption),
               const SizedBox(height: 8),
               TextField(
-                controller: controller,
+                controller: _nameController,
+                focusNode: _nameFocusNode,
                 style: const TextStyle(color: AppColors.ink),
-                decoration: const InputDecoration(
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
                   hintText: 'Add a name',
-                  hintStyle: TextStyle(color: AppColors.sage),
+                  hintStyle: const TextStyle(color: AppColors.sage),
                   border: InputBorder.none,
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.check, color: AppColors.gold),
+                    tooltip: 'Save name',
+                    onPressed: () {
+                      _saveName(context);
+                      _nameFocusNode.unfocus();
+                    },
+                  ),
                 ),
-                onSubmitted: (value) => context.read<SettingsCubit>().setProfileName(value),
+                onSubmitted: (_) {
+                  _saveName(context);
+                  _nameFocusNode.unfocus();
+                },
               ),
             ],
           ),
