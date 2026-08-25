@@ -15,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/parallax_layer.dart';
+import '../../prayer_times/data/prayer_times_result.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
@@ -67,7 +68,11 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                       const SizedBox(height: 12),
                       PrayerSummarySection(state: prayerState, settingsState: settingsState),
                       const SizedBox(height: 20),
-                      const DailyGoalsList(),
+                      DailyGoalsList(
+                        todayTimes: prayerState.result is PrayerTimesComputed
+                            ? prayerState.result as PrayerTimesComputed
+                            : null,
+                      ),
                       const SizedBox(height: 20),
                       AyahOfDayCard(),
                       const SizedBox(height: 16),

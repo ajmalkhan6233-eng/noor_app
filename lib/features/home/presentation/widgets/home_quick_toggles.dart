@@ -2,11 +2,13 @@
 //
 // Silent Mode and the pre-adhan reminder, moved to Home's front page
 // (2026-08-24 live-device review: both were "buried in Settings",
-// wanted as easily-reachable controls). This is a quick master
-// on/off for each — Silent Mode toggles all five prayers together;
-// per-prayer customization and the extra-minutes/reminder-minutes
-// fields stay in Settings, reached from here via the icon's own
-// screen for anything beyond the on/off flip.
+// wanted as easily-reachable controls). Silent Mode is a quick master
+// on/off toggling all five prayers together — per-prayer
+// customization stays in Settings. The reminder chip opens a minutes
+// dropdown directly here (5/10/15/20/30, or off) rather than only
+// toggling on/off — picking a value was previously Settings-only,
+// which is exactly the "shouldn't need to leave the front page for
+// this" friction flagged in the same review.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,16 +49,65 @@ class HomeQuickToggles extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            _chip(
-              context,
-              icon: reminderOn ? Icons.notifications_active : Icons.notifications_active_outlined,
-              label: 'Pre-adhan reminder',
-              on: reminderOn,
-              onTap: () => context.read<SettingsCubit>().setPreReminderEnabled(!reminderOn),
-            ),
+            _reminderChip(context, reminderOn, state.settings.preReminderMinutes),
           ],
         );
       },
+    );
+  }
+
+  static const _minuteOptions = [5, 10, 15, 20, 30];
+
+  Widget _reminderChip(BuildContext context, bool on, int minutes) {
+    final label = on ? 'Reminder: $minutes min' : 'Pre-adhan reminder';
+    return PopupMenuButton<int>(
+      // -1 means "off"; a real minute value both enables and sets it.
+      onSelected: (value) {
+        final cubit = context.read<SettingsCubit>();
+        if (value < 0) {
+          cubit.setPreReminderEnabled(false);
+        } else {
+          cubit.setPreReminderMinutes(value);
+          cubit.setPreReminderEnabled(true);
+        }
+      },
+      color: AppColors.card,
+      itemBuilder: (context) => [
+        for (final m in _minuteOptions)
+          PopupMenuItem(
+            value: m,
+            child: Text('$m minutes before', style: const TextStyle(color: AppColors.ink)),
+          ),
+        const PopupMenuItem(
+          value: -1,
+          child: Text('Off', style: TextStyle(color: AppColors.sage)),
+        ),
+      ],
+      child: Semantics(
+        label: label,
+        hint: 'Double tap to choose reminder timing',
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: on ? AppColors.card : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: on ? AppColors.gold : AppColors.hairline),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                on ? Icons.notifications_active : Icons.notifications_active_outlined,
+                size: 16,
+                color: on ? AppColors.gold : AppColors.sage,
+              ),
+              const SizedBox(width: 6),
+              Text(label, style: TextStyle(color: on ? AppColors.gold : AppColors.sage, fontSize: 12)),
+              const Icon(Icons.arrow_drop_down, size: 16, color: AppColors.sage),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

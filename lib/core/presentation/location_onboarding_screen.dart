@@ -1,16 +1,18 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Shown exactly once, right after the splash screen, before the main
-// dashboard — asks for location (needed for accurate prayer times),
-// explains manual per-prayer adjustment is available if a calculated
-// time doesn't match the user's local masjid, then never appears
-// again. Skipping never blocks anything: the app opens normally
-// either way, and location stays changeable from Settings afterward.
+// dashboard — a language choice, then location (needed for accurate
+// prayer times), explains manual per-prayer adjustment is available
+// if a calculated time doesn't match the user's local masjid, then
+// never appears again. Skipping never blocks anything: the app opens
+// normally either way, and both stay changeable from Settings after.
 
 import 'package:flutter/material.dart';
 
+import '../app_locale_controller.dart';
 import '../constants/app_colors.dart';
 import '../location/location_service.dart';
+import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
 
 class LocationOnboardingScreen extends StatefulWidget {
@@ -25,11 +27,15 @@ class LocationOnboardingScreen extends StatefulWidget {
 class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
   final _locationService = const LocationService();
   bool _resolving = false;
+  AppLocaleOption _selectedLocale = AppLocaleOption.english;
 
   Future<void> _finish() async {
-    await SettingsRepository().load().then((settings) async {
-      await SettingsRepository().save(settings.copyWith(hasSeenLocationOnboarding: true));
-    });
+    final repository = SettingsRepository();
+    final settings = await repository.load();
+    await repository.save(
+      settings.copyWith(hasSeenLocationOnboarding: true, locale: _selectedLocale),
+    );
+    AppLocaleController.instance.locale.value = _selectedLocale.locale;
     if (mounted) widget.onFinished();
   }
 
@@ -44,12 +50,25 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
     return Scaffold(
       backgroundColor: AppColors.paper,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Text(
+                'Choose your language',
+                style: TextStyle(color: AppColors.ink, fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  for (final option in AppLocaleOption.values) ...[
+                    if (option != AppLocaleOption.values.first) const SizedBox(width: 8),
+                    Expanded(child: _localeButton(option)),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 28),
               const Icon(Icons.location_on_outlined, color: AppColors.gold, size: 48),
               const SizedBox(height: 20),
               const Text(
@@ -103,6 +122,29 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _localeButton(AppLocaleOption option) {
+    final selected = option == _selectedLocale;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedLocale = option),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? AppColors.gold : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: selected ? AppColors.gold : AppColors.hairline),
+        ),
+        child: Text(
+          option.nativeName,
+          style: TextStyle(
+            color: selected ? AppColors.paper : AppColors.ink,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
           ),
         ),
       ),

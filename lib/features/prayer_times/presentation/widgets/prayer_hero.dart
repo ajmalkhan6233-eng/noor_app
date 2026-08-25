@@ -73,7 +73,16 @@ class _PrayerHeroState extends State<PrayerHero> {
           label: label,
           child: Column(
             children: [
-              Text(next.$1, style: AppTypography.heroDisplay),
+              Text(
+                next.$1,
+                // heroDisplay's shared w300 weight reads as too thin/
+                // "weak" for this specific spot — the one thing this
+                // whole screen exists to answer at a glance
+                // (2026-08-24 live-device review) — bolded locally
+                // rather than changing the shared token everywhere
+                // else it's used.
+                style: AppTypography.heroDisplay.copyWith(fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 4),
               // Countdown to the next prayer, with the current clock
               // time right beside it — the whole point of glancing at
@@ -96,15 +105,21 @@ class _PrayerHeroState extends State<PrayerHero> {
     );
   }
 
+  // Bumped up from the previous unset (body-text-sized) default — the
+  // countdown is the number people actually glance at this screen
+  // for, and it read too small next to the ring (2026-08-24
+  // live-device review: "the countdown, a little bigger").
   static const _countdownStyle = TextStyle(
     color: AppColors.sage,
     fontFeatures: [FontFeature.tabularFigures()],
     letterSpacing: 1,
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
   );
 
   static const _nowStyle = TextStyle(
     color: AppColors.gold,
-    fontSize: 12,
+    fontSize: 14,
     fontFeatures: [FontFeature.tabularFigures()],
   );
 

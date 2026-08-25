@@ -29,6 +29,10 @@ extension _AzkarCategoryIcon on AzkarCategory {
         return Icons.bedtime_outlined;
       case AzkarCategory.travel:
         return Icons.flight_outlined;
+      case AzkarCategory.childProtection:
+        return Icons.child_care_outlined;
+      case AzkarCategory.visitingGrave:
+        return Icons.park_outlined;
     }
   }
 }

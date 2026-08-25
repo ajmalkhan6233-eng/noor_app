@@ -43,10 +43,23 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   Future<void> _load() async {
     final today = DateTime.now();
-    final history = await _repository.historyForRange(
+    final raw = await _repository.historyForRange(
       today.subtract(const Duration(days: 13)),
       today,
     );
+    // Trim leading days with no activity at all — on a fresh install
+    // those are just padding before the app existed on this device,
+    // not real "0/5" days (2026-08-24 live-device review: "we just
+    // now installed... no point [showing] the 24th, 23rd..."). Always
+    // keep at least today, even with nothing logged yet.
+    var firstActive = raw.length - 1;
+    for (var i = 0; i < raw.length; i++) {
+      if (raw[i].completedCount > 0 || raw[i].fasted) {
+        firstActive = i;
+        break;
+      }
+    }
+    final history = raw.sublist(firstActive);
     if (mounted) {
       setState(() {
         _history = history;
@@ -107,11 +120,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   Widget _weeklyChart() {
     final last7 = _history.length > 7 ? _history.sublist(_history.length - 7) : _history;
+    final rangeLabel = last7.length == 1 ? 'Today' : 'Last ${last7.length} days';
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Last 7 days · prayers completed', style: AppTypography.caption),
+          Text('$rangeLabel · prayers completed', style: AppTypography.caption),
           const SizedBox(height: 16),
           SizedBox(
             height: 100,
