@@ -16,6 +16,15 @@
     <!-- Exact alarms for adhan/iqamath notifications and Silent Mode
          ringer windows. -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <!-- Android 13+ (API 33+): mandatory before ANY notification can
+         show at all, scheduled or immediate — .show()/.zonedSchedule()
+         both fail completely silently without it, no exception thrown.
+         Missing entirely until now (2026-08-25, found while
+         investigating "test adhan button does nothing") — this was
+         very likely the real root cause behind every "notification
+         set, nothing fired" report on a modern device, on top of the
+         separate exact-alarm gap already fixed in notification_service.dart. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- Lets Settings show the system's own "ignore battery
          optimizations" dialog for this app — the single most common
          real reason a scheduled adhan alarm silently never fires

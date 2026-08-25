@@ -49,7 +49,12 @@ class MoreScreen extends StatelessWidget {
         builder: (_) => const CalendarScreen(),
       ),
       _MoreTile(
-        icon: Icons.savings_outlined,
+        // Not Icons.savings_outlined — that's a literal piggy bank
+        // shape, wrong imagery for a Zakat calculator in an Islamic
+        // app (2026-08-25, flagged directly: "it's a pig... halal
+        // Shariah-law compliant app, these things has to be really
+        // considered"). calculate_outlined has no such issue.
+        icon: Icons.calculate_outlined,
         color: AppColors.gold,
         label: l10n.zakatCalculatorLabel,
         builder: (_) => const ZakatScreen(),

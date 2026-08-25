@@ -47,6 +47,17 @@ class NotificationService {
     await _plugin.initialize(
       const InitializationSettings(android: androidInit),
     );
+    // Android 13+ (API 33+): a notification permission that's granted
+    // or denied at runtime, separate from (and a prerequisite to) the
+    // exact-alarm grant below — without this, .show()/.zonedSchedule()
+    // both silently do nothing, no exception, no log. Requesting on
+    // every initialize() is harmless once already granted/denied; this
+    // is the only place that ever asks, so it has to run somewhere
+    // reachable before the very first notification of any kind.
+    await _plugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
   }
 
   /// Android 12+ gates *exact* alarms behind a separate "Alarms &

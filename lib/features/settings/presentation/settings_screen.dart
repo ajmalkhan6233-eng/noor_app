@@ -19,7 +19,6 @@ import 'widgets/language_section.dart';
 import 'widgets/location_section.dart';
 import 'widgets/method_madhab_section.dart';
 import 'widgets/pre_reminder_section.dart';
-import 'widgets/silent_mode_section.dart';
 import 'widgets/test_adhan_section.dart';
 
 /// Settings: calculation preferences and display. Notification
@@ -78,9 +77,6 @@ class _SettingsView extends StatelessWidget {
                   const SizedBox(height: 16),
                   const SectionHeader('Test Adhan'),
                   const AppCard(child: TestAdhanSection()),
-                  const SizedBox(height: 16),
-                  SectionHeader(l10n.silentModeSectionHeader),
-                  const AppCard(child: SilentModeSection()),
                   const SizedBox(height: 16),
                   SectionHeader(l10n.displaySectionHeader),
                   const AppCard(child: DisplaySection()),

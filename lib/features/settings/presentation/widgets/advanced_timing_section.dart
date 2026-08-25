@@ -24,7 +24,11 @@ class AdvancedTimingSection extends StatefulWidget {
 }
 
 class _AdvancedTimingSectionState extends State<AdvancedTimingSection> {
-  bool _expanded = false;
+  // Defaulted open (2026-08-25, explicitly asked for twice: "plus or
+  // minus option" for both iqamah and azan times) — collapsed-by-
+  // default was hiding a feature that was actually already built, not
+  // reducing clutter for someone actively looking for it.
+  bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
