@@ -104,25 +104,33 @@ class _AzkarScreenState extends State<AzkarScreen> {
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final (category, item) = _results[index];
+        final resultLabel = item.transliteration ?? item.translation ?? '';
         return AppCard(
           padding: EdgeInsets.zero,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () => _openCategory(category),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(category.label, style: const TextStyle(color: AppColors.gold, fontSize: 11)),
-                  const SizedBox(height: 4),
-                  Text(
-                    item.transliteration ?? item.translation ?? '',
-                    style: const TextStyle(color: AppColors.ink),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+          child: Semantics(
+            button: true,
+            label: '${category.label}: $resultLabel',
+            hint: 'Double tap to open this dua',
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => _openCategory(category),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: ExcludeSemantics(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(category.label, style: const TextStyle(color: AppColors.gold, fontSize: 11)),
+                      const SizedBox(height: 4),
+                      Text(
+                        resultLabel,
+                        style: const TextStyle(color: AppColors.ink),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
