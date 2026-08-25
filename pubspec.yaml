@@ -69,6 +69,7 @@ flutter:
     # the repo; just excluded from the APK.
     - assets/pilgrimage/
     - assets/audio/adhan/
+    - assets/quran/audio/juz_amma/
   fonts:
     - family: Cormorant Garamond
       fonts:

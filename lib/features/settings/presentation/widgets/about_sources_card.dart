@@ -49,6 +49,16 @@ class AboutSourcesCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(l10n.englishTranslationAttribution, style: AppTypography.caption),
+          const SizedBox(height: 12),
+          // Recitation audio (Juz Amma only — see
+          // assets/quran/audio/juz_amma/README.md) is CC BY 4.0,
+          // which requires attribution as a licence condition, not
+          // just a courtesy.
+          const Text(
+            'Recitation audio (Juz Amma): Moeed Alharthi, Hafs '
+            "narration — Dhikr Al-Huda collection, CC BY 4.0.",
+            style: AppTypography.caption,
+          ),
           // No Talbiyah attribution here: that text was exclusive to
           // the Hajj/Umrah guide feature, cut from v1 (CLAUDE.md's
           // Deferred section) — assets/talbiyah/ isn't bundled in the

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/widgets/reading_position_tracker.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../data/surah_audio_player.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'widgets/ayah_tile.dart';
@@ -26,11 +27,32 @@ class SurahReaderScreen extends StatefulWidget {
 class _SurahReaderScreenState extends State<SurahReaderScreen> {
   final _ayahKeys = <int, GlobalKey>{};
   var _scrolledToLastRead = false;
+  final _audioPlayer = SurahAudioPlayer();
+  var _playing = false;
 
   @override
   void initState() {
     super.initState();
     context.read<QuranCubit>().openSurah(widget.surahId);
+    _audioPlayer.onComplete.listen((_) {
+      if (mounted) setState(() => _playing = false);
+    });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _toggleAudio() async {
+    if (_playing) {
+      await _audioPlayer.stop();
+      setState(() => _playing = false);
+    } else {
+      await _audioPlayer.play(widget.surahId);
+      setState(() => _playing = true);
+    }
   }
 
   GlobalKey _keyFor(int ayahNumber) =>
@@ -56,6 +78,19 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
         backgroundColor: AppColors.paper,
         elevation: 0,
         title: Text(AppLocalizations.of(context)!.surahReaderTitle(widget.surahId)),
+        actions: [
+          // Recitation audio is only bundled for Juz Amma (surahs
+          // 78-114) — see surah_audio_player.dart's header for why
+          // the rest isn't. No button at all for other surahs, rather
+          // than one that always fails.
+          if (hasSurahAudio(widget.surahId))
+            IconButton(
+              icon: Icon(_playing ? Icons.pause_circle_outline : Icons.play_circle_outline),
+              color: AppColors.gold,
+              tooltip: _playing ? 'Pause recitation' : 'Play recitation',
+              onPressed: _toggleAudio,
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
