@@ -8,8 +8,11 @@ import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/quran_ayah.dart';
 
-/// One ayah with its number and a bookmark toggle. Arabic text size
-/// follows [fontScale] from Settings.
+/// One ayah with its number and a bookmark toggle. Arabic and
+/// translation text size both follow [fontScale] from Settings
+/// (2026-08-25 audit: "translation text size can't be adjusted,
+/// only Arabic" — same slider now covers both, translation scaling
+/// off a smaller base so it doesn't dominate the Arabic line).
 class AyahTile extends StatelessWidget {
   const AyahTile({
     super.key,
@@ -66,7 +69,7 @@ class AyahTile extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 ayah.translation!,
-                style: const TextStyle(color: AppColors.sage),
+                style: TextStyle(color: AppColors.sage, fontSize: 14 * fontScale),
               ),
             ],
           ],

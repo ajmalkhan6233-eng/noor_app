@@ -10,7 +10,7 @@ import '../../data/app_theme_mode.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 
-/// Theme, Arabic text size, and Hijri calendar offset.
+/// Theme, Quran text size (Arabic + translation), and Hijri calendar offset.
 class DisplaySection extends StatelessWidget {
   const DisplaySection({super.key});
 
@@ -25,7 +25,7 @@ class DisplaySection extends StatelessWidget {
             _themeSegments(context, settings.themeMode),
             const SizedBox(height: 12),
             Semantics(
-              label: 'Arabic text size',
+              label: 'Quran text size',
               value: '${settings.arabicFontScale.toStringAsFixed(2)}x',
               slider: true,
               child: Slider(
