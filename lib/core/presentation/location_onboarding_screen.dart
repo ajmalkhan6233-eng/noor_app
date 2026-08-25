@@ -14,6 +14,9 @@ import '../constants/app_colors.dart';
 import '../location/location_service.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
+import '../../features/prayer_times/data/notification_service.dart';
+import '../../features/prayer_times/data/notification_slots.dart';
+import '../../features/prayer_times/data/silent_mode_channel.dart';
 
 class LocationOnboardingScreen extends StatefulWidget {
   const LocationOnboardingScreen({super.key, required this.onFinished});
@@ -94,6 +97,42 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 style: TextStyle(color: AppColors.sage, height: 1.4),
               ),
               const SizedBox(height: 28),
+              const Icon(Icons.battery_charging_full_outlined, color: AppColors.gold, size: 48),
+              const SizedBox(height: 20),
+              const Text(
+                'Keep adhan reliable',
+                style: TextStyle(color: AppColors.ink, fontSize: 22, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "Android's own battery-saving can silently stop a scheduled "
+                'adhan from firing. Allowing "unrestricted" battery usage '
+                'for noor prevents that — this only affects noor, not the '
+                'rest of your phone.',
+                style: TextStyle(color: AppColors.sage, height: 1.4),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () => const SilentModeChannel().requestIgnoreBatteryOptimizations(),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.gold,
+                    side: const BorderSide(color: AppColors.goldBorder),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text('Allow unrestricted battery usage'),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: TextButton(
+                  onPressed: () => NotificationService().showTestNotification(PrayerSlot.fajr),
+                  child: const Text('Test the adhan sound now', style: TextStyle(color: AppColors.gold)),
+                ),
+              ),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

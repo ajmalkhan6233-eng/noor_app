@@ -16,6 +16,13 @@
     <!-- Exact alarms for adhan/iqamath notifications and Silent Mode
          ringer windows. -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <!-- Lets Settings show the system's own "ignore battery
+         optimizations" dialog for this app — the single most common
+         real reason a scheduled adhan alarm silently never fires
+         (Android kills the alarm's process to save battery). Does
+         not enable anything by itself; the user still has to accept
+         the system dialog. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <application
         android:label="noor"
         android:name="${applicationName}"

@@ -31,6 +31,12 @@ extension _AzkarCategoryIcon on AzkarCategory {
         return Icons.flight_outlined;
       case AzkarCategory.childProtection:
         return Icons.child_care_outlined;
+      case AzkarCategory.illness:
+        return Icons.healing_outlined;
+      case AzkarCategory.distress:
+        return Icons.spa_outlined;
+      case AzkarCategory.debt:
+        return Icons.account_balance_wallet_outlined;
       case AzkarCategory.visitingGrave:
         return Icons.park_outlined;
     }

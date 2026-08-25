@@ -24,6 +24,16 @@ enum NotificationKind { adhan, iqamath, reminder }
   };
 }
 
+/// Just the display name, for callers (like the "test adhan" button)
+/// that have no actual [PrayerTimesComputed] to hand [entryForSlot].
+String slotLabel(PrayerSlot slot) => switch (slot) {
+  PrayerSlot.fajr => 'Fajr',
+  PrayerSlot.dhuhr => 'Dhuhr',
+  PrayerSlot.asr => 'Asr',
+  PrayerSlot.maghrib => 'Maghrib',
+  PrayerSlot.isha => 'Isha',
+};
+
 /// Adhan/iqamath ids are unchanged from before the reminder feature
 /// existed (slot.index * 2 + 0/1) so upgrading installs don't leave an
 /// orphaned alarm under a since-renumbered id — the reminder slot gets

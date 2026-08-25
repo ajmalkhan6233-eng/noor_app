@@ -1,18 +1,25 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
 /// The azkar categories this feature is scoped for. `dbKey` must
-/// match `azkar_categories.category_key` exactly (seeded in
-/// `azkar_schema.dart`) for the five originally-seeded categories.
-/// [childProtection] and [visitingGrave] were added on request
-/// (2026-08-24 live-device review, matching categories present in a
-/// reference app) but have no seeded `dbKey` match yet — real,
-/// verified Hisn al-Muslim text for them hasn't been sourced, so
-/// `AzkarRepository.itemsForCategory` correctly returns empty for
-/// both and the row falls through to AzkarEmptyState's "not sourced
-/// yet" message. That's deliberate: showing the category now signals
-/// intent/roadmap without inventing the dua text itself, which
-/// CLAUDE.md's Religious Content rule forbids.
-enum AzkarCategory { morning, evening, afterPrayer, sleep, travel, childProtection, visitingGrave }
+/// match `azkar_categories.category_key` exactly. [childProtection],
+/// [illness], [distress], [debt], and [visitingGrave] were added
+/// 2026-08-25 — real, verified Hisn al-Muslim text (asellam/HisnElMuslim,
+/// the same MIT-licensed source already used for after_prayer/sleep/
+/// travel — see assets/azkar/README.md) extracted programmatically
+/// (direct JSON field copy, never hand-typed) and seeded via
+/// database_migrations.dart's `oldVersion < 6` branch.
+enum AzkarCategory {
+  morning,
+  evening,
+  afterPrayer,
+  sleep,
+  travel,
+  childProtection,
+  illness,
+  distress,
+  debt,
+  visitingGrave,
+}
 
 extension AzkarCategoryDb on AzkarCategory {
   String get dbKey {
@@ -29,6 +36,12 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'travel';
       case AzkarCategory.childProtection:
         return 'child_protection';
+      case AzkarCategory.illness:
+        return 'illness';
+      case AzkarCategory.distress:
+        return 'distress';
+      case AzkarCategory.debt:
+        return 'debt';
       case AzkarCategory.visitingGrave:
         return 'visiting_grave';
     }
@@ -48,6 +61,12 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'Travel';
       case AzkarCategory.childProtection:
         return 'Child Protection';
+      case AzkarCategory.illness:
+        return 'Illness';
+      case AzkarCategory.distress:
+        return 'Distress';
+      case AzkarCategory.debt:
+        return 'Debt';
       case AzkarCategory.visitingGrave:
         return 'Visiting the Grave';
     }

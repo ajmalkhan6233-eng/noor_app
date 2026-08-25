@@ -6,6 +6,10 @@
 // `SilentModeReceiver.kt` for the platform side. This cannot be
 // exercised in this offline dev environment (no device/emulator);
 // the API shape mirrors standard `AudioManager`/`AlarmManager` usage.
+//
+// Also carries the battery-optimization methods (added 2026-08-25) —
+// same channel, not a separate one: both are "native settings this
+// app needs the user to grant", not two unrelated concerns.
 
 import 'package:flutter/services.dart';
 
@@ -53,5 +57,23 @@ class SilentModeChannel {
     await _channel.invokeMethod<void>('cancelSilentWindow', {
       'requestCode': requestCode,
     });
+  }
+
+  /// Whether the OS has already exempted this app from battery
+  /// optimization — the single most common real reason a scheduled
+  /// adhan alarm silently never fires (Android kills the alarm's
+  /// process to save power).
+  Future<bool> isIgnoringBatteryOptimizations() async {
+    final result = await _channel.invokeMethod<bool>(
+      'isIgnoringBatteryOptimizations',
+    );
+    return result ?? false;
+  }
+
+  /// Shows the system's own "allow this app to ignore battery
+  /// optimizations?" dialog — the user still has to accept it; this
+  /// only opens the prompt.
+  Future<void> requestIgnoreBatteryOptimizations() async {
+    await _channel.invokeMethod<void>('requestIgnoreBatteryOptimizations');
   }
 }

@@ -18,6 +18,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -47,6 +48,12 @@ class MainActivity : FlutterActivity() {
                     }
                     "cancelSilentWindow" -> {
                         cancelSilentWindow(call.argument<Int>("requestCode")!!)
+                        result.success(null)
+                    }
+                    "isIgnoringBatteryOptimizations" ->
+                        result.success(isIgnoringBatteryOptimizations())
+                    "requestIgnoreBatteryOptimizations" -> {
+                        requestIgnoreBatteryOptimizations()
                         result.success(null)
                     }
                     else -> result.notImplemented()
@@ -95,5 +102,17 @@ class MainActivity : FlutterActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, flags)
         alarmManager.cancel(pendingIntent)
         pendingIntent.cancel()
+    }
+
+    private fun isIgnoringBatteryOptimizations(): Boolean {
+        val powerManager = getSystemService(PowerManager::class.java) ?: return false
+        return powerManager.isIgnoringBatteryOptimizations(packageName)
+    }
+
+    private fun requestIgnoreBatteryOptimizations() {
+        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+        intent.data = Uri.parse("package:$packageName")
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 }
