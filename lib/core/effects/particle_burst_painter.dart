@@ -116,7 +116,17 @@ class ParticleBurstPainter extends CustomPainter {
         center.dx + math.cos(particle.angle) * particle.distance * eased,
         center.dy + math.sin(particle.angle) * particle.distance * eased,
       );
-      final opacity = growing ? local * 0.9 : (1 - local) * 0.9;
+      // growing (splash only): without this tail-fade, particles hit
+      // full opacity at local==1 and — since this CustomPaint has no
+      // dissolve/removal of its own — stayed frozen there, visible
+      // straight through the Bismillah and NOOR phases as a stray dot
+      // (2026-08-25 live-device review: "there is a dot in the
+      // middle... even after the NOOR name comes up"). Ramping back
+      // down over the last 30% of each particle's own progress means
+      // every particle is fully gone by the time the burst controller
+      // completes, with nothing outside this painter needing to know.
+      final growingFade = local < 0.7 ? 1.0 : (1 - (local - 0.7) / 0.3).clamp(0.0, 1.0);
+      final opacity = growing ? local * 0.9 * growingFade : (1 - local) * 0.9;
       if (opacity <= 0) continue;
       final radiusScale = growing ? 0.2 + local * 0.8 : (1 - local * 0.4);
 

@@ -4,15 +4,16 @@
 // reading backing it is actually trustworthy — otherwise it's dimmed,
 // never a fully-opaque, seemingly-reliable wrong arrow.
 //
-// Rebuilt fresh (2026-08-25 live-device review — see
-// compass_face_painter.dart's header for the full story): the bezel
-// and recessed face are now plain Container/BoxDecoration gradients
-// and shadows, not raw canvas shader/blur ops, after those proved to
-// render as near-nothing on the live device while looking correct in
-// source. [dimmed]'s target alpha is still eased in over ~350ms
-// rather than applied instantly, to avoid the flicker a raw bool
-// caused when the underlying accuracy classification jittered near
-// its threshold.
+// Kept deliberately flat/2D (2026-08-25 live-device review: the
+// gradient-and-shadow "3D" bezel from the same day's earlier pass was
+// still glitching on-device — "no need 3D makeup, 2D very nice
+// compass design... keep a space, the 3D one [for later, with
+// explicit approval]"). Plain circle, hairline border, no gradients,
+// no BoxShadow layers — the simplest, most robust version, matching
+// compass_face_painter.dart's own plain-primitives-only approach.
+// [dimmed]'s target alpha is still eased in over ~350ms rather than
+// applied instantly, to avoid the flicker a raw bool caused when the
+// underlying accuracy classification jittered near its threshold.
 
 import 'package:flutter/material.dart';
 
@@ -25,14 +26,10 @@ class QiblaNeedle extends StatefulWidget {
     super.key,
     required this.rotationDegrees,
     required this.dimmed,
-    this.tiltX = 0,
-    this.tiltY = 0,
   });
 
   final double rotationDegrees;
   final bool dimmed;
-  final double tiltX;
-  final double tiltY;
 
   @override
   State<QiblaNeedle> createState() => _QiblaNeedleState();
@@ -74,14 +71,6 @@ class _QiblaNeedleState extends State<QiblaNeedle> with SingleTickerProviderStat
         '${widget.rotationDegrees.round()} degrees from facing direction'
         '${widget.dimmed ? ', low confidence' : ''}';
 
-    // Light drifts opposite the tilt, as if fixed overhead and the
-    // bezel were tipping under it — a cheap, robust stand-in for the
-    // previous per-facet lighting the raw-canvas bezel computed.
-    final lightAlign = Alignment(
-      (-widget.tiltX).clamp(-1.0, 1.0),
-      (-widget.tiltY).clamp(-1.0, 1.0),
-    );
-
     return Semantics(
       label: label,
       child: SizedBox(
@@ -90,53 +79,23 @@ class _QiblaNeedleState extends State<QiblaNeedle> with SingleTickerProviderStat
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Raised titanium/obsidian bezel with a gold rim catching
-            // the light.
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: lightAlign,
-                  end: -lightAlign,
-                  colors: [AppColors.gold.withValues(alpha: 0.5), AppColors.card],
-                ),
-                border: Border.all(color: AppColors.hairline, width: 1),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black54, blurRadius: 16, offset: Offset(0, 6)),
-                ],
-              ),
-            ),
-            // Recessed face, inset from the bezel.
-            Padding(
-              padding: const EdgeInsets.all(22),
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [AppColors.paper, AppColors.card],
-                    stops: const [0.7, 1.0],
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 10,
-                      spreadRadius: -6,
-                    ),
-                  ],
+                color: AppColors.card,
+                border: Border.fromBorderSide(
+                  BorderSide(color: AppColors.hairline, width: 1.5),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(22),
-              child: AnimatedBuilder(
-                animation: _controller,
-                builder: (context, _) => CustomPaint(
-                  size: const Size(228, 228),
-                  painter: CompassFacePainter(
-                    rotationDegrees: widget.rotationDegrees,
-                    needleAlpha: _dimmedAlpha +
-                        (_trustworthyAlpha - _dimmedAlpha) * _controller.value,
-                  ),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) => CustomPaint(
+                size: const Size(272, 272),
+                painter: CompassFacePainter(
+                  rotationDegrees: widget.rotationDegrees,
+                  needleAlpha: _dimmedAlpha +
+                      (_trustworthyAlpha - _dimmedAlpha) * _controller.value,
                 ),
               ),
             ),

@@ -104,8 +104,6 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
       child: QiblaNeedle(
         rotationDegrees: rotation,
         dimmed: !trustworthy,
-        tiltX: state.tiltX,
-        tiltY: state.tiltY,
       ),
     );
   }
