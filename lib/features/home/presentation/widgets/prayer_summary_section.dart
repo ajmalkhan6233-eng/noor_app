@@ -48,7 +48,7 @@ class PrayerSummarySection extends StatelessWidget {
       children: [
         PrayerHero(times: result),
         IqamahCountdownLine(times: result, offsets: state.iqamathOffsets),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         PrayerTimesStrip(times: result),
       ],
     );

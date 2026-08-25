@@ -61,11 +61,12 @@ class _AstrolabeRingState extends State<AstrolabeRing>
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, _) => CustomPaint(
-          // Cut from 132 (2026-08-25 live-device review: "there is a
-          // huge gap" between the top toggles and the prayer name) —
-          // the arc itself is thin, so a tall bounding box just read
-          // as empty space above the countdown.
-          size: const Size(double.infinity, 92),
+          // Cut from 132, then 92 (2026-08-25 live-device review: "there
+          // is a huge gap" between the top toggles and the prayer name,
+          // then "still a lot of gap... compact it") — the arc itself is
+          // thin, so a tall bounding box just read as empty space above
+          // the countdown.
+          size: const Size(double.infinity, 72),
           painter: AstrolabePainter(
             times: widget.times,
             now: widget.now,

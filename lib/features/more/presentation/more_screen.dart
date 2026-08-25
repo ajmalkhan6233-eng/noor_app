@@ -89,15 +89,18 @@ class MoreScreen extends StatelessWidget {
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 4,
+              // 3 columns × 2 full rows for today's 6 tiles — 4 columns
+              // left an orphaned 2-tile second row pinned to the left
+              // edge, which read as unbalanced/incomplete rather than a
+              // deliberate grid (2026-08-25 live-device review).
+              crossAxisCount: 3,
               mainAxisSpacing: 20,
               crossAxisSpacing: 12,
-              // 0.8 left just enough room for the icon + 2 lines of
-              // label text at the default text scale — a system font
-              // size above 1.0x (live device: MIUI) pushed the label
-              // 2.3px past the cell's fixed height, so this leaves more
-              // headroom rather than assuming default scale.
-              childAspectRatio: 0.72,
+              // Wider cells (3 columns instead of 4) get more headroom
+              // per cell automatically, but still leaves slack for a
+              // 2-line label at a higher system text scale — see the
+              // BOTTOM OVERFLOWED fix this replaced.
+              childAspectRatio: 0.95,
               children: [for (final tile in tiles) tile],
             ),
           ],

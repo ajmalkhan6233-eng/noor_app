@@ -63,19 +63,19 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                           hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       const HomeQuickToggles(),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 4),
                       PrayerSummarySection(state: prayerState, settingsState: settingsState),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 12),
                       DailyGoalsList(
                         todayTimes: prayerState.result is PrayerTimesComputed
                             ? prayerState.result as PrayerTimesComputed
                             : null,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 12),
                       AyahOfDayCard(),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       SunnahFastingCard(
                         hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                       ),
