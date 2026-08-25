@@ -18,6 +18,7 @@
 // reader (that already exists on the Al Quran tab itself).
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
@@ -27,6 +28,7 @@ import '../../../quran/data/quran_ayah.dart';
 import '../../../quran/data/quran_import_service.dart';
 import '../../../quran/data/quran_repository.dart';
 import '../../../quran/data/quran_surah.dart';
+import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 
 class AyahOfDayCard extends StatefulWidget {
   const AyahOfDayCard({
@@ -67,6 +69,10 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // Home already provides SettingsCubit (see home_dashboard.dart) —
+    // reuse it rather than creating a second instance, same source of
+    // truth as the Al Quran tab's own text-size slider.
+    final fontScale = context.watch<SettingsCubit>().state.settings.arabicFontScale;
     return FutureBuilder<(QuranAyah?, List<QuranSurah>)>(
       future: _future,
       builder: (context, snapshot) {
@@ -105,11 +111,23 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
                   ayah.arabicText,
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.right,
-                  style: AppTypography.arabic,
+                  style: AppTypography.arabic.copyWith(
+                    // AppTypography.arabic has no fontSize of its own —
+                    // it inherits Material's bodyMedium default (14) via
+                    // DefaultTextStyle. Multiplying that same base by
+                    // fontScale keeps the fontScale==1.0 appearance
+                    // identical to before this change.
+                    fontSize: 14 * fontScale,
+                  ),
                 ),
                 if (ayah.translation != null && ayah.translation!.isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  Text(ayah.translation!, style: AppTypography.caption),
+                  Text(
+                    ayah.translation!,
+                    style: AppTypography.caption.copyWith(
+                      fontSize: (AppTypography.caption.fontSize ?? 12) * fontScale,
+                    ),
+                  ),
                 ],
               ],
             ],
