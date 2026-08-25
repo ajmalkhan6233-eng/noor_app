@@ -59,6 +59,17 @@ class AboutSourcesCard extends StatelessWidget {
             "narration — Dhikr Al-Huda collection, CC BY 4.0.",
             style: AppTypography.caption,
           ),
+          const SizedBox(height: 12),
+          // MIT requires the permission notice to travel with copies of
+          // the work — this is that notice for the two Azkar datasets
+          // (see assets/azkar/README.md), which had no attribution
+          // anywhere in the UI until now (2026-08-25 audit).
+          const Text(
+            'Azkar text: Morning-And-Evening-Adhkar-DB (Seen-Arabic) and '
+            'HisnElMuslim (asellam), MIT licence. Per-item hadith '
+            'references are shown under each dhikr.',
+            style: AppTypography.caption,
+          ),
           // No Talbiyah attribution here: that text was exclusive to
           // the Hajj/Umrah guide feature, cut from v1 (CLAUDE.md's
           // Deferred section) — assets/talbiyah/ isn't bundled in the
