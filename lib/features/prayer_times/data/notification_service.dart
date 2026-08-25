@@ -49,6 +49,30 @@ class NotificationService {
     );
   }
 
+  /// Android 12+ gates *exact* alarms behind a separate "Alarms &
+  /// reminders" grant that isn't the same as notification permission
+  /// and isn't auto-granted just because SCHEDULE_EXACT_ALARM is in
+  /// the manifest — some OEMs (Xiaomi/MIUI especially) require the
+  /// user to flip it on manually. Every scheduled call in this file
+  /// used `exactAllowWhileIdle` unconditionally, and the whole
+  /// scheduling chain is wrapped in a blanket `.catchError` up in
+  /// PrayerCubit — so on a device where that grant is missing, every
+  /// adhan/iqamath/reminder notification silently failed to schedule,
+  /// with nothing surfaced anywhere (reported live: "reminder set,
+  /// nothing fired"). The native Silent Mode alarms already had this
+  /// exact fallback (see MainActivity.kt's setAlarm); this brings the
+  /// Dart-side notifications in line with it rather than failing
+  /// silently.
+  Future<AndroidScheduleMode> _scheduleMode() async {
+    final androidPlugin = _plugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    final canExact = await androidPlugin?.canScheduleExactNotifications();
+    return canExact == false
+        ? AndroidScheduleMode.inexactAllowWhileIdle
+        : AndroidScheduleMode.exactAllowWhileIdle;
+  }
+
   /// Fires the real adhan notification for [slot] immediately, through
   /// the exact same channel a scheduled prayer-time notification uses
   /// — lets someone confirm right now, from Settings, that it actually
@@ -147,7 +171,7 @@ class NotificationService {
       body,
       scheduled,
       details,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: await _scheduleMode(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
