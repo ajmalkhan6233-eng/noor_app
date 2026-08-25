@@ -15,12 +15,43 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../prayer_times/data/silent_mode_channel.dart';
 import '../../../prayer_times/data/silent_mode_settings.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 
 class HomeQuickToggles extends StatelessWidget {
-  const HomeQuickToggles({super.key});
+  const HomeQuickToggles({super.key, SilentModeChannel? channel})
+    : _channel = channel ?? const SilentModeChannel();
+
+  final SilentModeChannel _channel;
+
+  // Settings' own Silent Mode section (with its "Grant Do Not Disturb
+  // access" button) was removed as duplicate UI (2026-08-25: "it's
+  // already in the front page... remove it from settings") — this was
+  // the only other place that button lived, so turning Silent Mode on
+  // here now has to request that access itself, or the toggle would go
+  // on visually while the ringer never actually changes.
+  Future<void> _enableSilentMode(
+    BuildContext context,
+    SilentModeSettings s,
+  ) async {
+    if (!await _channel.hasNotificationPolicyAccess()) {
+      await _channel.requestNotificationPolicyAccess();
+    }
+    if (context.mounted) {
+      context.read<SettingsCubit>().setSilentMode(
+        SilentModeSettings(
+          fajr: true,
+          dhuhr: true,
+          asr: true,
+          maghrib: true,
+          isha: true,
+          extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +68,18 @@ class HomeQuickToggles extends StatelessWidget {
               icon: silentOn ? Icons.notifications_off : Icons.notifications_off_outlined,
               label: 'Silent Mode',
               on: silentOn,
-              onTap: () => context.read<SettingsCubit>().setSilentMode(
-                SilentModeSettings(
-                  fajr: !silentOn,
-                  dhuhr: !silentOn,
-                  asr: !silentOn,
-                  maghrib: !silentOn,
-                  isha: !silentOn,
-                  extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
-                ),
-              ),
+              onTap: () => silentOn
+                  ? context.read<SettingsCubit>().setSilentMode(
+                      SilentModeSettings(
+                        fajr: false,
+                        dhuhr: false,
+                        asr: false,
+                        maghrib: false,
+                        isha: false,
+                        extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
+                      ),
+                    )
+                  : _enableSilentMode(context, s),
             ),
             const SizedBox(width: 12),
             _reminderChip(context, reminderOn, state.settings.preReminderMinutes),
