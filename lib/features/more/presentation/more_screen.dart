@@ -77,7 +77,12 @@ class MoreScreen extends StatelessWidget {
       // — this tab sits directly above that persistent layer.
       backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(l10n.moreTab), backgroundColor: AppColors.paper),
-      body: Padding(
+      // SingleChildScrollView wraps the shrink-wrapped grid so a short
+      // viewport (small phone, split-screen, the default flutter_test
+      // surface) scrolls instead of overflowing — the grid's own
+      // NeverScrollableScrollPhysics only makes sense with a scrollable
+      // ancestor, which this now always provides.
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: StaggeredFadeIn(
           children: [
