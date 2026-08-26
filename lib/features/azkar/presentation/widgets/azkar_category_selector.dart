@@ -39,6 +39,8 @@ extension _AzkarCategoryIcon on AzkarCategory {
         return Icons.account_balance_wallet_outlined;
       case AzkarCategory.visitingGrave:
         return Icons.park_outlined;
+      case AzkarCategory.visitingSick:
+        return Icons.volunteer_activism_outlined;
     }
   }
 }

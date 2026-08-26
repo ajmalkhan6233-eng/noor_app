@@ -8,6 +8,10 @@
 /// travel — see assets/azkar/README.md) extracted programmatically
 /// (direct JSON field copy, never hand-typed) and seeded via
 /// database_migrations.dart's `oldVersion < 6` branch.
+///
+/// [visitingSick] was split out of [illness] 2026-08-26 (direct
+/// request: "Visiting the Sick" as its own category, distinct from
+/// general illness) — see azkar_supplementary_import_3.dart.
 enum AzkarCategory {
   morning,
   evening,
@@ -19,6 +23,7 @@ enum AzkarCategory {
   distress,
   debt,
   visitingGrave,
+  visitingSick,
 }
 
 extension AzkarCategoryDb on AzkarCategory {
@@ -44,6 +49,8 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'debt';
       case AzkarCategory.visitingGrave:
         return 'visiting_grave';
+      case AzkarCategory.visitingSick:
+        return 'visiting_sick';
     }
   }
 
@@ -69,6 +76,8 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'Debt';
       case AzkarCategory.visitingGrave:
         return 'Visiting the Grave';
+      case AzkarCategory.visitingSick:
+        return 'Visiting the Sick';
     }
   }
 }

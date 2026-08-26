@@ -26,7 +26,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 7;
+const int latestSchemaVersion = 8;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -125,5 +125,17 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       )
     ''');
   }
-  // Next migration: add `if (oldVersion < 8) { ... }` here.
+  if (oldVersion < 8) {
+    // "Visiting the Sick" split out as its own category (2026-08-26,
+    // direct request) — was previously folded into `illness` (see
+    // azkar_supplementary_import_3.dart for the item-level split,
+    // which handles moving the two already-imported duplicate rows
+    // over on an existing install; this only needs to add the row
+    // the category_id foreign key will point at).
+    await db.execute(
+      "INSERT OR IGNORE INTO azkar_categories (category_key, display_order) VALUES "
+      "('visiting_sick', 10)",
+    );
+  }
+  // Next migration: add `if (oldVersion < 9) { ... }` here.
 }

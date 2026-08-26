@@ -60,5 +60,5 @@ const List<String> azkarSeedStatements = [
       "('morning', 0), ('evening', 1), ('after_prayer', 2), "
       "('sleep', 3), ('travel', 4), ('child_protection', 5), "
       "('illness', 6), ('distress', 7), ('debt', 8), "
-      "('visiting_grave', 9)",
+      "('visiting_grave', 9), ('visiting_sick', 10)",
 ];
