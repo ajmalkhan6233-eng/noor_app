@@ -56,6 +56,7 @@
   "quranScreenTitle": "குர்ஆன்",
   "bookmarksLabel": "புத்தகக்குறிகள்",
   "noBookmarksMessage": "இன்னும் புத்தகக்குறிகள் இல்லை — படிக்கும்போது எந்த ஆயத்திலும் புத்தகக்குறி ஐகானைத் தட்டி இங்கு சேமிக்கவும்.",
+  "noAzkarBookmarksMessage": "இன்னும் புத்தகக்குறிகள் இல்லை — எந்த துஆவிலும் புத்தகக்குறி ஐகானைத் தட்டி இங்கு சேமிக்கவும்.",
   "searchQuranSemanticLabel": "குர்ஆனில் தேடு",
   "searchHintText": "தேடு…",
   "searchResultSemanticLabel": "தேடல் முடிவு: சூரா {surahId}, ஆயத் {ayahNumber}",

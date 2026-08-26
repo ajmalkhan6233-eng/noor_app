@@ -101,6 +101,15 @@ void main() {
       // upgrading user still gets the one-time explanation once.
       expect(settingsRows.first['has_seen_location_onboarding'], 0);
 
+      // The version-7 migration's azkar_bookmarks table exists and is
+      // usable on an upgraded install, not just a fresh one.
+      await upgraded.insert('azkar_bookmarks', {
+        'item_id': 1,
+        'created_at': '2026-01-01T00:00:00.000',
+      });
+      final bookmarks = await upgraded.query('azkar_bookmarks');
+      expect(bookmarks, hasLength(1));
+
       await upgraded.close();
     },
   );
@@ -119,6 +128,13 @@ void main() {
     // throw here) — including the seed data insert.
     final azkarCategories = await db.query('azkar_categories');
     expect(azkarCategories, isNotEmpty);
+
+    // azkar_bookmarks exists from a fresh install too.
+    await db.insert('azkar_bookmarks', {
+      'item_id': 1,
+      'created_at': '2026-01-01T00:00:00.000',
+    });
+    expect(await db.query('azkar_bookmarks'), hasLength(1));
 
     await db.close();
   });

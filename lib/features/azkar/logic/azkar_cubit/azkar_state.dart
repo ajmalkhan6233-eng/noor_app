@@ -13,6 +13,8 @@ class AzkarState extends Equatable {
     this.progressByItemId = const {},
     this.isLoading = true,
     this.importStatus,
+    this.bookmarkedItemIds = const {},
+    this.bookmarkedItems = const [],
   });
 
   final AzkarCategory category;
@@ -23,7 +25,17 @@ class AzkarState extends Equatable {
   /// `null` while the initial import check is still running.
   final AzkarImportStatus? importStatus;
 
+  /// Every bookmarked item's id, regardless of category — drives the
+  /// bookmark icon on every AzkarItemTile, wherever it's shown.
+  final Set<int> bookmarkedItemIds;
+
+  /// Populated by AzkarCubit.loadBookmarks() for the bookmarks screen —
+  /// spans every category, unlike [items] which is one category only.
+  final List<AzkarItem> bookmarkedItems;
+
   int progressFor(int itemId) => progressByItemId[itemId] ?? 0;
+
+  bool isBookmarked(int itemId) => bookmarkedItemIds.contains(itemId);
 
   AzkarState copyWith({
     AzkarCategory? category,
@@ -31,6 +43,8 @@ class AzkarState extends Equatable {
     Map<int, int>? progressByItemId,
     bool? isLoading,
     AzkarImportStatus? importStatus,
+    Set<int>? bookmarkedItemIds,
+    List<AzkarItem>? bookmarkedItems,
   }) {
     return AzkarState(
       category: category ?? this.category,
@@ -38,6 +52,8 @@ class AzkarState extends Equatable {
       progressByItemId: progressByItemId ?? this.progressByItemId,
       isLoading: isLoading ?? false,
       importStatus: importStatus ?? this.importStatus,
+      bookmarkedItemIds: bookmarkedItemIds ?? this.bookmarkedItemIds,
+      bookmarkedItems: bookmarkedItems ?? this.bookmarkedItems,
     );
   }
 
@@ -48,5 +64,7 @@ class AzkarState extends Equatable {
     progressByItemId,
     isLoading,
     importStatus,
+    bookmarkedItemIds,
+    bookmarkedItems,
   ];
 }

@@ -27,7 +27,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 6;
+const int latestSchemaVersion = 7;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -117,5 +117,15 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       "('visiting_grave', 9)",
     );
   }
-  // Next migration: add `if (oldVersion < 7) { ... }` here.
+  if (oldVersion < 7) {
+    // Duas & Dhikr bookmarks, direct request (2026-08-26) - one row
+    // per bookmarked azkar item, same shape as azkar_progress.
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS azkar_bookmarks (
+        item_id INTEGER PRIMARY KEY REFERENCES azkar_items(id),
+        created_at TEXT NOT NULL
+      )
+    ''');
+  }
+  // Next migration: add `if (oldVersion < 8) { ... }` here.
 }

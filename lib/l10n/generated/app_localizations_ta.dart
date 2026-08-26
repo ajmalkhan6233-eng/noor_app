@@ -178,6 +178,10 @@ class AppLocalizationsTa extends AppLocalizations {
       'இன்னும் புத்தகக்குறிகள் இல்லை — படிக்கும்போது எந்த ஆயத்திலும் புத்தகக்குறி ஐகானைத் தட்டி இங்கு சேமிக்கவும்.';
 
   @override
+  String get noAzkarBookmarksMessage =>
+      'இன்னும் புத்தகக்குறிகள் இல்லை — எந்த துஆவிலும் புத்தகக்குறி ஐகானைத் தட்டி இங்கு சேமிக்கவும்.';
+
+  @override
   String get searchQuranSemanticLabel => 'குர்ஆனில் தேடு';
 
   @override

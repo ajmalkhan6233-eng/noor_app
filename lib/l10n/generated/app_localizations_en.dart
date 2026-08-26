@@ -173,6 +173,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'No bookmarks yet — tap the bookmark icon on any ayah while reading to save it here.';
 
   @override
+  String get noAzkarBookmarksMessage =>
+      'No bookmarks yet — tap the bookmark icon on any dua to save it here.';
+
+  @override
   String get searchQuranSemanticLabel => 'Search the Quran';
 
   @override

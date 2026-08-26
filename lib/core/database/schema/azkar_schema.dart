@@ -40,6 +40,12 @@ const List<String> azkarCreateStatements = [
     imported_at TEXT NOT NULL
   )
   ''',
+  '''
+  CREATE TABLE azkar_bookmarks (
+    item_id INTEGER PRIMARY KEY REFERENCES azkar_items(id),
+    created_at TEXT NOT NULL
+  )
+  ''',
 ];
 
 /// Category keys only — structural metadata, not dhikr text. The

@@ -1,6 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:noor/features/azkar/data/azkar_bookmark_repository.dart';
 import 'package:noor/features/azkar/data/azkar_category.dart';
 import 'package:noor/features/azkar/data/azkar_item.dart';
 import 'package:noor/features/azkar/data/azkar_repository.dart';
@@ -30,6 +31,27 @@ class _FakeAzkarRepository extends AzkarRepository {
 
   @override
   Future<void> resetProgress(int itemId) async => _progress[itemId] = 0;
+}
+
+/// Overrides every public method so the real `sqflite_sqlcipher` calls
+/// are never reached.
+class _FakeAzkarBookmarkRepository extends AzkarBookmarkRepository {
+  _FakeAzkarBookmarkRepository([Map<int, AzkarItem>? items]) : _items = items ?? {};
+
+  final Set<int> _bookmarked = {};
+  final Map<int, AzkarItem> _items;
+
+  @override
+  Future<Set<int>> bookmarkedItemIds() async => {..._bookmarked};
+
+  @override
+  Future<void> setBookmarked(int itemId, bool bookmarked) async {
+    bookmarked ? _bookmarked.add(itemId) : _bookmarked.remove(itemId);
+  }
+
+  @override
+  Future<List<AzkarItem>> bookmarkedItems() async =>
+      [for (final id in _bookmarked) if (_items[id] != null) _items[id]!];
 }
 
 const _item = AzkarItem(
@@ -89,6 +111,58 @@ void main() {
       await cubit.reset(_item.id);
 
       expect(cubit.state.progressFor(_item.id), 0);
+      await cubit.close();
+    });
+  });
+
+  group('AzkarCubit bookmarks', () {
+    test('toggleBookmark adds then removes an item', () async {
+      final cubit = AzkarCubit(
+        repository: _FakeAzkarRepository({}),
+        bookmarkRepository: _FakeAzkarBookmarkRepository(),
+      );
+
+      await cubit.toggleBookmark(_item.id);
+      expect(cubit.state.isBookmarked(_item.id), isTrue);
+
+      await cubit.toggleBookmark(_item.id);
+      expect(cubit.state.isBookmarked(_item.id), isFalse);
+
+      await cubit.close();
+    });
+
+    test('loadBookmarks populates bookmarkedItems and their progress', () async {
+      final repository = _FakeAzkarRepository({
+        AzkarCategory.evening: [_item],
+      });
+      final bookmarkRepository = _FakeAzkarBookmarkRepository({_item.id: _item});
+      final cubit = AzkarCubit(
+        repository: repository,
+        bookmarkRepository: bookmarkRepository,
+      );
+      await cubit.selectCategory(AzkarCategory.evening);
+      await cubit.increment(_item.id);
+      await cubit.toggleBookmark(_item.id);
+
+      await cubit.loadBookmarks();
+
+      expect(cubit.state.bookmarkedItems, [_item]);
+      // The bookmarks screen shows accurate progress, not a stale 0,
+      // for an item bookmarked from a different category's list.
+      expect(cubit.state.progressFor(_item.id), 1);
+      await cubit.close();
+    });
+
+    test('an unbookmarked item never appears in bookmarkedItems', () async {
+      final bookmarkRepository = _FakeAzkarBookmarkRepository({_item.id: _item});
+      final cubit = AzkarCubit(
+        repository: _FakeAzkarRepository({}),
+        bookmarkRepository: bookmarkRepository,
+      );
+
+      await cubit.loadBookmarks();
+
+      expect(cubit.state.bookmarkedItems, isEmpty);
       await cubit.close();
     });
   });

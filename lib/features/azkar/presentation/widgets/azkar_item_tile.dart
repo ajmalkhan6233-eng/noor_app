@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_item.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../../logic/azkar_cubit/azkar_state.dart';
@@ -27,6 +28,7 @@ class AzkarItemTile extends StatelessWidget {
       builder: (context, state) {
         final count = state.progressFor(item.id);
         final done = count >= item.repeatCount;
+        final bookmarked = state.isBookmarked(item.id);
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           child: AppCard(
@@ -34,6 +36,18 @@ class AzkarItemTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SemanticButton(
+                    label: bookmarked ? 'Remove bookmark' : 'Add bookmark',
+                    onTap: () => context.read<AzkarCubit>().toggleBookmark(item.id),
+                    child: Icon(
+                      bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      color: AppColors.gold,
+                      size: 20,
+                    ),
+                  ),
+                ),
                 // Arabic is the primary element here, not the
                 // transliteration/translation underneath it — sized up
                 // and given more line height so it reads first

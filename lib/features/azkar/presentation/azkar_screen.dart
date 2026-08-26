@@ -11,6 +11,7 @@ import '../data/azkar_category.dart';
 import '../data/azkar_item.dart';
 import '../data/azkar_repository.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
+import 'widgets/azkar_bookmarks_button.dart';
 import 'widgets/azkar_category_selector.dart';
 
 /// Azkar: a search box, then a list of category rows (morning,
@@ -62,6 +63,7 @@ class _AzkarScreenState extends State<AzkarScreen> {
         appBar: AppBar(
           backgroundColor: AppColors.paper,
           title: Text(AppLocalizations.of(context)!.azkarScreenTitle),
+          actions: const [AzkarBookmarksButton()],
         ),
         body: Padding(
           padding: const EdgeInsets.all(24),

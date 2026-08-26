@@ -406,6 +406,12 @@ abstract class AppLocalizations {
   /// **'No bookmarks yet — tap the bookmark icon on any ayah while reading to save it here.'**
   String get noBookmarksMessage;
 
+  /// No description provided for @noAzkarBookmarksMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookmarks yet — tap the bookmark icon on any dua to save it here.'**
+  String get noAzkarBookmarksMessage;
+
   /// No description provided for @searchQuranSemanticLabel.
   ///
   /// In en, this message translates to:

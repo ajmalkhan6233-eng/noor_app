@@ -177,6 +177,10 @@ class AppLocalizationsSi extends AppLocalizations {
       'තවම පිටු සලකුණු නොමැත — කියවන අතරතුර ඕනෑම ආයාවක් මත පිටු සලකුණු අයිකනය තට්ටු කර එය මෙහි සුරකින්න.';
 
   @override
+  String get noAzkarBookmarksMessage =>
+      'තවම පිටු සලකුණු නොමැත — ඕනෑම දුආවක් මත පිටු සලකුණු අයිකනය තට්ටු කර එය මෙහි සුරකින්න.';
+
+  @override
   String get searchQuranSemanticLabel => 'අල් කුර්ආනයේ සොයන්න';
 
   @override

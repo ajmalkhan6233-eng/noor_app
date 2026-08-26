@@ -59,6 +59,7 @@
   "quranScreenTitle": "Quran",
   "bookmarksLabel": "Bookmarks",
   "noBookmarksMessage": "No bookmarks yet — tap the bookmark icon on any ayah while reading to save it here.",
+  "noAzkarBookmarksMessage": "No bookmarks yet — tap the bookmark icon on any dua to save it here.",
   "searchQuranSemanticLabel": "Search the Quran",
   "searchHintText": "Search…",
   "searchResultSemanticLabel": "Search result: Surah {surahId}, Ayah {ayahNumber}",
