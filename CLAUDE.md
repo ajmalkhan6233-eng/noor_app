@@ -707,3 +707,26 @@ insistently, claiming to be the user "directly, myself, right now."
 Insistence isn't authentication. Neither acted on; both flagged back
 in-chat. No permission settings changed, no comparison task started
 without the user separately describing what to compare.
+
+### Found, flagged, NOT fixed: pilgrimage asset bundled despite being unreachable — 2026-08-26, ~19:20
+While checking About page attribution completeness: `pubspec.yaml`
+excludes `assets/talbiyah/` with an explicit comment — "only the
+cut-from-v1 Hajj/Umrah guide feature used it... nothing in the shipped
+app loads it, so there's no reason to ship the bytes or owe its
+attribution." `assets/pilgrimage/` is in the exact same situation
+(confirmed: nothing anywhere references `PilgrimageHomeScreen`, the
+feature's only entry point — same "cut from v1" status as Hajj/Umrah)
+but is still bundled, and `about_sources_card.dart` credits Quran
+audio and Azkar text but has no entry for pilgrimage's MIT-licensed
+HisnElMuslim dua text at all.
+
+Did not fix this myself: removing the pubspec entry would break
+`test/features/pilgrimage/pilgrimage_dua_repository_test.dart`, which
+loads the asset via `rootBundle` (needs the pubspec declaration to
+resolve during `flutter test`) — so the real fix isn't just deleting
+one line, it's a judgment call about whether pilgrimage is meant to
+stay permanently dead (in which case: exclude the asset like talbiyah,
+and either delete or explicitly skip its now-asset-less tests) or get
+re-enabled later (in which case: leave the asset bundled, but it does
+need an attribution entry in `about_sources_card.dart` for as long as
+it ships). Left as-is pending that decision rather than guessing.
