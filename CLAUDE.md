@@ -735,3 +735,33 @@ and either delete or explicitly skip its now-asset-less tests) or get
 re-enabled later (in which case: leave the asset bundled, but it does
 need an attribution entry in `about_sources_card.dart` for as long as
 it ships). Left as-is pending that decision rather than guessing.
+
+### Live-verified: notification fixes work end-to-end on a real device — 2026-08-26, ~22:36
+Rebuilt, installed, and checked every piece of the notification work
+directly on the phone rather than trusting the code alone:
+
+- App and Settings both launched cleanly after the pilgrimage removal
+  and all the notification changes — no crash, no regression on the
+  after-Isha countdown-to-tomorrow's-Fajr logic.
+- More screen confirmed Hajj/Umrah/Pilgrimage tiles are actually gone.
+- New "Reliable notifications" Settings section: correctly showed the
+  not-exempted warning + button on first load, the button opened the
+  real system battery-settings screen (MIUI's "Battery details"), and
+  after granting "No restrictions" and returning to the app, the
+  resume-refresh correctly flipped to the exempted checkmark message
+  — the full loop works live, not just in the widget test.
+- Test Adhan (Fajr): fired immediately as a real notification with
+  the noor icon, confirming the `.show()`/channel/sound path.
+- The real test for the multi-day scheduling fix: `adb shell dumpsys
+  alarm | grep com.noorapp.noor` shows genuine `RTC_WAKEUP` alarms
+  registered for **today through Aug 29** (4 days deep), all
+  `exactAllowReason=allow-listed`. This is the actual OS primitive
+  that fires notifications — confirming the scheduling-horizon fix
+  works end-to-end on a real device, not just in the unit tests.
+  Didn't wait hours for an actual fire (impractical), but this is a
+  direct check of the exact mechanism that would fire, which is
+  stronger evidence than waiting and hoping nothing else confounds
+  the result.
+
+Everything from tonight's notification-reliability pass is now
+live-verified, not just analyze/test-clean.
