@@ -27,23 +27,31 @@
 // a source you can point this session at) rather than guessing
 // remaining dates — Poya days are lunar and shift yearly.
 //
-// UNRESOLVED CONFLICT (2026-08-23, do not silently pick a side): a
-// later search pass found several outlets (DailyNews, Ada Derana)
-// reporting Vesak Full Moon Poya Day as **1 May 2026**, with a
-// separate "Adhi Poson Full Moon Poya Day" on 30 May — but this file
-// already had Vesak on 30 May from an earlier, differently-sourced
-// pass, and that's also the date given in this loop's own planning
-// brief. gazette.lk (the authoritative source) only offers this as a
-// PDF this session's fetch tooling couldn't read. Left as 30 May
-// below, unchanged, until someone can open the actual gazette PDF
-// and confirm one way or the other — do not trust either search
-// summary as final.
+// RESOLVED 2026-08-26 (was "UNRESOLVED CONFLICT" below): two
+// independently-run searches this session — a general web search
+// summarizing dailynews.lk/govt.sl/lakpura.com/gazette.lk, and a
+// direct fetch of induwara.lk's "gazette-verified calendar" page —
+// both agree Vesak Full Moon Poya Day is **1 May 2026**, coinciding
+// with May Day, with 2 May also observed. gazette.lk itself only
+// exposes the real gazette as a PDF this session's tooling can't
+// read, so this still isn't a primary-source confirmation, but two
+// independent secondary sources agreeing (and neither citing 30 May)
+// is enough to correct the date. Moved from 30 May to 1 May below.
 //
-// Also still missing, not fabricated: Deepavali (no confirmed 2026
-// date surfaced), and full confirmation of Eid-ul-Fitr/Eid al-Adha
-// (added below with an approximate flag per the moon-sighting note in
-// this loop's planning brief — Islamic lunar dates aren't fixed in
-// advance the way solar-calendar Poya days are).
+// Still missing, deliberately not filled in: Vap/Il/Unduvap Full Moon
+// Poya (Oct/Nov/Dec) and Deepavali. induwara.lk's own answer for
+// these was internally inconsistent with the standard Poya month
+// cycle (labelled an October date "Il" — Il is traditionally
+// November's Poya, Vap is October's), and no other reachable source
+// gave exact Oct-Dec dates, so nothing from that source was used.
+// Confirm against the actual gazette PDF (or a source that doesn't
+// contradict the standard month-to-Poya-name mapping) before adding
+// these three.
+//
+// Also still missing: full confirmation of Eid-ul-Fitr/Eid al-Adha
+// beyond the approximate flag already used below per the moon-sighting
+// note in this loop's planning brief — Islamic lunar dates aren't
+// fixed in advance the way solar-calendar Poya days are.
 
 class SriLankaHoliday {
   const SriLankaHoliday({required this.name, required this.isPoya});
@@ -103,12 +111,13 @@ List<SriLankaHoliday> sriLankaHolidaysOn(DateTime date) {
     if (date.month == 4 && (date.day == 13 || date.day == 14)) {
       holidays.add(const SriLankaHoliday(name: 'Sinhala & Tamil New Year', isPoya: false));
     }
-    // Vesak: 30 May per this file's earlier sourcing pass and this
-    // loop's planning brief — a later search pass disagreed (1 May).
-    // See the UNRESOLVED CONFLICT note above; left as-is pending
-    // someone confirming against the actual gazette PDF.
-    if (date.month == 5 && date.day == 30) {
+    // Vesak Full Moon Poya Day — 1 May 2026, coinciding with May Day
+    // (see the RESOLVED note above); 2 May is also observed.
+    if (date.month == 5 && date.day == 1) {
       holidays.add(const SriLankaHoliday(name: 'Vesak Full Moon Poya Day', isPoya: true));
+    }
+    if (date.month == 5 && date.day == 2) {
+      holidays.add(const SriLankaHoliday(name: 'Day Following Vesak Full Moon Poya Day', isPoya: false));
     }
     if (date.month == 5 && date.day == 28) {
       holidays.add(const SriLankaHoliday(name: 'Eid al-Adha (approximate)', isPoya: false));
