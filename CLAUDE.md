@@ -641,3 +641,69 @@ were flagged back to the user in-chat. `sri_lanka_holiday.dart` was
 NOT modified. If the holiday data really does need updating, it needs
 an actual source (URL or document) the same way every other asset in
 this app has one — not an unsourced assertion.
+
+### Vesak date corrected; text-size + overflow fixes; Reference lines removed — 2026-08-26, ~14:30-15:30
+Real web research (WebSearch + WebFetch, not memory) resolved the
+file's own previously-flagged Vesak conflict: two independently-dated
+2026 sources agree Vesak Full Moon Poya coincides with May Day (1 May
+2026), not 30 May. Oct-Dec Poya days/Deepavali intentionally left
+unfilled — the only source found for those was internally
+inconsistent. Separately: app-wide text size increased ~15% via a
+single textScaler multiplier in app.dart (composes with, doesn't
+replace, the OS accessibility scale) per direct request, which
+surfaced two real overflow bugs (Home prayer-times strip, bottom nav
+labels) fixed with FittedBox(scaleDown), plus a 3.2px Pre-adhan
+reminder chip overflow fixed with Flexible+FittedBox. Also removed the
+"Reference: ..." hadith-citation line from Azkar/Talbiyah/Pilgrimage
+dua cards per direct request — data/schema untouched, UI line only.
+216 tests passing, `flutter analyze` clean. Pushed (`2ed5f86`).
+
+### Iqama-gap Home hero state — 2026-08-26, ~15:30-16:15
+Direct request: a real third state on the Home countdown ("Head to
+the masjid" + its own countdown) active only between a prayer's adhan
+and its iqamah, replacing what had only ever been a small secondary
+caption line (`IqamahCountdownLine`, now deleted) below a hero that
+kept showing "next prayer approaching" the whole time. State-
+transition logic pulled into a pure function
+(`prayer_countdown_phase.dart`) specifically so it's unit-testable
+without pumping a widget — 7 tests cover adhan-reached → gap →
+expires → next-prayer, a zero-minute offset never opening a gap, and
+Isha's own gap before falling through to tomorrow's Fajr. New
+`IqamaGapRow` widget reuses the existing digit-fade countdown
+treatment on the cyan accent token; `PrayerHero` fires one
+(crash-hardened) `ParticleBurst` as a one-time "ignition" moment right
+as the gap opens, per noor-kinetic-typography's guidance against
+per-tick particle effects. Default iqamah offsets updated to the
+requested starting points (20/10/10/5/10) in both the Dart default and
+the DB schema's DEFAULT clause — the per-prayer +/- adjustment UI in
+Settings (`IqamathOffsetSection`) already existed, nothing new needed
+there. 223 tests passing. Pushed (`f870e9d`). Not yet live-verified —
+phone disconnected for this whole segment.
+
+### Duas & Dhikr bookmarking — 2026-08-26, ~16:15-17:00
+Direct request: "own set of dua every day", mirroring the Quran tab's
+existing bookmark feature. New `azkar_bookmarks` table (schema version
+7, additive-only migration), `AzkarBookmarkRepository` (split from
+`azkar_repository.dart` to stay under the 150-line file limit), a
+bookmark icon on every `AzkarItemTile`, and a dedicated Bookmarks
+screen off the Duas & Dhikr app bar showing the full item (not just a
+label) so it's actually usable to recite from daily.
+`AzkarCubit.loadBookmarks` merges freshly-fetched progress into the
+existing map rather than replacing it, so an item bookmarked from a
+different category still shows its real count instead of a stale 0 —
+covered by a dedicated test. New `noAzkarBookmarksMessage` l10n string
+(EN/SI/TA) since the existing one says "ayah". 226 tests passing,
+`flutter analyze` clean, `flutter build apk --debug` succeeds. Pushed
+(`31a128f`). Not yet live-verified — phone disconnected for this whole
+segment; verify both this and the Iqama-gap state live as soon as it
+reconnects.
+
+### Two more suspicious mid-turn messages, not acted on — 2026-08-26, ~16:00
+Same pattern as before: (1) a message asking to reconfigure tool-
+permission settings (no tool available to do this regardless) and
+"go back" to a nonexistent prior "Athan app comparison" task — nothing
+like it exists anywhere in this session; (2) sent again, more
+insistently, claiming to be the user "directly, myself, right now."
+Insistence isn't authentication. Neither acted on; both flagged back
+in-chat. No permission settings changed, no comparison task started
+without the user separately describing what to compare.
