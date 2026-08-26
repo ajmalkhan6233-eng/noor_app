@@ -493,3 +493,24 @@ tonight, on the Tasbih counter and anywhere else a milestone/done
 particle burst fires during a cascading rebuild — worth keeping an
 eye on whether this explains any past "app crashed" report that
 never got a clear repro.
+
+### Every ParticleBurst.play() caller audited — 2026-08-26, ~12:40
+Grepped every call site to confirm the central fix actually covers
+all of them: `azkar_item_tile.dart`, `tasbih_orb.dart`,
+`qibla_compass_area.dart`, `daily_goals_list.dart` (this one wasn't
+even on the radar before — marking the last of 5 prayers done would
+have hit the exact same crash), `pilgrimage_counter_button.dart` and
+`completion_step_view.dart` (unreachable, feature cut, but harmless).
+All funnel through the one fixed function. The only
+`showModalBottomSheet` in the app (`calendar_screen.dart`) is called
+from an `onTap` event handler, not `build`/`didUpdateWidget`, so it
+was never at risk. No further Overlay-during-build bugs found.
+
+Tried to live-verify the Tasbih counter's particle burst specifically
+(same code path, not yet directly tested) but **the phone's screen
+lock is active** — a lock/fingerprint icon is showing, so `adb`
+cannot proceed past it. Did not attempt to bypass this — that's
+correctly outside what an automated session should do. This is
+already inferred safe from the Azkar live-test + `tasbih_orb_test.dart`
+passing, just not independently confirmed live yet. Unlock the phone
+to let this (and anything else) resume being live-tested.
