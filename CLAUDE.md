@@ -320,13 +320,27 @@ just source reading:
   the real 1080×2400 device), not a live app bug. Harmless test
   pollution; safe to ignore or clear via Settings if it's confusing to
   look at.
-- **Not yet reproduced**: the "one is not loading" complaint — the
-  Progress screen was hardened tonight (commit `974ff56`) as the most
-  likely candidate (same stuck-spinner bug class as the old Quran/
-  Azkar bug) but wasn't specifically confirmed stuck before the fix,
-  since the report came in without a screen name attached. Worth a
-  direct look at the Progress tab specifically next time the phone's
-  available, to close this out for certain.
+- **Ruled out**: the Progress screen (Prayer Times tab → "View your
+  progress") loads instantly and correctly on the real device — not
+  the "one is not loading" complaint. The `974ff56` hardening (no
+  infinite spinner on a DB read failure) is still worth keeping, but
+  wasn't the actual bug the user hit. What was "not loading" is still
+  unidentified — no crashes found in logcat across this whole session
+  either, so it may have been something transient, or a screen not
+  checked yet (Al Quran/Duas & Dhikr both spot-checked fine tonight;
+  Monthly Timetable and Qibla weren't tried).
+- Also found and fixed live: Silent Mode chip showed "on" before DND
+  access was actually granted — see commit `80c97ab`.
 - Did not touch Qibla — briefly landed on it by a mistap and backed
   out immediately without investigating, per the standing instruction
   to leave it alone.
+
+**Workflow note for next time**: for pure Dart/UI changes (colors,
+layout, spacing, widgets, animations), use `flutter run` with hot
+reload against the connected device instead of a full
+`flutter build apk` + `adb install` cycle each time — much faster.
+Only do a full rebuild when the change actually needs it: Android
+manifest edits, new permissions, new native (Kotlin/Java) code, or
+new packages. Tonight's `SilentModeReceiver.kt` fix was native and
+genuinely needed a rebuild; most of the Dart fixes tonight didn't and
+were rebuilt anyway before this was pointed out.
