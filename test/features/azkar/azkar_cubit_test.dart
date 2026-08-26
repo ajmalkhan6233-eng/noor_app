@@ -153,6 +153,27 @@ void main() {
       await cubit.close();
     });
 
+    test(
+      'unbookmarking while already on the bookmarks list removes it '
+      'immediately, not just on the next reload',
+      () async {
+        final bookmarkRepository = _FakeAzkarBookmarkRepository({_item.id: _item});
+        final cubit = AzkarCubit(
+          repository: _FakeAzkarRepository({}),
+          bookmarkRepository: bookmarkRepository,
+        );
+        await cubit.toggleBookmark(_item.id);
+        await cubit.loadBookmarks();
+        expect(cubit.state.bookmarkedItems, [_item]);
+
+        await cubit.toggleBookmark(_item.id);
+
+        expect(cubit.state.bookmarkedItems, isEmpty);
+        expect(cubit.state.isBookmarked(_item.id), isFalse);
+        await cubit.close();
+      },
+    );
+
     test('an unbookmarked item never appears in bookmarkedItems', () async {
       final bookmarkRepository = _FakeAzkarBookmarkRepository({_item.id: _item});
       final cubit = AzkarCubit(

@@ -34,7 +34,19 @@ class AzkarCubit extends Cubit<AzkarState> {
     await _bookmarkRepository.setBookmarked(itemId, !wasBookmarked);
     final next = {...state.bookmarkedItemIds};
     wasBookmarked ? next.remove(itemId) : next.add(itemId);
-    emit(state.copyWith(bookmarkedItemIds: next));
+    emit(
+      state.copyWith(
+        bookmarkedItemIds: next,
+        // Unbookmarking from within the Bookmarks screen itself must
+        // drop the item from the visible list immediately, not just
+        // flip its icon — otherwise it lingers until the screen is
+        // reopened. Newly-bookmarked items reach bookmarkedItems on
+        // the next loadBookmarks() call, same as before.
+        bookmarkedItems: wasBookmarked
+            ? [for (final item in state.bookmarkedItems) if (item.id != itemId) item]
+            : state.bookmarkedItems,
+      ),
+    );
   }
 
   Future<void> loadBookmarks() async {
