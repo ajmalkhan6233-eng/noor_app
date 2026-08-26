@@ -5,6 +5,12 @@
 // Mode. No network, no background service — a single one-shot
 // broadcast per alarm.
 //
+// RESTORE puts the ringer back to whatever it was right before
+// SILENCE ran (saved in a tiny SharedPreferences entry), not
+// unconditionally NORMAL — someone who keeps their phone on Vibrate
+// day-to-day shouldn't have it start ringing again after every
+// prayer window just because Silent Mode touched it.
+//
 // NOTE: this cannot be exercised on a device/emulator in this
 // environment; written to standard AudioManager/BroadcastReceiver
 // conventions but not runtime-verified.
@@ -21,14 +27,23 @@ class SilentModeReceiver : BroadcastReceiver() {
         const val EXTRA_ACTION = "action"
         const val ACTION_SILENCE = "SILENCE"
         const val ACTION_RESTORE = "RESTORE"
+        private const val PREFS_NAME = "silent_mode_prefs"
+        private const val KEY_PREVIOUS_RINGER_MODE = "previous_ringer_mode"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         val audioManager =
             context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         when (intent.getStringExtra(EXTRA_ACTION)) {
-            ACTION_SILENCE -> audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
-            ACTION_RESTORE -> audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+            ACTION_SILENCE -> {
+                prefs.edit().putInt(KEY_PREVIOUS_RINGER_MODE, audioManager.ringerMode).apply()
+                audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
+            }
+            ACTION_RESTORE -> {
+                val previousMode = prefs.getInt(KEY_PREVIOUS_RINGER_MODE, AudioManager.RINGER_MODE_NORMAL)
+                audioManager.ringerMode = previousMode
+            }
         }
     }
 }
