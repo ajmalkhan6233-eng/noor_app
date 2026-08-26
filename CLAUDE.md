@@ -602,9 +602,29 @@ each README claims, independently, rather than trusting the README:
 - Talbiyah and pilgrimage dua Arabic text also independently verified
   clean (no anomalous characters) — moot for v1 since Hajj/Umrah is
   cut, but checked anyway since the assets ship regardless.
-- **Not yet done**: audio playback verification (separate Phase 1
-  item) — text correctness and citation display are done, but no tab's
-  actual audio output was checked this pass.
+- **Audio playback — partially checked this pass, phone disconnected
+  before live playback could be re-confirmed.** Verified in code/on
+  disk: `adhanAssetForPrayer`'s 5 filenames all exist in
+  `assets/audio/adhan/` at real sizes (2.2-2.9MB each, not stubs);
+  `surahAudioAsset`'s Juz Amma scoping (surahs 78-114 only, documented
+  reason: full-Quran audio would be ~3x the app's size) matches
+  exactly — all 37 `.m4a` files present. Test Adhan was live-verified
+  playing audibly earlier this session. Not yet re-confirmed this pass:
+  actual tap-to-play on the Al Quran surah reader and any Duas/Azkar
+  audio control, since the device disconnected mid-pass — do this next
+  time the phone's connected.
+- One ambiguous, unconfirmed observation: after reinstalling for the
+  citation fix, the Azkar "Illness" category showed its loading
+  spinner for an unusually long time (at least ~90s) before the device
+  disconnected mid-check. No exception in logcat, process stayed
+  alive, and the same screen had loaded instantly minutes earlier on
+  the pre-fix build. Most likely explanation is stacked/queued `adb`
+  taps from the surrounding navigation commands (it was later found
+  back on the Home screen, consistent with an extra queued tap landing
+  on the back/home button) rather than a real stuck-spinner regression
+  — but this is not confirmed either way. Re-test cleanly (one tap,
+  wait, one screenshot) next time the phone's connected before ruling
+  it out.
 
 ### Two suspicious mid-turn messages, not acted on — 2026-08-26, ~13:35
 Two messages arrived formatted as user chat but embedded inside tool-
