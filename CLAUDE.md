@@ -460,3 +460,36 @@ the (still stale-from-earlier-testing) spiritual goals checkmarks,
 Silent Mode chip). Conclusion: a one-off timing artifact from the
 force-stop/relaunch race, not a real bug — noted here rather than
 silently dismissed, in case it recurs. Back to source-only work now.
+
+### CRASH found and fixed live — 2026-08-26, ~11:39
+This one is more serious than tonight's other fixes — an actual
+reproducible crash, not a UX polish item. Live-testing the Azkar tab
+(Duas & Dhikr → Morning), tapping a "Tap to count" button to complete
+it threw a real Flutter red-screen error: **"setState() or
+markNeedsBuild() called during build."** Root cause:
+`ParticleBurst.play()` (`core/effects/particle_burst.dart`) calls
+`overlay.insert(entry)` synchronously, and every caller triggers it
+from `didUpdateWidget` — Tasbih orb, Qibla compass area, the Azkar
+counter, and streak milestones all use this exact pattern (per their
+own skill files). `didUpdateWidget` runs during Flutter's build
+phase; `overlay.insert()` calls `setState()` on the ancestor
+`OverlayState` synchronously, and when that Overlay is itself
+mid-build in the same frame — routine when a `BlocBuilder` rebuild
+cascades down to the widget — that trips the assertion and crashes.
+
+Fixed centrally in `particle_burst.dart` (commit `c082034`): the
+`overlay.insert()` call is now deferred via
+`WidgetsBinding.instance.addPostFrameCallback`, which fixes every
+caller at once rather than patching each call site. All 216 tests
+pass, including `tasbih_orb_test.dart` which exercises the same code
+path. **Live-verified the actual fix**, not just tests: rebuilt,
+installed, reproduced the exact scenario that crashed before (a
+fresh "0 of 1" Ayat al-Kursi dhikr, tapped its counter) — this time
+it correctly shows "Done · 1 of 1" with the particle burst playing,
+no crash, confirmed clean in `adb logcat` too.
+
+This was very likely already happening silently in production before
+tonight, on the Tasbih counter and anywhere else a milestone/done
+particle burst fires during a cascading rebuild — worth keeping an
+eye on whether this explains any past "app crashed" report that
+never got a clear repro.
