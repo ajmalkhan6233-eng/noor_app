@@ -403,6 +403,33 @@ a confirmed dead end).
   project's own anti-drift rule. Apply this the next time the Prayer
   Times row UI is refined with device access available.
 
+### Source-level audit pass — 2026-08-26, ~09:10 (source+test verified only, no device)
+Checked and confirmed clean, no action needed: Zakat calculator's core
+math (`zakat_calculator.dart` — nisab/rate correct, lower-of-two-metals
+logic sound), Calendar screen (no I/O beyond a mounted-checked settings
+load), Monthly Timetable's coordinate guard (false alarm — the button
+itself is already disabled via `onPressed: null` when no coordinates,
+so the redundant guard inside is dead-but-harmless, not a live bug),
+`ayah_of_day_card.dart`'s FutureBuilder (already degrades to a "not
+loaded" message on error rather than spinning forever), Licences
+screen's FutureBuilder (theoretically same stuck-spinner shape as the
+Progress-screen bug, but `LicenseRegistry.licenses` is static Flutter
+framework data that doesn't do I/O — not worth hardening, todo-listed
+here rather than silently skipped), and — the big one —
+`settings_repository.dart` against `settings_schema.dart` and
+`database_migrations.dart`: every one of `AppSettings`'s 14 fields
+round-trips through matching column names in both save() and load(),
+the fresh-install schema and the versioned upgrade path
+(`latestSchemaVersion = 6`, five upgrade branches) agree exactly, and
+there's a dedicated `migration_test.dart` already exercising it. No
+gaps found.
+
+This closes out the areas flagged as unexplored earlier tonight. Next
+useful work is likely either implementing `noor-prayer-row-ux` (needs
+device access) or continuing to spot-check more peripheral screens
+not yet looked at (Islamic Calendar occasion data, notification
+channel setup on the Kotlin side) if nothing else comes up.
+
 **From this point in the session, the phone is disconnected.** Every
 fix below is verified via `flutter analyze` + `flutter test` only,
 explicitly noted as such — not live-tested on real hardware. Continue
