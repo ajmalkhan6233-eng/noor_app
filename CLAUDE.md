@@ -765,3 +765,60 @@ directly on the phone rather than trusting the code alone:
 
 Everything from tonight's notification-reliability pass is now
 live-verified, not just analyze/test-clean.
+
+## Overnight session — 2026-08-26 late night into 2026-08-27
+
+Working through a large queued list independently, committing each
+item as it's finished and verified. This section is the running log —
+check here first for current status before assuming anything is
+still open.
+
+### Done, committed, live-verified
+1. **"Visiting the Sick" Azkar category** (`055871b`) — split out of
+   the combined `illness` category per direct request. New
+   `azkar_supplementary_import_3.dart` moves the two shared rows
+   (matched against its own bundled JSON at import time, never a
+   hand-typed string — a hand-typed version genuinely failed its own
+   test first) rather than duplicating them. Verified character-for-
+   character against a fresh re-download of the source. Checked Hisn
+   al-Muslim for other standard sections not yet covered — found a
+   funeral/bereavement cluster, weather, food-and-fasting, and
+   marriage clusters missing; flagged in assets/azkar/README.md
+   rather than added speculatively.
+2. **Qibla compass root-cause fix** (`252c8a3`) — the "compass
+   blanks to a small gold blob" bug, previously guessed as a GPU/
+   Skia issue, was actually QiblaCubit wiping a good heading back to
+   null on every transient null-heading compass event (confirmed this
+   device's magnetometer stream does this mid-stream, not just before
+   first fix), which made the whole compass swap out for a loading
+   spinner. Fixed at the source; live-verified stable across repeated
+   screenshots where it previously blanked reliably. Also confirms
+   the 2026-08-25 2D redesign is genuinely live, not just claimed.
+3. **Home countdown vs. current time clarity** (`252c8a3`) — countdown
+   now captioned "Next prayer in"; current time pulled into its own
+   separated, labeled chip instead of sitting inline 10px away in
+   similar-weight numerals. Live-verified on device.
+4. **Bookmark staleness fix** — re-confirmed still solid (its
+   regression test and the full Azkar suite pass); no rework needed.
+
+### In progress / queued next, in order
+5. Icon polish pass (bottom nav + More screen) — original designs,
+   Athan-app-inspired *treatment* only, gold/cyan palette.
+6. Adhan licensing research (calm-voiced, openly-licensed reciter).
+7. Re-verify notification reliability items are still intact (not a
+   redo — last night's `dumpsys alarm` check already confirmed this
+   live; re-checking boot-receiver + exact-alarm + scheduling mode
+   are all still wired before calling it confirmed).
+8. Battery-optimization guided first-launch step — check whether this
+   is a first-run prompt (not just the existing Settings section) and
+   build it if missing.
+9. Home-screen widget (next prayer name + time, offline).
+10. Local encrypted backup/export (streaks, Zakat settings, bookmarks).
+11. "Send Feedback" button (WhatsApp/email handoff, mirroring Support
+    the Developer).
+
+Items 9 and 10 are substantial native/engineering work in their own
+right (a real Android AppWidgetProvider; a real encrypted export
+format) — if usage runs out before reaching them, they're genuinely
+not started, not partially done, and that will be stated plainly
+rather than implied finished.
