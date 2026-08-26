@@ -20,11 +20,62 @@ import '../../../prayer_times/data/silent_mode_settings.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 
-class HomeQuickToggles extends StatelessWidget {
+class HomeQuickToggles extends StatefulWidget {
   const HomeQuickToggles({super.key, SilentModeChannel? channel})
     : _channel = channel ?? const SilentModeChannel();
 
   final SilentModeChannel _channel;
+
+  @override
+  State<HomeQuickToggles> createState() => _HomeQuickTogglesState();
+}
+
+class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBindingObserver {
+  // Set right before opening the system DND-access screen, since
+  // requestNotificationPolicyAccess() just launches that screen and
+  // returns immediately — it can't tell us whether the user actually
+  // granted it. Re-checked on the next app resume instead (found live,
+  // 2026-08-26: the toggle was marking itself "on" the instant the
+  // settings screen opened, before the user had granted anything —
+  // showing Silent Mode as enabled even if they backed out without
+  // granting it, while the native ringer change would then silently
+  // have no effect).
+  bool _awaitingPolicyAccessResume = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed || !_awaitingPolicyAccessResume) return;
+    _awaitingPolicyAccessResume = false;
+    _finishEnableIfGranted();
+  }
+
+  Future<void> _finishEnableIfGranted() async {
+    if (!await widget._channel.hasNotificationPolicyAccess()) return;
+    if (!mounted) return;
+    final s = context.read<SettingsCubit>().state.settings.silentMode;
+    context.read<SettingsCubit>().setSilentMode(
+      SilentModeSettings(
+        fajr: true,
+        dhuhr: true,
+        asr: true,
+        maghrib: true,
+        isha: true,
+        extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
+      ),
+    );
+  }
 
   // Settings' own Silent Mode section (with its "Grant Do Not Disturb
   // access" button) was removed as duplicate UI (2026-08-25: "it's
@@ -36,21 +87,23 @@ class HomeQuickToggles extends StatelessWidget {
     BuildContext context,
     SilentModeSettings s,
   ) async {
-    if (!await _channel.hasNotificationPolicyAccess()) {
-      await _channel.requestNotificationPolicyAccess();
+    if (await widget._channel.hasNotificationPolicyAccess()) {
+      if (context.mounted) {
+        context.read<SettingsCubit>().setSilentMode(
+          SilentModeSettings(
+            fajr: true,
+            dhuhr: true,
+            asr: true,
+            maghrib: true,
+            isha: true,
+            extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
+          ),
+        );
+      }
+      return;
     }
-    if (context.mounted) {
-      context.read<SettingsCubit>().setSilentMode(
-        SilentModeSettings(
-          fajr: true,
-          dhuhr: true,
-          asr: true,
-          maghrib: true,
-          isha: true,
-          extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
-        ),
-      );
-    }
+    _awaitingPolicyAccessResume = true;
+    await widget._channel.requestNotificationPolicyAccess();
   }
 
   @override

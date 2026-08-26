@@ -282,3 +282,51 @@ That APK already has tonight's fixes built in (fake_async dependency,
 deprecated Matrix4 calls, Silent Mode DND-access regression, and the
 ringer-mode restore fix) and is sitting on disk ready to install the
 moment that toggle is flipped — no rebuild needed.
+
+### Live device testing session — 2026-08-26, ~06:43–07:25
+"Install via USB" got enabled and the debug APK installed successfully.
+Real testing on Ajmal's actual phone (Redmi/POCO, MIUI/HyperOS), not
+just source reading:
+
+- **Confirmed working live**: the Android 13+ POST_NOTIFICATIONS
+  permission dialog fires correctly on first launch (tonight's earlier
+  fix) — screenshotted, tapped Allow. Test Adhan from Settings posts a
+  real system notification with the correct per-prayer sound resource
+  (`android.resource://com.noorapp.noor/raw/adhan_isha`), HIGH
+  importance, confirmed via `adb shell dumpsys notification`. The
+  Silent Mode chip's DND-access request opens the real system "Modes
+  access" (MIUI's name for notification policy access) screen — also
+  confirmed via `adb shell dumpsys notification`.
+- **Found and fixed live**: `daily_goals_list.dart` — with no location
+  set, every prayer on Home's "Today's Spiritual Goals" was markable
+  regardless of whether it had actually happened yet (user's own
+  words: "now I can select all the prayers... not satisfied"). Fixed,
+  commit `0aca166`, verified live afterward — tapping a not-yet-due
+  prayer now does nothing.
+- **Found and fixed live**: `home_quick_toggles.dart` — the Silent
+  Mode chip flipped to "on" (gold, enabled) the instant it opened the
+  system DND-access screen, before the user had actually granted
+  anything. Confirmed by watching it happen: toggle went gold
+  immediately on tap, before I'd touched the system permission screen
+  at all. If someone backs out of that screen without granting access,
+  the app would still claim Silent Mode is on while the native ringer
+  change silently has no effect. Fixed to wait for app-resume and
+  re-check real grant state before enabling; 3 tests updated/added,
+  all passing.
+- **Test artifact, not a bug**: Home's daily-goals checklist currently
+  shows all 5 prayers checked for today — that's leftover from my own
+  mis-taps during earlier coordinate-calibration mistakes (tapping
+  before realizing screenshot preview coordinates need ×1.2 to map to
+  the real 1080×2400 device), not a live app bug. Harmless test
+  pollution; safe to ignore or clear via Settings if it's confusing to
+  look at.
+- **Not yet reproduced**: the "one is not loading" complaint — the
+  Progress screen was hardened tonight (commit `974ff56`) as the most
+  likely candidate (same stuck-spinner bug class as the old Quran/
+  Azkar bug) but wasn't specifically confirmed stuck before the fix,
+  since the report came in without a screen name attached. Worth a
+  direct look at the Progress tab specifically next time the phone's
+  available, to close this out for certain.
+- Did not touch Qibla — briefly landed on it by a mistap and backed
+  out immediately without investigating, per the standing instruction
+  to leave it alone.

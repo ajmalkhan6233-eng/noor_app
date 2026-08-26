@@ -38,13 +38,15 @@ Widget _wrap(SettingsCubit cubit) {
 void main() {
   const channel = MethodChannel('com.noorapp.noor/silent_mode');
   final calls = <String>[];
+  var accessGranted = false;
 
   setUp(() {
     calls.clear();
+    accessGranted = false;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (call) async {
       calls.add(call.method);
-      if (call.method == 'hasNotificationPolicyAccess') return false;
+      if (call.method == 'hasNotificationPolicyAccess') return accessGranted;
       return null;
     });
   });
@@ -55,7 +57,8 @@ void main() {
   });
 
   testWidgets(
-    'turning Silent Mode on requests DND access when not already granted',
+    'turning Silent Mode on requests DND access, but does not enable it '
+    'until access is confirmed granted after returning to the app',
     (tester) async {
       final cubit = SettingsCubit(
         repository: _FakeSettingsRepository(const AppSettings()),
@@ -70,7 +73,38 @@ void main() {
         'hasNotificationPolicyAccess',
         'requestNotificationPolicyAccess',
       ]));
+      // Not yet granted — must not show as enabled before the user has
+      // actually granted DND access in system settings.
+      expect(cubit.state.settings.silentMode.fajr, isFalse);
+
+      // Simulate returning to the app after granting access.
+      accessGranted = true;
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+
       expect(cubit.state.settings.silentMode.fajr, isTrue);
+
+      await cubit.close();
+    },
+  );
+
+  testWidgets(
+    'backing out without granting access leaves Silent Mode off',
+    (tester) async {
+      final cubit = SettingsCubit(
+        repository: _FakeSettingsRepository(const AppSettings()),
+      );
+      await cubit.load();
+
+      await tester.pumpWidget(_wrap(cubit));
+      await tester.tap(find.text('Silent Mode'));
+      await tester.pumpAndSettle();
+
+      // Returns to the app, but never actually granted access.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+
+      expect(cubit.state.settings.silentMode.fajr, isFalse);
 
       await cubit.close();
     },
