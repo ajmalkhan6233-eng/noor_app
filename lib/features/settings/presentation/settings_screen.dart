@@ -12,6 +12,7 @@ import '../logic/settings_cubit/settings_cubit.dart';
 import '../logic/settings_cubit/settings_state.dart';
 import 'widgets/about_donate_section.dart';
 import 'widgets/advanced_timing_section.dart';
+import 'widgets/battery_optimization_section.dart';
 import 'widgets/country_section.dart';
 import 'widgets/display_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
@@ -77,6 +78,9 @@ class _SettingsView extends StatelessWidget {
                   const SizedBox(height: 16),
                   const SectionHeader('Test Adhan'),
                   const AppCard(child: TestAdhanSection()),
+                  const SizedBox(height: 16),
+                  SectionHeader(l10n.batteryOptimizationSectionHeader),
+                  const AppCard(child: BatteryOptimizationSection()),
                   const SizedBox(height: 16),
                   SectionHeader(l10n.displaySectionHeader),
                   const AppCard(child: DisplaySection()),

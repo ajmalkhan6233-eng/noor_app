@@ -598,6 +598,30 @@ abstract class AppLocalizations {
   /// **'Pre-adhan reminder'**
   String get preReminderSectionHeader;
 
+  /// No description provided for @batteryOptimizationSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Reliable notifications'**
+  String get batteryOptimizationSectionHeader;
+
+  /// No description provided for @batteryOptimizationExemptedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is exempt from battery optimization — prayer notifications can fire reliably even when the app is closed.'**
+  String get batteryOptimizationExemptedMessage;
+
+  /// No description provided for @batteryOptimizationNotExemptedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Some phones (especially Samsung, Xiaomi, and Huawei) silently stop scheduled prayer notifications to save battery unless this app is exempted.'**
+  String get batteryOptimizationNotExemptedMessage;
+
+  /// No description provided for @grantBatteryOptimizationExemptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow unrestricted battery use'**
+  String get grantBatteryOptimizationExemptionLabel;
+
   /// No description provided for @sunnahFastingCardTitle.
   ///
   /// In en, this message translates to:

@@ -19,10 +19,11 @@
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
-import 'package:timezone/timezone.dart' as tz;
 
 import '../../settings/data/notification_settings.dart';
 import 'iqamath_offsets.dart';
+import 'notification_details.dart';
+import 'notification_scheduling.dart';
 import 'notification_slots.dart';
 import 'prayer_times_result.dart';
 
@@ -60,30 +61,6 @@ class NotificationService {
         ?.requestNotificationsPermission();
   }
 
-  /// Android 12+ gates *exact* alarms behind a separate "Alarms &
-  /// reminders" grant that isn't the same as notification permission
-  /// and isn't auto-granted just because SCHEDULE_EXACT_ALARM is in
-  /// the manifest — some OEMs (Xiaomi/MIUI especially) require the
-  /// user to flip it on manually. Every scheduled call in this file
-  /// used `exactAllowWhileIdle` unconditionally, and the whole
-  /// scheduling chain is wrapped in a blanket `.catchError` up in
-  /// PrayerCubit — so on a device where that grant is missing, every
-  /// adhan/iqamath/reminder notification silently failed to schedule,
-  /// with nothing surfaced anywhere (reported live: "reminder set,
-  /// nothing fired"). The native Silent Mode alarms already had this
-  /// exact fallback (see MainActivity.kt's setAlarm); this brings the
-  /// Dart-side notifications in line with it rather than failing
-  /// silently.
-  Future<AndroidScheduleMode> _scheduleMode() async {
-    final androidPlugin = _plugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    final canExact = await androidPlugin?.canScheduleExactNotifications();
-    return canExact == false
-        ? AndroidScheduleMode.inexactAllowWhileIdle
-        : AndroidScheduleMode.exactAllowWhileIdle;
-  }
-
   /// Fires the real adhan notification for [slot] immediately, through
   /// the exact same channel a scheduled prayer-time notification uses
   /// — lets someone confirm right now, from Settings, that it actually
@@ -97,7 +74,7 @@ class NotificationService {
       9000 + slot.index,
       '$name adhan (test)',
       'This is what the $name adhan notification sounds like.',
-      _adhanNotificationDetails(slot),
+      adhanNotificationDetails(slot),
     );
   }
 
@@ -105,119 +82,69 @@ class NotificationService {
   /// prayer in [times], respecting [notifications]' per-prayer toggle.
   /// Sunrise never gets a notification. The pre-adhan reminder is a
   /// single global on/off + minutes value, not per-prayer.
+  ///
+  /// [dayOffset] (0 = today) is the caller's responsibility to loop
+  /// across the full [notificationSchedulingHorizonDays] — this method
+  /// only ever touches the one day it's given, so a disabled prayer is
+  /// only fully cleared across every future day if the caller cancels
+  /// (or reschedules) every offset in the horizon, not just today's.
   Future<void> scheduleForDay({
     required PrayerTimesComputed times,
     required NotificationSettings notifications,
     required IqamathOffsetMinutes iqamathOffsets,
     bool preReminderEnabled = false,
     int preReminderMinutes = 10,
+    int dayOffset = 0,
   }) async {
     await initialize();
     for (final slot in PrayerSlot.values) {
       final (name, adhanTime) = entryForSlot(slot, times);
       if (!notifications.forPrayer(name)) {
-        await _cancel(slot);
+        await cancelSlot(_plugin, slot, dayOffset: dayOffset);
         continue;
       }
-      await _scheduleAt(
+      await scheduleAt(
+        _plugin,
         slot,
         '$name adhan',
         'It is time for $name.',
         adhanTime,
-        details: _adhanNotificationDetails(slot),
+        details: adhanNotificationDetails(slot),
+        dayOffset: dayOffset,
       );
 
       final iqamathMinutes = iqamathOffsets.forPrayer(name);
       final iqamathTime = adhanTime.add(Duration(minutes: iqamathMinutes));
-      await _scheduleAt(
+      await scheduleAt(
+        _plugin,
         slot,
         '$name iqamath',
         'Congregation for $name is starting.',
         iqamathTime,
         kind: NotificationKind.iqamath,
-        details: _defaultNotificationDetails,
+        details: defaultNotificationDetails,
+        dayOffset: dayOffset,
       );
 
       if (preReminderEnabled) {
         final reminderTime = adhanTime.subtract(
           Duration(minutes: preReminderMinutes),
         );
-        await _scheduleAt(
+        await scheduleAt(
+          _plugin,
           slot,
           '$name in $preReminderMinutes min',
           '$name will be at ${formatClockTime(adhanTime)}.',
           reminderTime,
           kind: NotificationKind.reminder,
-          details: _defaultNotificationDetails,
+          details: defaultNotificationDetails,
+          dayOffset: dayOffset,
         );
       } else {
-        await _plugin.cancel(idForSlot(slot, kind: NotificationKind.reminder));
+        await _plugin.cancel(
+          idForSlot(slot, kind: NotificationKind.reminder, dayOffset: dayOffset),
+        );
       }
     }
   }
-
-  Future<void> _cancel(PrayerSlot slot) async {
-    for (final kind in NotificationKind.values) {
-      await _plugin.cancel(idForSlot(slot, kind: kind));
-    }
-  }
-
-  Future<void> _scheduleAt(
-    PrayerSlot slot,
-    String title,
-    String body,
-    DateTime time, {
-    NotificationKind kind = NotificationKind.adhan,
-    required NotificationDetails details,
-  }) async {
-    final id = idForSlot(slot, kind: kind);
-    final scheduled = tz.TZDateTime.from(time, tz.local);
-    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) {
-      await _plugin.cancel(id);
-      return;
-    }
-    await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduled,
-      details,
-      androidScheduleMode: await _scheduleMode(),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
-  }
-
-  static const NotificationDetails _defaultNotificationDetails = NotificationDetails(
-    android: AndroidNotificationDetails(
-      'prayer_times',
-      'Prayer times',
-      channelDescription: 'Iqamath and pre-adhan reminders',
-      importance: Importance.high,
-      priority: Priority.high,
-    ),
-  );
-
-  /// One channel per prayer (`prayer_adhan_<name>`) so each can carry
-  /// its own actual adhan recording as the channel sound — Android
-  /// notification channels are created once and their sound can never
-  /// be changed afterward, which is why this can't just be a `sound:`
-  /// override on the shared channel above.
-  NotificationDetails _adhanNotificationDetails(PrayerSlot slot) {
-    final key = slot.name;
-    return NotificationDetails(
-      android: AndroidNotificationDetails(
-        'prayer_adhan_$key',
-        '${_capitalize(key)} adhan',
-        channelDescription: 'The $key call to prayer',
-        importance: Importance.max,
-        priority: Priority.max,
-        sound: RawResourceAndroidNotificationSound('adhan_$key'),
-        playSound: true,
-        audioAttributesUsage: AudioAttributesUsage.alarm,
-      ),
-    );
-  }
-
-  String _capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }

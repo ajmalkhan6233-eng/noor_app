@@ -13,8 +13,8 @@ import '../../../settings/data/settings_repository.dart';
 import '../../data/coordinate_bounds.dart';
 import '../../data/prayer_notification_coordinator.dart';
 import '../../data/prayer_repository.dart';
-import '../../data/prayer_times_result.dart';
 import '../../data/sri_lanka_district.dart';
+import 'notification_horizon_scheduler.dart';
 import 'prayer_state.dart';
 
 class PrayerCubit extends Cubit<PrayerState> {
@@ -26,8 +26,7 @@ class PrayerCubit extends Cubit<PrayerState> {
   }) : _repository = repository ?? const PrayerRepository(),
        _locationService = locationService ?? const LocationService(),
        _settingsRepository = settingsRepository ?? SettingsRepository(),
-       _notificationCoordinator =
-           notificationCoordinator ?? PrayerNotificationCoordinator(),
+       _notificationCoordinator = notificationCoordinator ?? PrayerNotificationCoordinator(),
        super(PrayerState(date: DateTime.now()));
 
   final PrayerRepository _repository;
@@ -77,8 +76,7 @@ class PrayerCubit extends Cubit<PrayerState> {
   Future<void> useGps() => _resolveLocation(forceFresh: true);
 
   /// On first open: cached fix if known, else a bounded GPS attempt
-  /// (see [LocationService]) that never hangs — the always-visible
-  /// manual/district selectors are the fallback on failure.
+  /// that never hangs — manual/district selectors are the fallback.
   Future<void> _autoFetchLocation() => _resolveLocation(forceFresh: false);
 
   Future<void> _resolveLocation({required bool forceFresh}) async {
@@ -128,29 +126,24 @@ class PrayerCubit extends Cubit<PrayerState> {
 
   void _recalculate() {
     if (!state.hasCoordinates) return;
+    final coordinates = Coordinates(
+      latitude: state.latitude!,
+      longitude: state.longitude!,
+    );
     final result = _repository.calculate(
-      coordinates: Coordinates(
-        latitude: state.latitude!,
-        longitude: state.longitude!,
-      ),
+      coordinates: coordinates,
       date: state.date,
       settings: state.settings,
     );
     emit(state.copyWith(result: result));
-    // Fire-and-forget: never blocks display or crashes the cubit.
-    if (result is PrayerTimesComputed) {
-      unawaited(
-        _notificationCoordinator
-            .scheduleForDay(
-              times: result,
-              notifications: state.notifications,
-              iqamathOffsets: state.iqamathOffsets,
-              silentMode: state.silentMode,
-              preReminderEnabled: state.preReminderEnabled,
-              preReminderMinutes: state.preReminderMinutes,
-            )
-            .catchError((_) {}),
-      );
-    }
+    // Fire-and-forget; see notification_horizon_scheduler.dart.
+    unawaited(
+      scheduleNotificationHorizon(
+        repository: _repository,
+        notificationCoordinator: _notificationCoordinator,
+        state: state,
+        coordinates: coordinates,
+      ),
+    );
   }
 }

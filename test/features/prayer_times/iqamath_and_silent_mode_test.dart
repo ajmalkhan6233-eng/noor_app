@@ -43,6 +43,7 @@ class _NoopNotificationService extends NotificationService {
     required IqamathOffsetMinutes iqamathOffsets,
     bool preReminderEnabled = false,
     int preReminderMinutes = 10,
+    int dayOffset = 0,
   }) async {}
 }
 

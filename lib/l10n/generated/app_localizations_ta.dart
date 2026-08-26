@@ -298,6 +298,21 @@ class AppLocalizationsTa extends AppLocalizations {
   String get preReminderSectionHeader => 'அதானுக்கு முந்தைய நினைவூட்டல்';
 
   @override
+  String get batteryOptimizationSectionHeader => 'நம்பகமான அறிவிப்புகள்';
+
+  @override
+  String get batteryOptimizationExemptedMessage =>
+      'இந்த ஆப் பேட்டரி மேம்படுத்தலில் இருந்து விலக்கு பெற்றுள்ளது — ஆப் மூடப்பட்டிருந்தாலும் தொழுகை அறிவிப்புகள் நம்பகமாக இயங்கும்.';
+
+  @override
+  String get batteryOptimizationNotExemptedMessage =>
+      'சில தொலைபேசிகள் (குறிப்பாக Samsung, Xiaomi, மற்றும் Huawei) இந்த ஆப் விலக்கு பெறாவிட்டால் பேட்டரியை சேமிக்க திட்டமிடப்பட்ட தொழுகை அறிவிப்புகளை அமைதியாக நிறுத்தும்.';
+
+  @override
+  String get grantBatteryOptimizationExemptionLabel =>
+      'வரம்பற்ற பேட்டரி பயன்பாட்டை அனுமதிக்கவும்';
+
+  @override
   String get sunnahFastingCardTitle => 'இன்று சுன்னத் நோன்பு';
 
   @override

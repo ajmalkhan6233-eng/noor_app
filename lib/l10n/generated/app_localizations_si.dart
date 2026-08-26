@@ -296,6 +296,21 @@ class AppLocalizationsSi extends AppLocalizations {
   String get preReminderSectionHeader => 'අදානයට පෙර මතක් කිරීම';
 
   @override
+  String get batteryOptimizationSectionHeader => 'විශ්වාසදායක දැනුම්දීම්';
+
+  @override
+  String get batteryOptimizationExemptedMessage =>
+      'මෙම යෙදුම බැටරි ප්‍රශස්තිකරණයෙන් නිදහස් කර ඇත — යෙදුම වසා ඇති විටත් යාච්ඤා දැනුම්දීම් විශ්වාසදායකව ක්‍රියාත්මක විය හැක.';
+
+  @override
+  String get batteryOptimizationNotExemptedMessage =>
+      'සමහර දුරකථන (විශේෂයෙන් Samsung, Xiaomi, සහ Huawei) මෙම යෙදුම නිදහස් නොකළහොත් බැටරිය ඉතිරි කිරීම සඳහා නියමිත යාච්ඤා දැනුම්දීම් නිහඬව නවත්වයි.';
+
+  @override
+  String get grantBatteryOptimizationExemptionLabel =>
+      'අසීමිත බැටරි භාවිතයට ඉඩ දෙන්න';
+
+  @override
   String get sunnahFastingCardTitle => 'අද සුන්නත් උපවාසය';
 
   @override

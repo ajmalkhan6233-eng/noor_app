@@ -291,6 +291,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preReminderSectionHeader => 'Pre-adhan reminder';
 
   @override
+  String get batteryOptimizationSectionHeader => 'Reliable notifications';
+
+  @override
+  String get batteryOptimizationExemptedMessage =>
+      'This app is exempt from battery optimization — prayer notifications can fire reliably even when the app is closed.';
+
+  @override
+  String get batteryOptimizationNotExemptedMessage =>
+      'Some phones (especially Samsung, Xiaomi, and Huawei) silently stop scheduled prayer notifications to save battery unless this app is exempted.';
+
+  @override
+  String get grantBatteryOptimizationExemptionLabel =>
+      'Allow unrestricted battery use';
+
+  @override
   String get sunnahFastingCardTitle => 'Sunnah Fasting Today';
 
   @override
