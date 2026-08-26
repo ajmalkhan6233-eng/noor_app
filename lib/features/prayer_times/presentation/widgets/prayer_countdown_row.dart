@@ -5,6 +5,15 @@
 // countdown/now numerals were sized too small for the one thing this
 // screen exists to answer at a glance) — the prayer name, a plain
 // "approaching" line under it, and the countdown+now row, sized up.
+//
+// Relabeled (2026-08-26, direct request: "unclear whether the big
+// number is a countdown or the current time") — the countdown and the
+// current clock used to sit inline on one row with only 10px between
+// them, both in similarly-weighted numerals, so a glance couldn't
+// tell which was which. Now the countdown is explicitly captioned
+// "Next prayer in", and the current time is pulled into its own
+// separated chip with a clock icon and "Current time" label — visually
+// a distinct element, not a second half of the same row.
 
 import 'package:flutter/material.dart';
 
@@ -36,10 +45,23 @@ class PrayerCountdownRow extends StatelessWidget {
     fontWeight: FontWeight.w700,
   );
 
-  static const _nowStyle = TextStyle(
-    color: AppColors.gold,
-    fontSize: 19,
+  static const _labelStyle = TextStyle(
+    color: AppColors.sage,
+    fontSize: 13,
+    letterSpacing: 0.5,
+  );
+
+  static const _clockChipLabelStyle = TextStyle(
+    color: AppColors.sage,
+    fontSize: 11,
+    letterSpacing: 0.8,
     fontWeight: FontWeight.w600,
+  );
+
+  static const _clockChipTimeStyle = TextStyle(
+    color: AppColors.gold,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
     fontFeatures: [FontFeature.tabularFigures()],
   );
 
@@ -53,19 +75,11 @@ class PrayerCountdownRow extends StatelessWidget {
           style: AppTypography.heroDisplay.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 2),
-        Text(
-          '$prayerName is approaching',
-          style: const TextStyle(color: AppColors.sage, fontSize: 13),
-        ),
+        const Text('Next prayer in', style: _labelStyle),
         const SizedBox(height: 6),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _countdownText(context, countdown),
-            const SizedBox(width: 10),
-            Text('now ${formatClock(now)}', style: _nowStyle),
-          ],
-        ),
+        _countdownText(context, countdown),
+        const SizedBox(height: 18),
+        _CurrentTimeChip(now: now),
       ],
     );
   }
@@ -99,5 +113,39 @@ class PrayerCountdownRow extends StatelessWidget {
     final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
     final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
     return '$hours:$minutes:$seconds';
+  }
+}
+
+/// A separated pill for the current clock time — deliberately distinct
+/// in shape, size, and position from the countdown above it, so it
+/// can't be mistaken for a second countdown number.
+class _CurrentTimeChip extends StatelessWidget {
+  const _CurrentTimeChip({required this.now});
+
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Current time ${formatClock(now)}',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.hairline),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.schedule, size: 13, color: AppColors.sage),
+            const SizedBox(width: 6),
+            const Text('CURRENT TIME', style: PrayerCountdownRow._clockChipLabelStyle),
+            const SizedBox(width: 8),
+            Text(formatClock(now), style: PrayerCountdownRow._clockChipTimeStyle),
+          ],
+        ),
+      ),
+    );
   }
 }

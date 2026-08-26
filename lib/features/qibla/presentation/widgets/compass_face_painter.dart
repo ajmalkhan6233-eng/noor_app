@@ -39,9 +39,14 @@
 // frame show up at all) but not something to act on blind — don't
 // retry either mitigation without a connected device to verify
 // against. Reverted both; this file is back to the state above.
-// Root cause still unconfirmed — most likely a genuine GPU/Skia (or
-// Impeller) layer-compositing bug specific to this device, not a Dart
-// state bug (the underlying values were always correct).
+//
+// CORRECTION (2026-08-26): the GPU/Skia theory above was wrong. Root-
+// caused live: qibla_cubit.dart was wiping a good heading back to
+// null on every subsequent null-heading compass event, which made
+// QiblaCompassArea swap this whole widget out for a centered spinner —
+// the "small gold thing that survives" was the spinner, not this
+// painter's Kaaba marker holding on. This painter was never the bug.
+// Fixed at the source in qibla_cubit.dart's `_listen`.
 
 import 'dart:math' as math;
 

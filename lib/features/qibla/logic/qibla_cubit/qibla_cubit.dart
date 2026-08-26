@@ -172,7 +172,26 @@ class QiblaCubit extends Cubit<QiblaState> {
           : AngleMath.normalise(reading.headingDegrees! + declination);
       emit(
         state.copyWith(
-          headingDegrees: trueHeading,
+          // A null heading after a real one has already arrived is a
+          // transient glitch, not a loss of the compass — live-
+          // reproduced and root-caused 2026-08-26: this device's
+          // magnetometer stream intermittently emits null-heading
+          // events mid-stream (not just before the first fix), and
+          // QiblaState.copyWith's headingDegrees param has no `??
+          // this.headingDegrees` fallback (deliberate elsewhere, since
+          // null is meaningful there) — so passing trueHeading straight
+          // through wiped a perfectly good heading back to null on
+          // every such event. That made needleRotationDegrees null,
+          // which made QiblaCompassArea swap the entire compass out for
+          // a centered CircularProgressIndicator — previously
+          // misdiagnosed as a GPU/Skia compositing bug (see
+          // compass_face_painter.dart's older investigation) because
+          // the small gold blob left on screen looked like the Kaaba
+          // marker holding on mid-glitch; it was actually the spinner,
+          // centered, not the marker at its real off-center position.
+          // Holding the last known heading through a transient null
+          // fixes it at the source.
+          headingDegrees: trueHeading ?? state.headingDegrees,
           compassAccuracy: reading.accuracy,
           displayAccuracy: _debouncedDisplayAccuracy(reading.accuracy),
           // Only a genuine heading clears the stalled flag — once the
