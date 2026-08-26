@@ -68,24 +68,32 @@ class _ProgressScreenState extends State<ProgressScreen> {
   }
 
   Future<void> _load() async {
-    final today = DateTime.now();
-    final raw = await _repository.historyForRange(
-      today.subtract(const Duration(days: 13)),
-      today,
-    );
-    // Trim leading days with no activity at all — on a fresh install
-    // those are just padding before the app existed on this device,
-    // not real "0/5" days (2026-08-24 live-device review: "we just
-    // now installed... no point [showing] the 24th, 23rd..."). Always
-    // keep at least today, even with nothing logged yet.
-    var firstActive = raw.length - 1;
-    for (var i = 0; i < raw.length; i++) {
-      if (raw[i].completedCount > 0 || raw[i].fasted) {
-        firstActive = i;
-        break;
+    List<({DateTime date, int completedCount, bool fasted})> history = const [];
+    try {
+      final today = DateTime.now();
+      final raw = await _repository.historyForRange(
+        today.subtract(const Duration(days: 13)),
+        today,
+      );
+      // Trim leading days with no activity at all — on a fresh install
+      // those are just padding before the app existed on this device,
+      // not real "0/5" days (2026-08-24 live-device review: "we just
+      // now installed... no point [showing] the 24th, 23rd..."). Always
+      // keep at least today, even with nothing logged yet.
+      var firstActive = raw.length - 1;
+      for (var i = 0; i < raw.length; i++) {
+        if (raw[i].completedCount > 0 || raw[i].fasted) {
+          firstActive = i;
+          break;
+        }
       }
+      history = raw.sublist(firstActive);
+    } catch (_) {
+      // A DB read failure leaves history empty rather than spinning
+      // forever — the same "stuck loading spinner" bug class already
+      // hit once on the Quran/Azkar tabs (see CLAUDE.md Phase 1); this
+      // screen has no reason to be exempt from the same safety net.
     }
-    final history = raw.sublist(firstActive);
     if (mounted) {
       setState(() {
         _history = history;
