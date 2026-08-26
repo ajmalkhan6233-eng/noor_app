@@ -198,9 +198,12 @@ verify against what's actually on the device, not the source tree.
       tonight, just wasn't checked off.
 - [x] Adhan mute toggle — Home's Silent Mode chip
       (`home_quick_toggles.dart`) is this: master on/off for all five
-      prayers' ringer silencing, with per-prayer granularity still in
-      Settings. Fixed tonight (2026-08-25) so turning it on also
-      requests the Do Not Disturb access it depends on.
+      prayers' ringer silencing. `silent_mode_section.dart` (the old
+      per-prayer granular Settings UI) was removed earlier tonight and
+      is now dead/unreferenced code — deliberately left in the repo
+      rather than deleted, per an earlier-session call. Fixed tonight
+      (2026-08-25) so turning the Home chip on also requests the Do
+      Not Disturb access it depends on.
 - [ ] Proactive location permission prompt
 - [ ] App-wide icon weight pass
 
@@ -231,3 +234,21 @@ verify against what's actually on the device, not the source tree.
 - [ ] Submit for review
 
 Do not jump to a later phase while an earlier item is still open.
+
+### Overnight log — 2026-08-26
+Tried to switch from source-reading to live device testing (test adhan
+notification, etc.) once told the phone was plugged in and connected.
+Blocked: `adb devices` returns an empty list even after finding
+adb.exe at `C:\android-sdk\platform-tools\` and restarting the adb
+server (`kill-server` / `start-server`). No wireless-debugging
+endpoint reachable either (`127.0.0.1:5555` refused). This means
+either USB debugging isn't authorized on the phone (needs a tap on
+the phone's own "Allow USB debugging?" prompt — can't be done
+remotely), the cable/port is charge-only, or the phone is asleep/
+locked. Nothing on the PC side left to try without that phone-side
+tap. Fell back to `flutter analyze` + `flutter test` + CI for the
+rest of the night — see commits `f628185` and `d877923`, both green
+in CI (runs #114, #115). First thing to check in the morning: unlock
+the phone, accept the USB debugging prompt if one is showing, then
+re-run `adb devices` from a terminal to confirm it's seen before
+trusting any future "tested live" claim.
