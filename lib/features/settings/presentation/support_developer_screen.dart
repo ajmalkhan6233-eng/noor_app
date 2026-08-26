@@ -24,16 +24,18 @@ class SupportDeveloperScreen extends StatelessWidget {
   static const String _message =
       "Hi, I'd like to support noor's development. Could you share your payment details?";
 
-  Future<void> _requestViaWhatsApp() async {
+  Future<void> _requestViaWhatsApp(BuildContext context) async {
     final uri = Uri.parse(
       'https://wa.me/$whatsappNumber?text=${Uri.encodeComponent(_message)}',
     );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else if (context.mounted) {
+      _showCantOpen(context, 'WhatsApp');
     }
   }
 
-  Future<void> _requestViaEmail() async {
+  Future<void> _requestViaEmail(BuildContext context) async {
     final uri = Uri(
       scheme: 'mailto',
       path: developerEmail,
@@ -42,7 +44,19 @@ class SupportDeveloperScreen extends StatelessWidget {
     );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
+    } else if (context.mounted) {
+      _showCantOpen(context, 'an email app');
     }
+  }
+
+  // Without this, a tap on either button with no matching app installed
+  // did nothing at all — no error, no indication anything was even
+  // tapped (found while auditing "silently does nothing" bug patterns,
+  // 2026-08-26).
+  void _showCantOpen(BuildContext context, String appName) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Couldn't open $appName — is it installed?")),
+    );
   }
 
   @override
@@ -74,14 +88,14 @@ class SupportDeveloperScreen extends StatelessWidget {
               icon: Icons.chat_bubble_outline,
               label: 'Message on WhatsApp',
               filled: true,
-              onTap: _requestViaWhatsApp,
+              onTap: () => _requestViaWhatsApp(context),
             ),
             const SizedBox(height: 12),
             _SupportButton(
               icon: Icons.mail_outline,
               label: 'Send an Email',
               filled: false,
-              onTap: _requestViaEmail,
+              onTap: () => _requestViaEmail(context),
             ),
           ],
         ),
