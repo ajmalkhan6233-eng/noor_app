@@ -42,7 +42,18 @@ abstract final class ParticleBurst {
         onComplete: () => entry.remove(),
       ),
     );
-    overlay.insert(entry);
+    // Every caller triggers this from didUpdateWidget (Tasbih orb,
+    // Qibla compass, Azkar counter, streak milestones — see their own
+    // skill files) which runs during Flutter's build phase.
+    // overlay.insert() calls setState() on the OverlayState
+    // synchronously, and if that Overlay ancestor is itself mid-build
+    // in the same frame (routine when a BlocBuilder rebuild cascades
+    // down to this widget), that trips "setState() or markNeedsBuild()
+    // called during build" — found live, 2026-08-26, tapping the Azkar
+    // counter to completion. Deferring the insert to just after the
+    // frame finishes is the standard fix and makes every caller safe
+    // at once, not just this one call site.
+    WidgetsBinding.instance.addPostFrameCallback((_) => overlay.insert(entry));
   }
 
   static Offset? _centerOf(BuildContext context) {
