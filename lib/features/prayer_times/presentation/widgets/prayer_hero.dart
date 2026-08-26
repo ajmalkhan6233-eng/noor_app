@@ -7,14 +7,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../../core/effects/particle_burst.dart';
+import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
+import '../../logic/prayer_countdown_phase.dart';
 import 'astrolabe_ring.dart';
+import 'iqama_gap_row.dart';
 import 'prayer_countdown_row.dart';
 
 class PrayerHero extends StatefulWidget {
-  const PrayerHero({super.key, required this.times});
+  const PrayerHero({super.key, required this.times, required this.offsets});
 
   final PrayerTimesComputed times;
+  final IqamathOffsetMinutes offsets;
 
   @override
   State<PrayerHero> createState() => _PrayerHeroState();
@@ -23,6 +28,7 @@ class PrayerHero extends StatefulWidget {
 class _PrayerHeroState extends State<PrayerHero> {
   late final Timer _timer;
   DateTime _now = DateTime.now();
+  bool _wasInIqamaGap = false;
 
   @override
   void initState() {
@@ -39,27 +45,31 @@ class _PrayerHeroState extends State<PrayerHero> {
     super.dispose();
   }
 
-  (String name, DateTime time) _nextEntry() {
-    for (final entry in widget.times.prayerEntries) {
-      if (entry.$2.isAfter(_now)) return entry;
-    }
-    // After Isha, there's no later entry left today — the next Fajr is
-    // tomorrow. Only today's computed times are available here, so
-    // tomorrow's Fajr is approximated as the same clock time one day
-    // later (prayer times shift by at most a couple of minutes
-    // day-to-day, close enough for a live countdown). A static
-    // "tomorrow" label with no countdown was a real regression here
-    // (2026-08-24 live-device review) — the whole point of this ring
-    // is a live countdown someone can glance at to see how long is
-    // left, and that's exactly the case right after Isha.
-    return ('Fajr', widget.times.fajr.add(const Duration(days: 1)));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final next = _nextEntry();
-    final remaining = next.$2.difference(_now);
-    final label = 'Next prayer: ${next.$1}, in ${_ariaCountdown(remaining)}';
+    final phase = computePrayerCountdownPhase(
+      times: widget.times,
+      offsets: widget.offsets,
+      now: _now,
+    );
+
+    final inIqamaGap = phase is IqamaGapPhase;
+    if (inIqamaGap && !_wasInIqamaGap) {
+      // One-time "ignition" moment right as the gap opens — per
+      // noor-kinetic-typography, a particle burst belongs on a
+      // meaningful state change like this, not on every tick.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ParticleBurst.play(context, intensity: 0.5);
+      });
+    }
+    _wasInIqamaGap = inIqamaGap;
+
+    final label = switch (phase) {
+      NextPrayerPhase(:final prayerName, :final remaining) =>
+        'Next prayer: $prayerName, in ${_ariaCountdown(remaining)}',
+      IqamaGapPhase(:final prayerName, :final remaining) =>
+        '$prayerName iqamah in ${_ariaCountdown(remaining)}',
+    };
 
     return Column(
       children: [
@@ -68,11 +78,16 @@ class _PrayerHeroState extends State<PrayerHero> {
         Semantics(
           liveRegion: true,
           label: label,
-          child: PrayerCountdownRow(
-            prayerName: next.$1,
-            remaining: remaining,
-            now: _now,
-          ),
+          child: switch (phase) {
+            NextPrayerPhase(:final prayerName, :final remaining) =>
+              PrayerCountdownRow(
+                prayerName: prayerName,
+                remaining: remaining,
+                now: _now,
+              ),
+            IqamaGapPhase(:final prayerName, :final remaining) =>
+              IqamaGapRow(prayerName: prayerName, remaining: remaining),
+          },
         ),
       ],
     );

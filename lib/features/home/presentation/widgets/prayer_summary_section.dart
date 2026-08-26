@@ -20,7 +20,6 @@ import '../../../prayer_times/presentation/widgets/prayer_hero.dart';
 import '../../../prayer_times/presentation/widgets/prayer_loading_skeleton.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import 'iqamah_countdown_line.dart';
 import 'prayer_times_strip.dart';
 
 class PrayerSummarySection extends StatelessWidget {
@@ -46,8 +45,7 @@ class PrayerSummarySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PrayerHero(times: result),
-        IqamahCountdownLine(times: result, offsets: state.iqamathOffsets),
+        PrayerHero(times: result, offsets: state.iqamathOffsets),
         const SizedBox(height: 12),
         PrayerTimesStrip(times: result),
       ],

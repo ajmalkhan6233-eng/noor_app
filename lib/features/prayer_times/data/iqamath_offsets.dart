@@ -6,12 +6,16 @@
 // apply to sunrise.
 
 class IqamathOffsetMinutes {
+  // Defaults per direct request (2026-08-26): standard mosque-practice
+  // starting points, Maghrib kept tight since its window is naturally
+  // short. A user who has already changed these via Settings is
+  // unaffected — only fresh values fall back to these.
   const IqamathOffsetMinutes({
     this.fajr = 20,
-    this.dhuhr = 15,
-    this.asr = 15,
-    this.maghrib = 10,
-    this.isha = 15,
+    this.dhuhr = 10,
+    this.asr = 10,
+    this.maghrib = 5,
+    this.isha = 10,
   });
 
   final int fajr;
