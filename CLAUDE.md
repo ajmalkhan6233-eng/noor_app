@@ -369,3 +369,25 @@ left over from tonight's flutter run/attach experiments, killed them,
 confirmed the app relaunches cleanly on the phone, and confirmed
 `flutter analyze` runs clean again (120s, only the known low-value
 `prefer_const_constructors` info hints, nothing new).
+
+### Support screen silent-failure fix — 2026-08-26, ~08:35
+Found the same "silently does nothing" bug class the new
+`noor-android-runtime-permissions` skill describes, but from a
+different root cause: `support_developer_screen.dart`'s WhatsApp and
+email buttons called `canLaunchUrl()` and just no-opped with zero
+feedback if it returned false — indistinguishable from a broken tap.
+Fixed (commit `5779446`) to show a SnackBar explaining what happened.
+Verified via `flutter analyze` + full `flutter test` (213 passing)
+and installed live on the phone (`adb install -r`, succeeded) — not
+individually tap-tested on-device since it's a low-risk UX-only
+change and the phone is being disconnected from here on (per the
+user's own request — the phone was only ever needed for live install/
+verification, never for editing itself, since hot reload was already
+a confirmed dead end).
+
+**From this point in the session, the phone is disconnected.** Every
+fix below is verified via `flutter analyze` + `flutter test` only,
+explicitly noted as such — not live-tested on real hardware. Continue
+per the user's standing instruction: work independently, keep this
+log current, don't wait for input unless something is genuinely
+broken and blocking.
