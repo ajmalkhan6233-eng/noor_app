@@ -10,6 +10,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../about_screen.dart';
+import '../send_feedback_screen.dart';
 import '../support_developer_screen.dart';
 
 class AboutDonateSection extends StatelessWidget {
@@ -27,6 +28,15 @@ class AboutDonateSection extends StatelessWidget {
               MaterialPageRoute<void>(builder: (_) => const AboutScreen()),
             ),
             child: const _Row(icon: Icons.info_outline, label: 'About'),
+          ),
+          const SizedBox(height: 4),
+          SemanticButton(
+            label: 'Send Feedback',
+            hint: 'Double tap to report a bug or suggest an idea',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SendFeedbackScreen()),
+            ),
+            child: const _Row(icon: Icons.feedback_outlined, label: 'Send Feedback'),
           ),
           const SizedBox(height: 4),
           SemanticButton(
