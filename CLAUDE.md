@@ -436,3 +436,27 @@ explicitly noted as such — not live-tested on real hardware. Continue
 per the user's standing instruction: work independently, keep this
 log current, don't wait for input unless something is genuinely
 broken and blocking.
+
+### Regression test added — 2026-08-26, ~09:15
+`daily_goals_list.dart`'s gating fix (commit `0aca166`) had zero test
+coverage despite being a real correctness bug found live. Added
+`test/features/home/widgets/daily_goals_list_test.dart` covering all
+three cases: no location set, a not-yet-due prayer with known times,
+an already-due prayer with known times (commit `80844ea`). 216/216
+tests passing.
+
+### Brief live spot-check — 2026-08-26, ~09:40
+Phone reconnected briefly. Installed the latest debug build (all of
+tonight's fixes through commit `80844ea`) and did one quick check per
+the user's request to keep this efficient rather than exhaustive: the
+very first screenshot right after `am start` showed the phone's home
+screen/app drawer instead of noor, which looked alarming, but `adb
+logcat` showed no crash (`FATAL`/`AndroidRuntime`) anywhere — just an
+unrelated benign system `DeadObjectException` from Android's own
+baseline-profile installer. A `pm list packages` + relaunch confirmed
+the app was still installed and running; the next screenshot showed
+Home loading correctly with everything intact (today's prayer times,
+the (still stale-from-earlier-testing) spiritual goals checkmarks,
+Silent Mode chip). Conclusion: a one-off timing artifact from the
+force-stop/relaunch race, not a real bug — noted here rather than
+silently dismissed, in case it recurs. Back to source-only work now.
