@@ -37,10 +37,6 @@ class TalbiyahCard extends StatelessWidget {
               )
             else ...[
               Text(entry.arabicText, textAlign: TextAlign.right, style: AppTypography.arabic),
-              if (entry.reference.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text('${l10n.guideReferenceLabel}: ${entry.reference}', style: AppTypography.caption),
-              ],
             ],
           ],
         );

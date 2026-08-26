@@ -51,10 +51,4 @@ void main() {
     final arabic = tester.widget<Text>(find.text('سُبْحَانَ اللَّهِ'));
     expect(arabic.style?.fontSize, 26);
   });
-
-  testWidgets('shows the hadith source citation', (tester) async {
-    await tester.pumpWidget(_wrap(AzkarItemTile(item: item)));
-
-    expect(find.textContaining('Sahih Muslim'), findsOneWidget);
-  });
 }

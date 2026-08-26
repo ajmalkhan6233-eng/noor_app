@@ -116,26 +116,30 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _chip(
-              context,
-              icon: silentOn ? Icons.notifications_off : Icons.notifications_off_outlined,
-              label: 'Silent Mode',
-              on: silentOn,
-              onTap: () => silentOn
-                  ? context.read<SettingsCubit>().setSilentMode(
-                      SilentModeSettings(
-                        fajr: false,
-                        dhuhr: false,
-                        asr: false,
-                        maghrib: false,
-                        isha: false,
-                        extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
-                      ),
-                    )
-                  : _enableSilentMode(context, s),
+            Flexible(
+              child: _chip(
+                context,
+                icon: silentOn ? Icons.notifications_off : Icons.notifications_off_outlined,
+                label: 'Silent Mode',
+                on: silentOn,
+                onTap: () => silentOn
+                    ? context.read<SettingsCubit>().setSilentMode(
+                        SilentModeSettings(
+                          fajr: false,
+                          dhuhr: false,
+                          asr: false,
+                          maghrib: false,
+                          isha: false,
+                          extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
+                        ),
+                      )
+                    : _enableSilentMode(context, s),
+              ),
             ),
             const SizedBox(width: 12),
-            _reminderChip(context, reminderOn, state.settings.preReminderMinutes),
+            Flexible(
+              child: _reminderChip(context, reminderOn, state.settings.preReminderMinutes),
+            ),
           ],
         );
       },
@@ -179,18 +183,21 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: on ? AppColors.gold : AppColors.hairline),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                on ? Icons.notifications_active : Icons.notifications_active_outlined,
-                size: 16,
-                color: on ? AppColors.gold : AppColors.sage,
-              ),
-              const SizedBox(width: 6),
-              Text(label, style: TextStyle(color: on ? AppColors.gold : AppColors.sage, fontSize: 12)),
-              const Icon(Icons.arrow_drop_down, size: 16, color: AppColors.sage),
-            ],
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  on ? Icons.notifications_active : Icons.notifications_active_outlined,
+                  size: 16,
+                  color: on ? AppColors.gold : AppColors.sage,
+                ),
+                const SizedBox(width: 6),
+                Text(label, style: TextStyle(color: on ? AppColors.gold : AppColors.sage, fontSize: 12)),
+                const Icon(Icons.arrow_drop_down, size: 16, color: AppColors.sage),
+              ],
+            ),
           ),
         ),
       ),

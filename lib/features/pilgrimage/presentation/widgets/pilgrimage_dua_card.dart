@@ -51,10 +51,6 @@ class PilgrimageDuaCard extends StatelessWidget {
                   l10n.reciteCountLabel(dua.repeatCount),
                   style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w600),
                 ),
-                if (dua.source.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text('${l10n.guideReferenceLabel}: ${dua.source}', style: AppTypography.caption),
-                ],
               ],
             ],
           ),

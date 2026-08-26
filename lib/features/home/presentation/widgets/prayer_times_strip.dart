@@ -84,22 +84,26 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: upcoming ? AppColors.gold : AppColors.sage,
-                  fontSize: 12,
-                  fontWeight: upcoming ? FontWeight.w700 : FontWeight.w400,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  name,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: upcoming ? AppColors.gold : AppColors.sage,
+                    fontSize: 12,
+                    fontWeight: upcoming ? FontWeight.w700 : FontWeight.w400,
+                  ),
                 ),
               ),
               const SizedBox(height: 6),
-              Text(
-                formatClock(time),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.time,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  formatClock(time),
+                  maxLines: 1,
+                  style: AppTypography.time,
+                ),
               ),
             ],
           ),

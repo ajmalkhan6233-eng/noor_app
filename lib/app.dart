@@ -95,6 +95,21 @@ class _NoorAppState extends State<NoorApp> {
               locale: locale,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
+              // 2026-08-26: general body/label text read as too small on
+              // a real device. Most of the app sets explicit fontSizes
+              // per-widget rather than through one shared scale, so a
+              // single MediaQuery-level bump here reaches every screen
+              // at once instead of hand-editing dozens of files —
+              // composed on top of the OS accessibility text scale
+              // rather than replacing it.
+              builder: (context, child) {
+                final mediaQuery = MediaQuery.of(context);
+                final boosted = mediaQuery.textScaler.scale(1.0) * 1.15;
+                return MediaQuery(
+                  data: mediaQuery.copyWith(textScaler: TextScaler.linear(boosted)),
+                  child: child!,
+                );
+              },
               home: _showSplash
                   ? SplashScreen(onFinished: _onSplashFinished)
                   : const HomeDashboard(),

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
@@ -65,17 +64,6 @@ class AzkarItemTile extends StatelessWidget {
                   Text(
                     item.translation!,
                     style: TextStyle(color: AppColors.sage, fontSize: 12 * fontScale),
-                  ),
-                ],
-                if (item.source.isNotEmpty) ...[
-                  const SizedBox(height: 6),
-                  Text(
-                    '${AppLocalizations.of(context)!.guideReferenceLabel}: ${item.source}',
-                    style: TextStyle(
-                      color: AppColors.sage.withValues(alpha: 0.7),
-                      fontSize: 11 * fontScale,
-                      fontStyle: FontStyle.italic,
-                    ),
                   ),
                 ],
                 const SizedBox(height: 12),
