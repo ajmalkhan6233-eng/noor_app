@@ -822,3 +822,86 @@ right (a real Android AppWidgetProvider; a real encrypted export
 format) — if usage runs out before reaching them, they're genuinely
 not started, not partially done, and that will be stated plainly
 rather than implied finished.
+
+### Flagged, not built: battery-optimization first-launch step (item 8)
+Checked `location_onboarding_screen.dart` — its own top comment
+records a *deliberate* 2026-08-25 decision to cut this exact step,
+quoting the direct feedback that caused it: "people will not like
+that question... this is critical — a second permission-style prompt
+during first launch was too much friction." The battery-optimization
+prompt lives in Settings instead (`battery_optimization_section.dart`,
+built and live-verified last night), reachable but not forced.
+Tonight's instruction asks to build a first-launch guided step for
+the same thing, which would silently reverse that explicit prior
+call. Not building it unilaterally — flagging the conflict instead.
+If a first-launch step is still wanted despite the friction concern
+already on record, say so directly and it's a small addition (same
+pattern as the location screen, one more screen after it).
+
+### Done, committed, live-verified (continued)
+7. **"Send Feedback" button** (`66765d1`) — was genuinely missing
+   (only "Support the Developer" existed). Mirrors its exact
+   WhatsApp/email OS-handoff pattern, different message content, sits
+   between About and Donate in Settings. Live-verified: opens, both
+   buttons present and correctly styled.
+8. **Notification reliability re-check** — not a redo. Confirmed
+   still intact: boot receiver in the manifest, `SCHEDULE_EXACT_ALARM`
+   declared, and real `RTC_WAKEUP` alarms currently registered
+   (`exactAllowReason=allow-listed`) via `dumpsys alarm` on the live
+   device, spanning multiple future days.
+
+### Researched, nothing shippable found: licensed calm Adhan (item 1)
+Same honest "not found" outcome as the earlier Azkar audio search —
+reported plainly rather than settling for an uncertain source.
+- The one CC0-badged candidate (Freesound, "sonically_sound") fails
+  verification despite the badge: its own description says the audio
+  was "extracted from [a YouTube video] and processed" — the uploader
+  is not the reciter and gives no indication of having obtained the
+  original creator's rights before self-declaring CC0. A license
+  can't be granted by someone who doesn't hold the rights, so this
+  isn't trustworthy regardless of what badge it carries.
+- A second Freesound item (RJStefanski, genuinely and verifiably CC-
+  licensed, real field recording) is a real option for the *license*
+  question but not the *content* question: it's an ambient recording
+  of a real muezzin at a real mosque, background noise included —
+  wrong style for in-app notification audio, and it captures a real
+  person's voice/mosque without their own direct consent, which sits
+  oddly for a religious utility even where the recording-copyright
+  chain is technically clean.
+- Everything else found (Assabile.com, YouTube "no copyright"
+  channels) is the same "free to listen" ambiguity already ruled out
+  for the Azkar audio search — no explicit redistribution license,
+  self-declared without visible chain of title.
+No Adhan audio change made. If the developer knows a specific
+reciter, mosque, or Islamic organization that has explicitly released
+Adhan audio under an open license, point at it directly and it can be
+verified and wired in properly — same as the Azkar audio gap.
+
+### Stopping point — 2026-08-27, ~00:20
+
+Stopping cleanly here rather than starting the three remaining items
+half-done. Everything above this line is committed, analyzed clean,
+and either live-verified on device or (for the Adhan research and the
+battery-optimization conflict) a plain finding with nothing left
+half-edited.
+
+**Genuinely not started** — each is substantial scope on its own, not
+a quick add, and starting them at low remaining budget risked shipping
+something shaky rather than something real:
+- **Icon polish pass** (original bottom-nav + More-screen icon
+  designs, Athan-app-inspired treatment only). Current icons are
+  plain Material glyphs; a genuine redesign means real custom icon
+  assets, not a font swap.
+- **Home-screen widget** (next prayer name + time, offline). Needs a
+  real Android `AppWidgetProvider` + `RemoteViews` layout + a way to
+  push prayer-time updates into it from the existing Dart-side prayer
+  calculation — new native surface area, not a Dart-only change.
+- **Local encrypted backup/export**. Needs a real file format
+  decision, a passphrase-based encryption scheme (the app's DB
+  passphrase is Keystore-bound and device-specific, so this needs its
+  own scheme — see noor-database-security's Keystore note), and a
+  restore path that can't corrupt the live DB on a bad import.
+
+Next session should start with icon polish (smallest of the three,
+self-contained, no schema/native risk) before the two bigger
+engineering items.
