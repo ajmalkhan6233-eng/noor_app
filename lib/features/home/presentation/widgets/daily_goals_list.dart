@@ -40,14 +40,17 @@ class DailyGoalsList extends StatelessWidget {
 
   /// Today's computed prayer times, used only to gate today's own
   /// rows — a prayer whose adhan hasn't happened yet can't be marked
-  /// done. `null` (location not resolved yet) leaves today ungated
-  /// rather than blocking everything.
+  /// done. `null` (location not resolved yet) blocks every row for
+  /// today rather than ungating all of them — the old "leave it open"
+  /// behavior let someone with no location set tick off all five
+  /// prayers at once regardless of actual time, defeating the point
+  /// of the gate (found live, 2026-08-26).
   final PrayerTimesComputed? todayTimes;
   final HapticService hapticService;
 
   bool _hasOccurred(String prayer) {
     final times = todayTimes;
-    if (times == null) return true;
+    if (times == null) return false;
     final now = DateTime.now();
     for (final (name, time) in times.prayerEntries) {
       if (name == prayer) return !time.isAfter(now);
