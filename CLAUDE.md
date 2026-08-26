@@ -385,6 +385,24 @@ user's own request — the phone was only ever needed for live install/
 verification, never for editing itself, since hot reload was already
 a confirmed dead end).
 
+### More skills added — 2026-08-26, ~09:05
+- `noor-hajj-umrah-guide` skill's "known open item" (translation gap)
+  turned out to be moot: the whole Hajj/Umrah/pilgrimage feature is
+  cut from v1 (confirmed against this file's own Deferred section and
+  `more_screen.dart`'s comment) — nothing to fix, nothing reachable
+  from the shipped app.
+- `noor-prayer-row-ux` (from `noor_prayer_ux_skill.zip`, commit
+  `8b835fc`): competitor-research UX patterns for the Prayer Times row
+  — live countdown inside the active row, inline per-prayer mute icon,
+  simple Today ←/→ date nav. Explicitly NOT including a weekly bar-
+  chart tracker (too close to the already-cut streak tracker feature —
+  would need its own explicit scope decision). Installed but not yet
+  implemented: this is a visual/design change, and the phone is
+  disconnected — implementing UI changes blind, with no way to
+  screenshot-verify they actually render correctly, would violate the
+  project's own anti-drift rule. Apply this the next time the Prayer
+  Times row UI is refined with device access available.
+
 **From this point in the session, the phone is disconnected.** Every
 fix below is verified via `flutter analyze` + `flutter test` only,
 explicitly noted as such — not live-tested on real hardware. Continue
