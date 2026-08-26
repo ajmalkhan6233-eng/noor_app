@@ -252,3 +252,33 @@ in CI (runs #114, #115). First thing to check in the morning: unlock
 the phone, accept the USB debugging prompt if one is showing, then
 re-run `adb devices` from a terminal to confirm it's seen before
 trusting any future "tested live" claim.
+
+### URGENT — app not currently installed on the phone (2026-08-26, ~06:24)
+The phone connected and `adb devices` finally saw it (device
+`lbzdfer8vkaqiziz`, a Redmi/POCO running MIUI/HyperOS `V816`,
+build `OS3.0.302.0.WOGMIXM`). Built a fresh debug APK
+(`flutter build apk --debug`, succeeded) to install tonight's fixes
+and test live. `flutter install` first tried a release APK that
+didn't exist, and in the process **uninstalled the previously
+working build** (confirmed: `adb shell pm list packages | grep noor`
+now returns nothing — the app icon is gone from the home screen).
+The follow-up `adb install -r app-debug.apk` then failed immediately
+with `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user` — no
+on-device confirmation dialog ever appeared (checked via screencap
+mid-install), so this isn't a tap-to-confirm prompt being missed.
+This is MIUI/HyperOS's own "Install via USB" developer-option gate,
+separate from Android's "Unknown sources" setting (which is already
+correctly enabled — `install_non_market_apps=1`). It fails silently
+before any dialog when that specific toggle is off.
+
+**To fix, on the phone itself:** Settings → Additional settings (or
+"Privacy protection") → Developer options → find "Install via USB"
+and turn it on. MIUI/HyperOS may require signing into a Xiaomi/Mi
+account and a phone-side verification step the first time — this
+can't be done remotely, needs Ajmal's hand. Once that's on, re-run
+from this machine:
+`"/c/android-sdk/platform-tools/adb.exe" install -r "C:\Users\Sony\Documents\noor_app\build\app\outputs\flutter-apk\app-debug.apk"`
+That APK already has tonight's fixes built in (fake_async dependency,
+deprecated Matrix4 calls, Silent Mode DND-access regression, and the
+ringer-mode restore fix) and is sitting on disk ready to install the
+moment that toggle is flipped — no rebuild needed.
