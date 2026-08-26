@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
-import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
-import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_item.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../../logic/azkar_cubit/azkar_state.dart';
+import 'azkar_counter_button.dart';
 
 /// One dhikr with a tap-to-count repetition counter. Text size follows
 /// [fontScale] from Settings — previously hardcoded, so the Quran
@@ -67,8 +67,19 @@ class AzkarItemTile extends StatelessWidget {
                     style: TextStyle(color: AppColors.sage, fontSize: 12 * fontScale),
                   ),
                 ],
+                if (item.source.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    '${AppLocalizations.of(context)!.guideReferenceLabel}: ${item.source}',
+                    style: TextStyle(
+                      color: AppColors.sage.withValues(alpha: 0.7),
+                      fontSize: 11 * fontScale,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 12),
-                _CounterButton(
+                AzkarCounterButton(
                   count: count,
                   repeatCount: item.repeatCount,
                   done: done,
@@ -79,67 +90,6 @@ class AzkarItemTile extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-/// Split out from [AzkarItemTile] so a plain constructor prop (rather
-/// than an internal BlocBuilder rebuild) drives [didUpdateWidget] —
-/// that's what lets us detect the false-to-true edge of [done] safely,
-/// the same pattern HapticCounterButton and QiblaCompassArea already
-/// use for their own particle bursts.
-class _CounterButton extends StatefulWidget {
-  const _CounterButton({
-    required this.count,
-    required this.repeatCount,
-    required this.done,
-    required this.onTap,
-  });
-
-  final int count;
-  final int repeatCount;
-  final bool done;
-  final VoidCallback onTap;
-
-  @override
-  State<_CounterButton> createState() => _CounterButtonState();
-}
-
-class _CounterButtonState extends State<_CounterButton> {
-  @override
-  void didUpdateWidget(_CounterButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.done && !oldWidget.done) {
-      ParticleBurst.play(context, intensity: 0.35);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SemanticButton(
-      label: 'Count for this dhikr: ${widget.count} of ${widget.repeatCount}',
-      hint: 'Double tap to count one repetition',
-      onTap: widget.onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: widget.done ? AppColors.gold : AppColors.hairline,
-          ),
-        ),
-        child: Text(
-          widget.done
-              ? 'Done · ${widget.count} of ${widget.repeatCount}'
-              : 'Tap to count · ${widget.count} of ${widget.repeatCount}',
-          style: TextStyle(
-            color: widget.done ? AppColors.gold : AppColors.ink,
-            fontWeight: FontWeight.w600,
-            fontSize: 13,
-          ),
-        ),
-      ),
     );
   }
 }

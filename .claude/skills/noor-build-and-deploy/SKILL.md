@@ -9,8 +9,14 @@ description: Use whenever building, launching, or relaunching the app on a devic
 Instant hot reload (and `flutter attach` to an already-running app) does
 not work in this environment: the tools available have no real
 terminal (no PTY), and Flutter's interactive keystroke listener
-requires one. This was tested twice (FIFO stdin, and attach) and both
-hit hard environment walls, not fixable with workarounds.
+requires one. This was tested three times now (FIFO stdin, attach, and
+`winpty`) and all three hit hard environment walls, not fixable with
+workarounds. `winpty` specifically refuses to even start unless its
+own invoking stdin is already a real tty (`stdin is not a tty`, fails
+even on a trivial non-Flutter command) — this session's shell has no
+real terminal at any layer for it to bootstrap from. Don't re-attempt
+with other PTY-wrapper tools (e.g. `conpty`, `pty.js`) without first
+confirming they don't share that same requirement.
 
 **Use `flutter build` + `adb install -r` for every change, Dart or
 native.** It's slower (~1 minute per cycle) but reliable. Don't spend

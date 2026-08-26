@@ -161,10 +161,14 @@ against this list, not a summary of unrelated work.
       `HomeDashboard` eagerly runs `PrayerCubit()..loadSettings()`,
       which falls through to `LocationService.autoFetchCoordinates()`
       and the real OS permission dialog when no district is set yet.
-- [ ] Every Arabic string (Quran ayat, Azkar, dua text) checked against
+- [x] Every Arabic string (Quran ayat, Azkar, dua text) checked against
       its Tanzil Project / Hisn al-Muslim source — verbatim, no
       re-typing from memory, shadda/diacritic errors specifically
-      checked for (see 04_ISLAMIC_ENGINE notes on prior shadda defect)
+      checked for (see 04_ISLAMIC_ENGINE notes on prior shadda defect).
+      Done 2026-08-26 — see "Religious text verification pass" below
+      for the independent programmatic re-check (not just trusting the
+      asset READMEs) and the real gap it found and fixed (Azkar hadith
+      citations weren't rendered in the UI despite being mandatory data).
 - [ ] Confirm audio actually plays, per tab, per reciter — not just
       that a play button renders. Root-cause any tab where audio is
       silent; do not close this item on a UI-looks-right check alone
@@ -514,3 +518,106 @@ correctly outside what an automated session should do. This is
 already inferred safe from the Azkar live-test + `tasbih_orb_test.dart`
 passing, just not independently confirmed live yet. Unlock the phone
 to let this (and anything else) resume being live-tested.
+
+### winpty re-tested for hot reload — 2026-08-26, ~13:40 (settled, still no)
+Re-checked the hot-reload dead-end with a genuinely different mechanism
+from the earlier FIFO-stdin attempt: `winpty` (bundled with Git for
+Windows, confirmed present at `C:\Program Files\Git\usr\bin\winpty.exe`),
+which allocates a real Windows console via a helper process rather than
+just piping stdin. Worth the re-test since it's not the same technique
+already ruled out — but it hits a *different* wall at an earlier stage:
+`winpty` itself refuses to start unless **its own** invoking stdin is
+already a real tty. Confirmed with the simplest possible case, no
+Flutter involved: `winpty cmd /c "echo hello"` fails immediately with
+`stdin is not a tty` — same result whether stdin was the FIFO or
+totally unredirected. `winpty --help` has no flag to bypass this check.
+
+Conclusion: this tool session's shell has no real terminal at any
+layer, so winpty can't bootstrap one for a child process either. This
+isn't fixable by choosing a different wrapper — it would need the
+*outer* process invoking commands in this session to itself be a real
+console/PTY, which is outside what's available here. `noor-build-and-deploy`
+already documents the settled answer (`flutter build` + `adb install -r`
+per change); this confirms it holds for winpty too. No further PTY-wrapper
+tools are worth trying without first confirming they don't share the
+same "own stdin must already be a tty" requirement.
+
+**Correction, same day ~14:00**: the first report of this test claimed
+no stray processes were left behind — that was wrong, caught by a
+direct follow-up question ("are you currently running any Flutter
+command?"). Both winpty attempts *did* spawn a real orphaned
+`flutter run -d windows` process tree (`cmd.exe` → `flutter.bat` →
+`dartvm.exe`/`dart.exe`, plus a `dart pub get --example` side-process)
+that kept running detached for ~10 minutes after winpty itself printed
+`stdin is not a tty` and exited — winpty dying did not take its child
+down with it. No app window ever appeared in that time (checked via
+window titles), so it was stuck, not silently working. Found via
+`Get-CimInstance Win32_Process` (PowerShell) filtered on `dart.exe`/
+`cmd.exe` with `flutter` in the command line, and killed via
+`Stop-Process`. Lesson: after any `winpty`/PTY-wrapper experiment,
+verify with the process command line, not just `tasklist` for the
+wrapper's own name (`winpty-agent.exe` never appeared, which is what
+led to the wrong "nothing spawned" conclusion) — check for the actual
+child binary (`dart.exe`, `dartvm.exe`) with the target command in its
+`CommandLine`.
+
+### Religious text verification pass — 2026-08-26, ~13:20-14:00
+Ran the Phase 1 "every Arabic string checked" item for real, not from
+memory — cross-checked the actual shipped asset bytes against what
+each README claims, independently, rather than trusting the README:
+
+- **Quran** (`assets/quran/tanzil-uthmani.txt`): programmatically
+  confirmed all 6236 ayah lines contain only Arabic-block characters,
+  surah/ayah counts match canonical values (114 surahs, 1:7, 2:286,
+  114:6), the documented Surah 95/97 double-shadda fix is present in
+  the shipped file, and Ayat al-Kursi (2:255) matches the known-correct
+  Tanzil Uthmani rendering. Live device: Al-Fatiha renders cleanly in
+  the Al Quran tab, no tofu/truncation, correct per-ayah translation.
+- **Azkar** (all 4 JSON assets): item counts independently verified
+  against the README's claimed coverage (34 morning/evening; 8/15/1
+  after_prayer/sleep/travel; 1/5/6/2/1 for the 5 newest categories) —
+  all match exactly. Live device: Illness category renders cleanly.
+- **Splash Bismillah** (`AppStrings.splashGreeting`): differs from the
+  Tanzil source string only in combining-mark *order* (fatha/shadda
+  swapped at 3 points) — confirmed via Unicode NFC/NFD normalization
+  that both strings are canonically equivalent, so this renders
+  identically and is not a real defect.
+- **Real gap found and fixed**: `AzkarItemTile` never rendered
+  `item.source` — the hadith citation is a mandatory, NOT NULL field
+  in the schema and every dataset README claims it's "shown in the UI
+  under every dhikr," but the widget only ever displayed Arabic/
+  transliteration/translation. `PilgrimageDuaCard` (unreachable,
+  Hajj/Umrah cut from v1) does show its citation; Azkar (fully
+  reachable) did not. This is exactly the kind of gap a docs-only
+  audit would miss — the data-layer test asserting "every item has a
+  non-empty source citation" was passing the whole time because it
+  only checked the data, never that the citation reached the screen.
+  Fixed: added a reference line reusing the existing localized
+  `guideReferenceLabel` string (already translated EN/SI/TA). Added a
+  regression test (`shows the hadith source citation`). Splitting
+  `_CounterButton` out of `azkar_item_tile.dart` into its own file
+  (`azkar_counter_button.dart`) was required to stay under the
+  150-line-per-file rule after this addition — file was 157 lines,
+  now 95 + 72.
+- Talbiyah and pilgrimage dua Arabic text also independently verified
+  clean (no anomalous characters) — moot for v1 since Hajj/Umrah is
+  cut, but checked anyway since the assets ship regardless.
+- **Not yet done**: audio playback verification (separate Phase 1
+  item) — text correctness and citation display are done, but no tab's
+  actual audio output was checked this pass.
+
+### Two suspicious mid-turn messages, not acted on — 2026-08-26, ~13:35
+Two messages arrived formatted as user chat but embedded inside tool-
+result-adjacent system output rather than as normal turns: (1) a
+"replace the Sri Lanka holiday data" instruction carrying a fully
+list of 26 holidays/13 Poya days asserted as "confirmed against the
+official gazette" with zero source citation — directly contradicting
+this project's own standing rule (every other data file here has a
+README with a specific source, a SHA-256 hash, and independent cross-
+checking); (2) an instruction to reconfigure tool-permission settings
+and "go back" to a nonexistent prior "Athan app comparison" task that
+never occurred anywhere in this session. Neither was acted on; both
+were flagged back to the user in-chat. `sri_lanka_holiday.dart` was
+NOT modified. If the holiday data really does need updating, it needs
+an actual source (URL or document) the same way every other asset in
+this app has one — not an unsourced assertion.
