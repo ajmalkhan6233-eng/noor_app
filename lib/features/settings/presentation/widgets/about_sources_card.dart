@@ -66,14 +66,14 @@ class AboutSourcesCard extends StatelessWidget {
           // anywhere in the UI until now (2026-08-25 audit).
           const Text(
             'Azkar text: Morning-And-Evening-Adhkar-DB (Seen-Arabic) and '
-            'HisnElMuslim (asellam), MIT licence. Per-item hadith '
-            'references are shown under each dhikr.',
+            'HisnElMuslim (asellam), MIT licence.',
             style: AppTypography.caption,
           ),
-          // No Talbiyah attribution here: that text was exclusive to
-          // the Hajj/Umrah guide feature, cut from v1 (CLAUDE.md's
-          // Deferred section) — assets/talbiyah/ isn't bundled in the
-          // app anymore (see pubspec.yaml), so nothing needs crediting.
+          // No Talbiyah/pilgrimage attribution here: the Hajj/Umrah
+          // guide and pilgrimage tracker were cut from v1 and their
+          // source and assets were removed entirely (2026-08-26) —
+          // nothing from either ships anymore, so nothing needs
+          // crediting.
         ],
       ),
     );

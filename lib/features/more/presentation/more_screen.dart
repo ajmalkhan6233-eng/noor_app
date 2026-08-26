@@ -72,9 +72,9 @@ class MoreScreen extends StatelessWidget {
         label: l10n.aboutLabel,
         builder: (_) => const AboutScreen(),
       ),
-      // Hajj/Umrah/pilgrimage guide feature is cut from v1 (see
-      // CLAUDE.md Deferred section) — its screens stay in the repo
-      // but aren't exposed here.
+      // Hajj/Umrah/pilgrimage guide feature is cut from v1 and its
+      // source was removed entirely (2026-08-26) — see CLAUDE.md's
+      // Deferred section.
     ];
 
     return Scaffold(

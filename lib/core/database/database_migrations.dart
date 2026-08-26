@@ -20,7 +20,6 @@
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import 'schema/azkar_schema.dart';
-import 'schema/pilgrimage_schema.dart';
 import 'schema/prayer_tracker_schema.dart';
 import 'schema/quran_schema.dart';
 import 'schema/settings_schema.dart';
@@ -36,7 +35,6 @@ Future<void> createNoorSchema(Database db, int version) async {
     ...azkarCreateStatements,
     ...quranCreateStatements,
     ...widgetPositionCreateStatements,
-    ...pilgrimageCreateStatements,
     ...prayerTrackerCreateStatements,
   ]) {
     await db.execute(statement);

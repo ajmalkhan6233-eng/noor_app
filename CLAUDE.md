@@ -52,8 +52,13 @@ literal library names.
   decision). Not shipping any part of it — Talbiyah, Tawaf/Sa'i
   steps, the guide screens, none of it. The Phase 2 "Umrah Guide
   translation gap" item is moot as a result and has been removed.
-  Existing code for this feature stays in the repo but is out of
-  scope for this loop; revisit only when explicitly told to.
+  Its source (`lib/features/hajj_umrah_guide/`,
+  `lib/features/pilgrimage/`), tests, DB schema, and assets
+  (`assets/pilgrimage/`, `assets/talbiyah/`) were fully removed from
+  the repo 2026-08-26, per direct request — this was dead weight
+  bundled (or nearly so) in every build for a feature with no
+  reachable entry point. If this feature comes back, it's a rebuild
+  from git history (tag/commit before the removal), not a re-enable.
 - Multiple Adhan reciter selection, cut from v1 (2026-08-23). Ship
   with the one default reciter only (see assets/audio/adhan/README.md
   for its provenance/licence). Per-reciter selection UI is deferred,
