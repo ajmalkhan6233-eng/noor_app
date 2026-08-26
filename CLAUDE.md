@@ -335,12 +335,37 @@ just source reading:
   out immediately without investigating, per the standing instruction
   to leave it alone.
 
-**Workflow note for next time**: for pure Dart/UI changes (colors,
-layout, spacing, widgets, animations), use `flutter run` with hot
-reload against the connected device instead of a full
-`flutter build apk` + `adb install` cycle each time — much faster.
-Only do a full rebuild when the change actually needs it: Android
-manifest edits, new permissions, new native (Kotlin/Java) code, or
-new packages. Tonight's `SilentModeReceiver.kt` fix was native and
-genuinely needed a rebuild; most of the Dart fixes tonight didn't and
-were rebuilt anyway before this was pointed out.
+**Workflow note, superseded below**: ~~for pure Dart/UI changes, use
+`flutter run` with hot reload instead of a full rebuild~~ — tried
+this properly (FIFO-bound stdin to `flutter run`, then `flutter
+attach`) and confirmed it's a dead end in this environment: Flutter's
+interactive `r`/`R` keystroke listener only activates when stdin is a
+real terminal (`stdin.hasTerminal`), which nothing here provides — no
+PTY available to the tools in this session. `flutter attach` also
+independently failed after the driving `flutter run` process was
+killed, since that tears down the app's Dart VM debug service even
+though the Android app process itself keeps running. **Settled
+answer: `flutter build apk --debug` + `adb install -r` for every
+change, Dart or native.** ~1 minute per cycle, reliable. Don't
+re-attempt hot reload — this is now captured as its own skill
+(`.claude/skills/noor-build-and-deploy`), no need to re-litigate.
+
+### Session lessons merged as skills — 2026-08-26, ~08:25
+Four new skills added from `noor_lessons_skills.zip` (commit
+`f6ffd06`): `noor-android-runtime-permissions` (the POST_NOTIFICATIONS
+class of silent-failure bug), `noor-build-and-deploy` (the hot-reload
+dead end above, plus: killing a `flutter run`/`attach` process can
+leave orphaned `dart.exe`/gradle `java.exe` processes behind that
+silently hang the *next* `flutter analyze`/build — check `tasklist`
+for stray `dart.exe`/`java.exe` and kill them if a command hangs with
+no output for unusually long), `noor-audit-reconciliation` (check
+external bug-list items against actual current code before touching
+anything — some are already fixed), and `noor-live-device-interaction`
+(always re-screenshot immediately before calculating a tap coordinate,
+never reuse an older one — this is exactly what caused several
+mis-taps earlier tonight). Applied immediately: found 5 orphaned
+`dart.exe` (one at 1.4GB) and 1 orphaned `java.exe` gradle daemon
+left over from tonight's flutter run/attach experiments, killed them,
+confirmed the app relaunches cleanly on the phone, and confirmed
+`flutter analyze` runs clean again (120s, only the known low-value
+`prefer_const_constructors` info hints, nothing new).
