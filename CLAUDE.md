@@ -963,3 +963,72 @@ then restore it and confirm the data actually lands.
 Needs a real Android `AppWidgetProvider` + `RemoteViews` layout + a
 way to push prayer-time updates into it from the existing Dart-side
 calculation — new native surface area, not touched yet.
+
+## Continuation — 2026-08-27, phone unavailable ("for a while")
+
+### Qibla: calibration-banner flicker fix + Kaaba marker redesign — code-verified, live-verify pending
+Root cause of the repeated "still blinking" reports, found via code
+review (not guesswork): `qibla_screen.dart` was mounting/unmounting
+`CalibrationPrompt` with a raw `if`, an instant pop that read as
+flicker even after the needle's own rotation/alpha were already
+smoothed on an earlier pass. Replaced with a new
+`AnimatedCalibrationBanner` widget (`AnimatedSize` + `AnimatedSwitcher`)
+so it now fades and collapses smoothly.
+
+Self-caught bug during that same review: my first draft used
+`AnimatedOpacity` wrapping a ternary child — the ternary swaps the
+actual widget instance the same frame the opacity starts animating
+toward 0, so the banner would still have vanished instantly instead of
+fading. Fixed by switching to `AnimatedSwitcher` with distinct
+`ValueKey`s per branch, which correctly keeps the outgoing child
+mounted while it fades out.
+
+Also replaced the plain gold rounded-square Kaaba marker with a small
+cube icon (kiswah band + door accent) plus a slow breathing glow, per
+direct feedback to "put the cover on the middle of the compass" and
+add animation — new `kaaba_marker_painter.dart`, driven by a new
+`_kaabaPulseController` in `qibla_needle.dart`.
+
+`qibla_screen.dart` and `qibla_needle.dart` both crossed the 150-line
+limit once these changes landed; split into `animated_calibration_
+banner.dart`, `kaaba_marker_painter.dart`, and `qibla_needle_ring.dart`.
+
+**Verified without a live device**: `flutter analyze` clean (only the
+same pre-existing const-hint infos — one real `unused_import` warning
+this pass introduced, in `qibla_needle.dart`, was caught by analyze
+and fixed before commit); full test suite passes, 217/217, zero
+failures; `flutter build apk --debug` compiles clean against the
+current tree. Committed `0fc9ba0`, pushed.
+
+**NOT yet confirmed — needs the phone**: whether the banner's fade
+actually reads as smooth on-device (vs. just in code review), whether
+the new Kaaba cube icon and pulse look right at actual compass scale,
+and — the thing that actually matters — whether these two fixes
+together resolve the "still blinking" complaint. Do not mark this
+Qibla item closed until seen live.
+
+### Native splash white-flash — root cause found and fixed, live-verify pending
+Confirmed the exact bug described in the overnight package's item 1a:
+`android/app/src/main/res/drawable/launch_background.xml` had
+`android:drawable="@android:color/white"` — the native Android splash
+window (shown before Flutter even starts) was literally white, not
+the custom splash widget misbehaving. The `drawable-v21` variant used
+`?android:colorBackground`, which also resolves to white under
+`Theme.Light`. Neither `styles.xml` nor `values-night/styles.xml`
+overrode it for `NormalTheme` either.
+
+Fixed: added `android/app/src/main/res/values/colors.xml` with
+`splash_background = #FF05070B` (locked obsidian), and pointed both
+`launch_background.xml` variants and both `NormalTheme` styles
+(`values/styles.xml`, `values-night/styles.xml`) at it. Native-only
+change, no Dart touched.
+
+`flutter build apk --debug` run fresh against this change to confirm
+it compiles. **Not yet confirmed**: that the white flash is actually
+gone on a cold launch on-device — this can only be seen live, not
+inferred from a clean build.
+
+### Splash sequence (particles → Bismillah → converging "Noor" letters), tap-feedback micro-animations, screen-transition polish
+Not started this pass. Queued next once the current build is
+confirmed, still doesn't require the phone to implement (only to
+verify).

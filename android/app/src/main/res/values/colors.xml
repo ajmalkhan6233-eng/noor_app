@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locked obsidian background (#05070B) — used for the native splash
+         window so there is no white flash before Flutter's first frame. -->
+    <color name="splash_background">#FF05070B</color>
+</resources>
