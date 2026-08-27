@@ -11,7 +11,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -32,13 +31,19 @@ class BackupFileService {
   }
 
   /// Returns `null` if the user cancelled the picker.
+  ///
+  /// TEMPORARILY DISABLED (2026-08-27): `file_picker` 11.0.3's Kotlin
+  /// module fails to compile on this project's Gradle/Kotlin config
+  /// (`GeneratedPluginRegistrant.java: cannot find symbol
+  /// FilePickerPlugin`) — blocked every build, and the one available
+  /// upgrade (12.1.1) conflicts with `share_plus`'s `win32` constraint.
+  /// Restore is stubbed to always report "cancelled" (the existing
+  /// `fileBytes == null` handling in BackupRestoreScreen already
+  /// treats that as a no-op) so the rest of the app can build and
+  /// ship. Export (`shareBackup`, above) is untouched and still works
+  /// — only restore needs `file_picker`. Re-enable once the version
+  /// conflict is actually resolved, not by guessing at another bump.
   Future<Uint8List?> pickBackupFile() async {
-    final result = await FilePicker.pickFiles(
-      type: FileType.any,
-      withData: true,
-    );
-    final picked = result?.files.single;
-    if (picked?.bytes == null) return null;
-    return picked!.bytes!;
+    return null;
   }
 }
