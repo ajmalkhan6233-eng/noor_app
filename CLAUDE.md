@@ -905,3 +905,61 @@ something shaky rather than something real:
 Next session should start with icon polish (smallest of the three,
 self-contained, no schema/native risk) before the two bigger
 engineering items.
+
+## Continuation — 2026-08-27, ~07:00
+
+### Icon polish pass — code done, build clean, live-verify pending
+Built an original 12-glyph line-icon set (`lib/core/presentation/
+icons/`) replacing the plain Material icons across the bottom nav and
+the More screen grid: a sundial for Prayer Times instead of a wall
+clock, an open-hands glyph for Duas & Dhikr, a strand of prayer beads
+for Tasbih instead of a generic circular-blur glyph, a balance scale
+for Zakat instead of a calculator, adjustment sliders for Settings
+instead of a gear, and a Qibla tile glyph deliberately matching the
+redesigned Qibla screen's own compass needle shape. Also fixed the
+Settings/About tiles reading flat/washed-out next to the other four
+(they were plain sage with no real tile tint) — now cyan/gold like
+the rest, so all six tiles are visually one family.
+
+`flutter analyze`: clean (same 34 pre-existing info hints, zero new).
+Full home/more/settings test suite: passes (the one reported
+"failure" is `test/features/more` not existing as a directory, not an
+actual test failing).
+
+**Update**: committed (`b8c2056`) after a full clean analyze + the
+whole 217-test suite passing, including a real regression this pass
+surfaced and fixed — `key_screens_smoke_test.dart` located bottom-nav
+tabs and More tiles by `Icons.*` IconData, which no longer exists on
+these custom-painted widgets; switched to finding by visible label
+text instead. **Still not live-screenshotted** — the phone has been
+in active personal use or disconnected through this whole segment.
+Static confidence is high (clean analyze, full suite green, every
+painter shape reviewed against its intended design), but per
+noor-visual-self-qa this isn't fully "done" until actually seen
+rendered on the device — first thing to screenshot-verify once the
+phone is free and reconnected.
+
+### Local encrypted backup/export — done, committed, not yet live-verified
+Built (`6d9cde7`): AES-256-GCM with a PBKDF2-derived passphrase key,
+exports prayer/fasting streak history + Quran/Azkar bookmarks + Zakat
+price memory to a file via the system share sheet, restores via the
+system file picker. Additive-only restore (never deletes existing
+data). Azkar bookmarks matched by Arabic text, not row id, since ids
+aren't stable across installs — proven by a test that deliberately
+gives the same item different ids on two simulated devices. New deps:
+`cryptography`, `share_plus`, `file_picker`, `path_provider` — all
+local-only, no new Android permission, no INTERNET.
+
+`flutter analyze`: clean. 8 new tests (crypto round-trip, wrong-
+passphrase rejection, tamper detection, payload JSON round-trip,
+gather→restore round-trip across two simulated devices, double-
+restore idempotency): all passing. **Not yet live-verified** — same
+reason as the icon polish above (phone unavailable this whole
+segment). Queued as the very next thing to check once it's back:
+export a real backup, confirm the share sheet opens with a real file,
+then restore it and confirm the data actually lands.
+
+### Still fully unstarted: home-screen widget
+Needs a real Android `AppWidgetProvider` + `RemoteViews` layout + a
+way to push prayer-time updates into it from the existing Dart-side
+calculation — new native surface area, not touched yet.
