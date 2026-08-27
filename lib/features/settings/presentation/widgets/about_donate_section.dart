@@ -10,6 +10,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../about_screen.dart';
+import '../backup_restore_screen.dart';
 import '../send_feedback_screen.dart';
 import '../support_developer_screen.dart';
 
@@ -37,6 +38,15 @@ class AboutDonateSection extends StatelessWidget {
               MaterialPageRoute<void>(builder: (_) => const SendFeedbackScreen()),
             ),
             child: const _Row(icon: Icons.feedback_outlined, label: 'Send Feedback'),
+          ),
+          const SizedBox(height: 4),
+          SemanticButton(
+            label: 'Backup & Restore',
+            hint: 'Double tap to export or restore an encrypted backup',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const BackupRestoreScreen()),
+            ),
+            child: const _Row(icon: Icons.security_outlined, label: 'Backup & Restore'),
           ),
           const SizedBox(height: 4),
           SemanticButton(

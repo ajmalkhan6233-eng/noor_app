@@ -47,6 +47,10 @@ dependencies:
   # Local-asset Adhan playback only — never streams, never fetches
   # remote audio (see assets/audio/adhan/README.md for provenance)
   audioplayers: ^5.2.1
+  cryptography: ^2.9.0
+  share_plus: ^12.0.2
+  file_picker: ^11.0.3
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
