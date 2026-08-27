@@ -149,6 +149,7 @@ class _MoreTile extends StatelessWidget {
           Container(
             width: 56,
             height: 56,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(16),
