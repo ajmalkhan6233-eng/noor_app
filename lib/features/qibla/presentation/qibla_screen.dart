@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../logic/qibla_cubit/qibla_cubit.dart';
 import '../logic/qibla_cubit/qibla_state.dart';
-import 'widgets/calibration_prompt.dart';
+import 'widgets/animated_calibration_banner.dart';
 import 'widgets/qibla_compass_area.dart';
 import 'widgets/qibla_district_fallback.dart';
 import 'widgets/qibla_info_panel.dart';
@@ -108,16 +107,13 @@ class _QiblaViewState extends State<_QiblaView> {
       );
     }
 
+    final showCalibration = state.displayAccuracy != CompassAccuracy.good &&
+        state.displayAccuracy != CompassAccuracy.unavailable;
     return Stack(
       children: [
         Column(
           children: [
-            if (state.displayAccuracy != CompassAccuracy.good &&
-                state.displayAccuracy != CompassAccuracy.unavailable)
-              const Padding(
-                padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
-                child: StaggeredFadeIn(children: [CalibrationPrompt()]),
-              ),
+            AnimatedCalibrationBanner(show: showCalibration),
             Expanded(
               child: QiblaCompassArea(
                 state: state,

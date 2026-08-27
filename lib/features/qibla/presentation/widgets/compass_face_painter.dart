@@ -54,12 +54,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import 'compass_ticks.dart';
+import 'kaaba_marker_painter.dart';
 
 class CompassFacePainter extends CustomPainter {
   CompassFacePainter({
     required this.rotationDegrees,
     required this.needleAlpha,
     this.locked = false,
+    this.kaabaPulse = 0,
   });
 
   final double rotationDegrees;
@@ -72,25 +74,19 @@ class CompassFacePainter extends CustomPainter {
   /// needle to gold instead of its usual cyan.
   final bool locked;
 
+  /// 0..1 looping value driving the Kaaba marker's ambient glow.
+  final double kaabaPulse;
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final faceRadius = size.width / 2;
 
     paintCompassTicksAndLabels(canvas, center, faceRadius);
-    _paintKaabaMarker(canvas, center, faceRadius);
+    paintKaabaMarker(canvas, center, faceRadius, kaabaPulse);
     _paintNeedle(canvas, center, faceRadius);
 
     canvas.drawCircle(center, 4, Paint()..color = AppColors.ink);
-  }
-
-  void _paintKaabaMarker(Canvas canvas, Offset center, double faceRadius) {
-    final pos = center + const Offset(0, -1) * (faceRadius * 0.42);
-    final rect = Rect.fromCenter(center: pos, width: 10, height: 10);
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, const Radius.circular(2)),
-      Paint()..color = AppColors.gold,
-    );
   }
 
   void _paintNeedle(Canvas canvas, Offset center, double faceRadius) {
@@ -132,5 +128,6 @@ class CompassFacePainter extends CustomPainter {
   bool shouldRepaint(covariant CompassFacePainter oldDelegate) =>
       oldDelegate.rotationDegrees != rotationDegrees ||
       oldDelegate.needleAlpha != needleAlpha ||
-      oldDelegate.locked != locked;
+      oldDelegate.locked != locked ||
+      oldDelegate.kaabaPulse != kaabaPulse;
 }

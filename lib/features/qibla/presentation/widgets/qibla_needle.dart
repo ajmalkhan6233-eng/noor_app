@@ -18,10 +18,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/angle_math.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import 'compass_face_painter.dart';
+import 'qibla_needle_ring.dart';
 
 class QiblaNeedle extends StatefulWidget {
   const QiblaNeedle({
@@ -55,6 +55,14 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
   static const _smoothingFactor = 0.18;
 
   late final AnimationController _dimController;
+  // Slow ambient breathing glow behind the Kaaba marker — a small,
+  // continuous sign of life on an otherwise static icon, per direct
+  // request for "some animation". Deliberately slow/low-amplitude
+  // (noor-animation-performance: nothing that reads as jank or drains
+  // battery) — this alone repaints the compass every frame regardless
+  // of compass activity, which is fine since CompassFacePainter's
+  // primitives are cheap.
+  late final AnimationController _kaabaPulseController;
   late final Ticker _smoothingTicker;
   late double _displayedRotation;
 
@@ -67,6 +75,10 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 350),
       value: widget.dimmed ? 0 : 1,
     );
+    _kaabaPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..repeat(reverse: true);
     _smoothingTicker = createTicker(_onTick)..start();
   }
 
@@ -88,6 +100,7 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
   void dispose() {
     _smoothingTicker.dispose();
     _dimController.dispose();
+    _kaabaPulseController.dispose();
     super.dispose();
   }
 
@@ -107,30 +120,9 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
         child: Stack(
           alignment: Alignment.center,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.card,
-                border: Border.fromBorderSide(
-                  BorderSide(
-                    color: widget.locked ? AppColors.gold : AppColors.hairline,
-                    width: 1.5,
-                  ),
-                ),
-                boxShadow: widget.locked
-                    ? [
-                        BoxShadow(
-                          color: AppColors.gold.withValues(alpha: 0.45),
-                          blurRadius: 24,
-                          spreadRadius: 2,
-                        ),
-                      ]
-                    : const [],
-              ),
-            ),
+            QiblaNeedleRing(locked: widget.locked),
             AnimatedBuilder(
-              animation: _dimController,
+              animation: Listenable.merge([_dimController, _kaabaPulseController]),
               builder: (context, _) => CustomPaint(
                 size: const Size(272, 272),
                 painter: CompassFacePainter(
@@ -138,6 +130,7 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
                   needleAlpha: _dimmedAlpha +
                       (_trustworthyAlpha - _dimmedAlpha) * _dimController.value,
                   locked: widget.locked,
+                  kaabaPulse: _kaabaPulseController.value,
                 ),
               ),
             ),
