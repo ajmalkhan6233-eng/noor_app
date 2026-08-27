@@ -13,7 +13,6 @@
 // run on every change, and enough to catch "this screen now crashes"
 // or "this text disappeared" even without a rendered screenshot.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:noor/app.dart';
@@ -21,6 +20,7 @@ import 'package:noor/core/constants/splash_config.dart';
 import 'package:noor/features/home/presentation/home_dashboard.dart';
 import 'package:noor/features/home/presentation/widgets/hero_card.dart';
 import 'package:noor/features/home/presentation/widgets/streak_capsule.dart';
+import 'package:noor/features/home/presentation/widgets/bottom_nav/noor_bottom_nav.dart';
 import 'package:noor/features/more/presentation/more_screen.dart';
 import 'package:noor/features/prayer_times/presentation/prayer_times_screen.dart';
 import 'package:noor/features/tasbih/presentation/tasbih_screen.dart';
@@ -73,7 +73,15 @@ void main() {
     await tester.pumpWidget(const NoorApp());
     await _pumpPastSplash(tester);
 
-    await tester.tap(find.byIcon(Icons.access_time));
+    // The bottom nav's icons are this app's own original line-art
+    // (NoorIcon/CustomPainter, 2026-08-27), not Material IconData, so
+    // find.byIcon no longer applies — the tab's visible label is a
+    // stable, user-facing way to find it instead. Home's own Quick
+    // Actions row repeats the same labels and stays alive in the tree
+    // (tabs aren't disposed on switch), so scope to the bottom nav.
+    await tester.tap(
+      find.descendant(of: find.byType(NoorBottomNav), matching: find.text('Prayer Times')),
+    );
     await _settle(tester);
 
     expect(tester.takeException(), isNull);
@@ -84,16 +92,16 @@ void main() {
     await tester.pumpWidget(const NoorApp());
     await _pumpPastSplash(tester);
 
-    await tester.tap(find.byIcon(Icons.more_horiz));
-    await _settle(tester);
-    // Home's own QuickActionRow shortcut uses the same icon as More's
-    // row and stays alive in the tree (tabs aren't disposed on
-    // switch), so byIcon alone matches 2 widgets — scope to MoreScreen.
     await tester.tap(
-      find.descendant(
-        of: find.byType(MoreScreen),
-        matching: find.byIcon(Icons.blur_circular),
-      ),
+      find.descendant(of: find.byType(NoorBottomNav), matching: find.text('More')),
+    );
+    await _settle(tester);
+    // Home's own QuickActionRow shortcut uses the same label as
+    // More's row and stays alive in the tree (tabs aren't disposed on
+    // switch), so find.text('Tasbih') alone can match more than one —
+    // scope to MoreScreen.
+    await tester.tap(
+      find.descendant(of: find.byType(MoreScreen), matching: find.text('Tasbih')),
     );
     await _settle(tester);
 
@@ -105,13 +113,12 @@ void main() {
     await tester.pumpWidget(const NoorApp());
     await _pumpPastSplash(tester);
 
-    await tester.tap(find.byIcon(Icons.more_horiz));
+    await tester.tap(
+      find.descendant(of: find.byType(NoorBottomNav), matching: find.text('More')),
+    );
     await _settle(tester);
     await tester.tap(
-      find.descendant(
-        of: find.byType(MoreScreen),
-        matching: find.byIcon(Icons.calendar_month),
-      ),
+      find.descendant(of: find.byType(MoreScreen), matching: find.text('Calendar')),
     );
     await _settle(tester);
 

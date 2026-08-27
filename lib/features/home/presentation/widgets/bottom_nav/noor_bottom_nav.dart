@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import 'nav_tab_item.dart';
 
@@ -25,11 +26,11 @@ class NoorBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final tabs = [
-      (Icons.home_outlined, l10n.homeTab),
-      (Icons.access_time, l10n.prayerTimesScreenTitle),
-      (Icons.menu_book_outlined, l10n.quranTabLabel),
-      (Icons.self_improvement_outlined, l10n.duasTabLabel),
-      (Icons.more_horiz, l10n.moreTab),
+      (NoorIconType.home, l10n.homeTab),
+      (NoorIconType.prayerTimes, l10n.prayerTimesScreenTitle),
+      (NoorIconType.quran, l10n.quranTabLabel),
+      (NoorIconType.duas, l10n.duasTabLabel),
+      (NoorIconType.more, l10n.moreTab),
     ];
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),

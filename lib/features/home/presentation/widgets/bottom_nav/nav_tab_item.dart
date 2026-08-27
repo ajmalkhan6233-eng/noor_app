@@ -8,6 +8,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/presentation/icons/noor_icon.dart';
+import '../../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../../core/presentation/motion/motion.dart';
 import '../../../../../core/utils/semantics_helpers.dart';
 
@@ -20,7 +22,7 @@ class NavTabItem extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  final NoorIconType icon;
   final String label;
   final bool active;
   final VoidCallback onTap;
@@ -53,7 +55,7 @@ class NavTabItem extends StatelessWidget {
                       ]
                     : null,
               ),
-              child: Icon(
+              child: NoorIcon(
                 icon,
                 color: active ? AppColors.paper : AppColors.sage,
                 size: 22,

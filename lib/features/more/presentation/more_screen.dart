@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/presentation/icons/noor_icon.dart';
+import '../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -31,44 +33,46 @@ class MoreScreen extends StatelessWidget {
     final prayerCubit = context.read<PrayerCubit>();
     final tiles = <_MoreTile>[
       _MoreTile(
-        icon: Icons.explore,
+        icon: NoorIconType.qibla,
         color: AppColors.accentSecondary,
         label: l10n.qiblaScreenTitle,
         builder: (_) => const QiblaScreen(),
       ),
       _MoreTile(
-        icon: Icons.blur_circular,
+        icon: NoorIconType.tasbih,
         color: AppColors.gold,
         label: l10n.tasbihScreenTitle,
         builder: (_) => const TasbihScreen(),
       ),
       _MoreTile(
-        icon: Icons.calendar_month,
+        icon: NoorIconType.calendar,
         color: AppColors.accentSecondary,
         label: l10n.calendarLabel,
         builder: (_) => const CalendarScreen(),
       ),
       _MoreTile(
-        // Not Icons.savings_outlined — that's a literal piggy bank
-        // shape, wrong imagery for a Zakat calculator in an Islamic
-        // app (2026-08-25, flagged directly: "it's a pig... halal
-        // Shariah-law compliant app, these things has to be really
-        // considered"). calculate_outlined has no such issue.
-        icon: Icons.calculate_outlined,
+        // A balance scale, not a calculator — zakat is literally about
+        // weighing wealth against nisab, and (2026-08-25, flagged
+        // directly) a piggy-bank glyph was already ruled out as wrong
+        // imagery for a halal/Shariah-compliant app.
+        icon: NoorIconType.zakat,
         color: AppColors.gold,
         label: l10n.zakatCalculatorLabel,
         builder: (_) => const ZakatScreen(),
       ),
       _MoreTile(
-        icon: Icons.settings_outlined,
-        color: AppColors.sage,
+        // Sage previously — read as flat/washed-out next to the other
+        // four tinted tiles (2026-08-27 live-device review). Cyan/gold
+        // keeps all six tiles in the same visual family.
+        icon: NoorIconType.settings,
+        color: AppColors.accentSecondary,
         label: l10n.settingsSemanticLabel,
         builder: (_) => const SettingsScreen(),
         onClosed: () => prayerCubit.loadSettings(),
       ),
       _MoreTile(
-        icon: Icons.info_outline,
-        color: AppColors.sage,
+        icon: NoorIconType.about,
+        color: AppColors.gold,
         label: l10n.aboutLabel,
         builder: (_) => const AboutScreen(),
       ),
@@ -124,7 +128,7 @@ class _MoreTile extends StatelessWidget {
     this.onClosed,
   });
 
-  final IconData icon;
+  final NoorIconType icon;
   final Color color;
   final String label;
   final WidgetBuilder builder;
@@ -149,7 +153,7 @@ class _MoreTile extends StatelessWidget {
               color: color.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(icon, color: color, size: 26),
+            child: NoorIcon(icon, color: color, size: 26),
           ),
           const SizedBox(height: 8),
           Text(
