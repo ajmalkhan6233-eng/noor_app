@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import '../app_locale_controller.dart';
 import '../constants/app_colors.dart';
 import '../location/location_service.dart';
+import '../utils/semantics_helpers.dart';
 import '../../features/prayer_times/presentation/widgets/district_selector.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
@@ -186,29 +187,23 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
 
   Widget _localeButton(AppLocaleOption option) {
     final selected = option == _selectedLocale;
-    return Semantics(
-      button: true,
-      selected: selected,
+    return SemanticButton(
       label: option.nativeName,
       hint: 'Double tap to set app language',
-      child: GestureDetector(
-        onTap: () => setState(() => _selectedLocale = option),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: selected ? AppColors.gold : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: selected ? AppColors.gold : AppColors.hairline),
-          ),
-          child: ExcludeSemantics(
-            child: Text(
-              option.nativeName,
-              style: TextStyle(
-                color: selected ? AppColors.paper : AppColors.ink,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-              ),
-            ),
+      onTap: () => setState(() => _selectedLocale = option),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? AppColors.gold : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: selected ? AppColors.gold : AppColors.hairline),
+        ),
+        child: Text(
+          option.nativeName,
+          style: TextStyle(
+            color: selected ? AppColors.paper : AppColors.ink,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
           ),
         ),
       ),

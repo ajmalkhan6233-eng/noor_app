@@ -1028,7 +1028,50 @@ it compiles. **Not yet confirmed**: that the white flash is actually
 gone on a cold launch on-device — this can only be seen live, not
 inferred from a clean build.
 
-### Splash sequence (particles → Bismillah → converging "Noor" letters), tap-feedback micro-animations, screen-transition polish
-Not started this pass. Queued next once the current build is
-confirmed, still doesn't require the phone to implement (only to
-verify).
+### Splash sequence — correction: already built, my earlier note here was wrong
+Checked the code before starting on this "queued" item and found it's
+already fully implemented and live-device tuned: `BigBangSplashView`
+(`lib/core/presentation/splash/big_bang_splash_view.dart`) does the
+particle burst → Arabic Bismillah (scaling in from depth, not a flat
+fade) → dissolve into the NOOR wordmark sequence, wired in via
+`splash_screen.dart`. Timings in `splash_config.dart` carry comments
+citing two separate 2026-08-24/08-25 live-device review passes that
+already tuned pacing ("it should ... com[e] up to the front — the
+splash overall felt slow" → burst duration cut in half) and text
+ordering (Arabic before any English, per explicit request). Falls
+back to a calm `PlainSplashView` under reduced-motion. Nothing to do
+here — already done.
+
+### Tap-feedback micro-animations + screen-transition polish — audited, done
+Before building a new tap-feedback wrapper as originally planned,
+audited what already exists rather than assuming this was unbuilt (the
+splash-sequence note above turned out to be stale, so re-checked this
+one too before writing more code). Found it's almost entirely already
+built:
+- `SemanticButton` (`lib/core/utils/semantics_helpers.dart`) is
+  already the app's tap-feedback chokepoint — a 0.98 press-scale,
+  used in 34 files across every feature.
+- `AppChip` has its own equivalent scale-down for the same reason
+  (its own header comment says so explicitly).
+- `TasbihOrb`, the app's single most-tapped element, has its own much
+  richer custom tap-bounce/shake/spring feedback on top of
+  `SemanticButton` internally.
+- Screen transitions: `FadeTabSwitcher` already cross-fades + slides
+  between bottom-nav tabs (not an instant cut), and there are no
+  custom zero-duration route overrides anywhere in `lib/` — screen
+  pushes use Flutter's own default `MaterialPageRoute` transitions.
+
+The one real gap, found by grepping for raw `GestureDetector`/
+`InkWell` outside the few legitimate cases (drag areas, `AppChip`
+itself, ripple-based list rows): the first-run locale selector in
+`location_onboarding_screen.dart` had a hand-rolled
+`Semantics()`+`GestureDetector()` pair with zero tap feedback —
+exactly the pattern `SemanticButton`'s own doc comment says to avoid.
+Converted it to `SemanticButton`. `flutter analyze` clean (no new
+issues on the file), full suite passes 217/217, no regressions.
+Committed and pushed.
+
+This closes out the "tap-feedback micro-animations, screen-transition
+polish" queued item. **Not yet confirmed live**: that the fixed
+locale-selector button actually feels right on a real screen — like
+everything else in this section, pending phone reconnection.
