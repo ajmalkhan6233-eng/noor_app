@@ -230,9 +230,27 @@ verify against what's actually on the device, not the source tree.
       blocker given the source is unambiguous.
 - [ ] Migrate APK build to AAB
 - [ ] Release signing keystore generated and stored safely
-- [ ] Privacy policy page/link added (required even for a no-network app)
-- [ ] Confirm manifest has no INTERNET permission and no billing
-      dependency anywhere in the dependency tree
+- [x] Privacy policy page/link added — `privacy_policy_screen.dart`
+      exists, linked from About, real accurate content (not a stub):
+      covers the no-collection summary, on-device-only location use,
+      what's stored locally, the exact permission list, and contact.
+      Verified 2026-08-28. Still open, separately, not a code task:
+      Play Console submission itself needs the policy hosted at a
+      public URL for the store listing — the in-app page alone doesn't
+      satisfy that, only the "does the app have one" half of this item.
+- [x] Confirm manifest has no INTERNET permission and no billing
+      dependency anywhere in the dependency tree — verified 2026-08-28
+      by actually running the Gradle manifest-merge task
+      (`processReleaseMainManifest`, not just reading the app's own
+      `AndroidManifest.xml`) and reading the real merged output at
+      `build/app/intermediates/merged_manifest/release/
+      processReleaseMainManifest/AndroidManifest.xml`: zero
+      `INTERNET` permission. The *debug* merged manifest does show
+      `INTERNET` — that's Flutter's own dev-tooling injection for
+      hot reload/DevTools on debug builds only, stripped in release;
+      worth knowing so a future debug-manifest check doesn't
+      misdiagnose it as a plugin leak. `pubspec.lock` has no
+      billing/`in_app_purchase`/IAP package of any kind.
 
 ### Phase 4 — Submission
 - [ ] Google Play developer account registered
