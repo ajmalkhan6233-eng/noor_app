@@ -19,10 +19,12 @@
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../../settings/data/notification_settings.dart';
 import 'iqamath_offsets.dart';
 import 'notification_details.dart';
+import 'notification_schedule_mode.dart';
 import 'notification_scheduling.dart';
 import 'notification_slots.dart';
 import 'prayer_times_result.dart';
@@ -75,6 +77,28 @@ class NotificationService {
       '$name adhan (test)',
       'This is what the $name adhan notification sounds like.',
       adhanNotificationDetails(slot),
+    );
+  }
+
+  /// Schedules a real notification [minutes] from now through the exact
+  /// same `zonedSchedule`/`alarmClock` path a genuine adhan uses — the
+  /// only way to actually confirm background scheduling still fires
+  /// after the app is fully closed, rather than just checking that an
+  /// alarm is *registered* (which doesn't prove it survives to fire).
+  /// Fixed id (9500) well clear of every real prayer/iqamath/reminder
+  /// id range, so it never collides with or gets cancelled by real
+  /// rescheduling.
+  Future<void> scheduleLiveTestNotification(int minutes) async {
+    await initialize();
+    final scheduled = tz.TZDateTime.now(tz.local).add(Duration(minutes: minutes));
+    await _plugin.zonedSchedule(
+      9500,
+      'Scheduled test notification',
+      'If this fired after the app was closed, background scheduling works.',
+      scheduled,
+      adhanNotificationDetails(PrayerSlot.fajr),
+      androidScheduleMode: await resolveScheduleMode(_plugin, preferAlarmClock: true),
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 

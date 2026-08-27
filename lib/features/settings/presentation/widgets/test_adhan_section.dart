@@ -51,6 +51,22 @@ class TestAdhanSection extends StatelessWidget {
               ),
           ],
         ),
+        const SizedBox(height: 12),
+        SemanticButton(
+          label: 'Schedule a real test notification in 3 minutes',
+          onTap: () => service.scheduleLiveTestNotification(3),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.hairline),
+            ),
+            child: const Text(
+              'Schedule test notification in 3 min (close app after)',
+              style: TextStyle(color: AppColors.sage, fontSize: 12),
+            ),
+          ),
+        ),
       ],
     );
   }
