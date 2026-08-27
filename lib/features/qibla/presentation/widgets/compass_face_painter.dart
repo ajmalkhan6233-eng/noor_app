@@ -59,6 +59,7 @@ class CompassFacePainter extends CustomPainter {
   CompassFacePainter({
     required this.rotationDegrees,
     required this.needleAlpha,
+    this.locked = false,
   });
 
   final double rotationDegrees;
@@ -66,6 +67,10 @@ class CompassFacePainter extends CustomPainter {
   /// Eased toward 1.0 (trustworthy) or 0.35 (low confidence) by
   /// QiblaNeedle's AnimationController.
   final double needleAlpha;
+
+  /// True when facing the qibla within the lock threshold — swaps the
+  /// needle to gold instead of its usual cyan.
+  final bool locked;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -93,34 +98,39 @@ class CompassFacePainter extends CustomPainter {
     canvas.translate(center.dx, center.dy);
     canvas.rotate(rotationDegrees * math.pi / 180);
 
+    // Slender hairline shape (2026-08-27 live-device review: "too
+    // thick" — was 0.13/0.09 of length at the widest point, roughly
+    // double a precise compass needle's proportions).
     final length = faceRadius * 0.85;
     final northHalf = Path()
       ..moveTo(0, -length)
-      ..lineTo(length * 0.13, length * 0.08)
+      ..lineTo(length * 0.06, length * 0.08)
       ..lineTo(0, 0)
-      ..lineTo(-length * 0.13, length * 0.08)
+      ..lineTo(-length * 0.06, length * 0.08)
       ..close();
     final southHalf = Path()
       ..moveTo(0, 0)
-      ..lineTo(length * 0.09, length * 0.08)
+      ..lineTo(length * 0.045, length * 0.08)
       ..lineTo(0, length * 0.28)
-      ..lineTo(-length * 0.09, length * 0.08)
+      ..lineTo(-length * 0.045, length * 0.08)
       ..close();
 
+    final needleColor = locked ? AppColors.gold : AppColors.accentSecondary;
     canvas.drawPath(
       northHalf,
-      Paint()..color = AppColors.accentSecondary.withValues(alpha: needleAlpha),
+      Paint()..color = needleColor.withValues(alpha: needleAlpha),
     );
     canvas.drawPath(
       southHalf,
       Paint()..color = AppColors.sage.withValues(alpha: needleAlpha * 0.8),
     );
-    canvas.drawCircle(Offset.zero, 5, Paint()..color = AppColors.ink);
+    canvas.drawCircle(Offset.zero, 3.5, Paint()..color = AppColors.ink);
     canvas.restore();
   }
 
   @override
   bool shouldRepaint(covariant CompassFacePainter oldDelegate) =>
       oldDelegate.rotationDegrees != rotationDegrees ||
-      oldDelegate.needleAlpha != needleAlpha;
+      oldDelegate.needleAlpha != needleAlpha ||
+      oldDelegate.locked != locked;
 }

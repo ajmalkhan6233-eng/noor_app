@@ -16,8 +16,10 @@
 // underlying accuracy classification jittered near its threshold.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/angle_math.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import 'compass_face_painter.dart';
 
@@ -26,41 +28,66 @@ class QiblaNeedle extends StatefulWidget {
     super.key,
     required this.rotationDegrees,
     required this.dimmed,
+    this.locked = false,
   });
 
   final double rotationDegrees;
   final bool dimmed;
 
+  /// True when the device is currently facing the qibla within
+  /// [kQiblaLockThresholdDegrees] — drives the needle's gold "aligned"
+  /// color instead of the usual cyan.
+  final bool locked;
+
   @override
   State<QiblaNeedle> createState() => _QiblaNeedleState();
 }
 
-class _QiblaNeedleState extends State<QiblaNeedle> with SingleTickerProviderStateMixin {
+class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin {
   static const _trustworthyAlpha = 1.0;
   static const _dimmedAlpha = 0.35;
 
-  late final AnimationController _controller;
+  // Raw compass readings arrive noisy — applying them straight to the
+  // painter's rotation snapped the needle frame to frame, which reads
+  // as a flicker rather than a smooth swing. Easing the *displayed*
+  // angle toward the raw target each frame (shortest way around the
+  // circle) removes that without adding perceptible lag.
+  static const _smoothingFactor = 0.18;
+
+  late final AnimationController _dimController;
+  late final Ticker _smoothingTicker;
+  late double _displayedRotation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _displayedRotation = widget.rotationDegrees;
+    _dimController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
       value: widget.dimmed ? 0 : 1,
     );
+    _smoothingTicker = createTicker(_onTick)..start();
+  }
+
+  void _onTick(Duration _) {
+    final next = AngleMath.smooth(_displayedRotation, widget.rotationDegrees, _smoothingFactor);
+    if (next == _displayedRotation) return;
+    setState(() => _displayedRotation = next);
   }
 
   @override
   void didUpdateWidget(QiblaNeedle oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.dimmed == oldWidget.dimmed) return;
-    widget.dimmed ? _controller.reverse() : _controller.forward();
+    if (widget.dimmed != oldWidget.dimmed) {
+      widget.dimmed ? _dimController.reverse() : _dimController.forward();
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _smoothingTicker.dispose();
+    _dimController.dispose();
     super.dispose();
   }
 
@@ -69,7 +96,8 @@ class _QiblaNeedleState extends State<QiblaNeedle> with SingleTickerProviderStat
     final label =
         '${AppLocalizations.of(context)!.qiblaNeedleSemanticLabel}: '
         '${widget.rotationDegrees.round()} degrees from facing direction'
-        '${widget.dimmed ? ', low confidence' : ''}';
+        '${widget.dimmed ? ', low confidence' : ''}'
+        '${widget.locked ? ', aligned with qibla' : ''}';
 
     return Semantics(
       label: label,
@@ -79,23 +107,37 @@ class _QiblaNeedleState extends State<QiblaNeedle> with SingleTickerProviderStat
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Container(
-              decoration: const BoxDecoration(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.card,
                 border: Border.fromBorderSide(
-                  BorderSide(color: AppColors.hairline, width: 1.5),
+                  BorderSide(
+                    color: widget.locked ? AppColors.gold : AppColors.hairline,
+                    width: 1.5,
+                  ),
                 ),
+                boxShadow: widget.locked
+                    ? [
+                        BoxShadow(
+                          color: AppColors.gold.withValues(alpha: 0.45),
+                          blurRadius: 24,
+                          spreadRadius: 2,
+                        ),
+                      ]
+                    : const [],
               ),
             ),
             AnimatedBuilder(
-              animation: _controller,
+              animation: _dimController,
               builder: (context, _) => CustomPaint(
                 size: const Size(272, 272),
                 painter: CompassFacePainter(
-                  rotationDegrees: widget.rotationDegrees,
+                  rotationDegrees: _displayedRotation,
                   needleAlpha: _dimmedAlpha +
-                      (_trustworthyAlpha - _dimmedAlpha) * _controller.value,
+                      (_trustworthyAlpha - _dimmedAlpha) * _dimController.value,
+                  locked: widget.locked,
                 ),
               ),
             ),

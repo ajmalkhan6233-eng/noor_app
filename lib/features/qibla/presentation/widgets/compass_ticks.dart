@@ -25,7 +25,7 @@ void paintCompassTicksAndLabels(
       center + direction * (faceRadius * 0.95),
       Paint()
         ..color = Colors.white.withValues(alpha: 0.75)
-        ..strokeWidth = deg % 90 == 0 ? 2.5 : 1.2,
+        ..strokeWidth = deg % 90 == 0 ? 1.5 : 0.75,
     );
   }
   const labels = ['N', 'E', 'S', 'W'];

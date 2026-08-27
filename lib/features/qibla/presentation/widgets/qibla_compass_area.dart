@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/effects/particle_burst.dart';
+import '../../../../core/haptics/haptic_service.dart';
 import '../../../../core/presentation/widgets/draggable_floating.dart';
 import '../../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../../core/sensors/compass_reading.dart';
@@ -31,6 +32,8 @@ class QiblaCompassArea extends StatefulWidget {
 }
 
 class _QiblaCompassAreaState extends State<QiblaCompassArea> {
+  static const _haptics = HapticService();
+
   @override
   void didUpdateWidget(QiblaCompassArea oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -38,6 +41,7 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
       // Smaller, calmer than the tasbih milestone burst — a quiet
       // confirmation, not a celebration.
       ParticleBurst.play(context, intensity: 0.35);
+      _haptics.tap();
     }
   }
 
@@ -104,6 +108,7 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
       child: QiblaNeedle(
         rotationDegrees: rotation,
         dimmed: !trustworthy,
+        locked: state.isLocked,
       ),
     );
   }
