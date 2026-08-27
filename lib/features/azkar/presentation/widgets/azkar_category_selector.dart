@@ -50,16 +50,22 @@ class AzkarCategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Scrollable, not a plain Column: 11 categories (grew from fewer
+    // when "Visiting the Sick" split out of "illness") no longer fit
+    // every device's available height under the Expanded above it —
+    // confirmed live as a ~48px bottom RenderFlex overflow.
     return AppCard(
       padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          for (final category in AzkarCategory.values) ...[
-            _row(context, category),
-            if (category != AzkarCategory.values.last)
-              const Divider(color: AppColors.hairline, height: 1),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            for (final category in AzkarCategory.values) ...[
+              _row(context, category),
+              if (category != AzkarCategory.values.last)
+                const Divider(color: AppColors.hairline, height: 1),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
