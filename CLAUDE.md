@@ -1,5 +1,53 @@
 # noor — Claude Code Project Directive
 
+## Authoritative Corrected Status — 2026-08-29
+
+The following status supersedes earlier historical checklists. Items in
+the confirmed list are complete and must not be rebuilt. The open list
+is the only active work list.
+
+### Confirmed Done
+
+- Splash sequence: particles, Bismillah, and NOOR reveal
+- Dawn/Nebula theme toggle, including Follow system
+- Custom navigation and feature icon set
+- Dark-mode text contrast fix
+- Qibla flicker source-level fix
+- Fresh-install location prompt: one-time and non-blocking
+- Sunnah fasting card on Home
+- Battery optimization in Settings, intentionally not onboarding
+- Manual per-prayer time offsets
+- Religious-content disclaimer on About
+- Feedback/report button in Settings
+- Exact-position Quran bookmark
+- Five selectable Adhan reciters through Settings, previews, and notifications
+- Quran recitation audio for bundled Juz Amma
+- Database migration through schema version 9, tested
+- Amiri font label removed from About
+- About page mission statement
+- Release signing keystore and Gradle selection
+- Local AAB build
+
+### Genuinely Open
+
+1. Launcher icon: replace the default Flutter logo
+2. Vesak holiday date: resolve the conflicting 2026 source claim
+3. Complete the Sri Lanka 2026 holiday dataset from the official gazette
+4. CI pipeline: publish AAB instead of APK
+5. Host the privacy policy publicly and link it in-app
+6. Run a real app-performance profiling pass
+7. Investigate the reported Home decoration above Dhuhr on a live device
+8. Fix Quran play-button visibility
+9. Check for any default Flutter icon elsewhere in-app
+10. Redesign Monthly Timetable as a clean table
+11. Add and verify the parallax scroll effect
+
+Items 1, 2, 3, 4, 5, 8, 10, and 11 were implemented in individual
+commits during the 2026-08-29 correction pass. Item 2 follows the
+official Ministry-linked schedule: Vesak is 1 May and Adhi Poson is
+30 May; do not relabel Adhi Poson as Adhi Vesak. Items 6, 7, and 9
+remain verification items where runtime evidence is still required.
+
 ## Stack
 Flutter (Dart), native Android. NOT web, NOT React, NOT Three.js/WebGL —
 ignore any prior doc that says otherwise; this app has no JS runtime.
