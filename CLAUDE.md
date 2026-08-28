@@ -1093,3 +1093,113 @@ This closes out the "tap-feedback micro-animations, screen-transition
 polish" queued item. **Not yet confirmed live**: that the fixed
 locale-selector button actually feels right on a real screen — like
 everything else in this section, pending phone reconnection.
+
+## Session — 2026-08-28, working autonomously (phone disconnected most of this session)
+
+Working through a large multi-message backlog independently per direct
+instruction: commit each item as finished, log here after every commit,
+don't wait for input. Check here first for current status.
+
+### Real Light theme built and shipped (commit `fbd744c`)
+The Dark/Light/System toggle in Settings was already correctly wired
+(a prior fix) but `buildLightTheme()` was a stub returning the exact
+same dark ThemeData as `buildDarkTheme()` — flipping the toggle changed
+nothing visible. Built a real `AppColorTokens` ThemeExtension
+architecture: `cosmic` (today's values, copied verbatim, pixel-
+identical to before) and a new `light` palette, with ~104 files
+migrated off static `AppColors` onto `context.colors` so both themes
+share one real token system and repaint live app-wide on toggle.
+Light gets pill-shaped buttons and a subtler (not disabled) particle
+background. Qibla's compass painters and the splash sequence stay
+frozen on Cosmic colors deliberately (fragile live-tuned code, and
+splash is a brand moment not a themed screen). Live-verified on
+device: Dark -> Light -> Dark re-themes instantly, Dark unchanged.
+
+### Theme labels renamed, contrast fix, battery/privacy-policy UI cleanup, About screen wording (commit `a2185c7`)
+- Dark/Light labels -> Nebula/Dawn (display label only).
+- Cosmic's secondary text color (`sage`) bumped `#8A93A3` ->
+  `#AAB3C2` — direct feedback it read too low-contrast. Light theme
+  untouched at this point (see below — revisited same session).
+- Battery optimization section: the "exempt from battery
+  optimization" confirmation text no longer shows once granted
+  (renders nothing, including its own header) — the exemption request
+  flow itself is unaffected.
+- About screen: mission text replaced with the exact requested
+  wording; removed the "Amiri" font-credit entry; Privacy Policy link
+  hidden (method kept, not deleted). Tanzil/tanzil.net attribution in
+  AboutSourcesCard deliberately left untouched.
+- Send Feedback screen intro softened to a warmer invitation.
+- **Still needs the user's own decision, not mine**: open-source
+  licence attributions for bundled fonts/libraries, before the About
+  page's licence section can be called finished.
+
+### Qibla — real bug reproduced live, root cause still open
+Opened Qibla, captured rapid screenshot sequences: compass genuinely
+blanks to near-nothing (~70% of frames, only a faint Kaaba glow
+survives) then fully renders on others. Confirmed this is the CURRENT
+build (`79ac304`, the "simplified 2D" commit), not a stale install —
+the glitch is real and still present in the latest code, not fixed by
+that commit. Tested one concrete hypothesis live: disabled Impeller
+(Flutter's newer Android renderer) via
+`io.flutter.embedding.android.EnableImpeller=false` in
+AndroidManifest.xml, rebuilt, reinstalled, re-tested — **no
+difference, ruled out, reverted**. logcat during the glitch shows no
+Dart exception at all, only native `HwcComposer: presentOrValidateDisplay presentFence:-1`
+noise (a device/compositor-timing signal, not a Flutter-side error).
+**Not resolved.** Next real step once the phone's back: a
+`screenrecord` capture (rules out screencap-IPC racing the compositor
+as an alternate explanation for what screenshots show) — queued, not
+yet tried.
+
+### Zakat: math verified correct, icon already fixed (no code changes needed)
+- Nisab constants (87.48g gold, 612.36g silver, 2.5% rate) match fiqh
+  reference values exactly; "lower of the two metals" rule correctly
+  applied; existing test suite independently covers edge cases
+  (exactly-at-nisab, one cent under, liabilities exceeding assets).
+- Zakat's More-screen icon is already a custom gold balance-scale
+  (`ZakatIconPainter`), not a plain circle — live-confirmed on device
+  this session. Whatever "still a plain circle" report prompted this
+  item is stale relative to the current build.
+
+### Confirmed already live, no changes needed
+- Dua library (Evening/After Prayer/Sleep/Travel/Child Protection/
+  Illness/Distress/Debt/Visiting the Grave/Visiting the Sick) — all
+  present, live-screenshotted this session.
+- Custom bottom-nav + More-screen icon redesign — live-confirmed
+  rendering correctly in both themes.
+- Quran recitation audio (Dhikr Al-Huda, Juz Amma only, CC BY 4.0) —
+  already wired to the play button on `surah_reader_screen.dart`,
+  confirmed in source, nothing to do.
+- Exact-position Quran bookmarking — already built:
+  `SurahReaderScreen`/`FullQuranScreen` both track precise ayah-level
+  reading position (`ReadingPositionTracker` + `markLastRead`) and
+  auto-scroll back to exactly where the reader stopped, plus a
+  separate manual per-ayah bookmark icon. One live discrepancy
+  flagged: `AyahTile` renders translation text whenever present in
+  the data (most ayahs have one, from an earlier backfill) — if
+  literal Arabic-only is wanted, that's a small separate change, not
+  yet made.
+
+### Selectable Adhan sound — built, wired end-to-end (commit `7ed6d08`)
+4 new options added on top of the existing Public Domain default
+(`doha`) — see assets/audio/adhan/README.md for full per-file
+licence/provenance detail and the one flagged, unresolved content-
+appropriateness concern (Hamtramck: real muezzin, no direct consent
+to this reuse, licence itself is clean). Wired all the way through:
+Settings picker + required attribution line, in-app preview, Test
+Adhan section, AND real scheduled notifications (new per-reciter
+Android channel ids, since a channel's sound is immutable after
+creation — `doha` keeps its original channel ids unchanged). Schema
+v8 -> v9. This reverses the 2026-08-23 "ship with the default reciter
+only" decision — noted for the record per direct re-request, not
+silently overridden. **Not yet live-verified** — phone disconnected
+for this whole segment; verify preview + Test Adhan + a real
+non-default scheduled notification once it's back.
+
+### Next up (in progress when this was written)
+- Light theme text contrast pass (separate from the Cosmic sage fix
+  above — direct follow-up feedback: light theme confirmed looking
+  good, wants a small further contrast bump for readability).
+- Re-verify everything not-yet-live-verified above once the phone
+  reconnects, in this order: Light theme contrast, Qibla screenrecord
+  capture, Adhan reciter selection (preview/test/real notification).
