@@ -12,13 +12,15 @@ void main() {
     expect(sriLankaHolidaysOn(DateTime(2030, 1, 1)), isNotEmpty);
   });
 
-  test('Vesak Full Moon Poya Day is only asserted for 2026', () {
-    // 2026-08-26 correction: moved from 30 May to 1 May per two
-    // independent sources agreeing it coincides with May Day this
-    // year — see the RESOLVED note in sri_lanka_holiday.dart.
+  test('Vesak and Adhi Poson remain distinct official dates', () {
     final vesak2026 = sriLankaHolidaysOn(DateTime(2026, 5, 1));
     expect(vesak2026, isNotEmpty);
     expect(vesak2026.any((h) => h.isPoya), isTrue);
+    expect(
+      sriLankaHolidaysOn(DateTime(2026, 5, 30))
+          .any((h) => h.name == 'Adhi Poson Full Moon Poya Day'),
+      isTrue,
+    );
 
     // A different year's May 1 isn't claimed as Vesak — Poya dates
     // are lunar and shift yearly; this app doesn't guess them. (May
@@ -28,6 +30,13 @@ void main() {
       sriLankaHolidaysOn(DateTime(2027, 5, 1)).any((h) => h.isPoya),
       isFalse,
     );
+  });
+
+  test('late-year official holidays are included', () {
+    expect(sriLankaHolidaysOn(DateTime(2026, 10, 25)).single.isPoya, isTrue);
+    expect(sriLankaHolidaysOn(DateTime(2026, 11, 8)).single.name, 'Deepavali Festival Day');
+    expect(sriLankaHolidaysOn(DateTime(2026, 11, 24)).single.isPoya, isTrue);
+    expect(sriLankaHolidaysOn(DateTime(2026, 12, 23)).single.isPoya, isTrue);
   });
 
   test('an ordinary day has no holidays', () {
