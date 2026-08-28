@@ -80,7 +80,11 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     paper: Color(0xFFF7F5F1),
     card: Color(0xFFFFFFFF),
     ink: Color(0xFF1B1B1F),
-    sage: Color(0xFF6B6F76),
+    // Bumped from 0x6B6F76 (direct feedback, 2026-08-28, after
+    // confirming Light looked good overall: a subtle further contrast
+    // increase for readability) — darker, still a neutral gray, not a
+    // big jump.
+    sage: Color(0xFF54585F),
     hairline: Color(0x1A1B1B1F),
     goldBorder: Color(0x40FFB703),
     gold: Color(0xFFFFB703),
