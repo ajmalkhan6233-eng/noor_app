@@ -8,9 +8,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
 import '../../constants/app_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class ReligiousContentQuietNote extends StatelessWidget {
   const ReligiousContentQuietNote({super.key});
@@ -22,7 +22,7 @@ class ReligiousContentQuietNote extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         l10n.religiousContentQuietNote,
-        style: AppTypography.caption.copyWith(color: AppColors.sage),
+        style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.sage),
       ),
     );
   }

@@ -18,7 +18,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 
 void paintCompassTicksAndLabels(
@@ -54,7 +54,7 @@ void _paintRosette(Canvas canvas, Offset center, double faceRadius) {
     Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = AppColors.accentSecondary.withValues(alpha: 0.18),
+      ..color = AppColorTokens.cosmic.accentSecondary.withValues(alpha: 0.18),
   );
 }
 
@@ -77,7 +77,7 @@ void _paintTickRing(Canvas canvas, Offset center, double faceRadius) {
       center + direction * (faceRadius * 0.95),
       Paint()
         ..color = isCardinal
-            ? AppColors.gold.withValues(alpha: 0.9)
+            ? AppColorTokens.cosmic.gold.withValues(alpha: 0.9)
             : Colors.white.withValues(alpha: isMajor ? 0.75 : 0.4)
         ..strokeWidth = isCardinal
             ? 2
@@ -91,7 +91,7 @@ void _paintTickRing(Canvas canvas, Offset center, double faceRadius) {
     // own N/E/S/W letters instead.
     if (isMajor && !isCardinal) {
       final numeralPos = center + direction * (faceRadius * 0.68);
-      _drawText(canvas, numeralPos, '$deg', size: 9, color: AppColors.sage);
+      _drawText(canvas, numeralPos, '$deg', size: 9, color: AppColorTokens.cosmic.sage);
     }
   }
 }
@@ -107,7 +107,7 @@ void _paintCardinalLabels(Canvas canvas, Offset center, double faceRadius) {
       pos,
       labels[i],
       size: i == 0 ? 16 : 14,
-      color: i == 0 ? AppColors.gold : AppColors.ink,
+      color: i == 0 ? AppColorTokens.cosmic.gold : AppColorTokens.cosmic.ink,
       weight: i == 0 ? FontWeight.w700 : FontWeight.w600,
     );
   }
@@ -117,7 +117,7 @@ void _paintCardinalLabels(Canvas canvas, Offset center, double faceRadius) {
     final angle = (45 + i * 90) * math.pi / 180;
     final pos =
         center + Offset(math.sin(angle), -math.cos(angle)) * (faceRadius * 0.66);
-    _drawText(canvas, pos, intercardinals[i], size: 9, color: AppColors.sage);
+    _drawText(canvas, pos, intercardinals[i], size: 9, color: AppColorTokens.cosmic.sage);
   }
 }
 

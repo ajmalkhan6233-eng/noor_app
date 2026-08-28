@@ -19,6 +19,7 @@ import 'widgets/high_latitude_notice.dart';
 import 'widgets/prayer_loading_skeleton.dart';
 import 'widgets/prayer_times_list.dart';
 import 'widgets/suhoor_iftar_row.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 /// Prayer-times screen. The astrolabe ring/countdown now leads Home
 /// instead (2026-08-24 live-device review), so this tab's own job is
@@ -100,7 +101,7 @@ class PrayerTimesScreen extends StatelessWidget {
         label: AppLocalizations.of(
           context,
         )!.activeCalculationSettingsLabel(text),
-        child: Text(text, style: AppTypography.caption),
+        child: Text(text, style: AppTypography.caption(context.colors.sage)),
       ),
     );
   }
@@ -112,7 +113,7 @@ class PrayerTimesScreen extends StatelessWidget {
       null => Center(
         child: Text(
           AppLocalizations.of(context)!.enterLocationPrompt,
-          style: AppTypography.caption,
+          style: AppTypography.caption(context.colors.sage),
         ),
       ),
       HighLatitudeUnresolved() => const HighLatitudeNotice(),

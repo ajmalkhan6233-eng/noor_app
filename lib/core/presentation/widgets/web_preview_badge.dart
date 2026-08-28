@@ -10,7 +10,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
+import '../../constants/app_color_tokens.dart';
 
 class WebPreviewBadge extends StatelessWidget {
   const WebPreviewBadge({super.key});
@@ -22,17 +22,17 @@ class WebPreviewBadge extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.goldBorder,
+        color: context.colors.goldBorder,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.gold),
+        border: Border.all(color: context.colors.gold),
       ),
-      child: const Text(
+      child: Text(
         'WEB PREVIEW — not final build',
         style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
-          color: AppColors.gold,
+          color: context.colors.gold,
         ),
       ),
     );

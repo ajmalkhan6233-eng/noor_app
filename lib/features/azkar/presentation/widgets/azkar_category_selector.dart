@@ -9,12 +9,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_category.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../azkar_category_screen.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 extension _AzkarCategoryIcon on AzkarCategory {
   IconData get icon {
@@ -62,7 +62,7 @@ class AzkarCategorySelector extends StatelessWidget {
             for (final category in AzkarCategory.values) ...[
               _row(context, category),
               if (category != AzkarCategory.values.last)
-                const Divider(color: AppColors.hairline, height: 1),
+                Divider(color: context.colors.hairline, height: 1),
             ],
           ],
         ),
@@ -89,12 +89,12 @@ class AzkarCategorySelector extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            Icon(category.icon, color: AppColors.gold, size: 20),
+            Icon(category.icon, color: context.colors.gold, size: 20),
             const SizedBox(width: 14),
             Expanded(
-              child: Text(category.label, style: const TextStyle(color: AppColors.ink)),
+              child: Text(category.label, style: TextStyle(color: context.colors.ink)),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.sage, size: 20),
+            Icon(Icons.chevron_right, color: context.colors.sage, size: 20),
           ],
         ),
       ),

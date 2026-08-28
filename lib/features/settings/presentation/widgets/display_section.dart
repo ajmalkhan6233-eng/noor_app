@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_theme_controller.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/app_theme_mode.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// Theme, Quran text size (Arabic + translation), and Hijri calendar offset.
 class DisplaySection extends StatelessWidget {
@@ -29,7 +29,7 @@ class DisplaySection extends StatelessWidget {
               value: '${settings.arabicFontScale.toStringAsFixed(2)}x',
               slider: true,
               child: Slider(
-                activeColor: AppColors.gold,
+                activeColor: context.colors.gold,
                 min: 0.75,
                 max: 2.0,
                 divisions: 25,
@@ -42,9 +42,9 @@ class DisplaySection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Hijri offset',
-                  style: TextStyle(color: AppColors.ink),
+                  style: TextStyle(color: context.colors.ink),
                 ),
                 Row(
                   children: [
@@ -53,14 +53,14 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays - 1),
-                      child: const Icon(Icons.remove, color: AppColors.gold),
+                      child: Icon(Icons.remove, color: context.colors.gold),
                     ),
                     SizedBox(
                       width: 32,
                       child: Text(
                         '${settings.hijriOffsetDays}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.sage),
+                        style: TextStyle(color: context.colors.sage),
                       ),
                     ),
                     SemanticButton(
@@ -68,7 +68,7 @@ class DisplaySection extends StatelessWidget {
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays + 1),
-                      child: const Icon(Icons.add, color: AppColors.gold),
+                      child: Icon(Icons.add, color: context.colors.gold),
                     ),
                   ],
                 ),
@@ -102,16 +102,16 @@ class DisplaySection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: mode == selected ? AppColors.gold : Colors.transparent,
+                    color: mode == selected ? context.colors.gold : Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: mode == selected ? AppColors.gold : AppColors.hairline,
+                      color: mode == selected ? context.colors.gold : context.colors.hairline,
                     ),
                   ),
                   child: Text(
                     mode.label,
                     style: TextStyle(
-                      color: mode == selected ? AppColors.paper : AppColors.ink,
+                      color: mode == selected ? context.colors.paper : context.colors.ink,
                       fontWeight: mode == selected ? FontWeight.w700 : FontWeight.w400,
                       fontSize: 13,
                     ),

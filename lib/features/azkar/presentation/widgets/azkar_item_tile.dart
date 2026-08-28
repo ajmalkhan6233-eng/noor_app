@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
@@ -11,6 +10,7 @@ import '../../data/azkar_item.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../../logic/azkar_cubit/azkar_state.dart';
 import 'azkar_counter_button.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// One dhikr with a tap-to-count repetition counter. Text size follows
 /// [fontScale] from Settings — previously hardcoded, so the Quran
@@ -43,7 +43,7 @@ class AzkarItemTile extends StatelessWidget {
                     onTap: () => context.read<AzkarCubit>().toggleBookmark(item.id),
                     child: Icon(
                       bookmarked ? Icons.bookmark : Icons.bookmark_border,
-                      color: AppColors.gold,
+                      color: context.colors.gold,
                       size: 20,
                     ),
                   ),
@@ -57,7 +57,7 @@ class AzkarItemTile extends StatelessWidget {
                   item.arabicText,
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.right,
-                  style: AppTypography.arabic.copyWith(
+                  style: AppTypography.arabic(context.colors.ink).copyWith(
                     fontSize: 26 * fontScale,
                     height: 1.7,
                   ),
@@ -67,7 +67,7 @@ class AzkarItemTile extends StatelessWidget {
                   Text(
                     item.transliteration!,
                     style: TextStyle(
-                      color: AppColors.sage,
+                      color: context.colors.sage,
                       fontStyle: FontStyle.italic,
                       fontSize: 13 * fontScale,
                     ),
@@ -77,7 +77,7 @@ class AzkarItemTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     item.translation!,
-                    style: TextStyle(color: AppColors.sage, fontSize: 12 * fontScale),
+                    style: TextStyle(color: context.colors.sage, fontSize: 12 * fontScale),
                   ),
                 ],
                 const SizedBox(height: 12),

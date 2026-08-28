@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/quran_surah.dart';
@@ -33,8 +33,8 @@ class SurahListTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.hairline)),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: context.colors.hairline)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class SurahListTile extends StatelessWidget {
               width: 28,
               child: Text(
                 '${surah.id}',
-                style: const TextStyle(color: AppColors.sage),
+                style: TextStyle(color: context.colors.sage),
               ),
             ),
             const SizedBox(width: 12),
@@ -53,11 +53,11 @@ class SurahListTile extends StatelessWidget {
                 children: [
                   Text(
                     surah.displayName,
-                    style: const TextStyle(color: AppColors.ink),
+                    style: TextStyle(color: context.colors.ink),
                   ),
                   if (subtitle.isNotEmpty) ...[
                     const SizedBox(height: 2),
-                    Text(subtitle, style: AppTypography.caption),
+                    Text(subtitle, style: AppTypography.caption(context.colors.sage)),
                   ],
                 ],
               ),
@@ -67,13 +67,13 @@ class SurahListTile extends StatelessWidget {
               Text(
                 surah.nameArabic!,
                 textDirection: TextDirection.rtl,
-                style: AppTypography.arabic.copyWith(fontSize: 18, height: 1.2),
+                style: AppTypography.arabic(context.colors.ink).copyWith(fontSize: 18, height: 1.2),
               ),
             ],
             const SizedBox(width: 12),
             Text(
               '${surah.ayahCount}',
-              style: const TextStyle(color: AppColors.sage),
+              style: TextStyle(color: context.colors.sage),
             ),
           ],
         ),

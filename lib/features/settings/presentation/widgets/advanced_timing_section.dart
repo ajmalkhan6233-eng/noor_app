@@ -10,11 +10,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import 'iqamath_offset_section.dart';
 import 'prayer_adjustments_section.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class AdvancedTimingSection extends StatefulWidget {
   const AdvancedTimingSection({super.key});
@@ -41,10 +41,10 @@ class _AdvancedTimingSectionState extends State<AdvancedTimingSection> {
           onTap: () => setState(() => _expanded = !_expanded),
           child: Row(
             children: [
-              const Expanded(child: Text('Advanced timing', style: TextStyle(color: AppColors.ink))),
+              Expanded(child: Text('Advanced timing', style: TextStyle(color: context.colors.ink))),
               Icon(
                 _expanded ? Icons.expand_less : Icons.expand_more,
-                color: AppColors.sage,
+                color: context.colors.sage,
               ),
             ],
           ),

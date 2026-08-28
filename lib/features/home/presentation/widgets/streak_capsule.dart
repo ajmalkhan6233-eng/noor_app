@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/presentation/widgets/kinetic_digits.dart';
@@ -32,11 +32,11 @@ class StreakCapsule extends StatelessWidget {
 
     return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      borderColor: AppColors.gold,
-      glowColor: AppColors.gold,
+      borderColor: context.colors.gold,
+      glowColor: context.colors.gold,
       child: Row(
         children: [
-          const Icon(Icons.local_fire_department, color: AppColors.gold, size: 28),
+          Icon(Icons.local_fire_department, color: context.colors.gold, size: 28),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -45,8 +45,8 @@ class StreakCapsule extends StatelessWidget {
                 KineticDigits(
                   text: l10n.dayStreakBadgeLabel(streakDays),
                   semanticsLabel: l10n.dayStreakBadgeLabel(streakDays),
-                  style: const TextStyle(
-                    color: AppColors.gold,
+                  style: TextStyle(
+                    color: context.colors.gold,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
                     fontSize: 13,
@@ -55,7 +55,7 @@ class StreakCapsule extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   l10n.goalsProgressLabel(completedCount, total, percent),
-                  style: AppTypography.caption,
+                  style: AppTypography.caption(context.colors.sage),
                 ),
               ],
             ),

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../logic/tasbih_cubit/tasbih_cubit.dart';
@@ -34,7 +34,7 @@ class _TasbihView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(title: Text(l10n.tasbihScreenTitle)),
       body: Column(
         children: [
@@ -71,8 +71,8 @@ class _TasbihView extends StatelessWidget {
                           ),
                           child: Text(
                             l10n.resetLabel,
-                            style: const TextStyle(
-                              color: AppColors.gold,
+                            style: TextStyle(
+                              color: context.colors.gold,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),

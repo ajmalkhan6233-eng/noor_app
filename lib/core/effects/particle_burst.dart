@@ -9,7 +9,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
+import '../constants/app_color_tokens.dart';
 import 'particle_burst_painter.dart';
 import '../presentation/motion/motion.dart';
 
@@ -23,7 +23,7 @@ abstract final class ParticleBurst {
     BuildContext context, {
     double intensity = 1.0,
     Offset? anchor,
-    Color color = AppColors.gold,
+    Color color = const Color(0xFFFFB703),
   }) {
     if (Motion.reduced(context)) return;
 

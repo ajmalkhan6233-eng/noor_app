@@ -20,7 +20,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../l10n/generated/app_localizations.dart';
@@ -82,27 +82,27 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
 
         return AppCard(
           padding: const EdgeInsets.all(20),
-          borderColor: AppColors.goldBorder,
+          borderColor: context.colors.goldBorder,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(l10n.ayahOfTheDayTitle, style: AppTypography.sectionHeader),
+              Text(l10n.ayahOfTheDayTitle, style: AppTypography.sectionHeader(context.colors.sage)),
               const SizedBox(height: 12),
               if (stillLoading)
-                const Center(
+                Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
                     child: SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: context.colors.gold),
                     ),
                   ),
                 )
               else if (ayah == null)
                 Text(
                   l10n.guideTextNotLoadedMessage,
-                  style: const TextStyle(color: AppColors.sage, fontStyle: FontStyle.italic),
+                  style: TextStyle(color: context.colors.sage, fontStyle: FontStyle.italic),
                 )
               else ...[
                 _reference(ayah, surahs),
@@ -111,8 +111,8 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
                   ayah.arabicText,
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.right,
-                  style: AppTypography.arabic.copyWith(
-                    // AppTypography.arabic has no fontSize of its own —
+                  style: AppTypography.arabic(context.colors.ink).copyWith(
+                    // AppTypography.arabic(context.colors.ink) has no fontSize of its own —
                     // it inherits Material's bodyMedium default (14) via
                     // DefaultTextStyle. Multiplying that same base by
                     // fontScale keeps the fontScale==1.0 appearance
@@ -124,8 +124,8 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
                   const SizedBox(height: 8),
                   Text(
                     ayah.translation!,
-                    style: AppTypography.caption.copyWith(
-                      fontSize: (AppTypography.caption.fontSize ?? 12) * fontScale,
+                    style: AppTypography.caption(context.colors.sage).copyWith(
+                      fontSize: (AppTypography.caption(context.colors.sage).fontSize ?? 12) * fontScale,
                     ),
                   ),
                 ],
@@ -143,7 +143,7 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
     final name = surah?.nameEnglish ?? surah?.nameTranslit ?? 'Surah ${ayah.surahId}';
     return Text(
       '$name ${ayah.surahId}:${ayah.ayahNumber}',
-      style: const TextStyle(color: AppColors.sage, fontSize: 12, letterSpacing: 0.4),
+      style: TextStyle(color: context.colors.sage, fontSize: 12, letterSpacing: 0.4),
     );
   }
 }

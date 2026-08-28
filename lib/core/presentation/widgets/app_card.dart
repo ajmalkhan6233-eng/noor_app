@@ -21,8 +21,8 @@
 // render, not just CI's headless test run.
 
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
-import '../../constants/app_colors.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -36,11 +36,11 @@ class AppCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
 
-  /// Border colour override — defaults to [AppColors.hairline].
+  /// Border colour override — defaults to [context.colors.hairline].
   final Color? borderColor;
 
   /// When set, adds a soft coloured glow behind the card (e.g.
-  /// [AppColors.gold] for a streak capsule, [AppColors.accentSecondary]
+  /// [context.colors.gold] for a streak capsule, [context.colors.accentSecondary]
   /// for a countdown capsule).
   final Color? glowColor;
 
@@ -51,7 +51,7 @@ class AppCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.paper.withValues(alpha: 0.4),
+            color: context.colors.paper.withValues(alpha: 0.4),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -75,18 +75,18 @@ class AppCard extends StatelessWidget {
       // gradient carries no such risk and was verified clean against
       // the full suite this pass).
       child: Material(
-        color: AppColors.card,
+        color: context.colors.card,
         borderRadius: BorderRadius.circular(20),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: borderColor ?? AppColors.hairline),
+            border: Border.all(color: borderColor ?? context.colors.hairline),
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color.lerp(AppColors.card, AppColors.ink, 0.04)!,
-                AppColors.card,
+                Color.lerp(context.colors.card, context.colors.ink, 0.04)!,
+                context.colors.card,
               ],
             ),
           ),

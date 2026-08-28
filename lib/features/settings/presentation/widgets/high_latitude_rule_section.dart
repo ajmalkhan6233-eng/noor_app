@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../prayer_times/data/prayer_high_latitude_rule.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
@@ -23,8 +23,8 @@ class HighLatitudeRuleSection extends StatelessWidget {
           child: DropdownButton<PrayerHighLatitudeRule>(
             isExpanded: true,
             value: rule,
-            dropdownColor: AppColors.card,
-            style: const TextStyle(color: AppColors.ink),
+            dropdownColor: context.colors.card,
+            style: TextStyle(color: context.colors.ink),
             items: [
               for (final option in PrayerHighLatitudeRule.values)
                 DropdownMenuItem(value: option, child: Text(option.label)),

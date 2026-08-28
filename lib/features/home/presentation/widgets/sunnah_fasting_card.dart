@@ -8,11 +8,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 bool isSunnahFastingWeekday(DateTime gregorianDate) {
   return gregorianDate.weekday == DateTime.monday ||
@@ -46,13 +46,13 @@ class SunnahFastingCard extends StatelessWidget {
       label: '${l10n.sunnahFastingCardTitle}. $reason',
       excludeSemantics: true,
       child: AppCard(
-        borderColor: AppColors.goldBorder,
+        borderColor: context.colors.goldBorder,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.sunnahFastingCardTitle, style: AppTypography.sectionHeader),
+            Text(l10n.sunnahFastingCardTitle, style: AppTypography.sectionHeader(context.colors.sage)),
             const SizedBox(height: 8),
-            Text(reason, style: AppTypography.caption),
+            Text(reason, style: AppTypography.caption(context.colors.sage)),
           ],
         ),
       ),

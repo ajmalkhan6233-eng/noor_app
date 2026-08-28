@@ -14,8 +14,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
-import '../../constants/app_colors.dart';
 
 class GlassCard extends StatelessWidget {
   const GlassCard({
@@ -38,9 +38,9 @@ class GlassCard extends StatelessWidget {
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: AppColors.card.withValues(alpha: 0.55),
+            color: context.colors.card.withValues(alpha: 0.55),
             borderRadius: borderRadius,
-            border: Border.all(color: AppColors.hairline, width: 1),
+            border: Border.all(color: context.colors.hairline, width: 1),
           ),
           child: child,
         ),

@@ -9,12 +9,12 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../core/utils/islamic_occasion.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../core/utils/sri_lanka_holiday.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class CalendarDayCell extends StatelessWidget {
   const CalendarDayCell({
@@ -56,17 +56,17 @@ class CalendarDayCell extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          // Today: gold fill (light) so the dark AppColors.paper text
+          // Today: gold fill (light) so the dark context.colors.paper text
           // below stays readable — a solid emerald fill (dark) behind
           // dark text was inverted-contrast, effectively unreadable.
           color: isToday
-              ? AppColors.gold
+              ? context.colors.gold
               : isRamadan
-                  ? AppColors.gold.withValues(alpha: 0.08)
-                  : AppColors.card,
+                  ? context.colors.gold.withValues(alpha: 0.08)
+                  : context.colors.card,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: hasMajorOccasion ? AppColors.gold : AppColors.hairline,
+            color: hasMajorOccasion ? context.colors.gold : context.colors.hairline,
             width: hasMajorOccasion ? 1.5 : 1,
           ),
         ),
@@ -77,14 +77,14 @@ class CalendarDayCell extends StatelessWidget {
             Text(
               '$gregorianDay',
               style: TextStyle(
-                color: isToday ? AppColors.paper : AppColors.ink,
+                color: isToday ? context.colors.paper : context.colors.ink,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
               '${hijri.day}',
-              style: AppTypography.caption.copyWith(
-                color: isToday ? AppColors.paper : AppColors.sage,
+              style: AppTypography.caption(context.colors.sage).copyWith(
+                color: isToday ? context.colors.paper : context.colors.sage,
               ),
             ),
             if (hasMajorOccasion || isWhiteDay || hasHoliday) ...[
@@ -99,11 +99,11 @@ class CalendarDayCell extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: hasMajorOccasion
-                            ? (isToday ? AppColors.paper : AppColors.gold)
+                            ? (isToday ? context.colors.paper : context.colors.gold)
                             : Colors.transparent,
                         border: isWhiteDay && !hasMajorOccasion
                             ? Border.all(
-                                color: isToday ? AppColors.paper : AppColors.gold,
+                                color: isToday ? context.colors.paper : context.colors.gold,
                               )
                             : null,
                       ),
@@ -115,7 +115,7 @@ class CalendarDayCell extends StatelessWidget {
                       height: 6,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isToday ? AppColors.paper : AppColors.accentSecondary,
+                        color: isToday ? context.colors.paper : context.colors.accentSecondary,
                       ),
                     ),
                   ],

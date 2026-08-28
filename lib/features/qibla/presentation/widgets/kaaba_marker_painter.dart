@@ -6,13 +6,13 @@
 // the needle itself, not separate from it"). Now painted at the
 // needle's own tip, inside the same rotated canvas context the needle
 // draws in, so it moves and turns with it. Also switched from a
-// light/near-white cube body (AppColors.ink, which does NOT read as
+// light/near-white cube body (AppColorTokens.cosmic.ink, which does NOT read as
 // black despite the old comment claiming it did) to genuine black, per
 // direct instruction to match the real Kaaba's kiswah color.
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 const _kaabaBlack = Color(0xFF0A0A0A);
 
@@ -35,7 +35,7 @@ void paintKaabaMarker(Canvas canvas, double size, double pulse) {
     pos,
     cubeSize * (0.85 + 0.1 * pulse),
     Paint()
-      ..color = AppColors.gold.withValues(alpha: glowAlpha)
+      ..color = AppColorTokens.cosmic.gold.withValues(alpha: glowAlpha)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
   );
 
@@ -52,7 +52,7 @@ void paintKaabaMarker(Canvas canvas, double size, double pulse) {
     cubeSize,
     cubeSize * 0.16,
   );
-  canvas.drawRect(bandRect, Paint()..color = AppColors.gold);
+  canvas.drawRect(bandRect, Paint()..color = AppColorTokens.cosmic.gold);
 
   // A hairline door accent, off-center, just below the band.
   final doorRect = Rect.fromLTWH(
@@ -61,13 +61,13 @@ void paintKaabaMarker(Canvas canvas, double size, double pulse) {
     cubeSize * 0.16,
     cubeSize * 0.34,
   );
-  canvas.drawRect(doorRect, Paint()..color = AppColors.gold.withValues(alpha: 0.85));
+  canvas.drawRect(doorRect, Paint()..color = AppColorTokens.cosmic.gold.withValues(alpha: 0.85));
 
   canvas.drawRRect(
     cubeRRect,
     Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = AppColors.gold.withValues(alpha: 0.7),
+      ..color = AppColorTokens.cosmic.gold.withValues(alpha: 0.7),
   );
 }

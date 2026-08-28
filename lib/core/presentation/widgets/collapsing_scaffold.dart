@@ -5,8 +5,8 @@
 // tab screen instead of a plain AppBar.
 
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
-import '../../constants/app_colors.dart';
 
 class CollapsingScaffold extends StatelessWidget {
   const CollapsingScaffold({
@@ -31,14 +31,14 @@ class CollapsingScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: transparentBody ? Colors.transparent : AppColors.paper,
+      backgroundColor: transparentBody ? Colors.transparent : context.colors.paper,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar.large(
             title: Text(title),
-            backgroundColor: AppColors.paper,
-            foregroundColor: AppColors.ink,
+            backgroundColor: context.colors.paper,
+            foregroundColor: context.colors.ink,
             surfaceTintColor: Colors.transparent,
             stretch: true,
             pinned: true,

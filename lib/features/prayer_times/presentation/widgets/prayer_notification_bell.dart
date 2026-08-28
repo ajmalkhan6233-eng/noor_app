@@ -7,9 +7,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class PrayerNotificationBell extends StatelessWidget {
   const PrayerNotificationBell({
@@ -35,7 +35,7 @@ class PrayerNotificationBell extends StatelessWidget {
         child: Icon(
           enabled ? Icons.notifications_active : Icons.notifications_off_outlined,
           size: 24,
-          color: enabled ? AppColors.gold : AppColors.sage,
+          color: enabled ? context.colors.gold : context.colors.sage,
         ),
       ),
     );

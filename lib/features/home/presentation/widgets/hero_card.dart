@@ -13,12 +13,12 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/allah_calligraphy.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class HeroCard extends StatefulWidget {
   const HeroCard({super.key, required this.hijriOffsetDays});
@@ -118,11 +118,11 @@ class _HeroCardState extends State<HeroCard>
             padding: const EdgeInsets.only(bottom: 6),
             child: Text(
               l10n.assalamuAlaikumGreeting,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: AppTypography.displayFamily,
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
-                color: AppColors.ink,
+                color: context.colors.ink,
               ),
             ),
           ),
@@ -132,25 +132,25 @@ class _HeroCardState extends State<HeroCard>
         // whenever the Hijri pill was wide enough to squeeze its Row
         // sibling below one line's worth of space). Each date now gets
         // its own full-width line so neither ever truncates the other.
-        Text(dateSubtitle, style: AppTypography.caption),
+        Text(dateSubtitle, style: AppTypography.caption(context.colors.sage)),
         const SizedBox(height: 6),
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.paper,
+              color: context.colors.paper,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.hairline),
+              border: Border.all(color: context.colors.hairline),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.brightness_2_outlined,
-                    color: AppColors.gold, size: 12),
+                Icon(Icons.brightness_2_outlined,
+                    color: context.colors.gold, size: 12),
                 const SizedBox(width: 4),
                 Text(hijri.formatted,
-                    style: AppTypography.caption.copyWith(fontSize: 11)),
+                    style: AppTypography.caption(context.colors.sage).copyWith(fontSize: 11)),
               ],
             ),
           ),

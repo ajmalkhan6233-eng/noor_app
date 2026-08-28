@@ -8,11 +8,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/adhan_audio_player.dart';
 import '../../logic/adhan_preview_cubit.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class AdhanPreviewButton extends StatelessWidget {
   const AdhanPreviewButton({super.key, required this.prayerName});
@@ -36,7 +36,7 @@ class AdhanPreviewButton extends StatelessWidget {
             child: Icon(
               isPlaying ? Icons.stop_circle_outlined : Icons.play_circle_outline,
               size: 24,
-              color: isPlaying ? AppColors.gold : AppColors.sage,
+              color: isPlaying ? context.colors.gold : context.colors.sage,
             ),
           ),
         );

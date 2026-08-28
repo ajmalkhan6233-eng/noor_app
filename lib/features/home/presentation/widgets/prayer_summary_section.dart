@@ -21,6 +21,7 @@ import '../../../prayer_times/presentation/widgets/prayer_loading_skeleton.dart'
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import 'prayer_times_strip.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class PrayerSummarySection extends StatelessWidget {
   const PrayerSummarySection({
@@ -39,7 +40,7 @@ class PrayerSummarySection extends StatelessWidget {
     if (result is! PrayerTimesComputed) {
       if (state.isResolvingLocation) return const PrayerLoadingSkeleton();
       return AppCard(
-        child: Text(l10n.setLocationOnPrayerTabMessage, style: AppTypography.caption),
+        child: Text(l10n.setLocationOnPrayerTabMessage, style: AppTypography.caption(context.colors.sage)),
       );
     }
     return Column(

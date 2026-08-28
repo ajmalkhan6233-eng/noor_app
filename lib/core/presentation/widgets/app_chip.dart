@@ -9,7 +9,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
+import '../../constants/app_color_tokens.dart';
 import '../motion/motion.dart';
 
 class AppChip extends StatefulWidget {
@@ -60,16 +60,16 @@ class _AppChipState extends State<AppChip> {
             curve: Curves.easeOutCubic,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: widget.selected ? AppColors.card : Colors.transparent,
+              color: widget.selected ? context.colors.card : Colors.transparent,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: widget.selected ? AppColors.gold : AppColors.hairline,
+                color: widget.selected ? context.colors.gold : context.colors.hairline,
               ),
             ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: widget.selected ? AppColors.gold : AppColors.sage,
+                color: widget.selected ? context.colors.gold : context.colors.sage,
                 fontSize: 13,
               ),
             ),

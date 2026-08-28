@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../logic/quran_cubit/quran_cubit.dart';
@@ -13,6 +12,7 @@ import '../surah_reader_screen.dart';
 import 'quran_search_bar.dart';
 import 'quran_search_result_tile.dart';
 import 'surah_list_tile.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class SurahIndex extends StatefulWidget {
   const SurahIndex({super.key, required this.state});
@@ -74,10 +74,10 @@ class _SurahIndexState extends State<SurahIndex> {
                       ),
                     ),
                   ),
-                  icon: const Icon(Icons.menu_book_outlined, color: AppColors.gold, size: 18),
-                  label: const Text(
+                  icon: Icon(Icons.menu_book_outlined, color: context.colors.gold, size: 18),
+                  label: Text(
                     'Read the full Quran',
-                    style: TextStyle(color: AppColors.gold),
+                    style: TextStyle(color: context.colors.gold),
                   ),
                 ),
               ),
@@ -93,7 +93,7 @@ class _SurahIndexState extends State<SurahIndex> {
                     child: Text(
                       'Continue: Surah ${state.lastRead!.surahId}, '
                       'Ayah ${state.lastRead!.ayahNumber}',
-                      style: const TextStyle(color: AppColors.gold),
+                      style: TextStyle(color: context.colors.gold),
                     ),
                   ),
                 ),

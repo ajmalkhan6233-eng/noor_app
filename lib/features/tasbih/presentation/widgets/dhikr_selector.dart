@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/dhikr_option.dart';
 import '../../logic/tasbih_cubit/tasbih_cubit.dart';
@@ -25,8 +25,8 @@ class DhikrSelector extends StatelessWidget {
           child: DropdownButton<String>(
             value: state.dhikrLabel,
             underline: const SizedBox.shrink(),
-            dropdownColor: AppColors.card,
-            style: const TextStyle(color: AppColors.ink),
+            dropdownColor: context.colors.card,
+            style: TextStyle(color: context.colors.ink),
             items: [
               for (final option in DhikrOption.values)
                 DropdownMenuItem(value: option.label, child: Text(option.label)),

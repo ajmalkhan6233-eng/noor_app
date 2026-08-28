@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/quran_ayah.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// One ayah with its number and a bookmark toggle. Arabic and
 /// translation text size both follow [fontScale] from Settings
@@ -41,14 +41,14 @@ class AyahTile extends StatelessWidget {
               children: [
                 Text(
                   'Ayah ${ayah.ayahNumber}',
-                  style: const TextStyle(color: AppColors.sage),
+                  style: TextStyle(color: context.colors.sage),
                 ),
                 SemanticButton(
                   label: isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                   onTap: onToggleBookmark,
                   child: Icon(
                     isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                    color: AppColors.gold,
+                    color: context.colors.gold,
                     size: 20,
                   ),
                 ),
@@ -60,7 +60,7 @@ class AyahTile extends StatelessWidget {
               textDirection: TextDirection.rtl,
               style: TextStyle(
                 fontFamily: AppTypography.arabicFamily,
-                color: AppColors.ink,
+                color: context.colors.ink,
                 fontSize: 22 * fontScale,
                 height: 1.8,
               ),
@@ -69,7 +69,7 @@ class AyahTile extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 ayah.translation!,
-                style: TextStyle(color: AppColors.sage, fontSize: 14 * fontScale),
+                style: TextStyle(color: context.colors.sage, fontSize: 14 * fontScale),
               ),
             ],
           ],

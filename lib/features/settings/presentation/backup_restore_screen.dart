@@ -15,9 +15,9 @@ import '../../../core/backup/backup_crypto.dart';
 import '../../../core/backup/backup_file_service.dart';
 import '../../../core/backup/backup_payload.dart';
 import '../../../core/backup/backup_repository.dart';
-import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import 'widgets/backup_passphrase_dialog.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
@@ -77,24 +77,24 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(
-        backgroundColor: AppColors.paper,
-        title: const Text('Backup & Restore', style: TextStyle(color: AppColors.ink)),
-        iconTheme: const IconThemeData(color: AppColors.gold),
+        backgroundColor: context.colors.paper,
+        title: Text('Backup & Restore', style: TextStyle(color: context.colors.ink)),
+        iconTheme: IconThemeData(color: context.colors.gold),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Save your prayer/fasting streak history, Quran and Azkar '
               "bookmarks, and Zakat calculator memory to a passphrase-"
               "encrypted file you keep yourself — noor has no cloud "
               'account, so this is the only way to carry it to a new '
               'phone or recover it if this one is lost.',
-              style: TextStyle(color: AppColors.sage, height: 1.4),
+              style: TextStyle(color: context.colors.sage, height: 1.4),
             ),
             const SizedBox(height: 24),
             _ActionButton(
@@ -140,22 +140,22 @@ class _ActionButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: AppColors.gold,
+            color: context.colors.gold,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (busy)
-                const SizedBox(
+                SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.paper),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: context.colors.paper),
                 )
               else
-                Icon(icon, color: AppColors.paper, size: 18),
+                Icon(icon, color: context.colors.paper, size: 18),
               const SizedBox(width: 8),
-              Text(label, style: const TextStyle(color: AppColors.paper, fontWeight: FontWeight.w600)),
+              Text(label, style: TextStyle(color: context.colors.paper, fontWeight: FontWeight.w600)),
             ],
           ),
         ),

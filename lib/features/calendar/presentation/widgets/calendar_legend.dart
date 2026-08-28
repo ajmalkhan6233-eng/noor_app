@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class CalendarLegend extends StatelessWidget {
   const CalendarLegend({super.key});
@@ -16,16 +16,17 @@ class CalendarLegend extends StatelessWidget {
         spacing: 16,
         runSpacing: 8,
         children: [
-          _item('Ramadan', tint: true),
-          _item('Eid / Ashura', dot: true),
-          _item('White Days', ring: true),
-          _item('Sri Lanka holiday / Poya', cyanDot: true),
+          _item(context, 'Ramadan', tint: true),
+          _item(context, 'Eid / Ashura', dot: true),
+          _item(context, 'White Days', ring: true),
+          _item(context, 'Sri Lanka holiday / Poya', cyanDot: true),
         ],
       ),
     );
   }
 
   Widget _item(
+    BuildContext context,
     String label, {
     bool tint = false,
     bool dot = false,
@@ -41,17 +42,17 @@ class CalendarLegend extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: tint
-                ? AppColors.gold.withValues(alpha: 0.2)
+                ? context.colors.gold.withValues(alpha: 0.2)
                 : dot
-                    ? AppColors.gold
+                    ? context.colors.gold
                     : cyanDot
-                        ? AppColors.accentSecondary
+                        ? context.colors.accentSecondary
                         : Colors.transparent,
-            border: ring ? Border.all(color: AppColors.gold) : null,
+            border: ring ? Border.all(color: context.colors.gold) : null,
           ),
         ),
         const SizedBox(width: 6),
-        Text(label, style: AppTypography.caption),
+        Text(label, style: AppTypography.caption(context.colors.sage)),
       ],
     );
   }

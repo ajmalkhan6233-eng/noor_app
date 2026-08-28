@@ -4,8 +4,8 @@
 // can't lock someone out of their own backup) and import (asks once).
 
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
-import '../../../../core/constants/app_colors.dart';
 
 /// Returns the entered passphrase, or `null` if cancelled.
 Future<String?> promptForPassphrase(
@@ -46,27 +46,27 @@ class _PassphraseDialogState extends State<_PassphraseDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.card,
+      backgroundColor: context.colors.card,
       title: Text(
         widget.confirmationRequired ? 'Choose a backup passphrase' : 'Enter the backup passphrase',
-        style: const TextStyle(color: AppColors.ink),
+        style: TextStyle(color: context.colors.ink),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.confirmationRequired)
-            const Text(
+            Text(
               "You'll need this to restore the backup later — noor doesn't "
               "store it anywhere, so if it's lost, the backup can't be "
               "recovered.",
-              style: TextStyle(color: AppColors.sage, fontSize: 13),
+              style: TextStyle(color: context.colors.sage, fontSize: 13),
             ),
           const SizedBox(height: 12),
           TextField(
             controller: _passphrase,
             obscureText: true,
             autofocus: true,
-            style: const TextStyle(color: AppColors.ink),
+            style: TextStyle(color: context.colors.ink),
             decoration: const InputDecoration(labelText: 'Passphrase'),
           ),
           if (widget.confirmationRequired) ...[
@@ -74,7 +74,7 @@ class _PassphraseDialogState extends State<_PassphraseDialog> {
             TextField(
               controller: _confirm,
               obscureText: true,
-              style: const TextStyle(color: AppColors.ink),
+              style: TextStyle(color: context.colors.ink),
               decoration: const InputDecoration(labelText: 'Confirm passphrase'),
             ),
           ],

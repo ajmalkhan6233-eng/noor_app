@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import '../../constants/app_typography.dart';
 import '../../constants/build_info.dart';
 import 'web_preview_badge.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class BuildStampFooter extends StatelessWidget {
   const BuildStampFooter({super.key});
@@ -27,7 +28,7 @@ class BuildStampFooter extends StatelessWidget {
           const WebPreviewBadge(),
           Semantics(
             label: BuildInfo.label,
-            child: const Text(BuildInfo.label, style: AppTypography.caption),
+            child: Text(BuildInfo.label, style: AppTypography.caption(context.colors.sage)),
           ),
         ],
       ),

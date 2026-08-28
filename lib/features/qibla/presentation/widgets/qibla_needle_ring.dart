@@ -5,8 +5,8 @@
 // when [locked] (facing the qibla within the lock threshold).
 
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
-import '../../../../core/constants/app_colors.dart';
 
 class QiblaNeedleRing extends StatelessWidget {
   const QiblaNeedleRing({super.key, required this.locked});
@@ -19,17 +19,17 @@ class QiblaNeedleRing extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.card,
+        color: context.colors.card,
         border: Border.fromBorderSide(
           BorderSide(
-            color: locked ? AppColors.gold : AppColors.hairline,
+            color: locked ? context.colors.gold : context.colors.hairline,
             width: 1.5,
           ),
         ),
         boxShadow: locked
             ? [
                 BoxShadow(
-                  color: AppColors.gold.withValues(alpha: 0.45),
+                  color: context.colors.gold.withValues(alpha: 0.45),
                   blurRadius: 24,
                   spreadRadius: 2,
                 ),

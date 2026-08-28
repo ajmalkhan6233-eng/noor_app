@@ -10,7 +10,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/icons/noor_icon.dart';
 import '../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
@@ -23,6 +22,7 @@ import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../../tasbih/presentation/tasbih_screen.dart';
 import '../../zakat/presentation/zakat_screen.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -34,19 +34,19 @@ class MoreScreen extends StatelessWidget {
     final tiles = <_MoreTile>[
       _MoreTile(
         icon: NoorIconType.qibla,
-        color: AppColors.accentSecondary,
+        color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
         builder: (_) => const QiblaScreen(),
       ),
       _MoreTile(
         icon: NoorIconType.tasbih,
-        color: AppColors.gold,
+        color: context.colors.gold,
         label: l10n.tasbihScreenTitle,
         builder: (_) => const TasbihScreen(),
       ),
       _MoreTile(
         icon: NoorIconType.calendar,
-        color: AppColors.accentSecondary,
+        color: context.colors.accentSecondary,
         label: l10n.calendarLabel,
         builder: (_) => const CalendarScreen(),
       ),
@@ -56,7 +56,7 @@ class MoreScreen extends StatelessWidget {
         // directly) a piggy-bank glyph was already ruled out as wrong
         // imagery for a halal/Shariah-compliant app.
         icon: NoorIconType.zakat,
-        color: AppColors.gold,
+        color: context.colors.gold,
         label: l10n.zakatCalculatorLabel,
         builder: (_) => const ZakatScreen(),
       ),
@@ -65,14 +65,14 @@ class MoreScreen extends StatelessWidget {
         // four tinted tiles (2026-08-27 live-device review). Cyan/gold
         // keeps all six tiles in the same visual family.
         icon: NoorIconType.settings,
-        color: AppColors.accentSecondary,
+        color: context.colors.accentSecondary,
         label: l10n.settingsSemanticLabel,
         builder: (_) => const SettingsScreen(),
         onClosed: () => prayerCubit.loadSettings(),
       ),
       _MoreTile(
         icon: NoorIconType.about,
-        color: AppColors.gold,
+        color: context.colors.gold,
         label: l10n.aboutLabel,
         builder: (_) => const AboutScreen(),
       ),
@@ -85,7 +85,7 @@ class MoreScreen extends StatelessWidget {
       // Transparent so HomeDashboard's CosmicBackground shows through
       // — this tab sits directly above that persistent layer.
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: Text(l10n.moreTab), backgroundColor: AppColors.paper),
+      appBar: AppBar(title: Text(l10n.moreTab), backgroundColor: context.colors.paper),
       // SingleChildScrollView wraps the shrink-wrapped grid so a short
       // viewport (small phone, split-screen, the default flutter_test
       // surface) scrolls instead of overflowing — the grid's own
@@ -162,7 +162,7 @@ class _MoreTile extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: AppColors.ink, fontSize: 11),
+            style: TextStyle(color: context.colors.ink, fontSize: 11),
           ),
         ],
       ),

@@ -12,12 +12,12 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
 import '../data/prayer_tracker_repository.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key, PrayerTrackerRepository? repository})
@@ -107,10 +107,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return BlocProvider(
       create: (_) => SettingsCubit()..load(),
       child: Scaffold(
-        backgroundColor: AppColors.paper,
+        backgroundColor: context.colors.paper,
         appBar: AppBar(title: const Text('Progress')),
         body: _loading
-            ? const Center(child: CircularProgressIndicator(color: AppColors.gold))
+            ? Center(child: CircularProgressIndicator(color: context.colors.gold))
             : ListView(
                 padding: const EdgeInsets.all(24),
                 children: [
@@ -140,19 +140,19 @@ class _ProgressScreenState extends State<ProgressScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Your name (kept on this device only)', style: AppTypography.caption),
+              Text('Your name (kept on this device only)', style: AppTypography.caption(context.colors.sage)),
               const SizedBox(height: 8),
               TextField(
                 controller: _nameController,
                 focusNode: _nameFocusNode,
-                style: const TextStyle(color: AppColors.ink),
+                style: TextStyle(color: context.colors.ink),
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: 'Add a name',
-                  hintStyle: const TextStyle(color: AppColors.sage),
+                  hintStyle: TextStyle(color: context.colors.sage),
                   border: InputBorder.none,
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.check, color: AppColors.gold),
+                    icon: Icon(Icons.check, color: context.colors.gold),
                     tooltip: 'Save name',
                     onPressed: () {
                       _saveName(context);
@@ -179,7 +179,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('$rangeLabel · prayers completed', style: AppTypography.caption),
+          Text('$rangeLabel · prayers completed', style: AppTypography.caption(context.colors.sage)),
           const SizedBox(height: 16),
           SizedBox(
             height: 100,
@@ -196,14 +196,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
                           Container(
                             height: 60 * (day.completedCount / 5).clamp(0.04, 1.0),
                             decoration: BoxDecoration(
-                              color: day.completedCount == 5 ? AppColors.gold : AppColors.accentSecondary,
+                              color: day.completedCount == 5 ? context.colors.gold : context.colors.accentSecondary,
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
                           const SizedBox(height: 6),
                           Text(
                             DateFormat.E().format(day.date).substring(0, 1),
-                            style: AppTypography.caption,
+                            style: AppTypography.caption(context.colors.sage),
                           ),
                         ],
                       ),
@@ -231,21 +231,21 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   Expanded(
                     child: Text(
                       DateFormat.MMMEd().format(day.date),
-                      style: const TextStyle(color: AppColors.ink),
+                      style: TextStyle(color: context.colors.ink),
                     ),
                   ),
                   Text(
                     '${day.completedCount}/5 prayers',
-                    style: AppTypography.caption,
+                    style: AppTypography.caption(context.colors.sage),
                   ),
                   if (day.fasted) ...[
                     const SizedBox(width: 8),
-                    const Icon(Icons.nightlight_round, color: AppColors.gold, size: 14),
+                    Icon(Icons.nightlight_round, color: context.colors.gold, size: 14),
                   ],
                 ],
               ),
             ),
-            if (day != reversed.last) const Divider(color: AppColors.hairline, height: 1),
+            if (day != reversed.last) Divider(color: context.colors.hairline, height: 1),
           ],
         ],
       ),

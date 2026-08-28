@@ -5,10 +5,14 @@
 // light, generous. Body (Inter) for everything else: labels,
 // settings, controls. Arabic (Amiri) for Arabic text wherever it
 // appears. Bundled as assets — never fetched at runtime.
+//
+// The colour-bearing styles below take their colour as a parameter
+// (usually `context.colors.ink` or `context.colors.sage`) instead of a
+// hardcoded constant, so the same style definition renders correctly
+// in both Cosmic and Light — callers pass whichever token applies,
+// same as any other themed color in the app.
 
 import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
 
 abstract final class AppTypography {
   static const String displayFamily = 'Cormorant Garamond';
@@ -41,52 +45,52 @@ abstract final class AppTypography {
   }
 
   /// The largest display moment — the next-prayer name.
-  static const TextStyle heroDisplay = TextStyle(
-    fontFamily: displayFamily,
-    fontWeight: FontWeight.w300,
-    fontSize: 44,
-    letterSpacing: 1.2,
-    color: AppColors.ink,
-  );
+  static TextStyle heroDisplay(Color color) => TextStyle(
+        fontFamily: displayFamily,
+        fontWeight: FontWeight.w300,
+        fontSize: 44,
+        letterSpacing: 1.2,
+        color: color,
+      );
 
   /// Small letterspaced caption headers above a section's content.
-  static const TextStyle sectionHeader = TextStyle(
-    fontFamily: displayFamily,
-    fontWeight: FontWeight.w500,
-    fontSize: 13,
-    letterSpacing: 2.4,
-    color: AppColors.sage,
-  );
+  static TextStyle sectionHeader(Color color) => TextStyle(
+        fontFamily: displayFamily,
+        fontWeight: FontWeight.w500,
+        fontSize: 13,
+        letterSpacing: 2.4,
+        color: color,
+      );
 
   /// Quiet caption text — e.g. the active method/madhab line.
-  static const TextStyle caption = TextStyle(
-    fontFamily: bodyFamily,
-    fontSize: 12,
-    letterSpacing: 0.4,
-    color: AppColors.sage,
-  );
+  static TextStyle caption(Color color) => TextStyle(
+        fontFamily: bodyFamily,
+        fontSize: 12,
+        letterSpacing: 0.4,
+        color: color,
+      );
 
   /// Tabular-figure time display (prayer times list).
-  static const TextStyle time = TextStyle(
-    fontFamily: bodyFamily,
-    fontFeatures: [FontFeature.tabularFigures()],
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    color: AppColors.ink,
-  );
+  static TextStyle time(Color color) => TextStyle(
+        fontFamily: bodyFamily,
+        fontFeatures: const [FontFeature.tabularFigures()],
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: color,
+      );
 
-  static const TextStyle arabic = TextStyle(
-    fontFamily: arabicFamily,
-    color: AppColors.ink,
-    height: 1.9,
-  );
+  static TextStyle arabic(Color color) => TextStyle(
+        fontFamily: arabicFamily,
+        color: color,
+        height: 1.9,
+      );
 
   /// A large tap-to-count number — the tasbih counter.
-  static const TextStyle counter = TextStyle(
-    fontFamily: bodyFamily,
-    fontFeatures: [FontFeature.tabularFigures()],
-    fontSize: 56,
-    fontWeight: FontWeight.bold,
-    color: AppColors.ink,
-  );
+  static TextStyle counter(Color color) => TextStyle(
+        fontFamily: bodyFamily,
+        fontFeatures: const [FontFeature.tabularFigures()],
+        fontSize: 56,
+        fontWeight: FontWeight.bold,
+        color: color,
+      );
 }

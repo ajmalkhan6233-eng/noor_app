@@ -9,8 +9,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
 import '../../constants/app_typography.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class NoorSplashWordmark extends StatelessWidget {
   const NoorSplashWordmark({super.key, this.fontSize = 40});
@@ -29,7 +29,7 @@ class NoorSplashWordmark extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.w600,
             letterSpacing: 10,
-            color: AppColors.gold,
+            color: context.colors.gold,
           ),
         ),
       ),

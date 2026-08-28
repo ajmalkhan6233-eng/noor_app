@@ -13,12 +13,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/silent_mode_channel.dart';
 import '../../../prayer_times/data/silent_mode_settings.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class HomeQuickToggles extends StatefulWidget {
   const HomeQuickToggles({super.key, SilentModeChannel? channel})
@@ -161,16 +161,16 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
           cubit.setPreReminderEnabled(true);
         }
       },
-      color: AppColors.card,
+      color: context.colors.card,
       itemBuilder: (context) => [
         for (final m in _minuteOptions)
           PopupMenuItem(
             value: m,
-            child: Text('$m minutes before', style: const TextStyle(color: AppColors.ink)),
+            child: Text('$m minutes before', style: TextStyle(color: context.colors.ink)),
           ),
-        const PopupMenuItem(
+        PopupMenuItem(
           value: -1,
-          child: Text('Off', style: TextStyle(color: AppColors.sage)),
+          child: Text('Off', style: TextStyle(color: context.colors.sage)),
         ),
       ],
       child: Semantics(
@@ -179,9 +179,9 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: on ? AppColors.card : Colors.transparent,
+            color: on ? context.colors.card : Colors.transparent,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: on ? AppColors.gold : AppColors.hairline),
+            border: Border.all(color: on ? context.colors.gold : context.colors.hairline),
           ),
           child: FittedBox(
             fit: BoxFit.scaleDown,
@@ -191,11 +191,11 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
                 Icon(
                   on ? Icons.notifications_active : Icons.notifications_active_outlined,
                   size: 16,
-                  color: on ? AppColors.gold : AppColors.sage,
+                  color: on ? context.colors.gold : context.colors.sage,
                 ),
                 const SizedBox(width: 6),
-                Text(label, style: TextStyle(color: on ? AppColors.gold : AppColors.sage, fontSize: 12)),
-                const Icon(Icons.arrow_drop_down, size: 16, color: AppColors.sage),
+                Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: 12)),
+                Icon(Icons.arrow_drop_down, size: 16, color: context.colors.sage),
               ],
             ),
           ),
@@ -218,16 +218,16 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: on ? AppColors.card : Colors.transparent,
+          color: on ? context.colors.card : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: on ? AppColors.gold : AppColors.hairline),
+          border: Border.all(color: on ? context.colors.gold : context.colors.hairline),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 16, color: on ? AppColors.gold : AppColors.sage),
+            Icon(icon, size: 16, color: on ? context.colors.gold : context.colors.sage),
             const SizedBox(width: 6),
-            Text(label, style: TextStyle(color: on ? AppColors.gold : AppColors.sage, fontSize: 12)),
+            Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: 12)),
           ],
         ),
       ),

@@ -6,13 +6,13 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../about_screen.dart';
 import '../backup_restore_screen.dart';
 import '../send_feedback_screen.dart';
 import '../support_developer_screen.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class AboutDonateSection extends StatelessWidget {
   const AboutDonateSection({super.key});
@@ -76,7 +76,7 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = muted ? AppColors.sage : AppColors.ink;
+    final color = muted ? context.colors.sage : context.colors.ink;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(

@@ -11,9 +11,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/semantics_helpers.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class SupportDeveloperScreen extends StatelessWidget {
   const SupportDeveloperScreen({super.key});
@@ -62,11 +62,11 @@ class SupportDeveloperScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(
-        backgroundColor: AppColors.paper,
-        title: const Text('Support noor', style: TextStyle(color: AppColors.ink)),
-        iconTheme: const IconThemeData(color: AppColors.gold),
+        backgroundColor: context.colors.paper,
+        title: Text('Support noor', style: TextStyle(color: context.colors.ink)),
+        iconTheme: IconThemeData(color: context.colors.gold),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -81,7 +81,7 @@ class SupportDeveloperScreen extends StatelessWidget {
               "payment details with you. This goes directly to the "
               "developer as an individual — it isn't a registered charity "
               "or organisation.",
-              style: AppTypography.caption.copyWith(color: AppColors.ink, fontSize: 14),
+              style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: 14),
             ),
             const SizedBox(height: 24),
             _SupportButton(
@@ -127,19 +127,19 @@ class _SupportButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: filled ? AppColors.gold : Colors.transparent,
+            color: filled ? context.colors.gold : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: filled ? null : Border.all(color: AppColors.goldBorder),
+            border: filled ? null : Border.all(color: context.colors.goldBorder),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: filled ? AppColors.paper : AppColors.gold, size: 18),
+              Icon(icon, color: filled ? context.colors.paper : context.colors.gold, size: 18),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: TextStyle(
-                  color: filled ? AppColors.paper : AppColors.gold,
+                  color: filled ? context.colors.paper : context.colors.gold,
                   fontWeight: FontWeight.w600,
                 ),
               ),

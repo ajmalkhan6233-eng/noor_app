@@ -19,7 +19,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
+import '../../constants/app_color_tokens.dart';
 import '../motion/motion.dart';
 import 'cosmic_background_painter.dart';
 
@@ -56,8 +56,9 @@ class _CosmicBackgroundState extends State<CosmicBackground>
   @override
   Widget build(BuildContext context) {
     final reduced = Motion.reduced(context);
+    final tokens = context.colors;
     return DecoratedBox(
-      decoration: const BoxDecoration(color: AppColors.paper),
+      decoration: BoxDecoration(color: tokens.paper),
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, _) => CustomPaint(
@@ -68,6 +69,7 @@ class _CosmicBackgroundState extends State<CosmicBackground>
             // paint (they're background, not a motion effect), they
             // just don't drift.
             t: reduced ? 0 : _controller.value,
+            tokens: tokens,
           ),
         ),
       ),

@@ -9,9 +9,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/motion.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class IqamaGapRow extends StatelessWidget {
   const IqamaGapRow({
@@ -23,13 +23,13 @@ class IqamaGapRow extends StatelessWidget {
   final String prayerName;
   final Duration remaining;
 
-  static const _countdownStyle = TextStyle(
-    color: AppColors.accentSecondary,
-    fontFeatures: [FontFeature.tabularFigures()],
-    letterSpacing: 1,
-    fontSize: 40,
-    fontWeight: FontWeight.w700,
-  );
+  static TextStyle _countdownStyle(Color color) => TextStyle(
+        color: color,
+        fontFeatures: const [FontFeature.tabularFigures()],
+        letterSpacing: 1,
+        fontSize: 40,
+        fontWeight: FontWeight.w700,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class IqamaGapRow extends StatelessWidget {
       children: [
         Text(
           'Head to the masjid',
-          style: AppTypography.heroDisplay.copyWith(
+          style: AppTypography.heroDisplay(context.colors.ink).copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 32,
           ),
@@ -46,7 +46,7 @@ class IqamaGapRow extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           '$prayerName iqamah is next',
-          style: const TextStyle(color: AppColors.sage, fontSize: 13),
+          style: TextStyle(color: context.colors.sage, fontSize: 13),
         ),
         const SizedBox(height: 6),
         _countdownText(context, countdown),
@@ -57,21 +57,22 @@ class IqamaGapRow extends StatelessWidget {
   /// The seconds digits fade as they change rather than jumping — same
   /// treatment as PrayerCountdownRow's own countdown.
   Widget _countdownText(BuildContext context, String countdown) {
+    final style = _countdownStyle(context.colors.accentSecondary);
     if (countdown.length < 2) {
-      return Text(countdown, style: _countdownStyle);
+      return Text(countdown, style: style);
     }
     final prefix = countdown.substring(0, countdown.length - 2);
     final seconds = countdown.substring(countdown.length - 2);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(prefix, style: _countdownStyle),
+        Text(prefix, style: style),
         AnimatedSwitcher(
           duration: Motion.effective(context, Motion.short),
           child: Text(
             seconds,
             key: ValueKey(seconds),
-            style: _countdownStyle,
+            style: style,
           ),
         ),
       ],

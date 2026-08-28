@@ -14,7 +14,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
+import '../../constants/app_color_tokens.dart';
 import '../../constants/splash_config.dart';
 import '../../effects/particle_burst_painter.dart';
 import '../motion/motion.dart';
@@ -88,8 +88,8 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                   center: center,
                   progress: _burstController.value,
                   particles: _particles!,
-                  color: AppColors.gold,
-                  softColor: AppColors.accentSecondary,
+                  color: AppColorTokens.cosmic.gold,
+                  softColor: AppColorTokens.cosmic.accentSecondary,
                   growing: true,
                 ),
               ),

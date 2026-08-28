@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
@@ -18,6 +17,7 @@ import '../logic/azkar_cubit/azkar_cubit.dart';
 import '../logic/azkar_cubit/azkar_state.dart';
 import 'widgets/azkar_empty_state.dart';
 import 'widgets/azkar_item_tile.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class AzkarCategoryScreen extends StatefulWidget {
   const AzkarCategoryScreen({super.key, required this.category});
@@ -40,9 +40,9 @@ class _AzkarCategoryScreenState extends State<AzkarCategoryScreen> {
     return BlocProvider(
       create: (_) => SettingsCubit()..load(),
       child: Scaffold(
-        backgroundColor: AppColors.paper,
+        backgroundColor: context.colors.paper,
         appBar: AppBar(
-          backgroundColor: AppColors.paper,
+          backgroundColor: context.colors.paper,
           elevation: 0,
           title: Text(widget.category.label),
         ),
@@ -51,8 +51,8 @@ class _AzkarCategoryScreenState extends State<AzkarCategoryScreen> {
           child: BlocBuilder<AzkarCubit, AzkarState>(
             builder: (context, state) {
               if (state.category != widget.category || state.isLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(color: AppColors.gold),
+                return Center(
+                  child: CircularProgressIndicator(color: context.colors.gold),
                 );
               }
               if (state.items.isEmpty) {

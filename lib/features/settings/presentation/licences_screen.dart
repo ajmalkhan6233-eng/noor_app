@@ -7,10 +7,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'widgets/licence_package_tile.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class _PackageLicence {
   const _PackageLicence({required this.name, required this.text});
@@ -48,14 +48,14 @@ class _LicencesScreenState extends State<LicencesScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(title: Text(l10n.openSourceLicencesLabel)),
       body: FutureBuilder<List<_PackageLicence>>(
         future: _future,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.gold),
+            return Center(
+              child: CircularProgressIndicator(color: context.colors.gold),
             );
           }
           final packages = snapshot.data!;
@@ -63,7 +63,7 @@ class _LicencesScreenState extends State<LicencesScreen> {
             return Center(
               child: Text(
                 l10n.noLicencesMessage,
-                style: const TextStyle(color: AppColors.sage),
+                style: TextStyle(color: context.colors.sage),
               ),
             );
           }

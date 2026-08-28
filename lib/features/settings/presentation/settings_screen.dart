@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/section_header.dart';
@@ -21,6 +20,7 @@ import 'widgets/location_section.dart';
 import 'widgets/method_madhab_section.dart';
 import 'widgets/pre_reminder_section.dart';
 import 'widgets/test_adhan_section.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 /// Settings: calculation preferences and display. Notification
 /// toggles live on the Home dashboard, not buried here.
@@ -43,13 +43,13 @@ class _SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(title: Text(l10n.settingsSemanticLabel)),
       body: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.gold),
+            return Center(
+              child: CircularProgressIndicator(color: context.colors.gold),
             );
           }
           return ListView(

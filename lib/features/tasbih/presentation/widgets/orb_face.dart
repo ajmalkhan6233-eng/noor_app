@@ -9,7 +9,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 
 class OrbFace extends StatelessWidget {
@@ -29,33 +29,33 @@ class OrbFace extends StatelessWidget {
           center: const Alignment(-0.35, -0.4),
           radius: 1.15,
           colors: [
-            AppColors.card,
-            AppColors.gold.withValues(alpha: 0.45),
-            AppColors.gold.withValues(alpha: 0.95),
+            context.colors.card,
+            context.colors.gold.withValues(alpha: 0.45),
+            context.colors.gold.withValues(alpha: 0.95),
           ],
           stops: const [0.0, 0.55, 1.0],
         ),
         border: Border.all(
-          color: AppColors.gold,
+          color: context.colors.gold,
           width: pulsing ? 5 : 3,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.paper.withValues(alpha: 0.5),
+            color: context.colors.paper.withValues(alpha: 0.5),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
           // Cyan rim glow on the far edge — the palette's "sparing,
           // specific spots only" secondary accent.
           BoxShadow(
-            color: AppColors.accentSecondary.withValues(alpha: 0.3),
+            color: context.colors.accentSecondary.withValues(alpha: 0.3),
             blurRadius: 18,
             spreadRadius: -4,
             offset: const Offset(8, 8),
           ),
           if (pulsing)
             BoxShadow(
-              color: AppColors.gold.withValues(alpha: 0.5),
+              color: context.colors.gold.withValues(alpha: 0.5),
               blurRadius: 24,
               spreadRadius: 2,
             ),
@@ -91,14 +91,14 @@ class OrbFace extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.accentSecondary.withValues(alpha: 0.4),
-                    AppColors.accentSecondary.withValues(alpha: 0),
+                    context.colors.accentSecondary.withValues(alpha: 0.4),
+                    context.colors.accentSecondary.withValues(alpha: 0),
                   ],
                 ),
               ),
             ),
           ),
-          Text('$count', style: AppTypography.counter),
+          Text('$count', style: AppTypography.counter(context.colors.ink)),
         ],
       ),
     );

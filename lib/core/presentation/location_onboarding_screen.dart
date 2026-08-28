@@ -24,7 +24,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_locale_controller.dart';
-import '../constants/app_colors.dart';
+import '../constants/app_color_tokens.dart';
 import '../location/location_service.dart';
 import '../utils/semantics_helpers.dart';
 import '../../features/prayer_times/presentation/widgets/district_selector.dart';
@@ -76,16 +76,16 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Choose your language',
-                style: TextStyle(color: AppColors.ink, fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(color: context.colors.ink, fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               Row(
@@ -97,29 +97,29 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 ],
               ),
               const SizedBox(height: 28),
-              const Icon(Icons.location_on_outlined, color: AppColors.gold, size: 48),
+              Icon(Icons.location_on_outlined, color: context.colors.gold, size: 48),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Find your prayer times',
                 style: TextStyle(
-                  color: AppColors.ink,
+                  color: context.colors.ink,
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'noor uses your location once, on-device only, to calculate '
                 'accurate prayer times for where you are. It is never sent '
                 'anywhere and you can change or clear it any time from '
                 'Settings.',
-                style: TextStyle(color: AppColors.sage, height: 1.4),
+                style: TextStyle(color: context.colors.sage, height: 1.4),
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 "If a calculated time doesn't match your local masjid, "
                 'you can nudge each prayer by a few minutes in Settings too.',
-                style: TextStyle(color: AppColors.sage, height: 1.4),
+                style: TextStyle(color: context.colors.sage, height: 1.4),
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -127,8 +127,8 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 child: ElevatedButton(
                   onPressed: _resolving ? null : _enableLocation,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.gold,
-                    foregroundColor: AppColors.paper,
+                    backgroundColor: context.colors.gold,
+                    foregroundColor: context.colors.paper,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
@@ -137,10 +137,10 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
               ),
               if (_gpsFailed) ...[
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   "Couldn't get a GPS fix — pick your district instead, "
                   "just this once.",
-                  style: TextStyle(color: AppColors.sage, height: 1.4),
+                  style: TextStyle(color: context.colors.sage, height: 1.4),
                 ),
                 const SizedBox(height: 12),
                 DistrictSelector(
@@ -155,8 +155,8 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                         ? null
                         : () => _finish(district: _pickedDistrict),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.gold,
-                      foregroundColor: AppColors.paper,
+                      backgroundColor: context.colors.gold,
+                      foregroundColor: context.colors.paper,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -170,8 +170,8 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 child: OutlinedButton(
                   onPressed: _resolving ? null : () => _finish(),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.gold,
-                    side: const BorderSide(color: AppColors.goldBorder),
+                    foregroundColor: context.colors.gold,
+                    side: BorderSide(color: context.colors.goldBorder),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
@@ -195,14 +195,14 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? AppColors.gold : Colors.transparent,
+          color: selected ? context.colors.gold : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: selected ? AppColors.gold : AppColors.hairline),
+          border: Border.all(color: selected ? context.colors.gold : context.colors.hairline),
         ),
         child: Text(
           option.nativeName,
           style: TextStyle(
-            color: selected ? AppColors.paper : AppColors.ink,
+            color: selected ? context.colors.paper : context.colors.ink,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
           ),
         ),

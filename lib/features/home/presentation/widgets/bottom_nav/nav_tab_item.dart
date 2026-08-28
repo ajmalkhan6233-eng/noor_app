@@ -7,11 +7,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/presentation/icons/noor_icon.dart';
 import '../../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../../core/presentation/motion/motion.dart';
 import '../../../../../core/utils/semantics_helpers.dart';
+import '../../../../../core/constants/app_color_tokens.dart';
 
 class NavTabItem extends StatelessWidget {
   const NavTabItem({
@@ -44,11 +44,11 @@ class NavTabItem extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: active ? AppColors.gold : Colors.transparent,
+                color: active ? context.colors.gold : Colors.transparent,
                 boxShadow: active
                     ? [
                         BoxShadow(
-                          color: AppColors.gold.withValues(alpha: 0.55),
+                          color: context.colors.gold.withValues(alpha: 0.55),
                           blurRadius: 14,
                           spreadRadius: 1,
                         ),
@@ -57,7 +57,7 @@ class NavTabItem extends StatelessWidget {
               ),
               child: NoorIcon(
                 icon,
-                color: active ? AppColors.paper : AppColors.sage,
+                color: active ? context.colors.paper : context.colors.sage,
                 size: 22,
               ),
             ),
@@ -71,7 +71,7 @@ class NavTabItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: active ? FontWeight.w700 : FontWeight.w400,
-                  color: active ? AppColors.gold : AppColors.sage,
+                  color: active ? context.colors.gold : context.colors.sage,
                 ),
               ),
             ),

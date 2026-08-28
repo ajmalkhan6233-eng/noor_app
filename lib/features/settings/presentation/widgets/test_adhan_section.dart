@@ -9,10 +9,10 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/notification_service.dart';
 import '../../../prayer_times/data/notification_slots.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class TestAdhanSection extends StatelessWidget {
   const TestAdhanSection({super.key, NotificationService? service})
@@ -26,10 +26,10 @@ class TestAdhanSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Play a prayer\'s real adhan notification right now, to '
           'confirm it actually sounds — not just that a preview plays.',
-          style: TextStyle(color: AppColors.sage, fontSize: 12, height: 1.4),
+          style: TextStyle(color: context.colors.sage, fontSize: 12, height: 1.4),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -44,9 +44,9 @@ class TestAdhanSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.goldBorder),
+                    border: Border.all(color: context.colors.goldBorder),
                   ),
-                  child: Text(slotLabel(slot), style: const TextStyle(color: AppColors.gold, fontSize: 13)),
+                  child: Text(slotLabel(slot), style: TextStyle(color: context.colors.gold, fontSize: 13)),
                 ),
               ),
           ],
@@ -59,11 +59,11 @@ class TestAdhanSection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.hairline),
+              border: Border.all(color: context.colors.hairline),
             ),
-            child: const Text(
+            child: Text(
               'Schedule test notification in 3 min (close app after)',
-              style: TextStyle(color: AppColors.sage, fontSize: 12),
+              style: TextStyle(color: context.colors.sage, fontSize: 12),
             ),
           ),
         ),

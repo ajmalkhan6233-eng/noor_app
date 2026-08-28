@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// Numeric qibla bearing and distance — always shown, independent of
 /// whether a compass is available or trustworthy. Kept small and off
@@ -35,8 +35,8 @@ class QiblaInfoPanel extends StatelessWidget {
           children: [
             Text(
               bearingText,
-              style: const TextStyle(
-                color: AppColors.gold,
+              style: TextStyle(
+                color: context.colors.gold,
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
@@ -44,7 +44,7 @@ class QiblaInfoPanel extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               distanceText,
-              style: const TextStyle(color: AppColors.sage, fontSize: 11),
+              style: TextStyle(color: context.colors.sage, fontSize: 11),
             ),
           ],
         ),

@@ -10,9 +10,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class AzkarCounterButton extends StatefulWidget {
   const AzkarCounterButton({
@@ -53,7 +53,7 @@ class _AzkarCounterButtonState extends State<AzkarCounterButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: widget.done ? AppColors.gold : AppColors.hairline,
+            color: widget.done ? context.colors.gold : context.colors.hairline,
           ),
         ),
         child: Text(
@@ -61,7 +61,7 @@ class _AzkarCounterButtonState extends State<AzkarCounterButton> {
               ? 'Done · ${widget.count} of ${widget.repeatCount}'
               : 'Tap to count · ${widget.count} of ${widget.repeatCount}',
           style: TextStyle(
-            color: widget.done ? AppColors.gold : AppColors.ink,
+            color: widget.done ? context.colors.gold : context.colors.ink,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),

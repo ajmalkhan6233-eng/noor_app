@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/motion.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
@@ -47,16 +47,16 @@ class _LicencePackageTileState extends State<LicencePackageTile> {
                   Expanded(
                     child: Text(
                       widget.packageName,
-                      style: const TextStyle(color: AppColors.ink),
+                      style: TextStyle(color: context.colors.ink),
                     ),
                   ),
                   AnimatedRotation(
                     turns: _expanded ? 0.5 : 0,
                     duration: Motion.effective(context, Motion.short),
                     curve: Motion.curve,
-                    child: const Icon(
+                    child: Icon(
                       Icons.keyboard_arrow_down,
-                      color: AppColors.sage,
+                      color: context.colors.sage,
                       size: 20,
                     ),
                   ),
@@ -70,7 +70,7 @@ class _LicencePackageTileState extends State<LicencePackageTile> {
                         padding: const EdgeInsets.only(top: 12),
                         child: Text(
                           widget.licenceText,
-                          style: AppTypography.caption.copyWith(height: 1.5),
+                          style: AppTypography.caption(context.colors.sage).copyWith(height: 1.5),
                         ),
                       )
                     : const SizedBox(width: double.infinity),

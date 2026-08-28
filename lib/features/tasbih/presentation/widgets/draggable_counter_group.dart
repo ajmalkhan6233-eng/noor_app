@@ -8,7 +8,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import 'tasbih_orb.dart';
 
@@ -41,7 +41,7 @@ class DraggableCounterGroup extends StatelessWidget {
               child: Text(
                 dhikrLabel,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.sage, fontSize: 18),
+                style: TextStyle(color: context.colors.sage, fontSize: 18),
               ),
             ),
             const SizedBox(height: 16),

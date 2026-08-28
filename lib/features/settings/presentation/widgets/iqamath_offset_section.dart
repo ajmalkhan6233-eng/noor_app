@@ -6,11 +6,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/iqamath_offsets.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// Five number fields controlling how many minutes after each adhan
 /// the congregation (iqamath) starts.
@@ -66,26 +66,26 @@ class IqamathOffsetSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.ink)),
+          Text(label, style: TextStyle(color: context.colors.ink)),
           Row(
             children: [
               SemanticButton(
                 label: 'Decrease $label iqamath offset',
                 onTap: () => change(-1),
-                child: const Icon(Icons.remove, color: AppColors.gold),
+                child: Icon(Icons.remove, color: context.colors.gold),
               ),
               SizedBox(
                 width: 48,
                 child: Text(
                   '$minutes min',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppColors.sage),
+                  style: TextStyle(color: context.colors.sage),
                 ),
               ),
               SemanticButton(
                 label: 'Increase $label iqamath offset',
                 onTap: () => change(1),
-                child: const Icon(Icons.add, color: AppColors.gold),
+                child: Icon(Icons.add, color: context.colors.gold),
               ),
             ],
           ),

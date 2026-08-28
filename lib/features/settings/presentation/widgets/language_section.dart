@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_locale_controller.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/app_locale.dart';
@@ -32,8 +32,8 @@ class LanguageSection extends StatelessWidget {
           child: DropdownButton<AppLocaleOption>(
             isExpanded: true,
             value: selected,
-            dropdownColor: AppColors.card,
-            style: const TextStyle(color: AppColors.ink),
+            dropdownColor: context.colors.card,
+            style: TextStyle(color: context.colors.ink),
             items: [
               for (final option in AppLocaleOption.values)
                 DropdownMenuItem(

@@ -7,7 +7,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
+import '../../constants/app_color_tokens.dart';
 
 class DriftingParticle {
   DriftingParticle({
@@ -49,15 +49,26 @@ class DriftingParticle {
 }
 
 class CosmicPainter extends CustomPainter {
-  const CosmicPainter({required this.particles, required this.t});
+  const CosmicPainter({required this.particles, required this.t, required this.tokens});
 
   final List<DriftingParticle> particles;
 
   /// 0..1 loop progress.
   final double t;
 
+  /// The active theme's palette — drives both particle color and, for
+  /// Light, a lower opacity ceiling so particles stay a quiet ambient
+  /// detail on a white background instead of reading as noisy dots.
+  final AppColorTokens tokens;
+
   @override
   void paint(Canvas canvas, Size size) {
+    final isLight = tokens.brightness == Brightness.light;
+    // Light needs materially dimmer particles — the same alpha that
+    // reads as a subtle glow on obsidian reads as a spattered dot on
+    // white. Not simply disabled, per spec: still moving, still two
+    // alternating tones, just quieter.
+    final opacityScale = isLight ? 0.45 : 1.0;
     final angle = t * 2 * math.pi;
     for (final p in particles) {
       // Each particle slowly circles a fixed anchor point rather than
@@ -76,12 +87,13 @@ class CosmicPainter extends CustomPainter {
         center,
         p.radius,
         Paint()
-          ..color = (p.gold ? AppColors.gold : AppColors.accentSecondary)
-              .withValues(alpha: p.opacity * breathe),
+          ..color = (p.gold ? tokens.gold : tokens.accentSecondary)
+              .withValues(alpha: p.opacity * breathe * opacityScale),
       );
     }
   }
 
   @override
-  bool shouldRepaint(covariant CosmicPainter oldDelegate) => oldDelegate.t != t;
+  bool shouldRepaint(covariant CosmicPainter oldDelegate) =>
+      oldDelegate.t != t || oldDelegate.tokens != tokens;
 }

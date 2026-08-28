@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// Shown whenever the compass is uncalibrated or its reported
 /// accuracy is too low to trust, alongside a dimmed needle.
@@ -21,7 +21,7 @@ class CalibrationPrompt extends StatelessWidget {
         child: Text(
           message,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: AppColors.gold),
+          style: TextStyle(color: context.colors.gold),
         ),
       ),
     );

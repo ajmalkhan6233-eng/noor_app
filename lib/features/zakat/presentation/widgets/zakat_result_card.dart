@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/zakat_calculator.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class ZakatResultCard extends StatelessWidget {
   const ZakatResultCard({super.key, required this.result});
@@ -33,24 +33,24 @@ class ZakatResultCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.netWealthLabel, style: AppTypography.caption),
+            Text(l10n.netWealthLabel, style: AppTypography.caption(context.colors.sage)),
             const SizedBox(height: 4),
             Text(
               result.netWealth.toStringAsFixed(2),
-              style: const TextStyle(color: AppColors.ink, fontSize: 20),
+              style: TextStyle(color: context.colors.ink, fontSize: 20),
             ),
             const SizedBox(height: 12),
-            Text(nisabLabel, style: AppTypography.caption),
+            Text(nisabLabel, style: AppTypography.caption(context.colors.sage)),
             const SizedBox(height: 16),
-            const Divider(color: AppColors.hairline, height: 1),
+            Divider(color: context.colors.hairline, height: 1),
             const SizedBox(height: 16),
-            Text(l10n.zakatDueLabel, style: AppTypography.caption),
+            Text(l10n.zakatDueLabel, style: AppTypography.caption(context.colors.sage)),
             const SizedBox(height: 4),
             Text(
               result.zakatDue.toStringAsFixed(2),
-              style: AppTypography.heroDisplay.copyWith(
+              style: AppTypography.heroDisplay(context.colors.ink).copyWith(
                 fontSize: 36,
-                color: result.nisabMet ? AppColors.gold : AppColors.sage,
+                color: result.nisabMet ? context.colors.gold : context.colors.sage,
               ),
             ),
           ],

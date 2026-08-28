@@ -7,9 +7,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
 import '../../constants/app_typography.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class BismillahReveal extends StatelessWidget {
   const BismillahReveal({
@@ -53,7 +53,7 @@ class BismillahReveal extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: AppTypography.arabicFamily,
-                color: AppColors.gold,
+                color: Color(0xFFFFB703),
                 fontSize: 30,
                 height: 1.6,
               ),

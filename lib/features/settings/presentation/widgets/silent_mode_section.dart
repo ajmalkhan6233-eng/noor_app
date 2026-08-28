@@ -7,12 +7,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/silent_mode_channel.dart';
 import '../../../prayer_times/data/silent_mode_settings.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class SilentModeSection extends StatefulWidget {
   const SilentModeSection({super.key, SilentModeChannel? channel})
@@ -76,8 +76,8 @@ class _SilentModeSectionState extends State<SilentModeSection> {
       toggled: value,
       child: SwitchListTile(
         contentPadding: EdgeInsets.zero,
-        activeThumbColor: AppColors.gold,
-        title: Text(label, style: const TextStyle(color: AppColors.ink)),
+        activeThumbColor: context.colors.gold,
+        title: Text(label, style: TextStyle(color: context.colors.ink)),
         value: value,
         onChanged: (v) => context.read<SettingsCubit>().setSilentMode(apply(v)),
       ),
@@ -95,29 +95,29 @@ class _SilentModeSectionState extends State<SilentModeSection> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
+        Text(
           'Extra minutes after iqamath',
-          style: TextStyle(color: AppColors.ink),
+          style: TextStyle(color: context.colors.ink),
         ),
         Row(
           children: [
             SemanticButton(
               label: 'Decrease extra silent minutes',
               onTap: () => change(-1),
-              child: const Icon(Icons.remove, color: AppColors.gold),
+              child: Icon(Icons.remove, color: context.colors.gold),
             ),
             SizedBox(
               width: 48,
               child: Text(
                 '${s.extraMinutesAfterIqamath} min',
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.sage),
+                style: TextStyle(color: context.colors.sage),
               ),
             ),
             SemanticButton(
               label: 'Increase extra silent minutes',
               onTap: () => change(1),
-              child: const Icon(Icons.add, color: AppColors.gold),
+              child: Icon(Icons.add, color: context.colors.gold),
             ),
           ],
         ),
@@ -132,12 +132,12 @@ class _SilentModeSectionState extends State<SilentModeSection> {
       onTap: () async {
         await widget._channel.requestNotificationPolicyAccess();
       },
-      child: const Padding(
-        padding: EdgeInsets.symmetric(vertical: 6),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
         child: Text(
           'Grant Do Not Disturb access',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.gold),
+          style: TextStyle(color: context.colors.gold),
         ),
       ),
     );

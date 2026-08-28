@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/haptics/haptic_service.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
@@ -30,6 +29,7 @@ import '../../../prayer_times/data/prayer_times_result.dart';
 import '../../../prayer_tracker/data/prayer_tracker_repository.dart';
 import '../../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class DailyGoalsList extends StatelessWidget {
   const DailyGoalsList({
@@ -76,18 +76,18 @@ class DailyGoalsList extends StatelessWidget {
                   SemanticButton(
                     label: 'Previous day',
                     onTap: cubit.goToPreviousDay,
-                    child: const Icon(Icons.chevron_left, color: AppColors.gold, size: 20),
+                    child: Icon(Icons.chevron_left, color: context.colors.gold, size: 20),
                   ),
                   Text(
                     isToday ? 'Today' : DateFormat.MMMd().format(state.viewedDate),
-                    style: const TextStyle(color: AppColors.sage, fontSize: 12),
+                    style: TextStyle(color: context.colors.sage, fontSize: 12),
                   ),
                   SemanticButton(
                     label: 'Next day',
                     onTap: cubit.goToNextDay,
                     child: Icon(
                       Icons.chevron_right,
-                      color: isToday ? AppColors.hairline : AppColors.gold,
+                      color: isToday ? context.colors.hairline : context.colors.gold,
                       size: 20,
                     ),
                   ),
@@ -131,10 +131,10 @@ class _GoalRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final color = !enabled
-        ? AppColors.hairline
+        ? context.colors.hairline
         : done
-        ? AppColors.gold
-        : AppColors.sage;
+        ? context.colors.gold
+        : context.colors.sage;
     return SemanticButton(
       label: label,
       hint: !enabled
@@ -156,7 +156,7 @@ class _GoalRow extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               label,
-              style: TextStyle(color: done ? AppColors.gold : (enabled ? AppColors.ink : AppColors.sage), fontSize: 14),
+              style: TextStyle(color: done ? context.colors.gold : (enabled ? context.colors.ink : context.colors.sage), fontSize: 14),
             ),
           ],
         ),

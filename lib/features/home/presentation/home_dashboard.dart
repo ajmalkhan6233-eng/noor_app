@@ -16,7 +16,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/fade_tab_switcher.dart';
 import '../../../core/presentation/widgets/cosmic_background.dart';
 import '../../azkar/presentation/azkar_screen.dart';
@@ -29,6 +28,7 @@ import '../../quran/presentation/quran_screen.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import 'home_overview_screen.dart';
 import 'widgets/bottom_nav/noor_bottom_nav.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -62,7 +62,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
         BlocProvider(create: (_) => PrayerTrackerCubit()..load()),
       ],
       child: Scaffold(
-        backgroundColor: AppColors.paper,
+        backgroundColor: context.colors.paper,
         body: Stack(
           children: [
             const Positioned.fill(child: CosmicBackground()),

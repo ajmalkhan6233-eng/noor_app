@@ -11,8 +11,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class CountrySection extends StatelessWidget {
   const CountrySection({super.key});
@@ -24,10 +24,10 @@ class CountrySection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          const Icon(Icons.check_circle, size: 18, color: AppColors.gold),
+          Icon(Icons.check_circle, size: 18, color: context.colors.gold),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(l10n.countrySriLanka, style: const TextStyle(color: AppColors.ink)),
+            child: Text(l10n.countrySriLanka, style: TextStyle(color: context.colors.ink)),
           ),
         ],
       ),

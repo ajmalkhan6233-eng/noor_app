@@ -7,10 +7,10 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../../l10n/generated/app_localizations.dart';
 import 'nav_tab_item.dart';
+import '../../../../../core/constants/app_color_tokens.dart';
 
 class NoorBottomNav extends StatelessWidget {
   const NoorBottomNav({
@@ -34,9 +34,9 @@ class NoorBottomNav extends StatelessWidget {
     ];
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: const BoxDecoration(
-        color: AppColors.paper,
-        border: Border(top: BorderSide(color: AppColors.hairline)),
+      decoration: BoxDecoration(
+        color: context.colors.paper,
+        border: Border(top: BorderSide(color: context.colors.hairline)),
       ),
       child: SafeArea(
         top: false,

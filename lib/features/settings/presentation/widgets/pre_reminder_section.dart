@@ -8,10 +8,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class PreReminderSection extends StatelessWidget {
   const PreReminderSection({super.key});
@@ -28,9 +28,9 @@ class PreReminderSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Remind me before adhan',
-                  style: TextStyle(color: AppColors.ink),
+                  style: TextStyle(color: context.colors.ink),
                 ),
                 SemanticButton(
                   label: enabled
@@ -39,7 +39,7 @@ class PreReminderSection extends StatelessWidget {
                   onTap: () => context.read<SettingsCubit>().setPreReminderEnabled(!enabled),
                   child: Icon(
                     enabled ? Icons.notifications_active : Icons.notifications_off_outlined,
-                    color: enabled ? AppColors.gold : AppColors.sage,
+                    color: enabled ? context.colors.gold : context.colors.sage,
                   ),
                 ),
               ],
@@ -49,9 +49,9 @@ class PreReminderSection extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Minutes before',
-                    style: TextStyle(color: AppColors.sage, fontSize: 13),
+                    style: TextStyle(color: context.colors.sage, fontSize: 13),
                   ),
                   Row(
                     children: [
@@ -60,14 +60,14 @@ class PreReminderSection extends StatelessWidget {
                         onTap: () => context
                             .read<SettingsCubit>()
                             .setPreReminderMinutes((minutes - 5).clamp(5, 60)),
-                        child: const Icon(Icons.remove, color: AppColors.gold),
+                        child: Icon(Icons.remove, color: context.colors.gold),
                       ),
                       SizedBox(
                         width: 48,
                         child: Text(
                           '$minutes min',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(color: AppColors.sage),
+                          style: TextStyle(color: context.colors.sage),
                         ),
                       ),
                       SemanticButton(
@@ -75,7 +75,7 @@ class PreReminderSection extends StatelessWidget {
                         onTap: () => context
                             .read<SettingsCubit>()
                             .setPreReminderMinutes((minutes + 5).clamp(5, 60)),
-                        child: const Icon(Icons.add, color: AppColors.gold),
+                        child: Icon(Icons.add, color: context.colors.gold),
                       ),
                     ],
                   ),

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
@@ -15,6 +14,7 @@ import 'licences_screen.dart';
 import 'privacy_policy_screen.dart';
 import 'widgets/about_sources_card.dart';
 import 'widgets/font_credit.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 /// About page: app identity, text-source attribution, bundled font
 /// credits, and licences.
@@ -25,20 +25,20 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(title: Text(l10n.aboutLabel)),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
           StaggeredFadeIn(
             children: [
-              _identityCard(),
+              _identityCard(context),
               const SizedBox(height: 16),
               const AboutSourcesCard(),
               const SizedBox(height: 16),
-              _religiousContentNoteCard(l10n),
+              _religiousContentNoteCard(context, l10n),
               const SizedBox(height: 16),
-              _fontCreditsCard(),
+              _fontCreditsCard(context),
               const SizedBox(height: 16),
               _privacyPolicyLink(context),
               const SizedBox(height: 16),
@@ -52,65 +52,65 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Widget _identityCard() {
+  Widget _identityCard(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(AppStrings.appName, style: AppTypography.heroDisplay),
+          Text(AppStrings.appName, style: AppTypography.heroDisplay(context.colors.ink)),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'A clean, privacy-first, ad-free Islamic utility app. '
             'Fully offline: no ads, no analytics, no remote telemetry.',
-            style: TextStyle(color: AppColors.sage),
+            style: TextStyle(color: context.colors.sage),
           ),
         ],
       ),
     );
   }
 
-  Widget _religiousContentNoteCard(AppLocalizations l10n) {
+  Widget _religiousContentNoteCard(BuildContext context, AppLocalizations l10n) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionHeader(l10n.religiousContentNoteHeader),
           const SizedBox(height: 8),
-          Text(l10n.religiousContentNoteBody, style: AppTypography.caption),
+          Text(l10n.religiousContentNoteBody, style: AppTypography.caption(context.colors.sage)),
         ],
       ),
     );
   }
 
-  Widget _fontCreditsCard() {
+  Widget _fontCreditsCard(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          SectionHeader('Typefaces'),
-          FontCredit(
+        children: [
+          const SectionHeader('Typefaces'),
+          const FontCredit(
             family: 'Cormorant Garamond',
             role: 'Display — prayer times, the Bismillah, headers',
           ),
-          SizedBox(height: 12),
-          FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
-          SizedBox(height: 12),
-          FontCredit(family: 'Amiri', role: 'Arabic text'),
-          SizedBox(height: 12),
-          FontCredit(
+          const SizedBox(height: 12),
+          const FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
+          const SizedBox(height: 12),
+          const FontCredit(family: 'Amiri', role: 'Arabic text'),
+          const SizedBox(height: 12),
+          const FontCredit(
             family: 'Noto Sans Tamil',
             role: 'Tamil interface text',
           ),
-          SizedBox(height: 12),
-          FontCredit(
+          const SizedBox(height: 12),
+          const FontCredit(
             family: 'Noto Sans Sinhala',
             role: 'Sinhala interface text',
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Each is licensed under the SIL Open Font Licence 1.1 and '
             'bundled with the app for fully offline use.',
-            style: AppTypography.caption,
+            style: AppTypography.caption(context.colors.sage),
           ),
         ],
       ),
@@ -126,15 +126,15 @@ class AboutScreen extends StatelessWidget {
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => const PrivacyPolicyScreen()),
         ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(
             children: [
-              Icon(Icons.privacy_tip_outlined, color: AppColors.gold),
-              SizedBox(width: 12),
+              Icon(Icons.privacy_tip_outlined, color: context.colors.gold),
+              const SizedBox(width: 12),
               Text(
                 'Privacy Policy',
-                style: TextStyle(color: AppColors.ink),
+                style: TextStyle(color: context.colors.ink),
               ),
             ],
           ),
@@ -152,15 +152,15 @@ class AboutScreen extends StatelessWidget {
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => const LicencesScreen()),
         ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(
             children: [
-              Icon(Icons.description_outlined, color: AppColors.gold),
-              SizedBox(width: 12),
+              Icon(Icons.description_outlined, color: context.colors.gold),
+              const SizedBox(width: 12),
               Text(
                 'Open source licences',
-                style: TextStyle(color: AppColors.ink),
+                style: TextStyle(color: context.colors.ink),
               ),
             ],
           ),

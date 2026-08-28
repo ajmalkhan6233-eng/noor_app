@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/reading_position_tracker.dart';
 import '../data/quran_ayah.dart';
@@ -27,6 +26,7 @@ import '../data/quran_surah.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'widgets/ayah_tile.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 // Ayah numbers never reach 1000, so surahId*1000+ayahNumber is a safe
 // unique int key without needing a (surah, ayah) record as a Map key.
@@ -67,9 +67,9 @@ class _FullQuranScreenState extends State<FullQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(
-        backgroundColor: AppColors.paper,
+        backgroundColor: context.colors.paper,
         elevation: 0,
         title: const Text('The Full Quran'),
       ),
@@ -77,8 +77,8 @@ class _FullQuranScreenState extends State<FullQuranScreen> {
         builder: (context, state) {
           final ayahs = state.fullQuranAyahs;
           if (ayahs == null) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.gold),
+            return Center(
+              child: CircularProgressIndicator(color: context.colors.gold),
             );
           }
           _maybeScrollToLastRead(state);
@@ -127,7 +127,7 @@ class _FullQuranScreenState extends State<FullQuranScreen> {
     if (!isLastRead) return child;
     return Container(
       decoration: BoxDecoration(
-        border: Border(left: BorderSide(color: AppColors.gold, width: 3)),
+        border: Border(left: BorderSide(color: context.colors.gold, width: 3)),
         borderRadius: BorderRadius.circular(4),
       ),
       padding: const EdgeInsets.only(left: 4),
@@ -140,7 +140,7 @@ class _FullQuranScreenState extends State<FullQuranScreen> {
       padding: const EdgeInsets.only(top: 20, bottom: 12),
       child: Text(
         '${surah.id}. ${surah.displayName}',
-        style: AppTypography.sectionHeader.copyWith(color: AppColors.gold, fontSize: 20),
+        style: AppTypography.sectionHeader(context.colors.sage).copyWith(color: context.colors.gold, fontSize: 20),
       ),
     );
   }

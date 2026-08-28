@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../prayer_times/data/prayer_settings.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
@@ -26,8 +26,8 @@ class MethodMadhabSection extends StatelessWidget {
               child: DropdownButton<PrayerCalculationMethod>(
                 isExpanded: true,
                 value: prayer.method,
-                dropdownColor: AppColors.card,
-                style: const TextStyle(color: AppColors.ink),
+                dropdownColor: context.colors.card,
+                style: TextStyle(color: context.colors.ink),
                 items: [
                   for (final method in PrayerCalculationMethod.values)
                     DropdownMenuItem(value: method, child: Text(method.label)),
@@ -44,8 +44,8 @@ class MethodMadhabSection extends StatelessWidget {
               child: DropdownButton<PrayerMadhab>(
                 isExpanded: true,
                 value: prayer.madhab,
-                dropdownColor: AppColors.card,
-                style: const TextStyle(color: AppColors.ink),
+                dropdownColor: context.colors.card,
+                style: TextStyle(color: context.colors.ink),
                 items: [
                   for (final madhab in PrayerMadhab.values)
                     DropdownMenuItem(value: madhab, child: Text(madhab.label)),

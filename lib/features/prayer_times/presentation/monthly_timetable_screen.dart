@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/location/location_service.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -53,7 +53,7 @@ class _MonthlyTimetableView extends StatelessWidget {
       // app's usual near-black background. Blended halfway between
       // the locked paper/card tones rather than a new colour, so the
       // AppCard rows below still stand out against it.
-      backgroundColor: Color.lerp(AppColors.paper, AppColors.card, 0.5),
+      backgroundColor: Color.lerp(context.colors.paper, context.colors.card, 0.5),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.monthlyTimetableScreenTitle),
       ),

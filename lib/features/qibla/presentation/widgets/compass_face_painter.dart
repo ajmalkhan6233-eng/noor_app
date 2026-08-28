@@ -22,7 +22,7 @@
 // with 10-shot rapid screenshot sequences and pixel-sampling (not just
 // eyeballing): in the bad frames, the pixels where the circle
 // Container and CompassFacePainter's ticks/needle should be read as
-// pure AppColors.paper (the screen background), not a dim or partial
+// pure AppColorTokens.cosmic.paper (the screen background), not a dim or partial
 // render — the whole subtree is simply absent from that composited
 // frame, while only the 10x10 Kaaba marker rect still paints. Two
 // standard mitigations were tried and BOTH made it worse, not better:
@@ -52,7 +52,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import 'compass_ticks.dart';
 import 'kaaba_marker_painter.dart';
 
@@ -85,7 +85,7 @@ class CompassFacePainter extends CustomPainter {
     paintCompassTicksAndLabels(canvas, center, faceRadius);
     _paintNeedle(canvas, center, faceRadius);
 
-    canvas.drawCircle(center, 4, Paint()..color = AppColors.ink);
+    canvas.drawCircle(center, 4, Paint()..color = AppColorTokens.cosmic.ink);
   }
 
   void _paintNeedle(Canvas canvas, Offset center, double faceRadius) {
@@ -110,14 +110,14 @@ class CompassFacePainter extends CustomPainter {
       ..lineTo(-length * 0.045, length * 0.08)
       ..close();
 
-    final needleColor = locked ? AppColors.gold : AppColors.accentSecondary;
+    final needleColor = locked ? AppColorTokens.cosmic.gold : AppColorTokens.cosmic.accentSecondary;
     canvas.drawPath(
       northHalf,
       Paint()..color = needleColor.withValues(alpha: needleAlpha),
     );
     canvas.drawPath(
       southHalf,
-      Paint()..color = AppColors.sage.withValues(alpha: needleAlpha * 0.8),
+      Paint()..color = AppColorTokens.cosmic.sage.withValues(alpha: needleAlpha * 0.8),
     );
 
     // Kaaba marker sits right at the needle's pointing tip — inside
@@ -135,7 +135,7 @@ class CompassFacePainter extends CustomPainter {
     paintKaabaMarker(canvas, faceRadius * 0.16, kaabaPulse);
     canvas.restore();
 
-    canvas.drawCircle(Offset.zero, 3.5, Paint()..color = AppColors.ink);
+    canvas.drawCircle(Offset.zero, 3.5, Paint()..color = AppColorTokens.cosmic.ink);
     canvas.restore();
   }
 

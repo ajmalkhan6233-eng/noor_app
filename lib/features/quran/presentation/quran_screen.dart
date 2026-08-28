@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/quran_import_status.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
@@ -11,6 +10,7 @@ import '../logic/quran_cubit/quran_state.dart';
 import 'bookmarks_screen.dart';
 import 'widgets/quran_import_notice.dart';
 import 'widgets/surah_index.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 /// Quran: surah index and search, or a clear notice when the feature
 /// is disabled (no verified source text on this device).
@@ -35,7 +35,7 @@ class _QuranView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: AppColors.paper,
+        backgroundColor: context.colors.paper,
         title: Text(l10n.quranScreenTitle),
         actions: [
           Semantics(
@@ -64,8 +64,8 @@ class _QuranView extends StatelessWidget {
               return QuranImportNotice(status: state.importStatus!);
             }
             if (state.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.gold),
+              return Center(
+                child: CircularProgressIndicator(color: context.colors.gold),
               );
             }
             if (!state.isImported) {

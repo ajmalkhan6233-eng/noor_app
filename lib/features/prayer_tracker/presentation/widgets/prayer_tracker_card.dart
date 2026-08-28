@@ -7,7 +7,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/presentation/widgets/section_header.dart';
@@ -18,6 +17,7 @@ import '../../data/prayer_tracker_repository.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 import '../progress_screen.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 // Reads the PrayerTrackerCubit provided by HomeDashboard (shared with
 // Home's DailyGoalsList) rather than creating its own — so marking a
@@ -59,14 +59,14 @@ class PrayerTrackerCard extends StatelessWidget {
                   SemanticButton(
                     label: 'Previous day',
                     onTap: cubit.goToPreviousDay,
-                    child: const Icon(Icons.chevron_left, color: AppColors.gold, size: 20),
+                    child: Icon(Icons.chevron_left, color: context.colors.gold, size: 20),
                   ),
                   SemanticButton(
                     label: 'Next day',
                     onTap: cubit.goToNextDay,
                     child: Icon(
                       Icons.chevron_right,
-                      color: isToday ? AppColors.hairline : AppColors.gold,
+                      color: isToday ? context.colors.hairline : context.colors.gold,
                       size: 20,
                     ),
                   ),
@@ -90,10 +90,10 @@ class PrayerTrackerCard extends StatelessWidget {
                 state.prayerStreak == 0
                     ? l10n.noPrayerStreakMessage
                     : l10n.prayerStreakLabel(state.prayerStreak),
-                style: AppTypography.caption,
+                style: AppTypography.caption(context.colors.sage),
               ),
               const SizedBox(height: 16),
-              const Divider(color: AppColors.hairline, height: 1),
+              Divider(color: context.colors.hairline, height: 1),
               const SizedBox(height: 16),
               SemanticButton(
                 label: l10n.fastingTodayLabel,
@@ -106,12 +106,12 @@ class PrayerTrackerCard extends StatelessWidget {
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
                       color: state.fastingToday
-                          ? AppColors.gold
-                          : AppColors.sage,
+                          ? context.colors.gold
+                          : context.colors.sage,
                       size: 20,
                     ),
                     const SizedBox(width: 12),
-                    Text(l10n.fastingTodayLabel, style: const TextStyle(color: AppColors.ink)),
+                    Text(l10n.fastingTodayLabel, style: TextStyle(color: context.colors.ink)),
                   ],
                 ),
               ),
@@ -120,7 +120,7 @@ class PrayerTrackerCard extends StatelessWidget {
                 state.fastingStreak == 0
                     ? l10n.noFastingStreakMessage
                     : l10n.fastingStreakLabel(state.fastingStreak),
-                style: AppTypography.caption,
+                style: AppTypography.caption(context.colors.sage),
               ),
               const SizedBox(height: 12),
               SemanticButton(
@@ -128,12 +128,12 @@ class PrayerTrackerCard extends StatelessWidget {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => const ProgressScreen()),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.bar_chart, color: AppColors.gold, size: 16),
-                    SizedBox(width: 6),
-                    Text('View your progress', style: TextStyle(color: AppColors.gold)),
+                    Icon(Icons.bar_chart, color: context.colors.gold, size: 16),
+                    const SizedBox(width: 6),
+                    Text('View your progress', style: TextStyle(color: context.colors.gold)),
                   ],
                 ),
               ),
@@ -162,10 +162,10 @@ class _PrayerChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final color = !enabled
-        ? AppColors.hairline
+        ? context.colors.hairline
         : done
-        ? AppColors.gold
-        : AppColors.sage;
+        ? context.colors.gold
+        : context.colors.sage;
     return SemanticButton(
       label: label,
       hint: !enabled
@@ -178,9 +178,9 @@ class _PrayerChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: done ? AppColors.card : Colors.transparent,
+          color: done ? context.colors.card : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: enabled ? (done ? AppColors.gold : AppColors.hairline) : AppColors.hairline),
+          border: Border.all(color: enabled ? (done ? context.colors.gold : context.colors.hairline) : context.colors.hairline),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

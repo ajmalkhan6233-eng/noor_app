@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 
 class FontCredit extends StatelessWidget {
@@ -16,8 +16,8 @@ class FontCredit extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(family, style: const TextStyle(color: AppColors.ink)),
-        Text(role, style: AppTypography.caption),
+        Text(family, style: TextStyle(color: context.colors.ink)),
+        Text(role, style: AppTypography.caption(context.colors.sage)),
       ],
     );
   }

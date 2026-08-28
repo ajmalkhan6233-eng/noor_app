@@ -7,7 +7,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/empty_state.dart';
@@ -17,6 +16,7 @@ import '../data/quran_bookmark.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class BookmarksScreen extends StatelessWidget {
   const BookmarksScreen({super.key});
@@ -25,7 +25,7 @@ class BookmarksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(title: Text(l10n.bookmarksLabel)),
       body: BlocBuilder<QuranCubit, QuranState>(
         builder: (context, state) {
@@ -79,10 +79,10 @@ class BookmarksScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           child: Row(
             children: [
-              const Icon(Icons.bookmark, color: AppColors.gold, size: 20),
+              Icon(Icons.bookmark, color: context.colors.gold, size: 20),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(label, style: const TextStyle(color: AppColors.ink)),
+                child: Text(label, style: TextStyle(color: context.colors.ink)),
               ),
             ],
           ),

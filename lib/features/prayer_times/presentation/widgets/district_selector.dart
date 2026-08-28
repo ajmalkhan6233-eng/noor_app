@@ -8,7 +8,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/sri_lanka_district.dart';
@@ -34,7 +34,7 @@ class DistrictSelector extends StatelessWidget {
           initialValue: selectedDistrict,
           isExpanded: true,
           decoration: InputDecoration(labelText: l10n.districtFieldLabel),
-          dropdownColor: AppColors.card,
+          dropdownColor: context.colors.card,
           hint: Text(l10n.chooseDistrictHint),
           items: [
             for (final district in sriLankaDistricts)

@@ -6,7 +6,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
+import '../constants/app_color_tokens.dart';
 
 /// One particle's fixed launch angle, distance, and size — generated
 /// once per burst and then just interpolated by [progress] each frame.
@@ -68,7 +68,7 @@ class ParticleBurstPainter extends CustomPainter {
     required this.progress,
     required this.particles,
     required this.color,
-    this.softColor = AppColors.accentSecondary,
+    this.softColor = const Color(0xFF00F2FE),
     this.growing = false,
   });
 

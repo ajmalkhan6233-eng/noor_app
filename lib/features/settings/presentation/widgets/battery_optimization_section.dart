@@ -16,11 +16,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../prayer_times/data/silent_mode_channel.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class BatteryOptimizationSection extends StatefulWidget {
   const BatteryOptimizationSection({super.key, SilentModeChannel? channel})
@@ -67,12 +67,12 @@ class _BatteryOptimizationSectionState extends State<BatteryOptimizationSection>
     if (_isExempted == true) {
       return Row(
         children: [
-          const Icon(Icons.check_circle, color: AppColors.gold, size: 18),
+          Icon(Icons.check_circle, color: context.colors.gold, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               l10n.batteryOptimizationExemptedMessage,
-              style: AppTypography.caption,
+              style: AppTypography.caption(context.colors.sage),
             ),
           ),
         ],
@@ -84,7 +84,7 @@ class _BatteryOptimizationSectionState extends State<BatteryOptimizationSection>
       children: [
         Text(
           l10n.batteryOptimizationNotExemptedMessage,
-          style: AppTypography.caption,
+          style: AppTypography.caption(context.colors.sage),
         ),
         const SizedBox(height: 8),
         SemanticButton(
@@ -98,7 +98,7 @@ class _BatteryOptimizationSectionState extends State<BatteryOptimizationSection>
             child: Text(
               l10n.grantBatteryOptimizationExemptionLabel,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.gold),
+              style: TextStyle(color: context.colors.gold),
             ),
           ),
         ),

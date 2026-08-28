@@ -6,11 +6,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../data/prayer_times_result.dart';
 import '../../logic/monthly_timetable_cubit/monthly_timetable_state.dart';
 import 'prayer_time_format.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// Short, unambiguous column labels — long enough to read at a glance,
 /// short enough that 5 prayers still fit one row without wrapping
@@ -48,7 +48,7 @@ class MonthlyTimetableRow extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-              color: isToday ? AppColors.gold : Colors.transparent,
+              color: isToday ? context.colors.gold : Colors.transparent,
               width: 2,
             ),
           ),
@@ -57,15 +57,15 @@ class MonthlyTimetableRow extends StatelessWidget {
           children: [
             SizedBox(
               width: 40,
-              child: Text(dateLabel, style: AppTypography.time),
+              child: Text(dateLabel, style: AppTypography.time(context.colors.ink)),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: result is PrayerTimesComputed
-                  ? _times(result)
-                  : const Text(
+                  ? _times(context, result)
+                  : Text(
                       'No genuine Isha/Fajr this day',
-                      style: AppTypography.caption,
+                      style: AppTypography.caption(context.colors.sage),
                     ),
             ),
           ],
@@ -78,7 +78,7 @@ class MonthlyTimetableRow extends StatelessWidget {
   // text length shift where the next one started) so every row's
   // Fajr/Dhuhr/Asr/Maghrib/Isha times land in the same horizontal
   // position as the row above and below it.
-  Widget _times(PrayerTimesComputed result) {
+  Widget _times(BuildContext context, PrayerTimesComputed result) {
     return Row(
       children: [
         for (final (name, time) in result.prayerEntries)
@@ -86,8 +86,8 @@ class MonthlyTimetableRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_prayerAbbreviations[name] ?? name, style: AppTypography.caption),
-                Text(formatClock(time), style: AppTypography.time.copyWith(fontSize: 12)),
+                Text(_prayerAbbreviations[name] ?? name, style: AppTypography.caption(context.colors.sage)),
+                Text(formatClock(time), style: AppTypography.time(context.colors.ink).copyWith(fontSize: 12)),
               ],
             ),
           ),

@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
@@ -30,8 +30,8 @@ class QuranSearchResultTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.hairline)),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: context.colors.hairline)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,12 +39,12 @@ class QuranSearchResultTile extends StatelessWidget {
             Text(
               ayah.arabicText,
               textDirection: TextDirection.rtl,
-              style: AppTypography.arabic,
+              style: AppTypography.arabic(context.colors.ink),
             ),
             const SizedBox(height: 4),
             Text(
               l10n.surahAyahLabel(ayah.surahId, ayah.ayahNumber),
-              style: AppTypography.caption,
+              style: AppTypography.caption(context.colors.sage),
             ),
           ],
         ),

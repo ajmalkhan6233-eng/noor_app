@@ -7,7 +7,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/haptics/haptic_service.dart';
 import '../../../../core/presentation/widgets/draggable_floating.dart';
@@ -16,6 +15,7 @@ import '../../../../core/sensors/compass_reading.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../logic/qibla_cubit/qibla_state.dart';
 import 'qibla_needle.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class QiblaCompassArea extends StatefulWidget {
   const QiblaCompassArea({
@@ -55,7 +55,7 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
           child: Text(
             AppLocalizations.of(context)!.qiblaNoCompassMessage,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.sage),
+            style: TextStyle(color: context.colors.sage),
           ),
         ),
       );
@@ -75,22 +75,22 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.explore_off_outlined, color: AppColors.sage, size: 40),
+                Icon(Icons.explore_off_outlined, color: context.colors.sage, size: 40),
                 const SizedBox(height: 12),
-                const Text(
+                Text(
                   "The compass sensor isn't responding. Try moving your "
                   'phone in a figure-8 a few times to calibrate it, or '
                   'reopen this screen.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.sage),
+                  style: TextStyle(color: context.colors.sage),
                 ),
               ],
             ),
           ),
         );
       }
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.gold),
+      return Center(
+        child: CircularProgressIndicator(color: context.colors.gold),
       );
     }
 

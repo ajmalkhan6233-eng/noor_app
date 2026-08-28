@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/prayer_adjustments.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// Per-prayer manual minute offsets, applied on top of the chosen
 /// calculation method.
@@ -54,26 +54,26 @@ class PrayerAdjustmentsSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.ink)),
+          Text(label, style: TextStyle(color: context.colors.ink)),
           Row(
             children: [
               SemanticButton(
                 label: 'Decrease $label offset',
                 onTap: () => change(-1),
-                child: const Icon(Icons.remove, color: AppColors.gold),
+                child: Icon(Icons.remove, color: context.colors.gold),
               ),
               SizedBox(
                 width: 48,
                 child: Text(
                   '$minutes min',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppColors.sage),
+                  style: TextStyle(color: context.colors.sage),
                 ),
               ),
               SemanticButton(
                 label: 'Increase $label offset',
                 onTap: () => change(1),
-                child: const Icon(Icons.add, color: AppColors.gold),
+                child: Icon(Icons.add, color: context.colors.gold),
               ),
             ],
           ),

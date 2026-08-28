@@ -8,8 +8,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
 import '../motion/motion.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class SkeletonBox extends StatefulWidget {
   const SkeletonBox({
@@ -51,7 +51,7 @@ class _SkeletonBoxState extends State<SkeletonBox>
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
-            color: AppColors.hairline.withValues(alpha: opacity),
+            color: context.colors.hairline.withValues(alpha: opacity),
             borderRadius: widget.borderRadius,
           ),
         );

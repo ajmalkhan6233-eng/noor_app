@@ -7,10 +7,10 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
 import '../../constants/app_typography.dart';
 import '../widgets/noor_splash_wordmark.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class PlainSplashView extends StatelessWidget {
   const PlainSplashView({super.key});
@@ -32,7 +32,7 @@ class PlainSplashView extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: AppTypography.arabicFamily,
-                    color: AppColors.gold,
+                    color: Color(0xFFFFB703),
                     fontSize: 26,
                     height: 1.6,
                   ),

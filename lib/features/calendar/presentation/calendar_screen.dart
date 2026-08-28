@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/hijri_date.dart';
 import '../../../core/utils/islamic_occasion.dart';
@@ -45,7 +45,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final today = DateTime.now();
 
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(
         title: Text('${_monthName(_month.month)} ${_month.year}'),
         actions: [
@@ -102,7 +102,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final holidays = sriLankaHolidaysOn(date);
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: AppColors.card,
+      backgroundColor: context.colors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -114,21 +114,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
           children: [
             Text(
               '${_monthName(date.month)} ${date.day}, ${date.year}',
-              style: const TextStyle(
-                color: AppColors.ink,
+              style: TextStyle(
+                color: context.colors.ink,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 4),
-            Text(hijri.formatted, style: AppTypography.caption),
+            Text(hijri.formatted, style: AppTypography.caption(context.colors.sage)),
             if (occasions.isNotEmpty || holidays.isNotEmpty) ...[
               const SizedBox(height: 16),
-              const Divider(color: AppColors.hairline, height: 1),
+              Divider(color: context.colors.hairline, height: 1),
               const SizedBox(height: 16),
-              for (final occasion in occasions) _detailRow(occasion.label, AppColors.gold),
+              for (final occasion in occasions) _detailRow(occasion.label, context.colors.gold),
               for (final holiday in holidays)
-                _detailRow(holiday.name, AppColors.accentSecondary),
+                _detailRow(holiday.name, context.colors.accentSecondary),
             ],
             const SizedBox(height: 8),
           ],
@@ -148,7 +148,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             decoration: BoxDecoration(shape: BoxShape.circle, color: dotColor),
           ),
           const SizedBox(width: 10),
-          Text(label, style: const TextStyle(color: AppColors.ink)),
+          Text(label, style: TextStyle(color: context.colors.ink)),
         ],
       ),
     );

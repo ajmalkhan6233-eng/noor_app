@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/presentation/widgets/reading_position_tracker.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/surah_audio_player.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'widgets/ayah_tile.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 /// Ayah-by-ayah view of one surah, with adjustable Arabic font size
 /// (from Settings), bookmarking, and last-read tracking: scrolling
@@ -73,9 +73,9 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(
-        backgroundColor: AppColors.paper,
+        backgroundColor: context.colors.paper,
         elevation: 0,
         title: Text(AppLocalizations.of(context)!.surahReaderTitle(widget.surahId)),
         actions: [
@@ -86,7 +86,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
           if (hasSurahAudio(widget.surahId))
             IconButton(
               icon: Icon(_playing ? Icons.pause_circle_outline : Icons.play_circle_outline),
-              color: AppColors.gold,
+              color: context.colors.gold,
               tooltip: _playing ? 'Pause recitation' : 'Play recitation',
               onPressed: _toggleAudio,
             ),
@@ -97,8 +97,8 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (context, state) {
             if (state.currentSurahId != widget.surahId) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.gold),
+              return Center(
+                child: CircularProgressIndicator(color: context.colors.gold),
               );
             }
             _maybeScrollToLastRead(state);

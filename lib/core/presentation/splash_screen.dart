@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
+import '../constants/app_color_tokens.dart';
 import '../constants/app_strings.dart';
 import '../constants/splash_config.dart';
 import 'splash/big_bang_splash_view.dart';
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       body: Semantics(
         label: AppStrings.splashGreetingSemanticLabel,
         child: FadeTransition(

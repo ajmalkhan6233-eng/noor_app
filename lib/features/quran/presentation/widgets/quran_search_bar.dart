@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../logic/quran_cubit/quran_cubit.dart';
 
@@ -18,11 +18,11 @@ class QuranSearchBar extends StatelessWidget {
       textField: true,
       label: l10n.searchQuranSemanticLabel,
       child: TextField(
-        style: const TextStyle(color: AppColors.ink),
+        style: TextStyle(color: context.colors.ink),
         decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search, color: AppColors.sage),
+          prefixIcon: Icon(Icons.search, color: context.colors.sage),
           hintText: l10n.searchHintText,
-          hintStyle: const TextStyle(color: AppColors.sage),
+          hintStyle: TextStyle(color: context.colors.sage),
         ),
         onChanged: (query) => context.read<QuranCubit>().search(query),
       ),

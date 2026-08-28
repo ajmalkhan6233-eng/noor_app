@@ -8,12 +8,12 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/prayer_times_result.dart';
 import 'prayer_time_format.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class SuhoorIftarRow extends StatelessWidget {
   const SuhoorIftarRow({super.key, required this.times});
@@ -26,17 +26,22 @@ class SuhoorIftarRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: _box(icon: Icons.nightlight_round, label: l10n.suhoorLabel, time: times.fajr),
+          child: _box(context, icon: Icons.nightlight_round, label: l10n.suhoorLabel, time: times.fajr),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: _box(icon: Icons.wb_twilight, label: l10n.iftarLabel, time: times.maghrib),
+          child: _box(context, icon: Icons.wb_twilight, label: l10n.iftarLabel, time: times.maghrib),
         ),
       ],
     );
   }
 
-  Widget _box({required IconData icon, required String label, required DateTime time}) {
+  Widget _box(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required DateTime time,
+  }) {
     return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Column(
@@ -44,18 +49,18 @@ class SuhoorIftarRow extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: AppColors.gold, size: 16),
+              Icon(icon, color: context.colors.gold, size: 16),
               const SizedBox(width: 6),
-              Text(label, style: AppTypography.caption),
+              Text(label, style: AppTypography.caption(context.colors.sage)),
             ],
           ),
           const SizedBox(height: 6),
           Text(
             formatClock(time),
-            style: const TextStyle(
-              color: AppColors.ink,
+            style: TextStyle(
+              color: context.colors.ink,
               fontWeight: FontWeight.w700,
-              fontFeatures: [FontFeature.tabularFigures()],
+              fontFeatures: const [FontFeature.tabularFigures()],
               fontSize: 18,
             ),
           ),

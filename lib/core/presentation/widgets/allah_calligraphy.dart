@@ -9,7 +9,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
+import '../../constants/app_color_tokens.dart';
 import '../../constants/app_typography.dart';
 
 class AllahCalligraphy extends StatelessWidget {
@@ -28,10 +28,10 @@ class AllahCalligraphy extends StatelessWidget {
           style: TextStyle(
             fontFamily: AppTypography.arabicFamily,
             fontSize: fontSize,
-            color: AppColors.gold,
+            color: context.colors.gold,
             shadows: [
               Shadow(
-                color: AppColors.paper.withValues(alpha: 0.85),
+                color: context.colors.paper.withValues(alpha: 0.85),
                 offset: const Offset(-1.4, -1.4),
                 blurRadius: 1.4,
               ),

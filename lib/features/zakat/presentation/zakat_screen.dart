@@ -8,7 +8,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -16,6 +15,7 @@ import '../data/zakat_calculator.dart';
 import '../data/zakat_price_memory.dart';
 import 'widgets/zakat_number_field.dart';
 import 'widgets/zakat_result_card.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 class ZakatScreen extends StatefulWidget {
   const ZakatScreen({super.key});
@@ -48,7 +48,7 @@ class _ZakatScreenState extends State<ZakatScreen> {
     final l10n = AppLocalizations.of(context)!;
     final result = ZakatCalculator.calculate(_inputs);
     return Scaffold(
-      backgroundColor: AppColors.paper,
+      backgroundColor: context.colors.paper,
       appBar: AppBar(title: Text(l10n.zakatCalculatorLabel)),
       body: ListView(
         padding: const EdgeInsets.all(24),
@@ -57,7 +57,7 @@ class _ZakatScreenState extends State<ZakatScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.goldSilverHeader, style: AppTypography.caption),
+                Text(l10n.goldSilverHeader, style: AppTypography.caption(context.colors.sage)),
                 const SizedBox(height: 8),
                 ZakatNumberField(
                   label: l10n.goldGramsLabel,
@@ -99,7 +99,7 @@ class _ZakatScreenState extends State<ZakatScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.otherAssetsHeader, style: AppTypography.caption),
+                Text(l10n.otherAssetsHeader, style: AppTypography.caption(context.colors.sage)),
                 const SizedBox(height: 8),
                 ZakatNumberField(
                   label: l10n.cashSavingsLabel,

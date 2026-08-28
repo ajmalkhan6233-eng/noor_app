@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../settings/data/notification_settings.dart';
@@ -12,6 +11,7 @@ import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
 import 'prayer_row_leading_controls.dart';
 import 'prayer_time_format.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 /// The five daily prayers plus sunrise, in chronological order. The
 /// prayer currently in effect carries a thin gold left rule — the
@@ -98,7 +98,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
-            color: isCurrent ? AppColors.gold : Colors.transparent,
+            color: isCurrent ? context.colors.gold : Colors.transparent,
             width: 2,
           ),
         ),
@@ -119,7 +119,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
               Semantics(
                 label: label,
                 child: ExcludeSemantics(
-                  child: Text(name, style: const TextStyle(color: AppColors.ink)),
+                  child: Text(name, style: TextStyle(color: context.colors.ink)),
                 ),
               ),
             ],
@@ -128,10 +128,10 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(formatClock(time), style: AppTypography.time),
+                Text(formatClock(time), style: AppTypography.time(context.colors.ink)),
                 if (iqamathTime != null) ...[
                   const SizedBox(width: 10),
-                  Text(formatClock(iqamathTime), style: AppTypography.caption),
+                  Text(formatClock(iqamathTime), style: AppTypography.caption(context.colors.sage)),
                 ],
               ],
             ),

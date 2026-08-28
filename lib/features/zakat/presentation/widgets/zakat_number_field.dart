@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 
 class ZakatNumberField extends StatefulWidget {
   const ZakatNumberField({
@@ -66,10 +66,10 @@ class _ZakatNumberFieldState extends State<ZakatNumberField> {
         child: TextField(
           controller: _controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          style: const TextStyle(color: AppColors.ink),
+          style: TextStyle(color: context.colors.ink),
           decoration: InputDecoration(
             labelText: widget.label,
-            labelStyle: AppTypography.caption,
+            labelStyle: AppTypography.caption(context.colors.sage),
           ),
           onChanged: (v) => widget.onChanged(double.tryParse(v) ?? 0),
         ),

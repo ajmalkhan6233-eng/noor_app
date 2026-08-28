@@ -11,7 +11,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../prayer_times/data/prayer_times_result.dart';
@@ -79,8 +79,8 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
       child: ExcludeSemantics(
         child: AppCard(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-          borderColor: upcoming ? AppColors.gold : null,
-          glowColor: upcoming ? AppColors.accentSecondary : null,
+          borderColor: upcoming ? context.colors.gold : null,
+          glowColor: upcoming ? context.colors.accentSecondary : null,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -90,7 +90,7 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
                   name,
                   maxLines: 1,
                   style: TextStyle(
-                    color: upcoming ? AppColors.gold : AppColors.sage,
+                    color: upcoming ? context.colors.gold : context.colors.sage,
                     fontSize: 12,
                     fontWeight: upcoming ? FontWeight.w700 : FontWeight.w400,
                   ),
@@ -102,7 +102,7 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
                 child: Text(
                   formatClock(time),
                   maxLines: 1,
-                  style: AppTypography.time,
+                  style: AppTypography.time(context.colors.ink),
                 ),
               ),
             ],
