@@ -177,11 +177,27 @@ jobs:
         continue-on-error: true
         run: flutter analyze --no-fatal-infos
 
-      - name: Build release APK
-        id: apk
+      - name: Configure release signing
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+        run: |
+          test -n "$RELEASE_KEYSTORE_BASE64" || { echo "Release signing secrets are required"; exit 1; }
+          echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/noor-release.jks"
+          cat > android/key.properties <<EOF
+          storePassword=$RELEASE_STORE_PASSWORD
+          keyPassword=$RELEASE_KEY_PASSWORD
+          keyAlias=$RELEASE_KEY_ALIAS
+          storeFile=$RUNNER_TEMP/noor-release.jks
+          EOF
+
+      - name: Build release AAB
+        id: aab
         run: |
           set -o pipefail
-          flutter build apk --release \
+          flutter build appbundle --release \
             --build-number ${{ github.run_number }} 2>&1 | tee /tmp/build.log
 
       - name: Publish build error to summary
@@ -200,25 +216,25 @@ jobs:
       - name: Publish success summary
         if: success()
         run: |
-          APK=build/app/outputs/flutter-apk/app-release.apk
+          AAB=build/app/outputs/bundle/release/app-release.aab
           {
             echo "## Noor build #${{ github.run_number }}"
             echo ""
-            echo "**APK built successfully.**"
+            echo "**Signed AAB built successfully.**"
             echo ""
             echo "| Field | Value |"
             echo "|---|---|"
-            echo "| Size | $(du -h \"$APK\" | cut -f1) |"
+            echo "| Size | $(du -h \"$AAB\" | cut -f1) |"
             echo "| Commit | \`${{ github.sha }}\` |"
             echo ""
-            echo "Debug-signed - sideload only, not Play Store ready."
+            echo "Release-signed and ready for Play Console upload."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload APK artifact
+      - name: Upload AAB artifact
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: noor-release-${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: noor-release-aab-${{ github.run_number }}
+          path: build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
           retention-days: 30
