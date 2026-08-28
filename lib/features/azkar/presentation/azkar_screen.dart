@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/widgets/app_card.dart';
+import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'azkar_category_screen.dart';
 import '../data/azkar_category.dart';
@@ -33,8 +34,15 @@ class AzkarScreen extends StatefulWidget {
 
 class _AzkarScreenState extends State<AzkarScreen> {
   late final AzkarRepository _repository = widget._repository ?? AzkarRepository();
+  final _searchScrollController = ScrollController();
   String _query = '';
   List<(AzkarCategory category, AzkarItem item)> _results = const [];
+
+  @override
+  void dispose() {
+    _searchScrollController.dispose();
+    super.dispose();
+  }
 
   Future<void> _search(String query) async {
     setState(() => _query = query);
@@ -102,35 +110,39 @@ class _AzkarScreenState extends State<AzkarScreen> {
       );
     }
     return ListView.separated(
+      controller: _searchScrollController,
       itemCount: _results.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final (category, item) = _results[index];
         final resultLabel = item.transliteration ?? item.translation ?? '';
-        return AppCard(
-          padding: EdgeInsets.zero,
-          child: Semantics(
-            button: true,
-            label: '${category.label}: $resultLabel',
-            hint: 'Double tap to open this dua',
-            child: InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: () => _openCategory(category),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: ExcludeSemantics(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: 11)),
-                      const SizedBox(height: 4),
-                      Text(
-                        resultLabel,
-                        style: TextStyle(color: context.colors.ink),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+        return ParallaxItem(
+          controller: _searchScrollController,
+          child: AppCard(
+            padding: EdgeInsets.zero,
+            child: Semantics(
+              button: true,
+              label: '${category.label}: $resultLabel',
+              hint: 'Double tap to open this dua',
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () => _openCategory(category),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: ExcludeSemantics(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: 11)),
+                        const SizedBox(height: 4),
+                        Text(
+                          resultLabel,
+                          style: TextStyle(color: context.colors.ink),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

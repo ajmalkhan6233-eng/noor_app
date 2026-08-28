@@ -27,6 +27,37 @@ class ParallaxLayer extends StatefulWidget {
   State<ParallaxLayer> createState() => _ParallaxLayerState();
 }
 
+/// Applies a small depth offset to content that moves inside a scroll view.
+class ParallaxItem extends StatelessWidget {
+  const ParallaxItem({
+    super.key,
+    required this.controller,
+    required this.child,
+    this.depth = 0.06,
+  });
+
+  final ScrollController controller;
+  final Widget child;
+  final double depth;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final reduced = MediaQuery.of(context).disableAnimations;
+        final offset = controller.hasClients && !reduced
+            ? controller.offset * depth
+            : 0.0;
+        return Transform.translate(
+          offset: Offset(0, -offset),
+          child: child,
+        );
+      },
+    );
+  }
+}
+
 class _ParallaxLayerState extends State<ParallaxLayer> {
   @override
   void initState() {
