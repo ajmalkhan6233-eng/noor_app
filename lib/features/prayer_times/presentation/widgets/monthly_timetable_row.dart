@@ -1,8 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// One day's row in the monthly timetable: date, then the five prayer
-// times. Today's row carries the same thin gold left rule used for
-// the current prayer elsewhere in the app.
+/// One day's row in the monthly timetable: day number, then five prayer
+/// times. Alternating rows aid scanning, while today gets a full outline.
 
 import 'package:flutter/material.dart';
 
@@ -25,15 +24,21 @@ const Map<String, String> _prayerAbbreviations = {
 };
 
 class MonthlyTimetableRow extends StatelessWidget {
-  const MonthlyTimetableRow({super.key, required this.day, required this.isToday});
+  const MonthlyTimetableRow({
+    super.key,
+    required this.day,
+    required this.isToday,
+    this.isAlternate = false,
+  });
 
   final MonthlyTimetableDay day;
   final bool isToday;
+  final bool isAlternate;
 
   @override
   Widget build(BuildContext context) {
     final result = day.result;
-    final dateLabel = '${day.date.day}/${day.date.month}';
+    final dateLabel = '${day.date.day}';
     final timesLabel = result is PrayerTimesComputed
         ? result.prayerEntries
               .map((e) => '${e.$1} ${formatClock(e.$2)}')
@@ -43,23 +48,21 @@ class MonthlyTimetableRow extends StatelessWidget {
       label:
           '$dateLabel${isToday ? ', today' : ''}: $timesLabel',
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 2),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 12),
         decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(
-              color: isToday ? context.colors.gold : Colors.transparent,
-              width: 2,
-            ),
+          color: isAlternate ? context.colors.paper.withValues(alpha: 0.22) : null,
+          border: Border.all(
+            color: isToday ? context.colors.gold : Colors.transparent,
+            width: isToday ? 1 : 0,
           ),
         ),
         child: Row(
           children: [
             SizedBox(
-              width: 40,
+              width: 36,
               child: Text(dateLabel, style: AppTypography.time(context.colors.ink)),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Expanded(
               child: result is PrayerTimesComputed
                   ? _times(context, result)

@@ -65,23 +65,55 @@ class _MonthlyTimetableView extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(24),
             children: [
-              AppCard(
-                child: Column(
-                  children: [
-                    for (final day in state.days)
-                      MonthlyTimetableRow(
-                        day: day,
-                        isToday:
-                            day.date.year == today.year &&
-                            day.date.month == today.month &&
-                            day.date.day == today.day,
-                      ),
-                  ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: 560,
+                  child: AppCard(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        _header(context),
+                        for (var index = 0; index < state.days.length; index++)
+                          MonthlyTimetableRow(
+                            day: state.days[index],
+                            isToday:
+                                state.days[index].date.year == today.year &&
+                                state.days[index].date.month == today.month &&
+                                state.days[index].date.day == today.day,
+                            isAlternate: index.isOdd,
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              )
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _header(BuildContext context) {
+    const labels = ['Day', 'Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      decoration: BoxDecoration(
+        color: context.colors.card,
+        border: Border(bottom: BorderSide(color: context.colors.hairline)),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 36,
+            child: Text(labels.first, style: TextStyle(color: context.colors.sage, fontSize: 12)),
+          ),
+          for (final label in labels.skip(1))
+            Expanded(
+              child: Text(label, style: TextStyle(color: context.colors.sage, fontSize: 12)),
+            ),
+        ],
       ),
     );
   }
