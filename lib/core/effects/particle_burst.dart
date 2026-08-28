@@ -9,7 +9,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../constants/app_color_tokens.dart';
 import 'particle_burst_painter.dart';
 import '../presentation/motion/motion.dart';
 

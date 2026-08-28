@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import '../../constants/app_strings.dart';
 import '../../constants/app_typography.dart';
 import '../widgets/noor_splash_wordmark.dart';
-import '../../../core/constants/app_color_tokens.dart';
 
 class PlainSplashView extends StatelessWidget {
   const PlainSplashView({super.key});

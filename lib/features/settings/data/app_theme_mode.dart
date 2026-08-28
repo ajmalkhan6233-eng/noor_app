@@ -11,9 +11,9 @@ extension AppThemeModeOptionLabel on AppThemeModeOption {
   String get label {
     switch (this) {
       case AppThemeModeOption.dark:
-        return 'Dark';
+        return 'Nebula';
       case AppThemeModeOption.light:
-        return 'Light';
+        return 'Dawn';
       case AppThemeModeOption.system:
         return 'Follow system';
     }

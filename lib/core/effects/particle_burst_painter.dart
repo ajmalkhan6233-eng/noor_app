@@ -6,7 +6,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-import '../constants/app_color_tokens.dart';
 
 /// One particle's fixed launch angle, distance, and size — generated
 /// once per burst and then just interpolated by [progress] each frame.

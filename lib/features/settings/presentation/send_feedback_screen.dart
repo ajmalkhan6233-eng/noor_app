@@ -68,9 +68,9 @@ class SendFeedbackScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Found a bug, or have an idea for noor? Send a message below "
-              "and it goes straight to the developer — no ticket system, "
-              "no account needed.",
+              "Welcome — feel free to message and discuss any thoughts or "
+              "feedback about noor, big or small. It goes straight to the "
+              "developer, no ticket system, no account needed.",
               style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: 14),
             ),
             const SizedBox(height: 24),

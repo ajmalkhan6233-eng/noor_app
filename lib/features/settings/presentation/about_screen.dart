@@ -40,8 +40,10 @@ class AboutScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _fontCreditsCard(context),
               const SizedBox(height: 16),
-              _privacyPolicyLink(context),
-              const SizedBox(height: 16),
+              // Privacy Policy link intentionally hidden for now (not
+              // deleted — _privacyPolicyLink() and PrivacyPolicyScreen
+              // both still exist below) pending the developer's own
+              // review of its content before showing it to users.
               _licencesLink(context),
               const SizedBox(height: 16),
               const BuildStampFooter(),
@@ -60,8 +62,12 @@ class AboutScreen extends StatelessWidget {
           Text(AppStrings.appName, style: AppTypography.heroDisplay(context.colors.ink)),
           const SizedBox(height: 8),
           Text(
-            'A clean, privacy-first, ad-free Islamic utility app. '
-            'Fully offline: no ads, no analytics, no remote telemetry.',
+            'This app is built to take Muslims from where they are to '
+            'where they want to be. Every Muslim has a niyyah — a place '
+            'he is in, and a place he wants to be, in his religion. This '
+            'app was created to fill that gap, with a sincere and humble '
+            'intention. Whoever can benefit from it, that is all we hope '
+            'for.',
             style: TextStyle(color: context.colors.sage),
           ),
         ],
@@ -95,8 +101,6 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 12),
           const FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
           const SizedBox(height: 12),
-          const FontCredit(family: 'Amiri', role: 'Arabic text'),
-          const SizedBox(height: 12),
           const FontCredit(
             family: 'Noto Sans Tamil',
             role: 'Tamil interface text',
@@ -117,6 +121,10 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
+  // Not called from build() right now — see the "hidden for now" note
+  // above. Kept, not deleted: re-add its call site once the privacy
+  // policy content has been reviewed.
+  // ignore: unused_element
   Widget _privacyPolicyLink(BuildContext context) {
     return AppCard(
       padding: EdgeInsets.zero,

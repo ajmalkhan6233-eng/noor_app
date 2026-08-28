@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_strings.dart';
 import '../../constants/app_typography.dart';
-import '../../../core/constants/app_color_tokens.dart';
 
 class BismillahReveal extends StatelessWidget {
   const BismillahReveal({

@@ -46,13 +46,14 @@ void main() {
     expect(calls, contains('isIgnoringBatteryOptimizations'));
   });
 
-  testWidgets('shows the exempted message when already exempted', (tester) async {
+  testWidgets('shows nothing once already exempted', (tester) async {
     isExempted = true;
     await tester.pumpWidget(_wrap());
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.check_circle), findsOneWidget);
+    expect(find.byType(BatteryOptimizationSection), findsOneWidget);
     expect(find.text('Allow unrestricted battery use'), findsNothing);
+    expect(find.byType(SizedBox), findsWidgets);
   });
 
   testWidgets(
@@ -77,13 +78,13 @@ void main() {
     (tester) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
-      expect(find.byIcon(Icons.check_circle), findsNothing);
+      expect(find.text('Allow unrestricted battery use'), findsOneWidget);
 
       isExempted = true;
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.check_circle), findsOneWidget);
+      expect(find.text('Allow unrestricted battery use'), findsNothing);
     },
   );
 }

@@ -17,6 +17,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../prayer_times/data/silent_mode_channel.dart';
@@ -62,46 +64,46 @@ class _BatteryOptimizationSectionState extends State<BatteryOptimizationSection>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    if (_isExempted == null) return const SizedBox.shrink();
-
-    if (_isExempted == true) {
-      return Row(
-        children: [
-          Icon(Icons.check_circle, color: context.colors.gold, size: 18),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              l10n.batteryOptimizationExemptedMessage,
-              style: AppTypography.caption(context.colors.sage),
-            ),
-          ),
-        ],
-      );
-    }
+    // Nothing to show once already exempted (the previous "this app is
+    // exempt from battery optimization" message was a technical detail
+    // that doesn't need surfacing) or before the first check resolves —
+    // the underlying exemption request itself is unaffected, this only
+    // hides the confirmation copy. Only the actionable "not yet
+    // exempted" case renders anything.
+    if (_isExempted != false) return const SizedBox.shrink();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          l10n.batteryOptimizationNotExemptedMessage,
-          style: AppTypography.caption(context.colors.sage),
-        ),
-        const SizedBox(height: 8),
-        SemanticButton(
-          label: l10n.grantBatteryOptimizationExemptionLabel,
-          hint: 'Opens the system battery settings dialog for this app',
-          onTap: () async {
-            await widget._channel.requestIgnoreBatteryOptimizations();
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Text(
-              l10n.grantBatteryOptimizationExemptionLabel,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: context.colors.gold),
-            ),
+        SectionHeader(l10n.batteryOptimizationSectionHeader),
+        AppCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.batteryOptimizationNotExemptedMessage,
+                style: AppTypography.caption(context.colors.sage),
+              ),
+              const SizedBox(height: 8),
+              SemanticButton(
+                label: l10n.grantBatteryOptimizationExemptionLabel,
+                hint: 'Opens the system battery settings dialog for this app',
+                onTap: () async {
+                  await widget._channel.requestIgnoreBatteryOptimizations();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(
+                    l10n.grantBatteryOptimizationExemptionLabel,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: context.colors.gold),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+        const SizedBox(height: 16),
       ],
     );
   }
