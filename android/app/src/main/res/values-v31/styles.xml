@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ (API 31+) draws its own system splash screen using
+         the new SplashScreen API, which does NOT read the legacy
+         android:windowBackground/launch_background.xml at all — it has
+         its own separate windowSplashScreenBackground attribute. That
+         attribute was never set anywhere in this project, so on any
+         API 31+ device the system splash fell back to its own default
+         (white), fully independent of and untouched by the
+         launch_background.xml fix. This is the real cause of the
+         white flash surviving that fix on a modern device (2026-08-28
+         live-device finding, SDK 36).
+
+         Deliberately does NOT extend android:Theme.SplashScreen — that
+         framework style failed to resolve during debug resource
+         linking on this project's toolchain (AAPT: "resource
+         android:style/Theme.SplashScreen not found", despite
+         android-36 being installed) — a compileSdk-resolution quirk
+         not worth chasing further. Setting the splash-screen-API
+         items directly on the existing LaunchTheme parent (same base
+         as values/styles.xml) sidesteps it entirely and needs nothing
+         beyond API 31 support for these specific attributes. -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:windowSplashScreenBackground">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+    </style>
+</resources>

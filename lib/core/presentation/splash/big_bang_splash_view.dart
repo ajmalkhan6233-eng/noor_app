@@ -15,12 +15,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
-import '../../constants/app_strings.dart';
-import '../../constants/app_typography.dart';
 import '../../constants/splash_config.dart';
 import '../../effects/particle_burst_painter.dart';
 import '../motion/motion.dart';
 import '../widgets/noor_splash_wordmark.dart';
+import 'bismillah_reveal.dart';
 import 'plain_splash_view.dart';
 
 class BigBangSplashView extends StatefulWidget {
@@ -95,49 +94,23 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                 ),
               ),
             ),
-            AnimatedBuilder(
-              animation: Listenable.merge([_burstController, _dissolveController]),
-              builder: (context, child) {
-                // Bismillah settles in over the burst's back half —
-                // scaling down from depth rather than a flat fade —
-                // then fades out as the dissolve begins.
-                final burstIn = ((_burstController.value - 0.5) / 0.5).clamp(0.0, 1.0);
-                final dissolveOut = 1.0 - _dissolveController.value;
-                final opacity = burstIn * dissolveOut;
-                final scale = 1.0 + (1.0 - burstIn) * 0.35;
-                return Opacity(
-                  opacity: opacity,
-                  child: Transform.scale(scale: scale, child: child),
-                );
-              },
-              child: Semantics(
-                label: AppStrings.splashGreetingSemanticLabel,
-                child: const ExcludeSemantics(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child: Text(
-                      AppStrings.splashGreeting,
-                      textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: AppTypography.arabicFamily,
-                        color: AppColors.gold,
-                        fontSize: 30,
-                        height: 1.6,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            BismillahReveal(
+              burstController: _burstController,
+              dissolveController: _dissolveController,
             ),
             AnimatedBuilder(
               animation: _dissolveController,
               builder: (context, child) {
                 // NOOR arrives from the same "coming from behind"
                 // depth treatment, timed to the dissolve rather than
-                // a flat fade-in.
-                final opacity = _dissolveController.value;
-                final scale = 0.85 + (opacity * 0.15);
+                // a flat fade-in. Eased (2026-08-28: at the raw linear
+                // rate this read as the wordmark snapping into place
+                // rather than settling) — easeOutCubic front-loads the
+                // motion and lets it coast to a stop instead of
+                // arriving at a constant rate and just halting.
+                final t = Curves.easeOutCubic.transform(_dissolveController.value);
+                final opacity = t;
+                final scale = 0.85 + (t * 0.15);
                 return Opacity(
                   opacity: opacity,
                   child: Transform.scale(scale: scale, child: child),
