@@ -79,17 +79,30 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
         elevation: 0,
         title: Text(AppLocalizations.of(context)!.surahReaderTitle(widget.surahId)),
         actions: [
-          // Recitation audio is only bundled for Juz Amma (surahs
-          // 78-114) — see surah_audio_player.dart's header for why
-          // the rest isn't. No button at all for other surahs, rather
-          // than one that always fails.
-          if (hasSurahAudio(widget.surahId))
-            IconButton(
-              icon: Icon(_playing ? Icons.pause_circle_outline : Icons.play_circle_outline),
-              color: context.colors.gold,
-              tooltip: _playing ? 'Pause recitation' : 'Play recitation',
-              onPressed: _toggleAudio,
+          // Keep recitation discoverable on every reader screen. Only the
+          // bundled, licensed Juz Amma files receive an active callback.
+          Semantics(
+            button: true,
+            label: hasSurahAudio(widget.surahId)
+                ? (_playing ? 'Pause recitation' : 'Play recitation')
+                : 'Recitation unavailable for this Surah',
+            value: _playing ? 'Playing' : 'Stopped',
+            hint: hasSurahAudio(widget.surahId)
+                ? 'Double tap to control recitation'
+                : 'Only Juz Amma recitations are bundled offline',
+            child: IconButton(
+              icon: Icon(
+                _playing ? Icons.pause_circle_outline : Icons.play_circle_outline,
+              ),
+              color: hasSurahAudio(widget.surahId)
+                  ? context.colors.gold
+                  : context.colors.sage,
+              tooltip: hasSurahAudio(widget.surahId)
+                  ? (_playing ? 'Pause recitation' : 'Play recitation')
+                  : 'Recitation unavailable for this Surah',
+              onPressed: hasSurahAudio(widget.surahId) ? _toggleAudio : null,
             ),
+          ),
         ],
       ),
       body: Padding(
