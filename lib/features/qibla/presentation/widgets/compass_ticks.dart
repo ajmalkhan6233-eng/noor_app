@@ -1,9 +1,18 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Degree ticks and N/E/S/W cardinal labels for the compass face —
-// split out of CompassFacePainter to stay under the 150-line limit.
-// Plain solid-color lines/text only (see compass_face_painter.dart's
-// header for why the tilt-lit/shadowed variant was dropped).
+// Degree ticks, cardinal/intercardinal labels, and a decorative inner
+// rosette for the compass face — split out of CompassFacePainter to
+// stay under the 150-line limit.
+//
+// Rebuilt from scratch (2026-08-28 live-device review: "looks too
+// simple — like a watch, not a compass" — the previous version drew
+// only 12 ticks at 30° spacing with no graduation at all). Now a full
+// 5°-graduated ring (72 ticks: minor every 5°, medium every 15°, major
+// every 30°, longest+boldest at the four cardinals) plus an 8-point
+// rosette star behind the ticks for real visual density, still using
+// only plain lines/paths/text — no shaders/gradients, per this
+// screen's established GPU-safety constraint (see
+// compass_face_painter.dart's header for why that constraint exists).
 
 import 'dart:math' as math;
 
@@ -17,35 +26,117 @@ void paintCompassTicksAndLabels(
   Offset center,
   double faceRadius,
 ) {
-  for (var deg = 0; deg < 360; deg += 30) {
+  _paintRosette(canvas, center, faceRadius);
+  _paintTickRing(canvas, center, faceRadius);
+  _paintCardinalLabels(canvas, center, faceRadius);
+}
+
+/// An 8-point star traced behind the ticks — a fixed ornamental motif
+/// (not tied to compass heading), giving the face real depth instead
+/// of reading as a flat clock.
+void _paintRosette(Canvas canvas, Offset center, double faceRadius) {
+  final outer = faceRadius * 0.62;
+  final inner = faceRadius * 0.30;
+  final path = Path();
+  for (var i = 0; i < 16; i++) {
+    final radius = i.isEven ? outer : inner;
+    final angle = i * (math.pi / 8);
+    final point = center + Offset(math.sin(angle), -math.cos(angle)) * radius;
+    if (i == 0) {
+      path.moveTo(point.dx, point.dy);
+    } else {
+      path.lineTo(point.dx, point.dy);
+    }
+  }
+  path.close();
+  canvas.drawPath(
+    path,
+    Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = AppColors.accentSecondary.withValues(alpha: 0.18),
+  );
+}
+
+void _paintTickRing(Canvas canvas, Offset center, double faceRadius) {
+  for (var deg = 0; deg < 360; deg += 5) {
     final angle = deg * math.pi / 180;
     final direction = Offset(math.sin(angle), -math.cos(angle));
+    final isCardinal = deg % 90 == 0;
+    final isMajor = deg % 30 == 0;
+    final isMedium = deg % 15 == 0;
+    final innerStop = isCardinal
+        ? 0.74
+        : isMajor
+            ? 0.80
+            : isMedium
+                ? 0.85
+                : 0.89;
     canvas.drawLine(
-      center + direction * (faceRadius * 0.8),
+      center + direction * (faceRadius * innerStop),
       center + direction * (faceRadius * 0.95),
       Paint()
-        ..color = Colors.white.withValues(alpha: 0.75)
-        ..strokeWidth = deg % 90 == 0 ? 1.5 : 0.75,
+        ..color = isCardinal
+            ? AppColors.gold.withValues(alpha: 0.9)
+            : Colors.white.withValues(alpha: isMajor ? 0.75 : 0.4)
+        ..strokeWidth = isCardinal
+            ? 2
+            : isMajor
+                ? 1.4
+                : 0.6,
     );
+
+    // Degree numerals at every major tick (every 30°) for real
+    // instrument detail, skipping the cardinals since they get their
+    // own N/E/S/W letters instead.
+    if (isMajor && !isCardinal) {
+      final numeralPos = center + direction * (faceRadius * 0.68);
+      _drawText(canvas, numeralPos, '$deg', size: 9, color: AppColors.sage);
+    }
   }
+}
+
+void _paintCardinalLabels(Canvas canvas, Offset center, double faceRadius) {
   const labels = ['N', 'E', 'S', 'W'];
   for (var i = 0; i < 4; i++) {
     final angle = i * 90 * math.pi / 180;
     final pos =
+        center + Offset(math.sin(angle), -math.cos(angle)) * (faceRadius * 0.60);
+    _drawText(
+      canvas,
+      pos,
+      labels[i],
+      size: i == 0 ? 16 : 14,
+      color: i == 0 ? AppColors.gold : AppColors.ink,
+      weight: i == 0 ? FontWeight.w700 : FontWeight.w600,
+    );
+  }
+
+  const intercardinals = ['NE', 'SE', 'SW', 'NW'];
+  for (var i = 0; i < 4; i++) {
+    final angle = (45 + i * 90) * math.pi / 180;
+    final pos =
         center + Offset(math.sin(angle), -math.cos(angle)) * (faceRadius * 0.66);
-    _drawLabel(canvas, pos, labels[i], bold: i == 0);
+    _drawText(canvas, pos, intercardinals[i], size: 9, color: AppColors.sage);
   }
 }
 
-void _drawLabel(Canvas canvas, Offset center, String text, {bool bold = false}) {
+void _drawText(
+  Canvas canvas,
+  Offset center,
+  String text, {
+  required double size,
+  required Color color,
+  FontWeight weight = FontWeight.w500,
+}) {
   final painter = TextPainter(
     text: TextSpan(
       text: text,
       style: TextStyle(
         fontFamily: AppTypography.bodyFamily,
-        fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
-        fontSize: bold ? 15 : 13,
-        color: bold ? AppColors.gold : AppColors.sage,
+        fontWeight: weight,
+        fontSize: size,
+        color: color,
       ),
     ),
     textDirection: TextDirection.ltr,

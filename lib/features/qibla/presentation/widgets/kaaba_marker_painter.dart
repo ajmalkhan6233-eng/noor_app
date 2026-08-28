@@ -1,43 +1,49 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The fixed marker at the top of the compass face showing where the
-// Kaaba direction is measured from — previously a plain gold rounded
-// square, which read as an abstract UI dot rather than the Kaaba
-// itself (direct feedback: "put the cover on the middle of the
-// compass" — the kiswah, the Kaaba's black-and-gold cloth covering).
-// Redrawn as a small cube with its kiswah band and door, still plain
-// canvas primitives only (paths + rects, no gradients/shaders) per
-// this screen's own established constraint — see
-// compass_face_painter.dart's header for why.
+// The Kaaba marker — previously a fixed icon near the top of the
+// compass face, entirely separate from the needle (direct feedback,
+// 2026-08-28 live-device review: "should be positioned directly on
+// the needle itself, not separate from it"). Now painted at the
+// needle's own tip, inside the same rotated canvas context the needle
+// draws in, so it moves and turns with it. Also switched from a
+// light/near-white cube body (AppColors.ink, which does NOT read as
+// black despite the old comment claiming it did) to genuine black, per
+// direct instruction to match the real Kaaba's kiswah color.
 
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
-/// Draws the Kaaba marker at [center], scaled to [faceRadius], with a
-/// slow ambient glow breathing at [pulse] (0..1, from QiblaNeedle's
-/// looping AnimationController) — a small, deliberately subtle sign
-/// of life on an otherwise static icon.
-void paintKaabaMarker(Canvas canvas, Offset center, double faceRadius, double pulse) {
-  final pos = center + const Offset(0, -1) * (faceRadius * 0.42);
-  final cubeSize = faceRadius * 0.16;
+const _kaabaBlack = Color(0xFF0A0A0A);
 
-  // Soft breathing glow behind the cube — alpha eases between two low
-  // values so it never competes with the needle for attention.
-  final glowAlpha = 0.12 + 0.10 * pulse;
+/// Draws the Kaaba marker centered at the local origin — call this
+/// after translating/rotating the canvas to the needle's tip, so the
+/// marker inherits the needle's own rotation and always points along
+/// it. [size] is the marker's edge length; [pulse] (0..1, looping)
+/// drives a slow ambient glow, a small deliberate sign of life.
+void paintKaabaMarker(Canvas canvas, double size, double pulse) {
+  const pos = Offset.zero;
+  final cubeSize = size;
+
+  // Soft breathing glow behind the cube — kept deliberately faint
+  // (2026-08-28 live-device finding: at the previous 0.16-0.28 alpha
+  // range, the glow visually dominated the small black cube and the
+  // whole marker read as "gold", not black, defeating the point of
+  // making the cube black at all).
+  final glowAlpha = 0.06 + 0.05 * pulse;
   canvas.drawCircle(
     pos,
-    cubeSize * (0.9 + 0.15 * pulse),
+    cubeSize * (0.85 + 0.1 * pulse),
     Paint()
       ..color = AppColors.gold.withValues(alpha: glowAlpha)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
   );
 
   final cubeRect = Rect.fromCenter(center: pos, width: cubeSize, height: cubeSize);
   final cubeRRect = RRect.fromRectAndRadius(cubeRect, Radius.circular(cubeSize * 0.12));
 
-  // Cube body — the Kaaba's black stone structure.
-  canvas.drawRRect(cubeRRect, Paint()..color = AppColors.ink);
+  // Cube body — the Kaaba's black stone structure, genuinely black.
+  canvas.drawRRect(cubeRRect, Paint()..color = _kaabaBlack);
 
   // Kiswah band — the gold-embroidered strip near the top third.
   final bandRect = Rect.fromLTWH(
@@ -62,6 +68,6 @@ void paintKaabaMarker(Canvas canvas, Offset center, double faceRadius, double pu
     Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = AppColors.gold.withValues(alpha: 0.6),
+      ..color = AppColors.gold.withValues(alpha: 0.7),
   );
 }

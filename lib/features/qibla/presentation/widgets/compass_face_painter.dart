@@ -83,7 +83,6 @@ class CompassFacePainter extends CustomPainter {
     final faceRadius = size.width / 2;
 
     paintCompassTicksAndLabels(canvas, center, faceRadius);
-    paintKaabaMarker(canvas, center, faceRadius, kaabaPulse);
     _paintNeedle(canvas, center, faceRadius);
 
     canvas.drawCircle(center, 4, Paint()..color = AppColors.ink);
@@ -120,6 +119,22 @@ class CompassFacePainter extends CustomPainter {
       southHalf,
       Paint()..color = AppColors.sage.withValues(alpha: needleAlpha * 0.8),
     );
+
+    // Kaaba marker sits right at the needle's pointing tip — inside
+    // this same translated canvas context, so its *position* is locked
+    // to the needle and turns with it (2026-08-28 direct feedback:
+    // "positioned directly on the needle itself, not separate from
+    // it"). Its own *orientation* is counter-rotated back to upright:
+    // a first attempt left it rotating with the needle, which turned
+    // the kiswah band and door into an unreadable diagonal smear at
+    // most headings once actually seen live — a cube icon needs to
+    // stay axis-aligned to read as a cube at all.
+    canvas.save();
+    canvas.translate(0, -length);
+    canvas.rotate(-rotationDegrees * math.pi / 180);
+    paintKaabaMarker(canvas, faceRadius * 0.16, kaabaPulse);
+    canvas.restore();
+
     canvas.drawCircle(Offset.zero, 3.5, Paint()..color = AppColors.ink);
     canvas.restore();
   }
