@@ -6,6 +6,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../prayer_times/data/adhan_reciter.dart';
 import '../../../prayer_times/data/iqamath_offsets.dart';
 import '../../../prayer_times/data/prayer_adjustments.dart';
 import '../../../prayer_times/data/prayer_high_latitude_rule.dart';
@@ -77,6 +78,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         preReminderEnabled: s.preReminderEnabled,
         preReminderMinutes: s.preReminderMinutes,
         hasSeenLocationOnboarding: s.hasSeenLocationOnboarding,
+        // Both were previously dropped here (this constructor call
+        // doesn't have copyWith's "keep unless overridden" behavior) —
+        // caught while adding adhanReciter; fixed both the same way.
+        profileName: s.profileName,
+        adhanReciter: s.adhanReciter,
       ));
 
   Future<void> setIqamathOffsets(IqamathOffsetMinutes offsets) =>
@@ -101,6 +107,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   /// Sets or clears (pass `null`) the selected Sri Lankan district.
   Future<void> setSelectedDistrict(String? district) =>
       _update((s) => s.withSelectedDistrict(district));
+
+  Future<void> setAdhanReciter(AdhanReciter reciter) =>
+      _update((s) => s.copyWith(adhanReciter: reciter));
 
   /// Switches the app's UI chrome language — takes effect immediately,
   /// no restart required. Never affects Arabic/Quran/Azkar text.

@@ -6,16 +6,14 @@
 
 import 'package:audioplayers/audioplayers.dart';
 
-/// Maps a prayer name to its bundled Adhan asset. `null` for names
-/// with no recording (e.g. "Sunrise", which has no Adhan).
-String? adhanAssetForPrayer(String prayerName) => switch (prayerName) {
-  'Fajr' => 'audio/adhan/fajr.mp3',
-  'Dhuhr' => 'audio/adhan/dhuhr.mp3',
-  'Asr' => 'audio/adhan/asr.mp3',
-  'Maghrib' => 'audio/adhan/maghrib.mp3',
-  'Isha' => 'audio/adhan/isha.mp3',
-  _ => null,
-};
+import 'adhan_reciter.dart';
+
+/// Maps a prayer name to its bundled Adhan asset for the default
+/// (`doha`) reciter. `null` for names with no recording (e.g.
+/// "Sunrise", which has no Adhan). Kept for callers that don't yet
+/// pass a reciter; prefer `adhanAssetFor` from adhan_reciter.dart.
+String? adhanAssetForPrayer(String prayerName) =>
+    adhanAssetFor(AdhanReciter.doha, prayerName);
 
 /// Thin wrapper so callers (a Cubit, never a widget directly) don't
 /// depend on the `audioplayers` package type.
@@ -29,11 +27,12 @@ class AdhanAudioPlayer {
   /// UI state without polling.
   Stream<void> get onComplete => _player.onPlayerComplete;
 
-  /// Plays the Adhan for [prayerName], or does nothing if there's no
-  /// recording for it. Stops any currently-playing clip first, so
-  /// tapping a different prayer's preview never overlaps audio.
-  Future<void> play(String prayerName) async {
-    final asset = adhanAssetForPrayer(prayerName);
+  /// Plays [reciter]'s Adhan for [prayerName], or does nothing if
+  /// there's no recording for it. Stops any currently-playing clip
+  /// first, so tapping a different prayer's preview never overlaps
+  /// audio.
+  Future<void> play(String prayerName, {AdhanReciter reciter = AdhanReciter.doha}) async {
+    final asset = adhanAssetFor(reciter, prayerName);
     if (asset == null) return;
     await _player.stop();
     await _player.play(AssetSource(asset));

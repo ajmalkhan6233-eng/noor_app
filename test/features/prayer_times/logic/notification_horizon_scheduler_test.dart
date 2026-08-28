@@ -9,6 +9,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/core/location/location_service.dart';
+import 'package:noor/features/prayer_times/data/adhan_reciter.dart';
 import 'package:noor/features/prayer_times/data/notification_slots.dart';
 import 'package:noor/features/prayer_times/data/prayer_notification_coordinator.dart';
 import 'package:noor/features/prayer_times/data/prayer_repository.dart';
@@ -30,6 +31,7 @@ class _RecordingCoordinator extends PrayerNotificationCoordinator {
     bool preReminderEnabled = false,
     int preReminderMinutes = 10,
     int dayOffset = 0,
+    AdhanReciter reciter = AdhanReciter.doha,
   }) async {
     dayOffsetsScheduled.add(dayOffset);
     timesScheduled.add(times);

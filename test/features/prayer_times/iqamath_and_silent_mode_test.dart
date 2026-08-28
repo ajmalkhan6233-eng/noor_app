@@ -1,6 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:noor/features/prayer_times/data/adhan_reciter.dart';
 import 'package:noor/features/prayer_times/data/iqamath_offsets.dart';
 import 'package:noor/features/prayer_times/data/notification_service.dart';
 import 'package:noor/features/prayer_times/data/prayer_notification_coordinator.dart';
@@ -44,6 +45,7 @@ class _NoopNotificationService extends NotificationService {
     bool preReminderEnabled = false,
     int preReminderMinutes = 10,
     int dayOffset = 0,
+    AdhanReciter reciter = AdhanReciter.doha,
   }) async {}
 }
 

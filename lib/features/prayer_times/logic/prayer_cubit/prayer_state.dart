@@ -3,6 +3,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../settings/data/notification_settings.dart';
+import '../../data/adhan_reciter.dart';
 import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_settings.dart';
 import '../../data/prayer_times_result.dart';
@@ -28,6 +29,7 @@ class PrayerState extends Equatable {
     this.silentMode = const SilentModeSettings(),
     this.preReminderEnabled = false,
     this.preReminderMinutes = 10,
+    this.adhanReciter = AdhanReciter.doha,
   });
 
   final double? latitude;
@@ -54,6 +56,9 @@ class PrayerState extends Equatable {
   final bool preReminderEnabled;
   final int preReminderMinutes;
 
+  /// User-selected Adhan sound — see adhan_reciter.dart.
+  final AdhanReciter adhanReciter;
+
   bool get hasCoordinates => latitude != null && longitude != null;
 
   PrayerState copyWith({
@@ -70,6 +75,7 @@ class PrayerState extends Equatable {
     SilentModeSettings? silentMode,
     bool? preReminderEnabled,
     int? preReminderMinutes,
+    AdhanReciter? adhanReciter,
   }) {
     return PrayerState(
       latitude: latitude ?? this.latitude,
@@ -85,6 +91,7 @@ class PrayerState extends Equatable {
       silentMode: silentMode ?? this.silentMode,
       preReminderEnabled: preReminderEnabled ?? this.preReminderEnabled,
       preReminderMinutes: preReminderMinutes ?? this.preReminderMinutes,
+      adhanReciter: adhanReciter ?? this.adhanReciter,
     );
   }
 

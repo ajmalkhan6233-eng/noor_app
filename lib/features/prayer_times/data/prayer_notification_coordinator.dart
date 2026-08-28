@@ -6,6 +6,7 @@
 // (re)computed.
 
 import '../../settings/data/notification_settings.dart';
+import 'adhan_reciter.dart';
 import 'iqamath_offsets.dart';
 import 'notification_service.dart';
 import 'prayer_times_result.dart';
@@ -35,6 +36,7 @@ class PrayerNotificationCoordinator {
     bool preReminderEnabled = false,
     int preReminderMinutes = 10,
     int dayOffset = 0,
+    AdhanReciter reciter = AdhanReciter.doha,
   }) async {
     await _notifications.scheduleForDay(
       times: times,
@@ -43,6 +45,7 @@ class PrayerNotificationCoordinator {
       preReminderEnabled: preReminderEnabled,
       preReminderMinutes: preReminderMinutes,
       dayOffset: dayOffset,
+      reciter: reciter,
     );
     await _scheduleSilentWindows(times, iqamathOffsets, silentMode, dayOffset);
   }

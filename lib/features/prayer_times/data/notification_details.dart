@@ -5,6 +5,7 @@
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'adhan_reciter.dart';
 import 'notification_slots.dart';
 
 const NotificationDetails defaultNotificationDetails = NotificationDetails(
@@ -17,21 +18,32 @@ const NotificationDetails defaultNotificationDetails = NotificationDetails(
   ),
 );
 
-/// One channel per prayer (`prayer_adhan_<name>`) so each can carry its
-/// own actual adhan recording as the channel sound — Android
-/// notification channels are created once and their sound can never be
-/// changed afterward, which is why this can't just be a `sound:`
-/// override on the shared channel above.
-NotificationDetails adhanNotificationDetails(PrayerSlot slot) {
+/// One channel per (reciter, prayer) so each can carry its own actual
+/// adhan recording as the channel sound — Android notification
+/// channels are created once and their sound can never be changed
+/// afterward, which is why this can't just be a `sound:` override on
+/// the shared channel above, and why switching [reciter] must switch
+/// to a differently-named channel rather than mutating the existing
+/// one. `doha` (the original default) keeps its original channel id
+/// (`prayer_adhan_<prayer>`) exactly as before, so nobody who never
+/// touches the new setting gets a channel change; every other reciter
+/// uses one raw resource for every prayer (see adhan_reciter.dart).
+NotificationDetails adhanNotificationDetails(
+  PrayerSlot slot, {
+  AdhanReciter reciter = AdhanReciter.doha,
+}) {
   final key = slot.name;
+  final isDoha = reciter == AdhanReciter.doha;
+  final channelId = isDoha ? 'prayer_adhan_$key' : 'prayer_adhan_${reciter.name}_$key';
+  final soundResource = isDoha ? 'adhan_$key' : 'adhan_${reciter.name}';
   return NotificationDetails(
     android: AndroidNotificationDetails(
-      'prayer_adhan_$key',
+      channelId,
       '${_capitalize(key)} adhan',
       channelDescription: 'The $key call to prayer',
       importance: Importance.max,
       priority: Priority.max,
-      sound: RawResourceAndroidNotificationSound('adhan_$key'),
+      sound: RawResourceAndroidNotificationSound(soundResource),
       playSound: true,
       audioAttributesUsage: AudioAttributesUsage.alarm,
       category: AndroidNotificationCategory.alarm,

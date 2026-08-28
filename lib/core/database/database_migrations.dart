@@ -26,7 +26,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 8;
+const int latestSchemaVersion = 9;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -137,5 +137,13 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       "('visiting_sick', 10)",
     );
   }
-  // Next migration: add `if (oldVersion < 9) { ... }` here.
+  if (oldVersion < 9) {
+    // Selectable Adhan sound (2026-08-28, direct request) — see
+    // adhan_reciter.dart. 'doha' matches the existing default so
+    // nobody's actual playback changes on upgrade.
+    await db.execute(
+      "ALTER TABLE app_settings ADD COLUMN adhan_reciter TEXT NOT NULL DEFAULT 'doha'",
+    );
+  }
+  // Next migration: add `if (oldVersion < 10) { ... }` here.
 }

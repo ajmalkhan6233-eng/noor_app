@@ -55,6 +55,7 @@ class PrayerCubit extends Cubit<PrayerState> {
         silentMode: appSettings.silentMode,
         preReminderEnabled: appSettings.preReminderEnabled,
         preReminderMinutes: appSettings.preReminderMinutes,
+        adhanReciter: appSettings.adhanReciter,
       ),
     );
     final district = findSriLankaDistrict(appSettings.selectedDistrict);

@@ -10,6 +10,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../logic/settings_cubit/settings_cubit.dart';
 import '../logic/settings_cubit/settings_state.dart';
 import 'widgets/about_donate_section.dart';
+import 'widgets/adhan_sound_section.dart';
 import 'widgets/advanced_timing_section.dart';
 import 'widgets/battery_optimization_section.dart';
 import 'widgets/country_section.dart';
@@ -75,6 +76,9 @@ class _SettingsView extends StatelessWidget {
                   const SizedBox(height: 16),
                   SectionHeader(l10n.preReminderSectionHeader),
                   const AppCard(child: PreReminderSection()),
+                  const SizedBox(height: 16),
+                  const SectionHeader('Adhan Sound'),
+                  const AppCard(child: AdhanSoundSection()),
                   const SizedBox(height: 16),
                   const SectionHeader('Test Adhan'),
                   const AppCard(child: TestAdhanSection()),

@@ -4,6 +4,7 @@
 // or calculation preferences from — one explicit object, never
 // scattered defaults.
 
+import '../../prayer_times/data/adhan_reciter.dart';
 import '../../prayer_times/data/iqamath_offsets.dart';
 import '../../prayer_times/data/prayer_settings.dart';
 import '../../prayer_times/data/silent_mode_settings.dart';
@@ -27,6 +28,7 @@ class AppSettings {
     this.preReminderMinutes = 10,
     this.hasSeenLocationOnboarding = false,
     this.profileName,
+    this.adhanReciter = AdhanReciter.doha,
   });
 
   final PrayerSettings prayerSettings;
@@ -77,6 +79,9 @@ class AppSettings {
   /// leaves the device, no account, no sign-in. `null` until set.
   final String? profileName;
 
+  /// User-selected Adhan sound — see adhan_reciter.dart.
+  final AdhanReciter adhanReciter;
+
   AppSettings copyWith({
     PrayerSettings? prayerSettings,
     NotificationSettings? notifications,
@@ -91,6 +96,7 @@ class AppSettings {
     int? preReminderMinutes,
     bool? hasSeenLocationOnboarding,
     String? profileName,
+    AdhanReciter? adhanReciter,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -107,6 +113,7 @@ class AppSettings {
       preReminderMinutes: preReminderMinutes ?? this.preReminderMinutes,
       hasSeenLocationOnboarding: hasSeenLocationOnboarding ?? this.hasSeenLocationOnboarding,
       profileName: profileName ?? this.profileName,
+      adhanReciter: adhanReciter ?? this.adhanReciter,
     );
   }
 
@@ -129,6 +136,7 @@ class AppSettings {
       preReminderMinutes: preReminderMinutes,
       hasSeenLocationOnboarding: hasSeenLocationOnboarding,
       profileName: profileName,
+      adhanReciter: adhanReciter,
     );
   }
 }

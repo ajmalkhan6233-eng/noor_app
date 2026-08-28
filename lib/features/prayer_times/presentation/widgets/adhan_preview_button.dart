@@ -12,6 +12,7 @@ import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/adhan_audio_player.dart';
 import '../../logic/adhan_preview_cubit.dart';
+import '../../logic/prayer_cubit/prayer_cubit.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class AdhanPreviewButton extends StatelessWidget {
@@ -31,8 +32,10 @@ class AdhanPreviewButton extends StatelessWidget {
           child: SemanticButton(
             label: l10n.previewAdhanSemanticLabel(prayerName),
             hint: isPlaying ? l10n.stopPreviewHint : l10n.playPreviewHint,
-            onTap: () =>
-                context.read<AdhanPreviewCubit>().togglePreview(prayerName),
+            onTap: () => context.read<AdhanPreviewCubit>().togglePreview(
+              prayerName,
+              reciter: context.read<PrayerCubit>().state.adhanReciter,
+            ),
             child: Icon(
               isPlaying ? Icons.stop_circle_outlined : Icons.play_circle_outline,
               size: 24,

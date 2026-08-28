@@ -22,6 +22,7 @@ import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../settings/data/notification_settings.dart';
+import 'adhan_reciter.dart';
 import 'iqamath_offsets.dart';
 import 'notification_details.dart';
 import 'notification_schedule_mode.dart';
@@ -69,14 +70,17 @@ class NotificationService {
   /// plays and isn't silenced by a system-level Do Not Disturb rule or
   /// per-app notification setting, rather than finding out at the next
   /// missed prayer.
-  Future<void> showTestNotification(PrayerSlot slot) async {
+  Future<void> showTestNotification(
+    PrayerSlot slot, {
+    AdhanReciter reciter = AdhanReciter.doha,
+  }) async {
     await initialize();
     final name = slotLabel(slot);
     await _plugin.show(
       9000 + slot.index,
       '$name adhan (test)',
       'This is what the $name adhan notification sounds like.',
-      adhanNotificationDetails(slot),
+      adhanNotificationDetails(slot, reciter: reciter),
     );
   }
 
@@ -88,7 +92,10 @@ class NotificationService {
   /// Fixed id (9500) well clear of every real prayer/iqamath/reminder
   /// id range, so it never collides with or gets cancelled by real
   /// rescheduling.
-  Future<void> scheduleLiveTestNotification(int minutes) async {
+  Future<void> scheduleLiveTestNotification(
+    int minutes, {
+    AdhanReciter reciter = AdhanReciter.doha,
+  }) async {
     await initialize();
     final scheduled = tz.TZDateTime.now(tz.local).add(Duration(minutes: minutes));
     await _plugin.zonedSchedule(
@@ -96,7 +103,7 @@ class NotificationService {
       'Scheduled test notification',
       'If this fired after the app was closed, background scheduling works.',
       scheduled,
-      adhanNotificationDetails(PrayerSlot.fajr),
+      adhanNotificationDetails(PrayerSlot.fajr, reciter: reciter),
       androidScheduleMode: await resolveScheduleMode(_plugin, preferAlarmClock: true),
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
@@ -119,6 +126,7 @@ class NotificationService {
     bool preReminderEnabled = false,
     int preReminderMinutes = 10,
     int dayOffset = 0,
+    AdhanReciter reciter = AdhanReciter.doha,
   }) async {
     await initialize();
     for (final slot in PrayerSlot.values) {
@@ -133,7 +141,7 @@ class NotificationService {
         '$name adhan',
         'It is time for $name.',
         adhanTime,
-        details: adhanNotificationDetails(slot),
+        details: adhanNotificationDetails(slot, reciter: reciter),
         dayOffset: dayOffset,
       );
 

@@ -40,6 +40,7 @@ Future<void> scheduleNotificationHorizon({
           preReminderEnabled: state.preReminderEnabled,
           preReminderMinutes: state.preReminderMinutes,
           dayOffset: dayOffset,
+          reciter: state.adhanReciter,
         )
         .catchError((_) {});
   }

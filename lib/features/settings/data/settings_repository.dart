@@ -4,6 +4,7 @@
 // row (`id = 1`); loading before any save exists returns the defaults.
 
 import '../../../core/database/database_helper.dart';
+import '../../prayer_times/data/adhan_reciter.dart';
 import '../../prayer_times/data/iqamath_offsets.dart';
 import '../../prayer_times/data/prayer_adjustments.dart';
 import '../../prayer_times/data/prayer_high_latitude_rule.dart';
@@ -80,6 +81,9 @@ class SettingsRepository {
       preReminderMinutes: row['pre_reminder_minutes']! as int,
       hasSeenLocationOnboarding: (row['has_seen_location_onboarding']! as int) != 0,
       profileName: row['profile_name'] as String?,
+      adhanReciter: AdhanReciter.values.byName(
+        row['adhan_reciter'] as String? ?? 'doha',
+      ),
     );
   }
 
@@ -127,6 +131,7 @@ class SettingsRepository {
       'pre_reminder_minutes': settings.preReminderMinutes,
       'has_seen_location_onboarding': settings.hasSeenLocationOnboarding ? 1 : 0,
       'profile_name': settings.profileName,
+      'adhan_reciter': settings.adhanReciter.name,
     };
 
     final existing = await db.query('app_settings', where: 'id = 1');

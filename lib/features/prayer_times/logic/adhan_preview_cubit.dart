@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/adhan_audio_player.dart';
+import '../data/adhan_reciter.dart';
 
 /// Emits the name of the prayer currently previewing, or `null` when
 /// nothing is playing.
@@ -23,14 +24,17 @@ class AdhanPreviewCubit extends Cubit<String?> {
   final AdhanAudioPlayer _player;
   late final StreamSubscription<void> _completeSub;
 
-  Future<void> togglePreview(String prayerName) async {
+  Future<void> togglePreview(
+    String prayerName, {
+    AdhanReciter reciter = AdhanReciter.doha,
+  }) async {
     if (state == prayerName) {
       await _player.stop();
       emit(null);
       return;
     }
     emit(prayerName);
-    await _player.play(prayerName);
+    await _player.play(prayerName, reciter: reciter);
   }
 
   @override

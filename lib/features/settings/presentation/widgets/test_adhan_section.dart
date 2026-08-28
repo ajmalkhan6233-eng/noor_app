@@ -8,10 +8,12 @@
 // only finding out at the next missed prayer.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/notification_service.dart';
 import '../../../prayer_times/data/notification_slots.dart';
+import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class TestAdhanSection extends StatelessWidget {
@@ -23,6 +25,7 @@ class TestAdhanSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = _service ?? NotificationService();
+    final reciter = context.watch<SettingsCubit>().state.settings.adhanReciter;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,7 +42,7 @@ class TestAdhanSection extends StatelessWidget {
             for (final slot in PrayerSlot.values)
               SemanticButton(
                 label: 'Test ${slotLabel(slot)} adhan now',
-                onTap: () => service.showTestNotification(slot),
+                onTap: () => service.showTestNotification(slot, reciter: reciter),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
@@ -54,7 +57,7 @@ class TestAdhanSection extends StatelessWidget {
         const SizedBox(height: 12),
         SemanticButton(
           label: 'Schedule a real test notification in 3 minutes',
-          onTap: () => service.scheduleLiveTestNotification(3),
+          onTap: () => service.scheduleLiveTestNotification(3, reciter: reciter),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
