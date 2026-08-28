@@ -29,7 +29,7 @@ void main() {
     late Color resolved;
     await tester.pumpWidget(
       MaterialApp(
-        theme: buildLightTheme(),
+        theme: buildDarkTheme(),
         home: Builder(
           builder: (context) {
             resolved = Theme.of(context).scaffoldBackgroundColor;
@@ -50,7 +50,7 @@ void main() {
     late Color colorSchemeSurface;
     await tester.pumpWidget(
       MaterialApp(
-        theme: buildLightTheme(),
+        theme: buildDarkTheme(),
         home: Builder(
           builder: (context) {
             final theme = Theme.of(context);
@@ -74,7 +74,7 @@ void main() {
     late Color inkColor;
     await tester.pumpWidget(
       MaterialApp(
-        theme: buildLightTheme(),
+        theme: buildDarkTheme(),
         home: Builder(
           builder: (context) {
             inkColor = Theme.of(context).textTheme.bodyMedium!.color!;
