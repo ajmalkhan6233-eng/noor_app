@@ -1,23 +1,24 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // A local-only "Progress" view — an optional display name (never an
-// account, never sent anywhere) plus a weekly bar chart and a recent-
-// days list, built entirely from PrayerTrackerRepository's existing
-// per-day completion data. This is the answer to "can we see weekly/
-// monthly progress" without adding any account, network call, or new
-// data collection (2026-08-24 live-device review) — every number here
-// was already being tracked locally; this just visualizes it.
+// account, never sent anywhere), a headline completion stat, a weekly
+// ring pattern, and a recent-days list, built entirely from
+// PrayerTrackerRepository's existing per-day completion data. Redesigned
+// 2026-08-29 for real visual impact (was previously just a name field
+// and a flat bar chart) — see widgets/progress_hero_stat.dart and
+// widgets/weekly_pattern_row.dart for the new pieces.
 
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_typography.dart';
-import '../../../core/presentation/widgets/app_card.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
-import '../../settings/logic/settings_cubit/settings_state.dart';
 import '../data/prayer_tracker_repository.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/presentation/widgets/app_card.dart';
+import 'widgets/profile_name_card.dart';
+import 'widgets/progress_hero_stat.dart';
+import 'widgets/recent_days_list.dart';
+import 'widgets/weekly_pattern_row.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key, PrayerTrackerRepository? repository})
@@ -35,36 +36,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
   List<({DateTime date, int completedCount, bool fasted})> _history = const [];
   bool _loading = true;
 
-  // A stable controller/focus node, not one rebuilt inline in build() —
-  // that earlier version recreated the TextEditingController on every
-  // SettingsCubit rebuild (including the one setProfileName itself
-  // triggers), which is a real bug on top of never disposing the old
-  // controller. Saves on both the keyboard's done key and on losing
-  // focus (tapping elsewhere) — previously the only way to save was an
-  // unlabelled keyboard action with no in-app confirmation (2026-08-25
-  // live-device review: "no enter button to save... check and edit").
-  final _nameController = TextEditingController();
-  final _nameFocusNode = FocusNode();
-  var _nameSeeded = false;
-
   @override
   void initState() {
     super.initState();
     _load();
-    _nameFocusNode.addListener(() {
-      if (!_nameFocusNode.hasFocus) _saveName(context);
-    });
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _nameFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _saveName(BuildContext context) {
-    context.read<SettingsCubit>().setProfileName(_nameController.text.trim());
   }
 
   Future<void> _load() async {
@@ -102,6 +77,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
     }
   }
 
+  List<({DateTime date, int completedCount, bool fasted})> get _last7 =>
+      _history.length > 7 ? _history.sublist(_history.length - 7) : _history;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -114,139 +92,29 @@ class _ProgressScreenState extends State<ProgressScreen> {
             : ListView(
                 padding: const EdgeInsets.all(24),
                 children: [
-                  _nameCard(context),
+                  ProgressHeroStat(days: _last7),
                   const SizedBox(height: 16),
-                  _weeklyChart(),
+                  _weeklyPatternCard(),
                   const SizedBox(height: 16),
-                  _recentList(),
+                  const ProfileNameCard(),
+                  const SizedBox(height: 16),
+                  RecentDaysList(days: _history.reversed.toList()),
                 ],
               ),
       ),
     );
   }
 
-  Widget _nameCard(BuildContext context) {
-    return BlocBuilder<SettingsCubit, SettingsState>(
-      builder: (context, state) {
-        // Seed the controller from persisted state exactly once — after
-        // that, the field is the source of truth so an in-flight edit
-        // is never clobbered by a rebuild from an unrelated cubit
-        // change.
-        if (!_nameSeeded) {
-          _nameController.text = state.settings.profileName ?? '';
-          _nameSeeded = true;
-        }
-        return AppCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Your name (kept on this device only)', style: AppTypography.caption(context.colors.sage)),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _nameController,
-                focusNode: _nameFocusNode,
-                style: TextStyle(color: context.colors.ink),
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  hintText: 'Add a name',
-                  hintStyle: TextStyle(color: context.colors.sage),
-                  border: InputBorder.none,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.check, color: context.colors.gold),
-                    tooltip: 'Save name',
-                    onPressed: () {
-                      _saveName(context);
-                      _nameFocusNode.unfocus();
-                    },
-                  ),
-                ),
-                onSubmitted: (_) {
-                  _saveName(context);
-                  _nameFocusNode.unfocus();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _weeklyChart() {
-    final last7 = _history.length > 7 ? _history.sublist(_history.length - 7) : _history;
+  Widget _weeklyPatternCard() {
+    final last7 = _last7;
     final rangeLabel = last7.length == 1 ? 'Today' : 'Last ${last7.length} days';
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('$rangeLabel · prayers completed', style: AppTypography.caption(context.colors.sage)),
+          Text(rangeLabel, style: TextStyle(color: context.colors.sage, fontSize: 12, letterSpacing: 0.4)),
           const SizedBox(height: 16),
-          SizedBox(
-            height: 100,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                for (final day in last7)
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            height: 60 * (day.completedCount / 5).clamp(0.04, 1.0),
-                            decoration: BoxDecoration(
-                              color: day.completedCount == 5 ? context.colors.gold : context.colors.accentSecondary,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            DateFormat.E().format(day.date).substring(0, 1),
-                            style: AppTypography.caption(context.colors.sage),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _recentList() {
-    final reversed = _history.reversed.toList();
-    return AppCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          for (final day in reversed) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      DateFormat.MMMEd().format(day.date),
-                      style: TextStyle(color: context.colors.ink),
-                    ),
-                  ),
-                  Text(
-                    '${day.completedCount}/5 prayers',
-                    style: AppTypography.caption(context.colors.sage),
-                  ),
-                  if (day.fasted) ...[
-                    const SizedBox(width: 8),
-                    Icon(Icons.nightlight_round, color: context.colors.gold, size: 14),
-                  ],
-                ],
-              ),
-            ),
-            if (day != reversed.last) Divider(color: context.colors.hairline, height: 1),
-          ],
+          WeeklyPatternRow(days: last7),
         ],
       ),
     );
