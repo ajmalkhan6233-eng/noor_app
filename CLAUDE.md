@@ -1,10 +1,26 @@
 # noor — Claude Code Project Directive
 
-## Authoritative Corrected Status — 2026-08-29
+## Authoritative Corrected Status — 2026-08-29 (Claude Code correction pass follows below)
 
-The following status supersedes earlier historical checklists. Items in
-the confirmed list are complete and must not be rebuilt. The open list
-is the only active work list.
+The list below was written by an overnight VS Code/Copilot session
+working on this same repo, locally, unpushed. A same-day Claude Code
+session reviewed every commit against real evidence (live-device
+testing, `flutter analyze`/`flutter test`, direct source fetches)
+before pushing any of it — see "Claude Code review of the 2026-08-29
+overnight commits" further below for the corrections that came out of
+that review. Two items in the list below are now known wrong or
+incomplete as originally written:
+
+- **"Qibla flicker source-level fix"** — disputed. Live-reproduced the
+  blank/blinking compass on-device the same day, after this claim was
+  written. Not fixed. See the correction section below.
+- **"Host the privacy policy publicly and link it in-app"** — the
+  actual publish was reverted (commit `97bbe03`) pending the
+  developer's own review of the policy text, per an explicit standing
+  instruction from earlier the same day. Not live.
+
+Everything else below this heading, unless specifically corrected
+further down this file, held up under review.
 
 ### Confirmed Done
 
@@ -12,7 +28,6 @@ is the only active work list.
 - Dawn/Nebula theme toggle, including Follow system
 - Custom navigation and feature icon set
 - Dark-mode text contrast fix
-- Qibla flicker source-level fix
 - Fresh-install location prompt: one-time and non-blocking
 - Sunnah fasting card on Home
 - Battery optimization in Settings, intentionally not onboarding
@@ -25,28 +40,85 @@ is the only active work list.
 - Database migration through schema version 9, tested
 - Amiri font label removed from About
 - About page mission statement
-- Release signing keystore and Gradle selection
+- Release signing keystore and Gradle selection (see correction below —
+  keystore itself is real and working; the CI half needed a real fix)
 - Local AAB build
 
 ### Genuinely Open
 
 1. Launcher icon: replace the default Flutter logo
-2. Vesak holiday date: resolve the conflicting 2026 source claim
+2. ~~Vesak holiday date~~ — resolved, see correction section below.
 3. Complete the Sri Lanka 2026 holiday dataset from the official gazette
-4. CI pipeline: publish AAB instead of APK
-5. Host the privacy policy publicly and link it in-app
+4. ~~CI pipeline: publish AAB instead of APK~~ — was broken (workflow file
+   in the wrong location, never ran), now fixed — see correction below.
+5. Host the privacy policy publicly and link it in-app — reverted, not
+   done, pending developer review of the policy text.
 6. Run a real app-performance profiling pass
 7. Investigate the reported Home decoration above Dhuhr on a live device
 8. Fix Quran play-button visibility
 9. Check for any default Flutter icon elsewhere in-app
 10. Redesign Monthly Timetable as a clean table
 11. Add and verify the parallax scroll effect
+12. **Qibla is still broken** — see correction section below. Not on the
+    original 11-item list because the overnight session believed it
+    was already fixed; re-opened after live reproduction.
 
-Items 1, 2, 3, 4, 5, 8, 10, and 11 were implemented in individual
-commits during the 2026-08-29 correction pass. Item 2 follows the
-official Ministry-linked schedule: Vesak is 1 May and Adhi Poson is
-30 May; do not relabel Adhi Poson as Adhi Vesak. Items 6, 7, and 9
-remain verification items where runtime evidence is still required.
+Items 1, 3, 8, 10, and 11 were implemented in individual commits
+during the 2026-08-29 overnight pass and held up under same-day
+review. Item 2 follows the official Ministry-linked schedule: Vesak is
+1 May and Adhi Poson is 30 May — these are two different holidays, not
+competing dates for one holiday; do not relabel Adhi Poson as Adhi
+Vesak. Items 6, 7, and 9 remain verification items where runtime
+evidence is still required.
+
+## Claude Code review of the 2026-08-29 overnight commits
+
+Reviewed all 7 local commits from the overnight session before
+pushing any of them (they were sitting unpushed — `origin/main` was
+still at the last Claude Code commit, so nothing below was ever live).
+
+- **Qibla — disputed, not accepted as fixed.** Live-reproduced the
+  compass blanking to near-nothing on ~70% of rapid screenshot frames,
+  same device, same day, after the "fix" commit. Ruled out one real
+  hypothesis (disabled Impeller via
+  `io.flutter.embedding.android.EnableImpeller=false`, rebuilt,
+  reinstalled, retested — no difference, reverted). Root cause still
+  open. A `screenrecord` capture (to rule out screencap itself racing
+  the compositor) is still queued, blocked on phone availability.
+- **CI AAB/signing pipeline was broken, now fixed** (`1c710e9`): the
+  overnight session's `build_apk.yml` sat at the repo root instead of
+  `.github/workflows/` — GitHub only discovers workflows in that exact
+  folder, so it never ran, and nothing was ever actually published by
+  it. Removed the dead file; merged its real value (signing from 4
+  optional repo secrets) into the existing working workflow
+  (`noor.yml`)'s AAB step. Falls back to today's debug-signing default
+  until those secrets are added in GitHub repo Settings — doesn't
+  break anything by existing.
+- **Public privacy policy publish reverted** (`97bbe03`), not because
+  the content was wrong, but because publishing it wasn't reviewed
+  first — an explicit standing instruction from earlier the same
+  session that the overnight session wasn't aware of. The in-app
+  `PrivacyPolicyScreen` itself is untouched.
+- **Vesak date — actually resolved well.** Found that May 1 (Vesak)
+  and May 30 (Adhi Poson) are two separate, real holidays, not
+  competing claims about one date — sourced from the Ministry of Home
+  Affairs' official 2026 holiday schedule PDF. Same-day review
+  attempted to independently verify that PDF directly and got a 403
+  (same class of government-site blocking hit earlier trying to reach
+  the actual Gazette) — so still not a first-hand primary-source
+  read, but this is a materially better, more specific answer than
+  anything found before it, and internally consistent. Calendar data
+  left as the overnight session set it.
+- **Release-signing Gradle config** was actually a same-session Claude
+  Code change from earlier the same day that had never been committed
+  — the overnight session correctly observed it working in the local
+  tree and counted it done without needing to redo it. Committed
+  properly now (`1b72f7e`).
+- Icon, exact-position bookmark, Adhan reciters, DB migration,
+  About-page text, Quran play-button fix, Monthly Timetable redesign,
+  parallax scrolling: `flutter analyze` clean, full test suite green
+  (218/218). Not yet independently live-verified on-device by Claude
+  Code specifically — queued.
 
 ## Stack
 Flutter (Dart), native Android. NOT web, NOT React, NOT Three.js/WebGL —
