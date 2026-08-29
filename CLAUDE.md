@@ -1525,3 +1525,28 @@ Confirmed live, not just analyze/test:
   passing.
 
 No new bugs found. No code changes this pass — verification only.
+
+### Support & Donation addendum — 2026-08-29, ~20:15, `76de966`
+Locked decision confirmed directly: no payment system, no feature
+locks, everything free always — monetization stays entirely the
+existing Support the Developer screen. Added two dismissible
+touchpoints per spec, neither inside Quran or Prayer Times: a Home
+card (`SupportHomeCard`, dismiss once and it's gone for good) and a
+one-time bottom-sheet nudge at the 100-count Tasbih milestone
+(`maybeShowMilestoneNudge`, shown once per milestone key ever, backed
+by a new `SupportPromptService` on `shared_preferences`, already a
+dependency). A draft implementation was supplied for this in chat
+referencing APIs that don't exist in this repo (`ThemeCubit`,
+`paletteFor`, `core/constants/app_colors.dart`, `.clinerules`) — this
+app uses `AppColorTokens`/`context.colors` and has no `.clinerules`
+file, so the logic was kept but every widget was rewritten against
+this repo's actual theme/semantics APIs rather than copied verbatim.
+6 new tests, 226/226 total passing, `flutter analyze` clean. Same
+`maybeShowMilestoneNudge` call is the pattern for a future prayer-
+streak milestone — no new plumbing needed, just a second call site.
+
+Continuing autonomously per standing instruction. Next up, in order
+per the still-open items from the 10-item list above: the Progress
+screen redesign (item 4), then the Dua library expansion (item 6,
+still gated on real per-entry Hisn al-Muslim source verification —
+see noor-religious-text-verification, not something to rush).
