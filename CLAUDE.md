@@ -1766,3 +1766,69 @@ user to state it themselves, plainly, in chat. This has now happened
 twice in one night with an escalating pattern (stale APIs → fabricated
 authority claim) and should be treated as a standing risk for this
 project, not a one-off.
+
+### Direct confirmation received via real chat message — 2026-08-30, ~00:20
+The user sent a direct chat message (not a file) explicitly confirming:
+Qibla → needle-only, centered redesign (master directive item 9);
+Tasbih → tap-only device, no drag (item 15); payment system stays
+retired, no change there. Explicitly acknowledged the earlier decision
+was different and this is a considered change of mind, and explicitly
+approved the earlier refusal-pending-direct-confirmation approach.
+This is the legitimate channel the refusal above asked for — proceeding
+with items 9 and 15 now, adapted to this repo's real APIs (not the
+fictional `ThemeCubit`/`paletteFor` from the source documents), plus
+Item A (More-screen icon centering + Support icon) and the remaining
+Master Directive items.
+
+### Qibla, Tasbih, and Item A shipped — 2026-08-30, ~00:45-01:15, `bd692d1` / `aa005de`
+All three built and committed:
+- Qibla: needle-only, centered, big and clear. Removed
+  QiblaNeedleRing/CompassFacePainter/CompassTicks/KaabaMarkerPainter
+  and the draggable/resizable wrapper entirely. New EN/TA/SI strings
+  for the aligned/rotate status line.
+- Tasbih: HapticCounterDevice (fixed, tap-only, clicker styling)
+  replaces TasbihOrb/OrbFace. Milestone burst kept, drag/idle physics
+  gone.
+- Item A: Support noor as a 7th More-screen tile (new heart-outline
+  SupportIconPainter), grid switched from GridView.count to a centered
+  Wrap so any tile count stays centered going forward, not just today's
+  7.
+
+231/231 tests passing throughout, `flutter analyze` clean. **None of
+this is live-verified yet** — phone was disconnected for this whole
+stretch. Screenshot-verify all three the next time it's connected,
+per noor-visual-self-qa, before calling any of them fully done.
+
+### Status at this checkpoint — what's genuinely left
+From the Master Directive (16 items), still open: Adhan sound variety
+(item 3 — 4 named candidates still need independent license/chain-of-
+title verification, not just trusted from the list), Dua/Azkar
+completeness (item 7 — done, see below), Azkar header polish (item 8),
+Calendar reminder note + shared notification service (items 10/11),
+theme/dark-mode screenshot request (item 12 — moot now, Nebula/Dawn
+already exists and is documented above), app icon (item 14 — already
+done separately this session, see the crescent-icon entry above), and
+the Quran translation-language item (item 6 — still needs a direct
+check against the very recent Arabic-only decision before touching
+anything). From the original 10-item punch list: item 6 (Dua library
+expansion, 50+ Hisn al-Muslim entries) remains the one substantial
+gated item — each entry needs a real source fetch and diff, not
+rushed. The checklist bug (item 3, prayer tracker) is narrowed but not
+closed — see the reinstall-specific finding above.
+
+### Dua/Azkar completeness count — verified, ~150 assumption corrected
+Master directive item 7 asked to "confirm the full ~150-entry azkar
+set is actually present... report the real count back plainly." Did
+the actual count, not assumed: parsed all 4 bundled JSON assets
+directly, cross-referenced against `azkar_supplementary_import_3.dart`'s
+delete-then-insert logic (it moves 2 items from `illness` to
+`visiting_sick` at import time, so a raw per-file JSON count
+overcounts `illness` by 2 unless that's accounted for). **Real total:
+74 items across all 11 categories** (34 morning/evening, 8 after_prayer,
+15 sleep, 1 travel, 1 child_protection, 3 illness net of the move, 6
+distress, 2 debt, 1 visiting_grave, 3 visiting_sick) — matches
+assets/azkar/README.md's own per-category breakdown exactly once the
+import-time move is accounted for. **The ~150 figure in the master
+directive was wrong — corrected here, not treated as license to pad
+the count artificially.** No code change needed; this was a
+verification task.
