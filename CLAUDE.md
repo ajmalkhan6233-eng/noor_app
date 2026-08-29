@@ -1550,3 +1550,22 @@ per the still-open items from the 10-item list above: the Progress
 screen redesign (item 4), then the Dua library expansion (item 6,
 still gated on real per-entry Hisn al-Muslim source verification —
 see noor-religious-text-verification, not something to rush).
+
+### Progress screen redesign — 2026-08-29, ~21:00, `f18af81`
+Item 4 done. Was previously just a name field and a flat blue bar
+chart (the exact complaint). Added `ProgressHeroStat` (headline
+completion % + perfect-day count), `WeeklyPatternRow` (one ring per
+day — gold+check for perfect, proportional cyan for partial, dim
+hairline for missed, today outlined), and colored status icons on
+`RecentDaysList`'s rows instead of a plain ratio. Also split
+`progress_screen.dart` into 4 widget files while already restructuring
+it — it was 254 lines, over this project's own 150-line-per-file rule
+even before today. 11 new tests, 231/231 total passing, `flutter
+analyze` clean. **Not yet live-verified** — phone was disconnected
+again by this point in the session; screenshot-verify next time it's
+connected, per noor-visual-self-qa (a design task isn't done from
+source-reading alone).
+
+Remaining from the original 10-item list: item 6 (Dua library
+expansion) only — still gated on real per-entry Hisn al-Muslim source
+fetches, not rushed.
