@@ -1688,3 +1688,39 @@ Arabic-only decision on the main reading screen before touching
 anything, since it may be describing the same screen or a different
 one (search results already show translation) and shouldn't be
 assumed without checking which.
+
+### Checklist bug — root cause narrowed conclusively, 2026-08-30, ~00:08
+Followed through on the exact next step from the entry above. Ran
+`pm clear com.noorapp.noor` (wipes data, zero backup/restore/install
+event involved — the strongest possible isolation), relaunched,
+granted location via onboarding. Result: **all 5 prayers correctly
+unchecked**, including with real computed times showing (Fajr 04:52
+through Isha 19:25) — the exact same "location resolved" condition
+that showed the bug on the last two uninstall/reinstall cycles.
+
+This narrows the cause conclusively: **the bug does not occur on
+`pm clear`, only on `adb uninstall` + `adb install -r`.** Combined
+with the earlier finding that `dumpsys backup`'s restore-at-install
+log shows this reinstall was NOT restored through Android's own
+BackupManager (no `Package: com.noorapp.noor` line in that session),
+the most likely remaining explanation is MIUI/HyperOS's own
+OEM-level app-data migration/restore path, which operates outside
+AOSP's `BackupManager` entirely (invisible to `dumpsys backup`,
+unaffected by `android:allowBackup` since that flag only governs the
+AOSP path) and appears to trigger specifically on a fresh **package
+install** event, not just app launch.
+
+**Practical implication**: this is very likely a real behavior on
+Xiaomi/MIUI devices specifically (and possibly other OEM skins with
+their own backup layer — Samsung, OPPO, etc. are known to have
+similar systems), not a bug this app's own code can fix — there is no
+public API to opt an app out of an OEM's proprietary backup system the
+way `allowBackup="false"` opts out of AOSP's. If this is confirmed as
+the mechanism, the honest scope of "item 3, fixed" is: fixed for the
+AOSP-standard case (verified: `allowBackup="false"` correctly stops
+Android's own BackupManager from restoring this package), genuinely
+unresolvable at the app level for MIUI's own OEM path if that's what
+this is. Whether a real end user (not `adb uninstall`/`install -r`,
+which is a developer-only action) would ever actually hit this exact
+sequence is a separate, real question worth weighing — most users
+never uninstall-then-reinstall the same app on the same device.
