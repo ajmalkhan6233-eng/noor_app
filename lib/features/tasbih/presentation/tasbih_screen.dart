@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../home/presentation/widgets/milestone_nudge_sheet.dart';
 import '../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../logic/tasbih_cubit/tasbih_state.dart';
 import 'widgets/dhikr_selector.dart';
@@ -43,7 +44,18 @@ class _TasbihView extends StatelessWidget {
             child: Center(child: DhikrSelector()),
           ),
           Expanded(
-            child: BlocBuilder<TasbihCubit, TasbihState>(
+            child: BlocConsumer<TasbihCubit, TasbihState>(
+              listener: (context, state) {
+                if (state.justHitMilestone && state.count == 100) {
+                  maybeShowMilestoneNudge(
+                    context: context,
+                    milestoneKey: 'tasbih_100_complete',
+                    message: "You completed a full tasbih cycle. noor is "
+                        "free, always — this only takes a second if you'd "
+                        "like to help keep it that way.",
+                  );
+                }
+              },
               builder: (context, state) {
                 return Stack(
                   // The orb's drag range now spans a large fraction of

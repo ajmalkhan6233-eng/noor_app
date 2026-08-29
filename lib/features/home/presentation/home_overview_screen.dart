@@ -26,6 +26,7 @@ import 'widgets/hero_card.dart';
 import 'widgets/home_quick_toggles.dart';
 import 'widgets/prayer_summary_section.dart';
 import 'widgets/sunnah_fasting_card.dart';
+import 'widgets/support_home_card.dart';
 
 class HomeOverviewScreen extends StatefulWidget {
   const HomeOverviewScreen({super.key});
@@ -79,6 +80,7 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                       SunnahFastingCard(
                         hijriOffsetDays: settingsState.settings.hijriOffsetDays,
                       ),
+                      const SupportHomeCard(),
                     ],
                   ),
                 ],
