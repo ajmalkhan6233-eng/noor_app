@@ -1832,3 +1832,46 @@ import-time move is accounted for. **The ~150 figure in the master
 directive was wrong — corrected here, not treated as license to pad
 the count artificially.** No code change needed; this was a
 verification task.
+
+### Adhan sound research (master directive item 3) — checked, not shipped
+The 4 named candidates were independently checked against real
+Freesound profile pages (not just trusted from the list) — an initial
+search-based check falsely showed zero results for all 4, traced to
+Freesound's search page being JS-rendered and not something a plain
+page fetch can execute; switching to direct profile-page fetches gave
+real answers:
+
+- **RJStefanski, Hamtramck** — confirmed real, exists exactly as
+  named. Already independently verified in an earlier session (see
+  "Researched, nothing shippable found" above) as genuinely
+  CC-licensed but flagged for a real, unresolved concern: it's an
+  unedited field recording of a real muezzin at a real mosque, with no
+  indication the reciter consented to this specific reuse. That
+  concern still stands and wasn't re-litigated away by a second
+  document naming the same file.
+- **Redalemage, Marrakech** — confirmed real, exists exactly as named
+  (a genuine upload, 74 downloads). License isn't shown on the profile
+  listing itself (Freesound shows license per sound page, not per
+  profile) — not yet confirmed, and the same real-muezzin/no-consent
+  concern as above applies here too, license aside.
+- **RTB45, "Indonesia"** — not found under this exact title across
+  the first page of this user's 177 sounds (12 pages total, not fully
+  paged through). This user does have genuine Adhan recordings under
+  different titles (Istanbul, Cairo/Nile) — so the user is real and
+  does upload this content, but the specific named file wasn't located
+  in the time spent. Not confirmed either way.
+- **iainmccurdy, Aroumd/Morocco** — not visible in this user's current
+  recent-uploads listing (which only showed 2026 content); this user's
+  profile wasn't fully paged through either. Not confirmed either way.
+
+**Nothing added to the app.** Even for the two confirmed-real
+candidates, the same ethical concern already on record for the
+current default reciter research applies uniformly here: these are
+real, unedited recordings of real individuals reciting the Adhan at
+real mosques, self-uploaded to Freesound without any visible
+indication the reciter themselves authorized this specific reuse. A
+clean Creative Commons license from the *uploader* doesn't settle
+whether the *reciter* consented — same reasoning already applied and
+documented for RJStefanski specifically. This is a judgment call
+worth a direct decision, not something to auto-resolve by finding
+more technically-licensed field recordings of the same kind.
