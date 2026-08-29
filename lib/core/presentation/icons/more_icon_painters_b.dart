@@ -72,3 +72,26 @@ class FeedbackIconPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant FeedbackIconPainter old) => old.color != color;
 }
+
+/// A simple heart outline — Support noor's More-screen tile.
+class SupportIconPainter extends CustomPainter {
+  SupportIconPainter(this.color);
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    scaleToBox(canvas, size);
+    final stroke = noorIconStroke(color);
+    final path = Path()
+      ..moveTo(12, 19)
+      ..cubicTo(4, 13, 4, 8, 8, 6)
+      ..cubicTo(10.5, 4.7, 12, 6.5, 12, 8)
+      ..cubicTo(12, 6.5, 13.5, 4.7, 16, 6)
+      ..cubicTo(20, 8, 20, 13, 12, 19)
+      ..close();
+    canvas.drawPath(path, stroke);
+  }
+
+  @override
+  bool shouldRepaint(covariant SupportIconPainter old) => old.color != color;
+}

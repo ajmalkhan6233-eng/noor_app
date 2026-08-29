@@ -23,4 +23,5 @@ enum NoorIconType {
   settings,
   about,
   feedback,
+  support,
 }

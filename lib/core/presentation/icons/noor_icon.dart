@@ -31,6 +31,7 @@ class NoorIcon extends StatelessWidget {
     NoorIconType.settings => SettingsIconPainter(color),
     NoorIconType.about => AboutIconPainter(color),
     NoorIconType.feedback => FeedbackIconPainter(color),
+    NoorIconType.support => SupportIconPainter(color),
   };
 
   @override

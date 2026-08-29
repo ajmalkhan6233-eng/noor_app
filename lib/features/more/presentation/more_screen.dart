@@ -10,19 +10,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/presentation/icons/noor_icon.dart';
 import '../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
-import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../qibla/presentation/qibla_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
+import '../../settings/presentation/support_developer_screen.dart';
 import '../../tasbih/presentation/tasbih_screen.dart';
 import '../../zakat/presentation/zakat_screen.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import 'widgets/more_tile.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -31,26 +31,26 @@ class MoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final prayerCubit = context.read<PrayerCubit>();
-    final tiles = <_MoreTile>[
-      _MoreTile(
+    final tiles = <MoreTile>[
+      MoreTile(
         icon: NoorIconType.qibla,
         color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
         builder: (_) => const QiblaScreen(),
       ),
-      _MoreTile(
+      MoreTile(
         icon: NoorIconType.tasbih,
         color: context.colors.gold,
         label: l10n.tasbihScreenTitle,
         builder: (_) => const TasbihScreen(),
       ),
-      _MoreTile(
+      MoreTile(
         icon: NoorIconType.calendar,
         color: context.colors.accentSecondary,
         label: l10n.calendarLabel,
         builder: (_) => const CalendarScreen(),
       ),
-      _MoreTile(
+      MoreTile(
         // A balance scale, not a calculator — zakat is literally about
         // weighing wealth against nisab, and (2026-08-25, flagged
         // directly) a piggy-bank glyph was already ruled out as wrong
@@ -60,7 +60,7 @@ class MoreScreen extends StatelessWidget {
         label: l10n.zakatCalculatorLabel,
         builder: (_) => const ZakatScreen(),
       ),
-      _MoreTile(
+      MoreTile(
         // Sage previously — read as flat/washed-out next to the other
         // four tinted tiles (2026-08-27 live-device review). Cyan/gold
         // keeps all six tiles in the same visual family.
@@ -70,11 +70,20 @@ class MoreScreen extends StatelessWidget {
         builder: (_) => const SettingsScreen(),
         onClosed: () => prayerCubit.loadSettings(),
       ),
-      _MoreTile(
+      MoreTile(
         icon: NoorIconType.about,
         color: context.colors.gold,
         label: l10n.aboutLabel,
         builder: (_) => const AboutScreen(),
+      ),
+      // 7th tile, added 2026-08-30: visible, not buried in Settings —
+      // the existing Settings > Donate entry stays too, two doors to
+      // the same room, not one hidden door.
+      MoreTile(
+        icon: NoorIconType.support,
+        color: context.colors.gold,
+        label: l10n.supportNoorTitle,
+        builder: (_) => const SupportDeveloperScreen(),
       ),
       // Hajj/Umrah/pilgrimage guide feature is cut from v1 and its
       // source was removed entirely (2026-08-26) — see CLAUDE.md's
@@ -86,85 +95,31 @@ class MoreScreen extends StatelessWidget {
       // — this tab sits directly above that persistent layer.
       backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(l10n.moreTab), backgroundColor: context.colors.paper),
-      // SingleChildScrollView wraps the shrink-wrapped grid so a short
-      // viewport (small phone, split-screen, the default flutter_test
-      // surface) scrolls instead of overflowing — the grid's own
-      // NeverScrollableScrollPhysics only makes sense with a scrollable
-      // ancestor, which this now always provides.
+      // SingleChildScrollView wraps the wrap so a short viewport (small
+      // phone, split-screen, the default flutter_test surface) scrolls
+      // instead of overflowing.
+      //
+      // Wrap instead of GridView.count (2026-08-30): a fixed 3-column
+      // grid pins any incomplete last row to the left edge — fine at
+      // exactly 6 tiles (a full 2x3 grid), but a real, visible problem
+      // the moment a 7th tile is added (an orphaned lone tile on its
+      // own row). WrapAlignment.center keeps every row — full or
+      // partial — centered regardless of tile count, so this doesn't
+      // need revisiting the next time a tile is added or removed.
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: StaggeredFadeIn(
           children: [
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              // 3 columns × 2 full rows for today's 6 tiles — 4 columns
-              // left an orphaned 2-tile second row pinned to the left
-              // edge, which read as unbalanced/incomplete rather than a
-              // deliberate grid (2026-08-25 live-device review).
-              crossAxisCount: 3,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 12,
-              // Wider cells (3 columns instead of 4) get more headroom
-              // per cell automatically, but still leaves slack for a
-              // 2-line label at a higher system text scale — see the
-              // BOTTOM OVERFLOWED fix this replaced.
-              childAspectRatio: 0.95,
-              children: [for (final tile in tiles) tile],
+            Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12,
+                runSpacing: 20,
+                children: [for (final tile in tiles) SizedBox(width: 96, child: tile)],
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _MoreTile extends StatelessWidget {
-  const _MoreTile({
-    required this.icon,
-    required this.color,
-    required this.label,
-    required this.builder,
-    this.onClosed,
-  });
-
-  final NoorIconType icon;
-  final Color color;
-  final String label;
-  final WidgetBuilder builder;
-  final VoidCallback? onClosed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SemanticButton(
-      label: label,
-      hint: AppLocalizations.of(context)!.openHint,
-      onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute<void>(builder: builder));
-        onClosed?.call();
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: NoorIcon(icon, color: color, size: 26),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: context.colors.ink, fontSize: 11),
-          ),
-        ],
       ),
     );
   }
