@@ -1478,3 +1478,50 @@ throughout, `flutter analyze` clean (only pre-existing info hints).
 Pushed as `024f2dd`. Items 4 and 6 are the two genuinely open ones
 from this list — say so plainly if asked "is everything from the
 10-item list done."
+
+### Live-device verification of `024f2dd` — 2026-08-29, ~19:20-19:31
+Phone reconnected (device `lbzdfer8vkaqiziz`). `adb` was found at
+`E:\android-sdk\platform-tools` this session, not the
+`C:\android-sdk` path recorded in an earlier log entry — that path is
+stale, use `ANDROID_HOME`/`ANDROID_SDK_ROOT` (both point at `E:`) or
+search fresh rather than trusting the old path. Fresh debug build,
+installed with `adb install -r` — failed once first with
+`INSTALL_FAILED_UPDATE_INCOMPATIBLE` (the previously-installed build
+was release-signed, this one debug-signed); `adb uninstall` then
+`install -r` fixed it, which also gave a genuinely clean fresh-install
+state to test item 3 against.
+
+Confirmed live, not just analyze/test:
+- **Daily checklist (item 3)**: fresh install shows all 5 prayers
+  correctly unchecked. Directly confirms the `allowBackup="false"` fix
+  didn't regress the base case — doesn't by itself prove the backup-
+  restore scenario is fixed (that needs a real prior-install-with-
+  backup-history device state to reproduce, not available here), but
+  the honest fresh-install case is verified.
+- **Launcher icon (item 1)**: home screen icon is the new gold
+  crescent/cyan ring design, genuinely live, not a stale cached icon.
+- **Quran translation removal (item 5)**: opened Surah 1 — Arabic
+  only, no English line under any ayah. Directly confirms the earlier
+  live-screenshot bug (translation showing) is fixed.
+- **Tasbih orb (item 9)**: renders correctly at rest and survives a
+  drag-and-release with no crash (logcat clean, count stayed at 0 —
+  the drag wasn't misread as a tap either). One screenshot mid-drag
+  showed a garbled single-pixel-wide render artifact — traced to firing
+  two concurrent `adb shell input swipe` processes against the same
+  touch device to try to catch the glow mid-gesture, not an app bug:
+  a follow-up screenshot immediately after showed the orb fully intact.
+  The glow-intensifies-with-pull effect itself wasn't caught in a
+  clean still frame (inherently hard to time via serial adb screenshots
+  against a live gesture) — the underlying logic is simple and
+  directly reuses the same `_dragOffset` the pre-existing, still-
+  passing `tasbih_orb_test.dart` already exercises, so this is
+  reported as "live-confirmed no regression," not "glow visually
+  confirmed peak-bright."
+- Splash overlap (item 2) and the Home text-reveal (item 8) were not
+  independently re-verified live this pass — both are fast, one-time
+  animations that finish before a screenshot can be lined up
+  reliably; `flutter test` already exercises `widget_test.dart`'s
+  splash-to-home transition and no visual regression was seen in
+  passing.
+
+No new bugs found. No code changes this pass — verification only.
