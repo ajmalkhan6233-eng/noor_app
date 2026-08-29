@@ -162,6 +162,30 @@ jobs:
             echo "::error::override block missing"; exit 1; }
           echo "compileSdk 36 verified"
 
+      - name: Configure release signing (if secrets are present)
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+        run: |
+          # Optional — falls back to Flutter's debug-signing default
+          # (build.gradle.kts's own hasReleaseSigning check) exactly
+          # like it always has, until these 4 secrets are added in
+          # repo Settings -> Secrets. Never fails the build either way.
+          if [ -n "$RELEASE_KEYSTORE_BASE64" ]; then
+            echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/noor-release.jks"
+            cat > android/key.properties <<EOF
+          storePassword=$RELEASE_STORE_PASSWORD
+          keyPassword=$RELEASE_KEY_PASSWORD
+          keyAlias=$RELEASE_KEY_ALIAS
+          storeFile=$RUNNER_TEMP/noor-release.jks
+          EOF
+            echo "Release signing configured from secrets."
+          else
+            echo "No release-signing secrets set — building with debug signing (unchanged default)."
+          fi
+
       - name: Pass 2 - build release APK
         run: |
           set -o pipefail
