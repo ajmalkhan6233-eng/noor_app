@@ -1394,3 +1394,87 @@ the compositor/GPU driver layer specifically, not a Flutter-level
 logic bug (the fix history already ruled out the Dart-side heading-
 nulling theory, RepaintBoundary, and emit-throttling, and now Impeller
 too).
+
+## Session — 2026-08-29 (continued): 10-item punch list, `024f2dd`
+
+Per direct instruction, checked build-vs-commit staleness honestly
+before touching code, then worked the list in order. No phone
+connected this pass — everything below is `flutter analyze`/`flutter
+test` verified only, stated as such, not live-confirmed on device.
+
+1. **Icon** — confirmed via `git log --all` on the mipmap PNG: only 2
+   commits ever touched it (the Flutter stock default, then the
+   cyan star/compass-rose) — no "crescent" icon has ever existed in
+   this repo's history, so the ask to "revert" to one describes
+   something that never shipped. Designed a new gold-crescent/cyan-
+   ring/obsidian icon instead (`scripts/gen_launcher_icon.js`, a
+   hand-rolled PNG encoder — no canvas/ImageMagick available here),
+   visually confirmed via Read on the xxxhdpi output before writing
+   all 5 densities. **New design, not a literal revert — said plainly
+   rather than implied otherwise.**
+2. **Splash overlap** — real bug, fixed. Bismillah's fade-out
+   (`easeIn`) and NOOR's fade-in (`easeOutCubic`) both spanned the
+   same 0..1 dissolve range with different curves, so at t=0.3
+   Bismillah was ~91% opaque while NOOR was already ~66% opaque —
+   genuine simultaneous visibility, not just a blend. Split into two
+   non-overlapping halves.
+3. **Daily checklist** — root cause found: `allowBackup` was never
+   set (defaults true), and `dumpsys backup` showed real backup
+   history for this package, so Android Auto Backup could silently
+   restore stale local DB state on a "fresh" install. Fixed
+   (`allowBackup="false"`). **Caveat stated honestly**: a live fresh
+   install on the pre-fix build actually showed correct behavior, so
+   this may be intermittent/timing-dependent rather than the only or
+   fully deterministic cause — not oversold as fully proven without a
+   phone to reproduce the exact restore scenario. Future-prayer
+   locking was checked and already correct (`daily_goals_list.dart`'s
+   `_hasOccurred` gate, pre-existing).
+4. **View Progress redesign** — **not started this pass.** Genuinely
+   open, not touched — flagging honestly rather than claiming partial
+   progress.
+5. **Quran translation** — live-screenshot confirmed English was
+   showing under the Arabic on the main reading screen. Fixed:
+   removed the translation block from `AyahTile` (search results use
+   a separate widget, untouched). Test rewritten to assert the
+   opposite of a stale 2026-08-25 decision.
+6. **Dua library expansion (50+ Hisn al-Muslim entries)** — **not
+   attempted this pass.** Per noor-religious-text-verification, every
+   new entry needs its exact source text pulled and diffed character-
+   by-character, not typed from memory even by a "verified" source
+   name — that's 50+ real source fetches and diffs, not something to
+   rush inside a larger multi-item pass. Left out rather than guessed,
+   per this project's own standing rule.
+7. **Bounce-scroll app-wide** — already done, nothing to add:
+   `AppScrollBehavior` (wired into `MaterialApp.scrollBehavior` in
+   `app.dart`) already applies `BouncingScrollPhysics` globally, so
+   every `ListView`/`GridView`/`CustomScrollView` in the app already
+   has it without per-screen wiring.
+8. **Text-reveal on a key moment** — applied to Home's "Assalamu
+   Alaikum" greeting (`hero_card.dart`), the one place already doing
+   a deliberate reveal→hold→fade sequence: the fade-in is now a
+   character-by-character build using the same existing
+   `AnimationController`/timing (no second animation system bolted
+   on), staying whole through the later fade-out rather than reversing
+   letter-by-letter.
+9. **Tasbih orb polish** — added one concrete, bounded improvement
+   tying "responsiveness" to the orb's own drag gesture: the cyan rim
+   glow now brightens and widens in proportion to how far the orb is
+   currently pulled (`pullFraction` threaded from `TasbihOrb`'s
+   existing `_dragOffset` into `OrbFace`), rather than being a fixed
+   decoration. Existing 3D tilt/spring/idle-breathing untouched.
+10. **Qibla status** — no redesign attempted, per explicit instruction
+    not to reopen the 3D question. Honest current state, unchanged
+    from the last entry above: the sensor-error crash fix (`3c94fc5`)
+    is separate and solid; the actual visual blank/blink glitch is
+    confirmed real via `screenrecord` (not a screenshot artifact),
+    root cause still open, Impeller already ruled out, software-
+    rasterizer/GPU-trace is the next real step, not yet tried.
+
+Also this session: merged 4 new skills (`noor-bounce-scroll`,
+`noor-text-reveal`, `noor-icon-generation`, `noor-targeted-scope`) and
+added the new top-of-file WORKING METHOD section codifying the
+targeted-scope rule as permanent, not one-time. 220/220 tests passing
+throughout, `flutter analyze` clean (only pre-existing info hints).
+Pushed as `024f2dd`. Items 4 and 6 are the two genuinely open ones
+from this list — say so plainly if asked "is everything from the
+10-item list done."
