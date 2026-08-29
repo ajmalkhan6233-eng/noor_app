@@ -1,9 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
+//
+// Qibla-compass screen: a needle toward the Kaaba (only ever shown
+// with confidence the underlying compass reading earns), plus the
+// numeric bearing and distance, which are always shown. Redesigned
+// 2026-08-30 per direct request: needle only, centered, big and
+// clear — no longer draggable/resizable, no ring/dial decoration.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
@@ -15,11 +20,6 @@ import 'widgets/qibla_district_fallback.dart';
 import 'widgets/qibla_info_panel.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
-/// Qibla-compass screen: a needle toward the Kaaba (only ever shown
-/// with confidence the underlying compass reading earns), plus the
-/// numeric bearing and distance, which are always shown. The compass
-/// itself floats free — drag it anywhere on screen, position
-/// persisted, with a button to recentre it.
 class QiblaScreen extends StatelessWidget {
   const QiblaScreen({super.key});
 
@@ -35,48 +35,22 @@ class QiblaScreen extends StatelessWidget {
   }
 }
 
-class _QiblaView extends StatefulWidget {
+class _QiblaView extends StatelessWidget {
   const _QiblaView();
-
-  @override
-  State<_QiblaView> createState() => _QiblaViewState();
-}
-
-class _QiblaViewState extends State<_QiblaView> {
-  final _compassPosition = DraggablePositionController();
-
-  @override
-  void dispose() {
-    _compassPosition.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.colors.paper,
-      appBar: AppBar(
-        title: Text(l10n.qiblaScreenTitle),
-        actions: [
-          Semantics(
-            label: l10n.recentreCompassLabel,
-            button: true,
-            child: IconButton(
-              icon: const Icon(Icons.center_focus_strong_outlined),
-              tooltip: l10n.recentreCompassLabel,
-              onPressed: _compassPosition.reset,
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(l10n.qiblaScreenTitle)),
       body: BlocBuilder<QiblaCubit, QiblaState>(
-        builder: (context, state) => _buildBody(state),
+        builder: (context, state) => _buildBody(context, state),
       ),
     );
   }
 
-  Widget _buildBody(QiblaState state) {
+  Widget _buildBody(BuildContext context, QiblaState state) {
     if (state.locationError != null) {
       return Center(
         child: Padding(
@@ -114,12 +88,7 @@ class _QiblaViewState extends State<_QiblaView> {
         Column(
           children: [
             AnimatedCalibrationBanner(show: showCalibration),
-            Expanded(
-              child: QiblaCompassArea(
-                state: state,
-                positionController: _compassPosition,
-              ),
-            ),
+            Expanded(child: QiblaCompassArea(state: state)),
           ],
         ),
         Positioned(

@@ -163,6 +163,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'This device has no compass — showing the qibla bearing as a number only.';
 
   @override
+  String get qiblaAlignedMessage => 'Alhamdulillah — Qibla found';
+
+  @override
+  String get qiblaRotateMessage => 'Rotate to find Qibla';
+
+  @override
   String get quranScreenTitle => 'Quran';
 
   @override

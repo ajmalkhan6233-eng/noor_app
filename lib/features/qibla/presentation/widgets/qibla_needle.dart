@@ -1,27 +1,21 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// A confident-looking needle is only ever shown when the compass
-// reading backing it is actually trustworthy — otherwise it's dimmed,
-// never a fully-opaque, seemingly-reliable wrong arrow.
-//
-// Kept deliberately flat/2D (2026-08-25 live-device review: the
-// gradient-and-shadow "3D" bezel from the same day's earlier pass was
-// still glitching on-device — "no need 3D makeup, 2D very nice
-// compass design... keep a space, the 3D one [for later, with
-// explicit approval]"). Plain circle, hairline border, no gradients,
-// no BoxShadow layers — the simplest, most robust version, matching
-// compass_face_painter.dart's own plain-primitives-only approach.
-// [dimmed]'s target alpha is still eased in over ~350ms rather than
-// applied instantly, to avoid the flicker a raw bool caused when the
-// underlying accuracy classification jittered near its threshold.
+// Redesigned 2026-08-30 per direct request: needle only, centered, big
+// and clear — removes the ring/tick/dial decoration (QiblaNeedleRing,
+// CompassFacePainter, KaabaMarkerPainter) that sat around it before.
+// "3D" here means a soft glow/shadow depth effect, not real 3D
+// geometry — this app has no 3D rendering package. A confident-
+// looking needle is only ever shown when the compass reading backing
+// it is actually trustworthy — otherwise it's dimmed, never a fully-
+// opaque, seemingly-reliable wrong arrow (kept from the previous
+// design, still correct here).
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/utils/angle_math.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import 'compass_face_painter.dart';
-import 'qibla_needle_ring.dart';
 
 class QiblaNeedle extends StatefulWidget {
   const QiblaNeedle({
@@ -35,8 +29,8 @@ class QiblaNeedle extends StatefulWidget {
   final bool dimmed;
 
   /// True when the device is currently facing the qibla within
-  /// [kQiblaLockThresholdDegrees] — drives the needle's gold "aligned"
-  /// color instead of the usual cyan.
+  /// [kQiblaLockThresholdDegrees] — drives the gold "aligned" color and
+  /// message instead of the usual cyan.
   final bool locked;
 
   @override
@@ -48,21 +42,13 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
   static const _dimmedAlpha = 0.35;
 
   // Raw compass readings arrive noisy — applying them straight to the
-  // painter's rotation snapped the needle frame to frame, which reads
-  // as a flicker rather than a smooth swing. Easing the *displayed*
-  // angle toward the raw target each frame (shortest way around the
-  // circle) removes that without adding perceptible lag.
+  // needle's rotation snapped it frame to frame, which reads as a
+  // flicker rather than a smooth swing. Easing the *displayed* angle
+  // toward the raw target each frame (shortest way around the circle)
+  // removes that without adding perceptible lag.
   static const _smoothingFactor = 0.18;
 
   late final AnimationController _dimController;
-  // Slow ambient breathing glow behind the Kaaba marker — a small,
-  // continuous sign of life on an otherwise static icon, per direct
-  // request for "some animation". Deliberately slow/low-amplitude
-  // (noor-animation-performance: nothing that reads as jank or drains
-  // battery) — this alone repaints the compass every frame regardless
-  // of compass activity, which is fine since CompassFacePainter's
-  // primitives are cheap.
-  late final AnimationController _kaabaPulseController;
   late final Ticker _smoothingTicker;
   late double _displayedRotation;
 
@@ -75,10 +61,6 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 350),
       value: widget.dimmed ? 0 : 1,
     );
-    _kaabaPulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2400),
-    )..repeat(reverse: true);
     _smoothingTicker = createTicker(_onTick)..start();
   }
 
@@ -100,42 +82,68 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
   void dispose() {
     _smoothingTicker.dispose();
     _dimController.dispose();
-    _kaabaPulseController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final label =
-        '${AppLocalizations.of(context)!.qiblaNeedleSemanticLabel}: '
+        '${l10n.qiblaNeedleSemanticLabel}: '
         '${widget.rotationDegrees.round()} degrees from facing direction'
         '${widget.dimmed ? ', low confidence' : ''}'
         '${widget.locked ? ', aligned with qibla' : ''}';
 
     return Semantics(
       label: label,
-      child: SizedBox(
-        width: 272,
-        height: 272,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            QiblaNeedleRing(locked: widget.locked),
-            AnimatedBuilder(
-              animation: Listenable.merge([_dimController, _kaabaPulseController]),
-              builder: (context, _) => CustomPaint(
-                size: const Size(272, 272),
-                painter: CompassFacePainter(
-                  rotationDegrees: _displayedRotation,
-                  needleAlpha: _dimmedAlpha +
-                      (_trustworthyAlpha - _dimmedAlpha) * _dimController.value,
-                  locked: widget.locked,
-                  kaabaPulse: _kaabaPulseController.value,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedBuilder(
+            animation: _dimController,
+            builder: (context, _) {
+              final alpha = _dimmedAlpha + (_trustworthyAlpha - _dimmedAlpha) * _dimController.value;
+              final color = widget.locked ? context.colors.gold : context.colors.accentSecondary;
+              return Text(
+                widget.locked ? l10n.qiblaAlignedMessage : l10n.qiblaRotateMessage,
+                style: TextStyle(color: color.withValues(alpha: alpha), fontSize: 15, fontWeight: FontWeight.w600),
+              );
+            },
+          ),
+          const SizedBox(height: 40),
+          AnimatedBuilder(
+            animation: _dimController,
+            builder: (context, _) {
+              final alpha = _dimmedAlpha + (_trustworthyAlpha - _dimmedAlpha) * _dimController.value;
+              final color = widget.locked ? context.colors.gold : context.colors.accentSecondary;
+              return Transform.rotate(
+                angle: _displayedRotation * (3.14159265 / 180),
+                child: Container(
+                  width: 220,
+                  height: 220,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    // Soft glow/shadow depth — the closest "3D" this
+                    // widget-based rendering can genuinely deliver
+                    // without a separate 3D package.
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withValues(alpha: alpha * 0.4),
+                        blurRadius: 30,
+                        spreadRadius: 4,
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.navigation,
+                    size: 200,
+                    color: color.withValues(alpha: alpha),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

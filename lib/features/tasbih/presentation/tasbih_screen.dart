@@ -58,10 +58,6 @@ class _TasbihView extends StatelessWidget {
               },
               builder: (context, state) {
                 return Stack(
-                  // The orb's drag range now spans a large fraction of
-                  // the screen (see TasbihOrb._maxPullFraction) — it
-                  // must not be clipped at this Stack's own bounds.
-                  clipBehavior: Clip.none,
                   children: [
                     DraggableCounterGroup(
                       dhikrLabel: state.dhikrLabel,

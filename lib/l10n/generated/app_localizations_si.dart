@@ -167,6 +167,12 @@ class AppLocalizationsSi extends AppLocalizations {
       'මෙම උපකරණයේ දික්සූචියක් නොමැත — කිබ්ලා දිශාව අංකයක් ලෙස පමණක් පෙන්වයි.';
 
   @override
+  String get qiblaAlignedMessage => 'අල්හම්දුලිල්ලාහ් — කිබ්ලාව හමු විය';
+
+  @override
+  String get qiblaRotateMessage => 'කිබ්ලාව සොයා ගැනීමට හරවන්න';
+
+  @override
   String get quranScreenTitle => 'අල් කුර්ආනය';
 
   @override

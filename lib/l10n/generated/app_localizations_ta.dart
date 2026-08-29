@@ -168,6 +168,12 @@ class AppLocalizationsTa extends AppLocalizations {
       'இந்த சாதனத்தில் திசைகாட்டி இல்லை — கிப்லா திசையை எண்ணாக மட்டும் காட்டுகிறது.';
 
   @override
+  String get qiblaAlignedMessage => 'அல்ஹம்துலில்லாஹ் — கிப்லா கண்டறியப்பட்டது';
+
+  @override
+  String get qiblaRotateMessage => 'கிப்லாவைக் கண்டறிய திருப்பவும்';
+
+  @override
   String get quranScreenTitle => 'குர்ஆன்';
 
   @override

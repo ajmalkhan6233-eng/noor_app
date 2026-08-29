@@ -388,6 +388,18 @@ abstract class AppLocalizations {
   /// **'This device has no compass — showing the qibla bearing as a number only.'**
   String get qiblaNoCompassMessage;
 
+  /// No description provided for @qiblaAlignedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah — Qibla found'**
+  String get qiblaAlignedMessage;
+
+  /// No description provided for @qiblaRotateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate to find Qibla'**
+  String get qiblaRotateMessage;
+
   /// No description provided for @quranScreenTitle.
   ///
   /// In en, this message translates to:

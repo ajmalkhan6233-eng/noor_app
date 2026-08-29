@@ -1,16 +1,16 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The compass's draggable region — split out of QiblaScreen to stay
-// under the 150-line limit. Fires a calm confirmation burst the
-// moment the needle settles onto the qibla (QiblaState.isLocked),
-// re-arming only after it drifts back out of lock.
+// The compass area — split out of QiblaScreen to stay under the
+// 150-line limit. Fires a calm confirmation burst the moment the
+// needle settles onto the qibla (QiblaState.isLocked), re-arming only
+// after it drifts back out of lock. Redesigned 2026-08-30: centered,
+// fixed in place — no longer draggable/resizable (that was part of
+// the ring/dial decoration removed in the same pass).
 
 import 'package:flutter/material.dart';
 
 import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/haptics/haptic_service.dart';
-import '../../../../core/presentation/widgets/draggable_floating.dart';
-import '../../../../core/presentation/widgets/draggable_position_controller.dart';
 import '../../../../core/sensors/compass_reading.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../logic/qibla_cubit/qibla_state.dart';
@@ -18,14 +18,9 @@ import 'qibla_needle.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class QiblaCompassArea extends StatefulWidget {
-  const QiblaCompassArea({
-    super.key,
-    required this.state,
-    required this.positionController,
-  });
+  const QiblaCompassArea({super.key, required this.state});
 
   final QiblaState state;
-  final DraggablePositionController positionController;
 
   @override
   State<QiblaCompassArea> createState() => _QiblaCompassAreaState();
@@ -95,16 +90,7 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
     }
 
     final trustworthy = state.displayAccuracy == CompassAccuracy.good;
-    return DraggableFloating(
-      // Bumped up from 220 (2026-08-24 live-device review: "make the
-      // compass a little bit big") — still pinch-resizable 0.7x-1.6x
-      // from here via minScale/maxScale below.
-      size: const Size(272, 272),
-      widgetKey: 'qibla_compass',
-      controller: widget.positionController,
-      resizable: true,
-      minScale: 0.7,
-      maxScale: 1.6,
+    return Center(
       child: QiblaNeedle(
         rotationDegrees: rotation,
         dimmed: !trustworthy,

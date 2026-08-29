@@ -55,6 +55,8 @@
   "recentreCompassLabel": "Recentre compass",
   "qiblaCalibrationPromptMessage": "Compass reading is uncalibrated or unreliable — move your device in a figure-eight motion to calibrate. The needle is dimmed until then so it is never shown pointing confidently in a wrong direction.",
   "qiblaNoCompassMessage": "This device has no compass — showing the qibla bearing as a number only.",
+  "qiblaAlignedMessage": "Alhamdulillah — Qibla found",
+  "qiblaRotateMessage": "Rotate to find Qibla",
 
   "quranScreenTitle": "Quran",
   "bookmarksLabel": "Bookmarks",
