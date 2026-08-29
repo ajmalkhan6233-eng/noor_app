@@ -2,7 +2,9 @@
 //
 // Presentation only dispatches `start()`/`setManualLocation()` and
 // reads state — location, compass, tilt, and qibla math all stay out
-// of the widget tree.
+// of the widget tree. Sensor-stream wiring itself lives in
+// qibla_sensor_binder.dart (see its header for the compass null-
+// heading and stream-error handling history).
 
 import 'dart:async';
 
@@ -13,10 +15,11 @@ import '../../../../core/sensors/compass_reading.dart';
 import '../../../../core/sensors/compass_service.dart';
 import '../../../../core/sensors/magnetic_declination.dart';
 import '../../../../core/sensors/tilt_service.dart';
-import '../../../../core/utils/angle_math.dart';
 import '../../../prayer_times/data/sri_lanka_district.dart';
 import '../../../settings/data/settings_repository.dart';
 import '../../data/qibla_calculator.dart';
+import 'qibla_accuracy_debouncer.dart';
+import 'qibla_sensor_binder.dart';
 import 'qibla_state.dart';
 
 class QiblaCubit extends Cubit<QiblaState> {
@@ -35,62 +38,17 @@ class QiblaCubit extends Cubit<QiblaState> {
   final CompassService _compassService;
   final TiltService _tiltService;
   final SettingsRepository _settingsRepository;
-  StreamSubscription<CompassReading>? _compassSubscription;
-  StreamSubscription<TiltReading>? _tiltSubscription;
+  QiblaSensorSubscriptions? _sensorSubscriptions;
   Timer? _compassStallTimer;
 
   /// If flutter_compass genuinely never delivers a first event (seen
-  /// on a real device: the needle stayed on an infinite loading spinner
-  /// indefinitely, reported as "the app is completely locked") there's
-  /// no other signal anything is wrong — [CompassAccuracy.unavailable]
-  /// only covers "no magnetometer at all", not "has one, but the
-  /// stream just isn't producing". A plain timeout is the only way to
-  /// tell "still loading" from "never going to arrive" apart.
+  /// live: the needle stayed on an infinite loading spinner
+  /// indefinitely) there's no other signal anything is wrong —
+  /// [CompassAccuracy.unavailable] only covers "no magnetometer at
+  /// all", not "has one, but the stream just isn't producing".
   static const _compassStallTimeout = Duration(seconds: 5);
 
-  // Hysteresis for the good/not-good accuracy boundary specifically —
-  // magnetometer accuracy readings genuinely oscillate reading to
-  // reading on a real device (indoors, near other electronics), and
-  // that boundary drives two visible UI changes at once: the needle's
-  // dim/undim and whether CalibrationPrompt is mounted at all (a
-  // whole banner popping in and out, not just an alpha fade). Reported
-  // repeatedly as "the compass is blinking" even after the needle's
-  // own alpha was smoothed (see QiblaNeedle) — that fix only covered
-  // the needle's opacity, not this banner mount/unmount, which is the
-  // more jarring of the two. Requiring 3 consecutive readings on the
-  // new side before actually flipping means a single noisy sample
-  // can't do it alone.
-  static const _hysteresisStreak = 3;
-  bool _uiGood = false;
-  int _streakCount = 0;
-  CompassAccuracy _lastDisplayed = CompassAccuracy.unavailable;
-
-  /// Only the good/not-good boundary is debounced — CalibrationPrompt
-  /// and the needle's dim both branch on that boundary alone, not on
-  /// which specific non-good classification it is. [unavailable]
-  /// passes straight through: that's a device-capability fact, not
-  /// sensor noise, so there's nothing to debounce.
-  CompassAccuracy _debouncedDisplayAccuracy(CompassAccuracy raw) {
-    if (raw == CompassAccuracy.unavailable) {
-      _uiGood = false;
-      _streakCount = 0;
-      _lastDisplayed = CompassAccuracy.unavailable;
-      return _lastDisplayed;
-    }
-    final rawGood = raw == CompassAccuracy.good;
-    if (rawGood == _uiGood) {
-      _streakCount = 0;
-      _lastDisplayed = raw;
-      return _lastDisplayed;
-    }
-    _streakCount++;
-    if (_streakCount >= _hysteresisStreak) {
-      _uiGood = rawGood;
-      _streakCount = 0;
-      _lastDisplayed = raw;
-    }
-    return _lastDisplayed;
-  }
+  final _debouncer = QiblaAccuracyDebouncer();
 
   /// Resolves a location automatically — a cached or bounded GPS fix
   /// first, then a previously chosen Sri Lankan district — so this
@@ -145,74 +103,47 @@ class QiblaCubit extends Cubit<QiblaState> {
   }
 
   void _listen(double declination) {
-    _compassSubscription?.cancel();
+    _sensorSubscriptions?.cancel();
     _compassStallTimer?.cancel();
-    var firstReadingSeen = false;
     _compassStallTimer = Timer(_compassStallTimeout, () {
-      if (!firstReadingSeen && !isClosed) {
-        emit(state.copyWith(compassStalled: true));
-      }
-    });
-    _compassSubscription = _compassService.readings.listen((reading) {
-      // Only a reading that actually carries a heading disarms the
-      // stall timer — a device whose magnetometer stream keeps
-      // delivering events with a null heading (seen live: MIUI/Xiaomi
-      // hardware that never resolves a fused heading) used to count as
-      // "first reading seen" on the very first null event, permanently
-      // silencing the stall timer while the needle stayed stuck on an
-      // infinite spinner forever — no compass, no error, nothing
-      // actionable. Now that device correctly reaches the "sensor
-      // isn't responding" message after the timeout instead.
-      if (!firstReadingSeen && reading.headingDegrees != null) {
-        firstReadingSeen = true;
-        _compassStallTimer?.cancel();
-      }
-      final trueHeading = reading.headingDegrees == null
-          ? null
-          : AngleMath.normalise(reading.headingDegrees! + declination);
-      emit(
-        state.copyWith(
-          // A null heading after a real one has already arrived is a
-          // transient glitch, not a loss of the compass — live-
-          // reproduced and root-caused 2026-08-26: this device's
-          // magnetometer stream intermittently emits null-heading
-          // events mid-stream (not just before the first fix), and
-          // QiblaState.copyWith's headingDegrees param has no `??
-          // this.headingDegrees` fallback (deliberate elsewhere, since
-          // null is meaningful there) — so passing trueHeading straight
-          // through wiped a perfectly good heading back to null on
-          // every such event. That made needleRotationDegrees null,
-          // which made QiblaCompassArea swap the entire compass out for
-          // a centered CircularProgressIndicator — previously
-          // misdiagnosed as a GPU/Skia compositing bug (see
-          // compass_face_painter.dart's older investigation) because
-          // the small gold blob left on screen looked like the Kaaba
-          // marker holding on mid-glitch; it was actually the spinner,
-          // centered, not the marker at its real off-center position.
-          // Holding the last known heading through a transient null
-          // fixes it at the source.
-          headingDegrees: trueHeading ?? state.headingDegrees,
-          compassAccuracy: reading.accuracy,
-          displayAccuracy: _debouncedDisplayAccuracy(reading.accuracy),
-          // Only a genuine heading clears the stalled flag — once the
-          // timer has already declared the compass unresponsive, a
-          // further null-heading reading must not silently flip it back
-          // to false and hide that message again.
-          compassStalled: trueHeading == null ? state.compassStalled : false,
-        ),
-      );
+      if (!isClosed) emit(state.copyWith(compassStalled: true));
     });
 
-    _tiltSubscription?.cancel();
-    _tiltSubscription = _tiltService.readings.listen((reading) {
-      emit(state.copyWith(tiltX: reading.x, tiltY: reading.y));
-    });
+    _sensorSubscriptions = bindQiblaSensors(
+      compassService: _compassService,
+      tiltService: _tiltService,
+      debouncer: _debouncer,
+      declination: declination,
+      state: () => state,
+      emit: emit,
+      onFirstCompassReading: () => _compassStallTimer?.cancel(),
+      onCompassError: _handleCompassError,
+    );
+  }
+
+  /// A platform channel throwing instead of returning a null/degraded
+  /// reading — seen on cloud emulators (Appetize and similar) that
+  /// don't simulate a real magnetometer, where the sensor plugin's
+  /// channel setup itself fails rather than just reporting "no
+  /// heading". Degrades to the same [CompassAccuracy.unavailable]
+  /// state the service itself already uses for "no magnetometer at
+  /// all", so the UI (the existing "compass sensor isn't responding"
+  /// message) needs no separate handling for this.
+  void _handleCompassError() {
+    if (isClosed) return;
+    _compassStallTimer?.cancel();
+    emit(
+      state.copyWith(
+        compassAccuracy: CompassAccuracy.unavailable,
+        displayAccuracy: _debouncer(CompassAccuracy.unavailable),
+        compassStalled: true,
+      ),
+    );
   }
 
   @override
   Future<void> close() {
-    _compassSubscription?.cancel();
-    _tiltSubscription?.cancel();
+    _sensorSubscriptions?.cancel();
     _compassStallTimer?.cancel();
     return super.close();
   }

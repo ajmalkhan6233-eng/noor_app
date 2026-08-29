@@ -1323,3 +1323,53 @@ non-default scheduled notification once it's back.
 - Re-verify everything not-yet-live-verified above once the phone
   reconnects, in this order: Light theme contrast, Qibla screenrecord
   capture, Adhan reciter selection (preview/test/real notification).
+
+## Session — 2026-08-29 (continued): Qibla sensor-error crash fix + blank-frame proof
+
+### Fixed: unhandled sensor stream errors (real crash risk on cloud emulators)
+Investigated a report that Qibla/location might be crashing unhandled
+on Appetize's emulated environment (no real sensor hardware). Found a
+real, concrete gap: `QiblaCubit._listen()` subscribed to both the
+compass and tilt sensor streams with no `onError` handler, and
+`main.dart` has no global zone guard (`runZonedGuarded`) either — so a
+platform-channel failure (which `flutter_compass`/`sensors_plus` are
+known to raise as a genuine stream error, not just a null reading,
+when no real sensor exists) had nothing catching it anywhere in the
+chain. Fixed: both subscriptions now have `onError`, degrading the
+same way a missing sensor already does (`CompassAccuracy.unavailable`
+for compass, centered/0,0 for tilt) instead of throwing. Split
+`qibla_cubit.dart` into three files to land back under the 150-line
+limit (it was already over at 219 lines before this fix, un-caught
+until now): `qibla_accuracy_debouncer.dart` (hysteresis logic) and
+`qibla_sensor_binder.dart` (the actual stream-to-state wiring). Two
+new regression tests (`qibla_cubit_sensor_error_test.dart`) simulate a
+`PlatformException` on each stream via `controller.addError(...)` and
+assert graceful degradation. 220/220 tests passing, `flutter analyze`
+clean. Live-verified: fresh release-signed install, ran normally, no
+crash, no exception in logcat.
+
+### Confirmed via screen recording: the original Qibla blank-frame bug is a REAL rendering glitch, not a screenshot artifact
+This is unrelated to the fix above (that one prevents a crash on
+missing sensors; this is a separate, still-unsolved bug where the
+compass visually blanks intermittently on a device that DOES have
+working sensors). Long-standing open question: was the blank/blink
+pattern seen in `adb screencap` sequences a real thing the user could
+see, or an artifact of screencap's IPC racing the display compositor?
+Settled this definitively today: captured a real `adb shell
+screenrecord` (native H.264 encoder reading the actual composited
+display output — a completely different capture path than
+screencap's IPC) and extracted frames with `ffmpeg`. The exact same
+blank/full alternation appears in the video itself — two consecutive
+extracted frames, both timestamped the same second (~125ms apart),
+one fully blank except a tiny gold pixel, the next fully rendered.
+**This is a genuine, physically-visible rendering glitch on this
+device, happening multiple times per second** — not a screenshot-tool
+artifact. Root cause is still open (Impeller was already ruled out
+earlier this session by disabling it and retesting — no difference).
+Next real step: try forcing the legacy Skia *software* rasterizer
+(not just disabling Impeller, which still uses Skia+Vulkan/GL) or
+capture a native GPU trace, since this now looks like something in
+the compositor/GPU driver layer specifically, not a Flutter-level
+logic bug (the fix history already ruled out the Dart-side heading-
+nulling theory, RepaintBoundary, and emit-throttling, and now Impeller
+too).
