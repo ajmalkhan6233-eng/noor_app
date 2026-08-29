@@ -8,7 +8,6 @@
 // only ever written to the on-device encrypted database.
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/widgets/app_card.dart';
@@ -17,10 +16,6 @@ import '../../../core/constants/app_color_tokens.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
-
-  static final _publicPolicyUri = Uri.parse(
-    'https://ajmalkhan6233-eng.github.io/noor_app/privacy-policy.html',
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -112,25 +107,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   style: AppTypography.caption(context.colors.sage),
                 ),
               ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          AppCard(
-            child: Semantics(
-              button: true,
-              label: 'Open public privacy policy',
-              hint: 'Opens the privacy policy in your browser',
-              child: TextButton.icon(
-                onPressed: () => launchUrl(
-                  _publicPolicyUri,
-                  mode: LaunchMode.externalApplication,
-                ),
-                icon: Icon(Icons.open_in_new, color: context.colors.gold),
-                label: Text(
-                  'Open public privacy policy',
-                  style: TextStyle(color: context.colors.gold),
-                ),
-              ),
             ),
           ),
         ],
