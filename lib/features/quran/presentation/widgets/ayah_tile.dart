@@ -8,11 +8,12 @@ import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/quran_ayah.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
-/// One ayah with its number and a bookmark toggle. Arabic and
-/// translation text size both follow [fontScale] from Settings
-/// (2026-08-25 audit: "translation text size can't be adjusted,
-/// only Arabic" — same slider now covers both, translation scaling
-/// off a smaller base so it doesn't dominate the Arabic line).
+/// One ayah with its number and a bookmark toggle. Arabic only,
+/// deliberately — no translation line (direct instruction, 2026-08-29:
+/// the main reading screens stay Arabic-only, large text; translation
+/// is only ever shown in Quran search results, a different screen).
+/// [ayah.translation] still exists in the data model and is used
+/// there; this tile just never renders it.
 class AyahTile extends StatelessWidget {
   const AyahTile({
     super.key,
@@ -65,13 +66,6 @@ class AyahTile extends StatelessWidget {
                 height: 1.8,
               ),
             ),
-            if (ayah.translation != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                ayah.translation!,
-                style: TextStyle(color: context.colors.sage, fontSize: 14 * fontScale),
-              ),
-            ],
           ],
         ),
       ),

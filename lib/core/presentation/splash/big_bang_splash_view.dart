@@ -108,7 +108,15 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                 // rather than settling) — easeOutCubic front-loads the
                 // motion and lets it coast to a stop instead of
                 // arriving at a constant rate and just halting.
-                final t = Curves.easeOutCubic.transform(_dissolveController.value);
+                //
+                // Only the SECOND half of the dissolve belongs to
+                // fading this in — see BismillahReveal's matching note:
+                // the two used to span the same 0..1 range with
+                // different curves, so Bismillah was still highly
+                // visible at the same instant NOOR had already faded
+                // most of the way in, a real overlap (2026-08-29).
+                final linear = ((_dissolveController.value - 0.5) / 0.5).clamp(0.0, 1.0);
+                final t = Curves.easeOutCubic.transform(linear);
                 final opacity = t;
                 final scale = 0.85 + (t * 0.15);
                 return Opacity(

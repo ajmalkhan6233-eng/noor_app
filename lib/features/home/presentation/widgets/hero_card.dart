@@ -34,6 +34,11 @@ class _HeroCardState extends State<HeroCard>
   late final AnimationController _controller;
   late final Animation<double> _greetingOpacity;
   Timer? _holdTimer;
+  // Set once the initial reveal completes, so the later fade-out
+  // (controller running 1 -> 0) fades the whole greeting rather than
+  // dropping characters in reverse — see noor-text-reveal: builds up,
+  // holds, then fades away as a whole, not a reversed typewriter.
+  bool _revealed = false;
 
   @override
   void initState() {
@@ -42,6 +47,11 @@ class _HeroCardState extends State<HeroCard>
         vsync: this, duration: const Duration(milliseconds: 600));
     _greetingOpacity =
         CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && mounted) {
+        setState(() => _revealed = true);
+      }
+    });
     _controller.forward();
     // A real cancelable Timer, not Future.delayed — a pending
     // Future.delayed left running when this widget is torn down
@@ -116,14 +126,26 @@ class _HeroCardState extends State<HeroCard>
                 ),
           child: Padding(
             padding: const EdgeInsets.only(bottom: 6),
-            child: Text(
-              l10n.assalamuAlaikumGreeting,
-              style: TextStyle(
-                fontFamily: AppTypography.displayFamily,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                color: context.colors.ink,
-              ),
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                final greeting = l10n.assalamuAlaikumGreeting;
+                // Character-by-character build-up during the initial
+                // reveal only (noor-text-reveal) — once fully revealed,
+                // stays whole through the later hold-then-fade.
+                final visibleChars = _revealed
+                    ? greeting.length
+                    : (greeting.length * _controller.value).round();
+                return Text(
+                  greeting.substring(0, visibleChars),
+                  style: TextStyle(
+                    fontFamily: AppTypography.displayFamily,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: context.colors.ink,
+                  ),
+                );
+              },
             ),
           ),
         ),

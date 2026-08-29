@@ -165,7 +165,11 @@ class _TasbihOrbState extends State<TasbihOrb> with TickerProviderStateMixin {
               child: child,
             );
           },
-          child: OrbFace(count: widget.count, pulsing: widget.pulsing),
+          child: OrbFace(
+            count: widget.count,
+            pulsing: widget.pulsing,
+            pullFraction: (_dragOffset.distance / _maxPull()).clamp(0.0, 1.0),
+          ),
         ),
       ),
     );

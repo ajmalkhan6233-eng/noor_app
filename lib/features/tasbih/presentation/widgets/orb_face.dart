@@ -13,10 +13,21 @@ import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 
 class OrbFace extends StatelessWidget {
-  const OrbFace({super.key, required this.count, required this.pulsing});
+  const OrbFace({
+    super.key,
+    required this.count,
+    required this.pulsing,
+    this.pullFraction = 0.0,
+  });
 
   final int count;
   final bool pulsing;
+
+  /// 0.0 (resting) to 1.0 (at max drag distance) — ties the rim glow's
+  /// intensity to how far the orb is currently being pulled, so the
+  /// glow itself reads as a response to touch rather than a static
+  /// decoration (2026-08-29 polish pass).
+  final double pullFraction;
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +57,14 @@ class OrbFace extends StatelessWidget {
             offset: const Offset(0, 10),
           ),
           // Cyan rim glow on the far edge — the palette's "sparing,
-          // specific spots only" secondary accent.
+          // specific spots only" secondary accent. Brightens and
+          // widens with pullFraction so the glow visibly answers the
+          // drag itself, not just a fixed decoration.
           BoxShadow(
-            color: context.colors.accentSecondary.withValues(alpha: 0.3),
-            blurRadius: 18,
-            spreadRadius: -4,
+            color: context.colors.accentSecondary
+                .withValues(alpha: 0.3 + pullFraction * 0.35),
+            blurRadius: 18 + pullFraction * 14,
+            spreadRadius: -4 + pullFraction * 6,
             offset: const Offset(8, 8),
           ),
           if (pulsing)

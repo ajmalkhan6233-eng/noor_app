@@ -1,5 +1,26 @@
 # noor — Claude Code Project Directive
 
+## WORKING METHOD — READ THIS FIRST, EVERY SESSION
+
+noor is built and maintained block by block. Each feature (Qibla,
+Tasbih, Quran, Azkar, Home, Settings, notifications, etc.) is its own
+block, self-contained.
+
+When given a narrow request — "fix X," "change the icon," "Qibla is
+broken" — work ONLY inside that one block's files. Do not re-read the
+whole app. Do not re-audit unrelated features. Do not re-verify things
+already confirmed working in a previous session, unless the request
+explicitly asks for a full audit.
+
+Before starting any task, state plainly which single block it belongs
+to, and confirm you're staying within that scope.
+
+This exists because broad, unscoped work has repeatedly consumed usage
+far faster than the actual size of the request justified. This is now
+a permanent operating rule for this project, not a one-time
+instruction — it applies to every future session, regardless of who
+starts it or how the request is phrased.
+
 ## Authoritative Corrected Status — 2026-08-29 (Claude Code correction pass follows below)
 
 The list below was written by an overnight VS Code/Copilot session

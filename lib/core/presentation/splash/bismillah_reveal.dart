@@ -33,7 +33,17 @@ class BismillahReveal extends StatelessWidget {
         // brisk).
         final burstInLinear = ((burstController.value - 0.5) / 0.5).clamp(0.0, 1.0);
         final burstIn = Curves.easeOutCubic.transform(burstInLinear);
-        final dissolveOut = 1.0 - Curves.easeIn.transform(dissolveController.value);
+        // Only the FIRST half of the dissolve belongs to fading this
+        // out — NOOR (see BigBangSplashView) only starts fading in
+        // during the second half, so the two never both have positive
+        // opacity at once. Previously both spanned the whole 0..1
+        // range with different easing curves (easeIn here, easeOutCubic
+        // for NOOR), which meant Bismillah was still ~90% opaque at
+        // the same instant NOOR had already reached ~65% — a real,
+        // visible overlap of Arabic and English text, not just a
+        // brief crossfade blend (found 2026-08-29, direct report).
+        final dissolveOutLinear = (dissolveController.value / 0.5).clamp(0.0, 1.0);
+        final dissolveOut = 1.0 - Curves.easeIn.transform(dissolveOutLinear);
         final opacity = burstIn * dissolveOut;
         final scale = 1.0 + (1.0 - burstIn) * 0.35;
         return Opacity(

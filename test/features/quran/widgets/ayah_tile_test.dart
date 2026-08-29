@@ -1,7 +1,9 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Regression test for the 2026-08-25 fix: translation text must scale
-// with fontScale, not just the Arabic line.
+// Regression test for the 2026-08-29 fix: the main Quran reading
+// screens are Arabic-only, deliberately — AyahTile must never render
+// a translation line even when the ayah data has one (translation is
+// only ever shown in search results, a different widget entirely).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,28 +22,7 @@ void main() {
     translation: 'In the name of Allah',
   );
 
-  testWidgets('translation font size scales with fontScale', (tester) async {
-    await tester.pumpWidget(
-      _wrap(
-        AyahTile(
-          ayah: ayah,
-          fontScale: 1.5,
-          isBookmarked: false,
-          onToggleBookmark: () {},
-        ),
-      ),
-    );
-
-    final translation = tester.widget<Text>(
-      find.text('In the name of Allah'),
-    );
-    expect(translation.style?.fontSize, 14 * 1.5);
-
-    final arabic = tester.widget<Text>(find.text('بِسْمِ اللَّهِ'));
-    expect(arabic.style?.fontSize, 22 * 1.5);
-  });
-
-  testWidgets('defaults to base sizes at fontScale 1.0', (tester) async {
+  testWidgets('never renders translation even when the ayah has one', (tester) async {
     await tester.pumpWidget(
       _wrap(
         AyahTile(
@@ -53,9 +34,23 @@ void main() {
       ),
     );
 
-    final translation = tester.widget<Text>(
-      find.text('In the name of Allah'),
+    expect(find.text('In the name of Allah'), findsNothing);
+    expect(find.text('بِسْمِ اللَّهِ'), findsOneWidget);
+  });
+
+  testWidgets('Arabic text size scales with fontScale', (tester) async {
+    await tester.pumpWidget(
+      _wrap(
+        AyahTile(
+          ayah: ayah,
+          fontScale: 1.5,
+          isBookmarked: false,
+          onToggleBookmark: () {},
+        ),
+      ),
     );
-    expect(translation.style?.fontSize, 14);
+
+    final arabic = tester.widget<Text>(find.text('بِسْمِ اللَّهِ'));
+    expect(arabic.style?.fontSize, 22 * 1.5);
   });
 }
