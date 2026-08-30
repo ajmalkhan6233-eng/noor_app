@@ -11,7 +11,6 @@ import '../../../../core/effects/particle_burst.dart';
 import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
 import '../../logic/prayer_countdown_phase.dart';
-import 'astrolabe_ring.dart';
 import 'iqama_gap_row.dart';
 import 'prayer_countdown_row.dart';
 
@@ -73,8 +72,6 @@ class _PrayerHeroState extends State<PrayerHero> {
 
     return Column(
       children: [
-        AstrolabeRing(times: widget.times, now: _now),
-        const SizedBox(height: 4),
         Semantics(
           liveRegion: true,
           label: label,
