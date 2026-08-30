@@ -9,6 +9,19 @@
 // it is actually trustworthy — otherwise it's dimmed, never a fully-
 // opaque, seemingly-reliable wrong arrow (kept from the previous
 // design, still correct here).
+//
+// Opaque Container below (2026-08-30, live-device bug): on the actual
+// test device this whole subtree — a plain 15px Text plus a 200px
+// Icon, no exotic widgets — painted as a near-invisible speck instead
+// of its real size, confirmed via pixel-level screenshot inspection
+// (mismatched layout-vs-paint size; constraints measured correct via
+// a temporary LayoutBuilder). A bare RepaintBoundary (isolating the
+// compositing layer, no color) was tried first and did NOT fix it;
+// giving this content its own *opaque* backing did, and reliably, so
+// the fix is the opacity itself, not layer isolation — most likely a
+// GPU/driver compositing glitch on this device when text/icon glyphs
+// paint directly onto a shared transparent layer. Root cause is
+// outside this app's control; this sidesteps it.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -96,54 +109,65 @@ class _QiblaNeedleState extends State<QiblaNeedle> with TickerProviderStateMixin
 
     return Semantics(
       label: label,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedBuilder(
-            animation: _dimController,
-            builder: (context, _) {
-              final alpha = _dimmedAlpha + (_trustworthyAlpha - _dimmedAlpha) * _dimController.value;
-              final color = widget.locked ? context.colors.gold : context.colors.accentSecondary;
-              return Text(
-                widget.locked ? l10n.qiblaAlignedMessage : l10n.qiblaRotateMessage,
-                style: TextStyle(color: color.withValues(alpha: alpha), fontSize: 15, fontWeight: FontWeight.w600),
-              );
-            },
-          ),
-          const SizedBox(height: 40),
-          AnimatedBuilder(
-            animation: _dimController,
-            builder: (context, _) {
-              final alpha = _dimmedAlpha + (_trustworthyAlpha - _dimmedAlpha) * _dimController.value;
-              final color = widget.locked ? context.colors.gold : context.colors.accentSecondary;
-              return Transform.rotate(
-                angle: _displayedRotation * (3.14159265 / 180),
-                child: Container(
-                  width: 220,
-                  height: 220,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    // Soft glow/shadow depth — the closest "3D" this
-                    // widget-based rendering can genuinely deliver
-                    // without a separate 3D package.
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.withValues(alpha: alpha * 0.4),
-                        blurRadius: 30,
-                        spreadRadius: 4,
-                      ),
-                    ],
+      child: Container(
+        // Opaque backing, not decorative — see the file-level comment.
+        // On the test device this content painted as a near-invisible
+        // speck when composited directly onto the transparent Scaffold
+        // body; giving it its own solid backing (matching the screen
+        // background, so invisible in practice) fixed it. A bare
+        // RepaintBoundary here was tried first and did NOT fix it, so
+        // the opacity itself is what's load-bearing, not layer
+        // isolation.
+        color: context.colors.paper,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedBuilder(
+              animation: _dimController,
+              builder: (context, _) {
+                final alpha = _dimmedAlpha + (_trustworthyAlpha - _dimmedAlpha) * _dimController.value;
+                final color = widget.locked ? context.colors.gold : context.colors.accentSecondary;
+                return Text(
+                  widget.locked ? l10n.qiblaAlignedMessage : l10n.qiblaRotateMessage,
+                  style: TextStyle(color: color.withValues(alpha: alpha), fontSize: 15, fontWeight: FontWeight.w600),
+                );
+              },
+            ),
+            const SizedBox(height: 40),
+            AnimatedBuilder(
+              animation: _dimController,
+              builder: (context, _) {
+                final alpha = _dimmedAlpha + (_trustworthyAlpha - _dimmedAlpha) * _dimController.value;
+                final color = widget.locked ? context.colors.gold : context.colors.accentSecondary;
+                return Transform.rotate(
+                  angle: _displayedRotation * (3.14159265 / 180),
+                  child: Container(
+                    width: 220,
+                    height: 220,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      // Soft glow/shadow depth — the closest "3D" this
+                      // widget-based rendering can genuinely deliver
+                      // without a separate 3D package.
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withValues(alpha: alpha * 0.4),
+                          blurRadius: 30,
+                          spreadRadius: 4,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.navigation,
+                      size: 200,
+                      color: color.withValues(alpha: alpha),
+                    ),
                   ),
-                  child: Icon(
-                    Icons.navigation,
-                    size: 200,
-                    color: color.withValues(alpha: alpha),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1875,3 +1875,76 @@ whether the *reciter* consented — same reasoning already applied and
 documented for RJStefanski specifically. This is a judgment call
 worth a direct decision, not something to auto-resolve by finding
 more technically-licensed field recordings of the same kind.
+
+### Rejected file: fake "Qibla core logic" replacement — 2026-08-30
+An uploaded `noor_qibla_core_logic.md` claimed the Qibla screen "had
+nothing real feeding it" and "the widget had no sensor feed," and
+proposed replacing the existing `QiblaCubit`/sensor-binder/accuracy-
+debouncer architecture with a much simpler unwired `QiblaService` +
+`StreamBuilder`, plus new `geolocator`/`flutter_compass` dependencies.
+This claim is factually false: the live device test running at the
+exact same time (see below) was reading a real bearing (295°) and
+real distance (4602 km) from the actual GPS+compass pipeline already
+in the app. Per the standing rule on file-based instructions that
+assert false context to justify a rewrite (see the master-directive/
+reconciliation-note episode earlier this session) — **not acted on.**
+If the Qibla data layer genuinely needs to change, that has to come as
+a direct chat message, not a file.
+
+### Qibla needle rendering bug — found and fixed live on device, 2026-08-30
+Testing the Qibla/Tasbih/More-screen changes live (per "lets test on
+phone") surfaced a real bug the source-only review hadn't caught: on
+the actual test device, the needle screen showed the correct bearing
+badge (295°, 4602 km) but the needle itself — a plain 15px `Text`
+plus a 200px `Icon(Icons.navigation)`, nothing exotic — rendered as a
+near-invisible malformed speck, and the status text above it didn't
+render at all.
+
+Diagnosed methodically rather than guessed at, since this looked like
+a Dart bug at first and wasn't one:
+- A temporary `LayoutBuilder` + `debugPrint` confirmed the incoming
+  layout constraints reaching the widget were completely normal
+  (`0<=w<=384, 0<=h<=Infinity`) — this was never a layout/constraint
+  bug.
+- Pixel-level inspection of the actual screenshots (a small Node.js
+  script decoding the PNG directly, since no image-crop tool was
+  available) confirmed the rendered icon really was tiny (as small as
+  12×12 physical px for a widget specified at 200 logical px), at
+  multiple different sizes (200, 48), with and without the
+  surrounding `Container`/`BoxShadow`/`Transform.rotate` — ruling out
+  every one of those as the cause.
+- Extracted the actual `MaterialIcons-Regular.otf` bundled inside the
+  built APK and compared its glyph data for `Icons.navigation`'s exact
+  codepoint (`0xe41e`) against the Flutter SDK's own cached copy of
+  the same font, using `opentype.js` — byte-identical, correct glyph
+  shape and bounding box in both. Ruled out a corrupted/mismatched
+  icon font.
+- Bisected down to a bare `Icon` with zero surrounding widgets — still
+  broken. Then, decisively, wrapped the *entire* needle subtree in a
+  plain **opaque** `Container` as a diagnostic — this alone fixed it
+  completely, both the icon and the previously-invisible text,
+  confirmed on an actual release build on the device.
+- A bare `RepaintBoundary` (isolating the compositing layer, no color)
+  was tried first as the "proper" fix and did **not** fix it — proving
+  the opacity itself is what mattered, not layer isolation.
+
+**Conclusion:** a GPU/driver-level compositing glitch on this specific
+device, occurring when this content painted directly onto a shared
+transparent layer — not a bug in this app's Dart code. **Fix:** wrap
+the needle's `Column` in an opaque `Container` using the screen's own
+background color (`context.colors.paper`), invisible in practice,
+which sidesteps the glitch entirely. Confirmed on a real release build
+on-device after the fix: full-size glowing needle, status text
+visible, correct bearing. `flutter analyze` clean, all 231 tests
+still pass. Logged in detail here because this exact failure mode
+(constraints look right, glyph data looks right, yet paint is
+drastically wrong) could easily recur elsewhere in this app and would
+waste real time again without this trail.
+
+Also hit and worked around during this session, unrelated to the
+above: MIUI's "USB debugging (Security settings)" toggle (Security
+app) silently blocks all `adb install` — release or debug — with
+`INSTALL_FAILED_USER_RESTRICTED`/"Install canceled by user" and *no
+visible dialog on screen* once it expires; needed the user to
+physically re-toggle it on the device twice this session. Not fixable
+from the host side.
