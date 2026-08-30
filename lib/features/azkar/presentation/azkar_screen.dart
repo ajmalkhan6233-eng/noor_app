@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -13,6 +14,7 @@ import '../data/azkar_repository.dart';
 import '../logic/azkar_cubit/azkar_cubit.dart';
 import 'widgets/azkar_bookmarks_button.dart';
 import 'widgets/azkar_category_selector.dart';
+import 'widgets/azkar_header.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 /// Azkar: a search box, then a list of category rows (morning,
@@ -69,8 +71,10 @@ class _AzkarScreenState extends State<AzkarScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          // No title here — AzkarHeader below is the large, centered
+          // "alive" title now (master directive item 8). Keeping this
+          // AppBar only for the back button and bookmarks action.
           backgroundColor: context.colors.paper,
-          title: Text(AppLocalizations.of(context)!.azkarScreenTitle),
           actions: const [AzkarBookmarksButton()],
         ),
         body: Padding(
@@ -78,17 +82,22 @@ class _AzkarScreenState extends State<AzkarScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AppCard(
-                child: TextField(
-                  style: TextStyle(color: context.colors.ink),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search, color: context.colors.sage),
-                    hintText: 'Search duas — e.g. "sleep", "travel"',
-                    hintStyle: TextStyle(color: context.colors.sage),
-                    border: InputBorder.none,
+              StaggeredFadeIn(
+                children: [
+                  AzkarHeader(title: AppLocalizations.of(context)!.azkarScreenTitle),
+                  AppCard(
+                    child: TextField(
+                      style: TextStyle(color: context.colors.ink),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search, color: context.colors.sage),
+                        hintText: 'Search duas — e.g. "sleep", "travel"',
+                        hintStyle: TextStyle(color: context.colors.sage),
+                        border: InputBorder.none,
+                      ),
+                      onChanged: _search,
+                    ),
                   ),
-                  onChanged: _search,
-                ),
+                ],
               ),
               const SizedBox(height: 16),
               Expanded(

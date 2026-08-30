@@ -1948,3 +1948,44 @@ app) silently blocks all `adb install` — release or debug — with
 visible dialog on screen* once it expires; needed the user to
 physically re-toggle it on the device twice this session. Not fixable
 from the host side.
+
+### Rejected two "corrected" widget files — 2026-08-30
+Aj sent a genuine direct chat message ("it's Aj, confirming this
+myself") along with two uploaded files (`noor_qibla_tasbih_corrected.md`,
+`noor_remaining_widgets_corrected.md`) claiming a separate planning
+chat had pulled the real `app_color_tokens.dart`/`app_theme.dart` and
+rewritten 5 widgets to fix wrong-API usage. Checked before applying,
+per Aj's own request to "report back plainly what compiled and what
+didn't": the Qibla needle and Tasbih device files in the upload were
+older, simpler versions than what's already in the repo — dropping
+the compass smoothing, the dim/trustworthy-alpha state, l10n strings,
+and (critically) the opaque-Container fix for today's on-device
+rendering bug. The other three target paths
+(`next_prayer_card.dart`, `features/support/.../support_home_card.dart`,
+`azkar_header.dart`) didn't exist anywhere in the repo, and a repo-wide
+grep for the hardcoded-white-text bug both files cite as their reason
+for existing found exactly one hit — a decorative calligraphy shadow,
+not body text. **Not applied.** The planning chat's picture of the
+repo doesn't match what's actually here. Reported this back plainly
+instead of silently discarding it or silently applying it.
+
+### Azkar header polish (master directive item 8) — implemented, not yet live-verified
+`lib/features/azkar/presentation/widgets/azkar_header.dart` (new) —
+large centered title using the existing `AppTypography.heroDisplay`
+style (same one the next-prayer name uses, for visual consistency
+rather than a one-off treatment), with a slow 3s breathing gold-glow
+`BoxShadow` behind it for the "alive" quality the directive asked for.
+Wired into `azkar_screen.dart` inside the existing `StaggeredFadeIn`
+alongside the search box, and the AppBar's now-redundant plain title
+was removed (back button + bookmarks action kept). Real `context.colors`
+tokens throughout, real `l10n.azkarScreenTitle` string — no invented
+API, no hardcoded text. `flutter analyze` clean, 2 new widget tests
+added (`test/features/azkar/widgets/azkar_header_test.dart`), full
+suite at 233/233.
+
+**Not yet confirmed on-device** — the phone disconnected from adb
+mid-session (unrelated to the MIUI install-permission issue; `adb
+devices` now returns no devices at all) and hasn't reconnected. Per
+noor-visual-self-qa this is not being reported as a finished design
+task until it's actually seen rendered on the phone — flagging this
+plainly rather than claiming done from source alone.
