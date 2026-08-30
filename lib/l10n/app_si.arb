@@ -87,6 +87,11 @@
 
   "qiblaLabel": "කිබ්ලා",
   "calendarLabel": "දින දර්ශනය",
+  "calendarRemindersTitle": "මතක් කිරීම්",
+  "calendarReminderEmptyMessage": "මෙම දිනයේ තවම මතක් කිරීම් නැත.",
+  "calendarReminderNoteHint": "මෙම මතක් කිරීම කුමක් සඳහාද?",
+  "calendarReminderAddButton": "මතක් කිරීමක් එක් කරන්න",
+  "calendarReminderDeleteHint": "මෙම මතක් කිරීම මකා දැමීමට දෙවරක් තට්ටු කරන්න",
   "zakatCalculatorLabel": "සකාත් ගණකය",
   "aboutLabel": "පිළිබඳ",
 

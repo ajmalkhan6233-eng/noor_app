@@ -1989,3 +1989,66 @@ devices` now returns no devices at all) and hasn't reconnected. Per
 noor-visual-self-qa this is not being reported as a finished design
 task until it's actually seen rendered on the phone — flagging this
 plainly rather than claiming done from source alone.
+
+### Master directive item 6 (Quran translation) — genuine conflict found, not implemented
+Item 6 asks: "below 'Read the Full Quran,' show only the translation
+matching the user's selected app language." Checked the actual screen
+before touching anything, as flagged earlier this session as needed.
+`full_quran_screen.dart` renders every ayah through `AyahTile` —
+the exact widget that was made **Arabic-only** earlier this session
+per an explicit punch-list decision, with `ayah_tile_test.dart`
+asserting a translation never renders. Implementing item 6 as written
+would directly reverse that decision on the same screen.
+
+This is a genuine conflict between two real instructions, not
+something to silently pick a side on. **Not implemented.** Needs a
+direct answer from Aj: keep Full Quran Arabic-only (current state) and
+treat item 6 as superseded, or bring translation back specifically
+here in the user's selected app language (noting only English
+translation text is currently imported — Tamil/Sinhala Quran
+translation isn't sourced yet, same limitation already documented on
+the Ayah of the Day card).
+
+### Calendar reminders shipped (master directive items 10/11) — 2026-08-30
+No reminder/event concept existed in the Calendar tab at all before
+this — it was a grid plus occasion/holiday overlays only. Built as a
+real feature, not a stub:
+
+- `lib/core/database/schema/calendar_reminder_schema.dart` (new) —
+  `calendar_reminders` table (date, note, hour, minute). Wired into
+  `database_migrations.dart` as schema version 10, with an
+  `IF NOT EXISTS` upgrade branch for existing installs, following the
+  established migration pattern exactly.
+- `lib/features/calendar/data/calendar_reminder.dart` (model) and
+  `calendar_reminder_repository.dart` (CRUD via the existing
+  `DatabaseHelper` — no second database connection).
+- `lib/features/calendar/logic/calendar_reminder_cubit/` (new) — loads
+  a given date's reminders, add/remove.
+- **Notifications reuse the existing `NotificationService`** — the one
+  file in the whole app that's allowed to touch
+  `flutter_local_notifications` — rather than standing up a second,
+  competing notification path. Added `scheduleCalendarReminder` /
+  `cancelCalendarReminder` plus a dedicated `calendar_reminders`
+  Android channel (`notification_details.dart`), and a fixed id
+  offset (`calendarReminderNotificationIdBase = 20000`) chosen to sit
+  comfortably clear of every prayer/iqamath/reminder/test id already
+  in use (see `notification_slots.dart`'s `idForSlot` doc for the
+  existing ranges).
+- UI: tapping a day's existing detail bottom sheet now also shows that
+  day's reminders and an "Add reminder" button opening a note field +
+  `showTimePicker` dialog (`calendar_day_detail_sheet.dart`,
+  `add_reminder_dialog.dart`, `calendar_reminder_tile.dart`) — the
+  sheet's content was extracted out of `calendar_screen.dart` into its
+  own file to build this without blowing past the 150-line convention.
+- 5 new l10n keys, drafted in English/Tamil/Sinhala (machine-drafted
+  per noor-trilingual-i18n — flagging for native review before this
+  ships publicly, same as always for new UI copy in these languages).
+- `flutter analyze` clean, 5 new repository tests
+  (`calendar_reminder_repository_test.dart`) plus the existing
+  migration test still passing, full suite at 238/238.
+
+**Not yet verified on-device** — same phone-disconnected-from-adb
+situation as the Azkar header above. This is real, tested code, but
+"tested" here means unit/widget tests and `flutter analyze`, not an
+actual tap-through on the phone — noor-visual-self-qa still applies
+once the phone is back.

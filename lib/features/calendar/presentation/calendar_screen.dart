@@ -7,12 +7,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_color_tokens.dart';
-import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/hijri_date.dart';
-import '../../../core/utils/islamic_occasion.dart';
-import '../../../core/utils/sri_lanka_holiday.dart';
 import '../../settings/data/settings_repository.dart';
 import 'widgets/calendar_day_cell.dart';
+import 'widgets/calendar_day_detail_sheet.dart';
 import 'widgets/calendar_legend.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -86,69 +84,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   gregorianDate: date,
                   hijri: hijri,
                   isToday: isToday,
-                  onTap: () => _showDayDetail(context, date, hijri),
+                  onTap: () => showCalendarDayDetail(
+                    context,
+                    date: date,
+                    hijri: hijri,
+                    monthName: _monthName(date.month),
+                  ),
                 );
               },
             ),
           ),
           const CalendarLegend(),
-        ],
-      ),
-    );
-  }
-
-  void _showDayDetail(BuildContext context, DateTime date, HijriDate hijri) {
-    final occasions = occasionsOn(hijri);
-    final holidays = sriLankaHolidaysOn(date);
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: context.colors.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${_monthName(date.month)} ${date.day}, ${date.year}',
-              style: TextStyle(
-                color: context.colors.ink,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(hijri.formatted, style: AppTypography.caption(context.colors.sage)),
-            if (occasions.isNotEmpty || holidays.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Divider(color: context.colors.hairline, height: 1),
-              const SizedBox(height: 16),
-              for (final occasion in occasions) _detailRow(occasion.label, context.colors.gold),
-              for (final holiday in holidays)
-                _detailRow(holiday.name, context.colors.accentSecondary),
-            ],
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _detailRow(String label, Color dotColor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: dotColor),
-          ),
-          const SizedBox(width: 10),
-          Text(label, style: TextStyle(color: context.colors.ink)),
         ],
       ),
     );

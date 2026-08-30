@@ -284,6 +284,23 @@ class AppLocalizationsTa extends AppLocalizations {
   String get calendarLabel => 'நாட்காட்டி';
 
   @override
+  String get calendarRemindersTitle => 'நினைவூட்டல்கள்';
+
+  @override
+  String get calendarReminderEmptyMessage =>
+      'இந்த நாளில் இன்னும் நினைவூட்டல்கள் இல்லை.';
+
+  @override
+  String get calendarReminderNoteHint => 'இந்த நினைவூட்டல் எதற்காக?';
+
+  @override
+  String get calendarReminderAddButton => 'நினைவூட்டல் சேர்க்கவும்';
+
+  @override
+  String get calendarReminderDeleteHint =>
+      'இந்த நினைவூட்டலை நீக்க இரண்டு முறை தட்டவும்';
+
+  @override
   String get zakatCalculatorLabel => 'ஜகாத் கணிப்பான்';
 
   @override

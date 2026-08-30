@@ -179,4 +179,40 @@ class NotificationService {
       }
     }
   }
+
+  /// Schedules a one-off Calendar reminder. [reminderId] is the
+  /// reminder's own database row id, offset into a fixed range
+  /// ([calendarReminderNotificationIdBase]) well clear of every
+  /// prayer/iqamath/reminder/test id above — cancelling later just
+  /// needs the same [reminderId] back, not anything else about the
+  /// reminder. Past-due times are silently skipped rather than firing
+  /// immediately, matching [scheduleAt]'s behavior for prayer times.
+  Future<void> scheduleCalendarReminder({
+    required int reminderId,
+    required String note,
+    required DateTime dateTime,
+  }) async {
+    await initialize();
+    final scheduled = tz.TZDateTime.from(dateTime, tz.local);
+    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
+    await _plugin.zonedSchedule(
+      calendarReminderNotificationIdBase + reminderId,
+      'Reminder',
+      note,
+      scheduled,
+      calendarReminderNotificationDetails,
+      androidScheduleMode: await resolveScheduleMode(_plugin, preferAlarmClock: false),
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
+  Future<void> cancelCalendarReminder(int reminderId) async {
+    await initialize();
+    await _plugin.cancel(calendarReminderNotificationIdBase + reminderId);
+  }
 }
+
+/// Comfortably clear of every prayer/iqamath/reminder id (tops out
+/// around 7104 at the maximum scheduling horizon) and every test id
+/// (9000–9500) — see notification_slots.dart's [idForSlot] doc.
+const int calendarReminderNotificationIdBase = 20000;

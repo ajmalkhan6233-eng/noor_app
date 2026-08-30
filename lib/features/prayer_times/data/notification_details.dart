@@ -18,6 +18,20 @@ const NotificationDetails defaultNotificationDetails = NotificationDetails(
   ),
 );
 
+/// Its own channel, separate from [defaultNotificationDetails] — a
+/// Calendar reminder isn't a prayer-time notification, and a person
+/// may want to mute one channel without muting the other in Android's
+/// own per-app notification settings.
+const NotificationDetails calendarReminderNotificationDetails = NotificationDetails(
+  android: AndroidNotificationDetails(
+    'calendar_reminders',
+    'Calendar reminders',
+    channelDescription: 'Reminders you set on the calendar',
+    importance: Importance.high,
+    priority: Priority.high,
+  ),
+);
+
 /// One channel per (reciter, prayer) so each can carry its own actual
 /// adhan recording as the channel sound — Android notification
 /// channels are created once and their sound can never be changed

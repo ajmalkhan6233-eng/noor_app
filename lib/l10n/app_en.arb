@@ -98,6 +98,11 @@
 
   "qiblaLabel": "Qibla",
   "calendarLabel": "Calendar",
+  "calendarRemindersTitle": "Reminders",
+  "calendarReminderEmptyMessage": "No reminders on this day yet.",
+  "calendarReminderNoteHint": "What's this reminder for?",
+  "calendarReminderAddButton": "Add reminder",
+  "calendarReminderDeleteHint": "Double tap to delete this reminder",
   "zakatCalculatorLabel": "Zakat calculator",
   "aboutLabel": "About",
 

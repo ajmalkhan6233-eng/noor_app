@@ -574,6 +574,36 @@ abstract class AppLocalizations {
   /// **'Calendar'**
   String get calendarLabel;
 
+  /// No description provided for @calendarRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get calendarRemindersTitle;
+
+  /// No description provided for @calendarReminderEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders on this day yet.'**
+  String get calendarReminderEmptyMessage;
+
+  /// No description provided for @calendarReminderNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s this reminder for?'**
+  String get calendarReminderNoteHint;
+
+  /// No description provided for @calendarReminderAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get calendarReminderAddButton;
+
+  /// No description provided for @calendarReminderDeleteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to delete this reminder'**
+  String get calendarReminderDeleteHint;
+
   /// No description provided for @zakatCalculatorLabel.
   ///
   /// In en, this message translates to:

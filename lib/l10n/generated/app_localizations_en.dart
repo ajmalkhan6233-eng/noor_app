@@ -278,6 +278,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarLabel => 'Calendar';
 
   @override
+  String get calendarRemindersTitle => 'Reminders';
+
+  @override
+  String get calendarReminderEmptyMessage => 'No reminders on this day yet.';
+
+  @override
+  String get calendarReminderNoteHint => 'What\'s this reminder for?';
+
+  @override
+  String get calendarReminderAddButton => 'Add reminder';
+
+  @override
+  String get calendarReminderDeleteHint => 'Double tap to delete this reminder';
+
+  @override
   String get zakatCalculatorLabel => 'Zakat calculator';
 
   @override

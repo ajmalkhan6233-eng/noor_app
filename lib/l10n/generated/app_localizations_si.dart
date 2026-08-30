@@ -283,6 +283,22 @@ class AppLocalizationsSi extends AppLocalizations {
   String get calendarLabel => 'දින දර්ශනය';
 
   @override
+  String get calendarRemindersTitle => 'මතක් කිරීම්';
+
+  @override
+  String get calendarReminderEmptyMessage => 'මෙම දිනයේ තවම මතක් කිරීම් නැත.';
+
+  @override
+  String get calendarReminderNoteHint => 'මෙම මතක් කිරීම කුමක් සඳහාද?';
+
+  @override
+  String get calendarReminderAddButton => 'මතක් කිරීමක් එක් කරන්න';
+
+  @override
+  String get calendarReminderDeleteHint =>
+      'මෙම මතක් කිරීම මකා දැමීමට දෙවරක් තට්ටු කරන්න';
+
+  @override
   String get zakatCalculatorLabel => 'සකාත් ගණකය';
 
   @override

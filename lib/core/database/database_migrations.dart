@@ -20,13 +20,14 @@
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import 'schema/azkar_schema.dart';
+import 'schema/calendar_reminder_schema.dart';
 import 'schema/prayer_tracker_schema.dart';
 import 'schema/quran_schema.dart';
 import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 9;
+const int latestSchemaVersion = 10;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -36,6 +37,7 @@ Future<void> createNoorSchema(Database db, int version) async {
     ...quranCreateStatements,
     ...widgetPositionCreateStatements,
     ...prayerTrackerCreateStatements,
+    ...calendarReminderCreateStatements,
   ]) {
     await db.execute(statement);
   }
@@ -145,5 +147,11 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       "ALTER TABLE app_settings ADD COLUMN adhan_reciter TEXT NOT NULL DEFAULT 'doha'",
     );
   }
-  // Next migration: add `if (oldVersion < 10) { ... }` here.
+  if (oldVersion < 10) {
+    // Calendar reminders (2026-08-30, master directive items 10/11).
+    for (final statement in calendarReminderCreateStatements) {
+      await db.execute(statement.replaceFirst('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS'));
+    }
+  }
+  // Next migration: add `if (oldVersion < 11) { ... }` here.
 }
