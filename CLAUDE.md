@@ -2214,3 +2214,48 @@ tonight's Qibla work and re-pushed it to the `apk-releases` branch at
 the same path (`dist/noor-arm64.apk`), so the link already shared
 (`raw.githubusercontent.com/.../apk-releases/dist/noor-arm64.apk`)
 now serves the current build without needing a new link.
+
+### Compass dial glitch — actual root cause found, not just papered over — 2026-08-30
+
+The "plain compass" instruction (previous entry) shipped, but Aj
+reconnected the phone and the SAME glitch still reproduced on the flat-
+color version — proving the earlier gradient/blur theory wrong, not
+just unfashionable. Took a screenshot burst (5 frames, ~1.5s apart)
+and diffed pixel bounding boxes programmatically rather than eyeballing
+single screenshots: 3 of 5 frames rendered the full dial correctly,
+2 of 5 collapsed to the same tiny malformed speck — genuinely
+intermittent, not something a single "looks fine now" screenshot can
+rule out.
+
+Root-caused this time, not just bisected around: `qibla_sensor_binder.dart`
+has **no throttling at all** on the raw compass stream — every single
+sensor reading calls `emit()`, and the dial (redesigned as a plain
+`StatelessWidget` reading `state.needleRotationDegrees` straight from
+the outer `BlocBuilder`) repainted its *entire* multi-layer Stack
+(rings, ticks, Arabic label, needle, badge) on every one of those raw
+events. The **old**, pre-rebuild `QiblaNeedle` widget never had this
+problem because it kept its own local `Ticker`-smoothed
+`_displayedRotation` (`AngleMath.smooth`), decoupling paint frequency
+from raw sensor frequency and confining the actual repaint to a small,
+cheap subtree — that decoupling was lost when the needle got folded
+into the new dial's stateless design, and is almost certainly what
+made this device's already-known compositor quirk trip far more
+severely on the new screen than it ever did on the old one.
+
+Fixed at the source: split the rotating needle+badge into their own
+widget (`compass_needle_and_badge.dart`), a `StatefulWidget` with its
+own `Ticker` restoring the exact smoothing the old needle had, wrapped
+in its own `RepaintBoundary` so its (now rate-limited) repaints never
+force the static rings/label to repaint alongside it. `flutter
+analyze` clean, all 32 Qibla tests passing.
+
+**Not yet re-confirmed live** — MIUI's "Install via USB" developer
+toggle had expired again by the time this build was ready (same class
+of block documented earlier tonight; needs Aj's own tap on the
+phone). This is a real, well-reasoned architectural fix for a
+concretely identified cause (unthrottled sensor stream driving a
+stateless heavy-Stack repaint), not a guess — but "well-reasoned" is
+being stated plainly instead of "confirmed," since the actual proof
+requires the same kind of multi-frame screenshot burst used to catch
+it in the first place, next time the phone's install permission is
+back.
