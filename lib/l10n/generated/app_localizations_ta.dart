@@ -174,6 +174,59 @@ class AppLocalizationsTa extends AppLocalizations {
   String get qiblaRotateMessage => 'கிப்லாவைக் கண்டறிய திருப்பவும்';
 
   @override
+  String get qiblaAlignedPillLabel => 'கிப்லா சரியாக உள்ளது';
+
+  @override
+  String get qiblaYourLocationLabel => 'உங்கள் இருப்பிடம்';
+
+  @override
+  String qiblaRouteCaption(String origin) {
+    return '$origin இலிருந்து கஃபா வரை';
+  }
+
+  @override
+  String get qiblaFlyingLabel => 'விமானத்தில்';
+
+  @override
+  String get qiblaCamelLabel => 'ஒட்டகத்தில்';
+
+  @override
+  String get qiblaFootLabel => 'நடந்து';
+
+  @override
+  String qiblaHoursAbbrev(int hours) {
+    return '≈ $hours மணி';
+  }
+
+  @override
+  String qiblaDaysAbbrev(int days) {
+    return '≈ $days நாட்கள்';
+  }
+
+  @override
+  String qiblaMonthsAbbrev(int months) {
+    return '≈ $months மாதங்கள்';
+  }
+
+  @override
+  String get qiblaFacingReadoutLabel => 'நோக்கி உள்ளது';
+
+  @override
+  String get qiblaBearingReadoutLabel => 'கிப்லா';
+
+  @override
+  String get qiblaHoldLevelLabel => 'நிலைமட்டமாக வைக்கவும்';
+
+  @override
+  String get qiblaFlatSurfaceCaption =>
+      'தொலைபேசியை தட்டையாக, உலோகத்திலிருந்து விலகி வையுங்கள்.';
+
+  @override
+  String qiblaTravelEstimateSemanticLabel(int hours, int days, int months) {
+    return 'தோராயமான பயண நேர மதிப்பீடுகள்: விமானத்தில் $hours மணிநேரம், ஒட்டகத்தில் $days நாட்கள், நடந்து $months மாதங்கள்';
+  }
+
+  @override
   String get quranScreenTitle => 'குர்ஆன்';
 
   @override

@@ -3,4 +3,7 @@
     <!-- Locked obsidian background (#05070B) — used for the native splash
          window so there is no white flash before Flutter's first frame. -->
     <color name="splash_background">#FF05070B</color>
+
+    <!-- Adaptive-icon background layer — same locked obsidian. -->
+    <color name="ic_launcher_background">#FF05070B</color>
 </resources>

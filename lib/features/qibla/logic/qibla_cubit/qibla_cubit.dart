@@ -1,10 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Presentation only dispatches `start()`/`setManualLocation()` and
-// reads state — location, compass, tilt, and qibla math all stay out
-// of the widget tree. Sensor-stream wiring itself lives in
-// qibla_sensor_binder.dart (see its header for the compass null-
-// heading and stream-error handling history).
+// reads state. Sensor-stream wiring lives in qibla_sensor_binder.dart.
 
 import 'dart:async';
 
@@ -67,7 +64,7 @@ class QiblaCubit extends Cubit<QiblaState> {
     final appSettings = await _settingsRepository.load();
     final district = findSriLankaDistrict(appSettings.selectedDistrict);
     if (district != null) {
-      _applyLocation(district.latitude, district.longitude);
+      _applyLocation(district.latitude, district.longitude, originLabel: district.name);
       return;
     }
 
@@ -83,11 +80,11 @@ class QiblaCubit extends Cubit<QiblaState> {
 
   /// Lets the district-picker fallback set a location directly when
   /// GPS was unavailable and no district was already known.
-  void setManualLocation(double latitude, double longitude) {
-    _applyLocation(latitude, longitude);
+  void setManualLocation(double latitude, double longitude, {String? originLabel}) {
+    _applyLocation(latitude, longitude, originLabel: originLabel);
   }
 
-  void _applyLocation(double latitude, double longitude) {
+  void _applyLocation(double latitude, double longitude, {String? originLabel}) {
     final declination = MagneticDeclination.estimate(latitude, longitude);
     emit(
       state.copyWith(
@@ -97,6 +94,7 @@ class QiblaCubit extends Cubit<QiblaState> {
         distanceKm: QiblaCalculator.distanceToKaabaKm(latitude, longitude),
         isResolvingLocation: false,
         locationError: null,
+        originLabel: originLabel,
       ),
     );
     _listen(declination);

@@ -24,10 +24,15 @@ class QiblaState extends Equatable {
     this.tiltX = 0,
     this.tiltY = 0,
     this.compassStalled = false,
+    this.originLabel,
   });
 
   final double? latitude;
   final double? longitude;
+
+  /// Route card's starting-point label — the chosen district's name,
+  /// or `null` for a real GPS fix (no honest name to attach to one).
+  final String? originLabel;
 
   /// True great-circle bearing to the Kaaba from the current
   /// location, in degrees — static once resolved, independent of the
@@ -100,6 +105,7 @@ class QiblaState extends Equatable {
     double? tiltX,
     double? tiltY,
     bool? compassStalled,
+    String? originLabel,
   }) {
     return QiblaState(
       latitude: latitude ?? this.latitude,
@@ -114,6 +120,12 @@ class QiblaState extends Equatable {
       tiltX: tiltX ?? this.tiltX,
       tiltY: tiltY ?? this.tiltY,
       compassStalled: compassStalled ?? this.compassStalled,
+      // Sticky, unlike locationError/headingDegrees above — this is
+      // only ever passed once, at the point location is first
+      // resolved (_applyLocation), while every later copyWith call
+      // (every sensor tick) has no opinion on it and must not reset it
+      // back to null.
+      originLabel: originLabel ?? this.originLabel,
     );
   }
 
@@ -131,5 +143,6 @@ class QiblaState extends Equatable {
     tiltX,
     tiltY,
     compassStalled,
+    originLabel,
   ];
 }

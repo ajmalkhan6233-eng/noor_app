@@ -1,11 +1,12 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // The compass area — split out of QiblaScreen to stay under the
-// 150-line limit. Fires a calm confirmation burst the moment the
-// needle settles onto the qibla (QiblaState.isLocked), re-arming only
-// after it drifts back out of lock. Redesigned 2026-08-30: centered,
-// fixed in place — no longer draggable/resizable (that was part of
-// the ring/dial decoration removed in the same pass).
+// 150-line limit. Fires a calm confirmation burst plus a haptic pulse
+// the moment the needle settles onto the qibla (QiblaState.isLocked),
+// re-arming only after it drifts back out of lock. Rebuilt 2026-08-30
+// per the approved mockup: QiblaCompassDial replaces the old plain
+// QiblaNeedle, and a QiblaAlignedPill (not a dialog) shows/hides with
+// the same lock signal.
 
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,8 @@ import '../../../../core/haptics/haptic_service.dart';
 import '../../../../core/sensors/compass_reading.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../logic/qibla_cubit/qibla_state.dart';
-import 'qibla_needle.dart';
+import 'qibla_aligned_pill.dart';
+import 'qibla_compass_dial.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class QiblaCompassArea extends StatefulWidget {
@@ -58,11 +60,6 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
 
     final rotation = state.needleRotationDegrees;
     if (rotation == null) {
-      // A plain spinner here used to just spin forever if
-      // flutter_compass never delivered a first event on a given
-      // device — reported live as "the app is completely locked".
-      // QiblaCubit's stall timeout (5s) turns that into an actual,
-      // actionable message instead of silence.
       if (state.compassStalled) {
         return Center(
           child: Padding(
@@ -90,12 +87,17 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
     }
 
     final trustworthy = state.displayAccuracy == CompassAccuracy.good;
-    return Center(
-      child: QiblaNeedle(
-        rotationDegrees: rotation,
-        dimmed: !trustworthy,
-        locked: state.isLocked,
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        QiblaCompassDial(
+          rotationDegrees: rotation,
+          dimmed: !trustworthy,
+          headingDegrees: state.headingDegrees,
+          bearingDegrees: state.bearingDegrees!,
+        ),
+        QiblaAlignedPill(visible: state.isLocked),
+      ],
     );
   }
 }

@@ -1,10 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Qibla-compass screen: a needle toward the Kaaba (only ever shown
-// with confidence the underlying compass reading earns), plus the
-// numeric bearing and distance, which are always shown. Redesigned
-// 2026-08-30 per direct request: needle only, centered, big and
-// clear — no longer draggable/resizable, no ring/dial decoration.
+// Qibla screen, rebuilt 2026-08-30 per the approved mockup: a route/
+// distance card with a plane travelling toward Makkah, the redesigned
+// compass dial, an "aligned" pill (not a dialog), a compact level
+// indicator, and a caption — no full-screen calibration takeover
+// (FR-9's honest low-accuracy warning is still shown, just as a small
+// pill via AnimatedCalibrationBanner, same as before this rebuild).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,9 @@ import '../logic/qibla_cubit/qibla_state.dart';
 import 'widgets/animated_calibration_banner.dart';
 import 'widgets/qibla_compass_area.dart';
 import 'widgets/qibla_district_fallback.dart';
-import 'widgets/qibla_info_panel.dart';
+import 'widgets/qibla_level_indicator.dart';
+import 'widgets/qibla_route_card.dart';
+import 'widgets/qibla_title_ornament.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 class QiblaScreen extends StatelessWidget {
@@ -43,7 +46,12 @@ class _QiblaView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.colors.paper,
-      appBar: AppBar(title: Text(l10n.qiblaScreenTitle)),
+      appBar: AppBar(
+        backgroundColor: context.colors.paper,
+        elevation: 0,
+        centerTitle: true,
+        title: QiblaTitleOrnament(title: l10n.qiblaScreenTitle),
+      ),
       body: BlocBuilder<QiblaCubit, QiblaState>(
         builder: (context, state) => _buildBody(context, state),
       ),
@@ -83,25 +91,29 @@ class _QiblaView extends StatelessWidget {
 
     final showCalibration = state.displayAccuracy != CompassAccuracy.good &&
         state.displayAccuracy != CompassAccuracy.unavailable;
-    return Stack(
-      children: [
-        Column(
-          children: [
-            AnimatedCalibrationBanner(show: showCalibration),
-            Expanded(child: QiblaCompassArea(state: state)),
-          ],
-        ),
-        Positioned(
-          top: 12,
-          right: 12,
-          child: SafeArea(
-            child: QiblaInfoPanel(
-              bearingDegrees: state.bearingDegrees!,
-              distanceKm: state.distanceKm!,
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+      child: Column(
+        children: [
+          QiblaRouteCard(distanceKm: state.distanceKm!, originLabel: state.originLabel),
+          const SizedBox(height: 8),
+          AnimatedCalibrationBanner(show: showCalibration),
+          const SizedBox(height: 12),
+          QiblaCompassArea(state: state),
+          const SizedBox(height: 22),
+          QiblaLevelIndicator(tiltX: state.tiltX),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Text(
+              AppLocalizations.of(context)!.qiblaFlatSurfaceCaption,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: context.colors.sage.withValues(alpha: 0.7), fontSize: 9, height: 1.4),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -400,6 +400,90 @@ abstract class AppLocalizations {
   /// **'Rotate to find Qibla'**
   String get qiblaRotateMessage;
 
+  /// No description provided for @qiblaAlignedPillLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla Aligned'**
+  String get qiblaAlignedPillLabel;
+
+  /// No description provided for @qiblaYourLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your location'**
+  String get qiblaYourLocationLabel;
+
+  /// No description provided for @qiblaRouteCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'{origin} to the Kaaba'**
+  String qiblaRouteCaption(String origin);
+
+  /// No description provided for @qiblaFlyingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'flying'**
+  String get qiblaFlyingLabel;
+
+  /// No description provided for @qiblaCamelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'by camel'**
+  String get qiblaCamelLabel;
+
+  /// No description provided for @qiblaFootLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'on foot'**
+  String get qiblaFootLabel;
+
+  /// No description provided for @qiblaHoursAbbrev.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {hours} hrs'**
+  String qiblaHoursAbbrev(int hours);
+
+  /// No description provided for @qiblaDaysAbbrev.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {days} days'**
+  String qiblaDaysAbbrev(int days);
+
+  /// No description provided for @qiblaMonthsAbbrev.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {months} months'**
+  String qiblaMonthsAbbrev(int months);
+
+  /// No description provided for @qiblaFacingReadoutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'FACING'**
+  String get qiblaFacingReadoutLabel;
+
+  /// No description provided for @qiblaBearingReadoutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'QIBLA'**
+  String get qiblaBearingReadoutLabel;
+
+  /// No description provided for @qiblaHoldLevelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold level'**
+  String get qiblaHoldLevelLabel;
+
+  /// No description provided for @qiblaFlatSurfaceCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep phone flat, away from metal.'**
+  String get qiblaFlatSurfaceCaption;
+
+  /// No description provided for @qiblaTravelEstimateSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rough travel time estimates: {hours} hours flying, {days} days by camel, {months} months on foot'**
+  String qiblaTravelEstimateSemanticLabel(int hours, int days, int months);
+
   /// No description provided for @quranScreenTitle.
   ///
   /// In en, this message translates to:

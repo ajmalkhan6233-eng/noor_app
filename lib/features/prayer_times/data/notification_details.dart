@@ -15,6 +15,11 @@ const NotificationDetails defaultNotificationDetails = NotificationDetails(
     channelDescription: 'Iqamath and pre-adhan reminders',
     importance: Importance.high,
     priority: Priority.high,
+    // Explicit, not left to the OS default — a prayer-time
+    // notification has nothing sensitive in it, so it should show its
+    // real content on a locked screen regardless of a given phone's
+    // own global "hide sensitive notification content" setting.
+    visibility: NotificationVisibility.public,
   ),
 );
 
@@ -61,6 +66,7 @@ NotificationDetails adhanNotificationDetails(
       playSound: true,
       audioAttributesUsage: AudioAttributesUsage.alarm,
       category: AndroidNotificationCategory.alarm,
+      visibility: NotificationVisibility.public,
     ),
   );
 }

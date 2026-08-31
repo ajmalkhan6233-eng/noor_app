@@ -26,6 +26,7 @@ class QiblaDistrictFallback extends StatelessWidget {
             context.read<QiblaCubit>().setManualLocation(
               district.latitude,
               district.longitude,
+              originLabel: district.name,
             );
             context.read<SettingsCubit>().setSelectedDistrict(district.name);
           },

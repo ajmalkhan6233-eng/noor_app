@@ -169,6 +169,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get qiblaRotateMessage => 'Rotate to find Qibla';
 
   @override
+  String get qiblaAlignedPillLabel => 'Qibla Aligned';
+
+  @override
+  String get qiblaYourLocationLabel => 'Your location';
+
+  @override
+  String qiblaRouteCaption(String origin) {
+    return '$origin to the Kaaba';
+  }
+
+  @override
+  String get qiblaFlyingLabel => 'flying';
+
+  @override
+  String get qiblaCamelLabel => 'by camel';
+
+  @override
+  String get qiblaFootLabel => 'on foot';
+
+  @override
+  String qiblaHoursAbbrev(int hours) {
+    return '≈ $hours hrs';
+  }
+
+  @override
+  String qiblaDaysAbbrev(int days) {
+    return '≈ $days days';
+  }
+
+  @override
+  String qiblaMonthsAbbrev(int months) {
+    return '≈ $months months';
+  }
+
+  @override
+  String get qiblaFacingReadoutLabel => 'FACING';
+
+  @override
+  String get qiblaBearingReadoutLabel => 'QIBLA';
+
+  @override
+  String get qiblaHoldLevelLabel => 'Hold level';
+
+  @override
+  String get qiblaFlatSurfaceCaption => 'Keep phone flat, away from metal.';
+
+  @override
+  String qiblaTravelEstimateSemanticLabel(int hours, int days, int months) {
+    return 'Rough travel time estimates: $hours hours flying, $days days by camel, $months months on foot';
+  }
+
+  @override
   String get quranScreenTitle => 'Quran';
 
   @override
