@@ -15,33 +15,24 @@ import '../../data/azkar_category.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../azkar_category_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import 'azkar_category_icon_painters_a.dart';
+import 'azkar_category_icon_painters_b.dart';
 
 extension _AzkarCategoryIcon on AzkarCategory {
-  IconData get icon {
-    switch (this) {
-      case AzkarCategory.morning:
-        return Icons.wb_sunny_outlined;
-      case AzkarCategory.evening:
-        return Icons.nights_stay_outlined;
-      case AzkarCategory.afterPrayer:
-        return Icons.self_improvement_outlined;
-      case AzkarCategory.sleep:
-        return Icons.bedtime_outlined;
-      case AzkarCategory.travel:
-        return Icons.flight_outlined;
-      case AzkarCategory.childProtection:
-        return Icons.child_care_outlined;
-      case AzkarCategory.illness:
-        return Icons.healing_outlined;
-      case AzkarCategory.distress:
-        return Icons.spa_outlined;
-      case AzkarCategory.debt:
-        return Icons.account_balance_wallet_outlined;
-      case AzkarCategory.visitingGrave:
-        return Icons.park_outlined;
-      case AzkarCategory.visitingSick:
-        return Icons.volunteer_activism_outlined;
-    }
+  CustomPainter painter(Color color) {
+    return switch (this) {
+      AzkarCategory.morning => AzkarMorningIconPainter(color),
+      AzkarCategory.evening => AzkarEveningIconPainter(color),
+      AzkarCategory.afterPrayer => AzkarAfterPrayerIconPainter(color),
+      AzkarCategory.sleep => AzkarSleepIconPainter(color),
+      AzkarCategory.travel => AzkarTravelIconPainter(color),
+      AzkarCategory.childProtection => AzkarChildProtectionIconPainter(color),
+      AzkarCategory.illness => AzkarIllnessIconPainter(color),
+      AzkarCategory.distress => AzkarDistressIconPainter(color),
+      AzkarCategory.debt => AzkarDebtIconPainter(color),
+      AzkarCategory.visitingGrave => AzkarVisitingGraveIconPainter(color),
+      AzkarCategory.visitingSick => AzkarVisitingSickIconPainter(color),
+    };
   }
 }
 
@@ -89,7 +80,7 @@ class AzkarCategorySelector extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            Icon(category.icon, color: context.colors.gold, size: 20),
+            SizedBox(width: 20, height: 20, child: CustomPaint(painter: category.painter(context.colors.gold))),
             const SizedBox(width: 14),
             Expanded(
               child: Text(category.label, style: TextStyle(color: context.colors.ink)),
