@@ -2259,3 +2259,19 @@ being stated plainly instead of "confirmed," since the actual proof
 requires the same kind of multi-frame screenshot burst used to catch
 it in the first place, next time the phone's install permission is
 back.
+
+### Qibla pulled from the active app — 2026-08-31, direct request
+
+Rather than keep iterating live against an intermittent glitch, Aj
+asked to remove Qibla from the app entirely for now and add it back
+later. Done as a temporary disable, not a deletion: `MoreTile` gained
+a `comingSoon` flag (grey icon/label, tap shows a plain "being
+rebuilt" SnackBar instead of navigating) and the Qibla tile in
+`more_screen.dart` now sets it — the tile keeps its slot in the grid,
+all Qibla source/tests/the fix above are untouched, and re-enabling
+later is a one-line flip back to `false`, not a rebuild from git
+history the way the fully-removed Hajj/Umrah feature would need. New
+`comingSoonHint`/`comingSoonMessage` l10n keys, EN/TA/SI. `flutter
+analyze` clean, 242/242 tests. **Live-confirmed** on-device: tile
+greys out correctly, tapping shows "Qibla is being rebuilt and will
+be back soon." with no navigation, every other tile unaffected.
