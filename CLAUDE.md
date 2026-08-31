@@ -2275,3 +2275,68 @@ history the way the fully-removed Hajj/Umrah feature would need. New
 analyze` clean, 242/242 tests. **Live-confirmed** on-device: tile
 greys out correctly, tapping shows "Qibla is being rebuilt and will
 be back soon." with no navigation, every other tile unaffected.
+
+### Qibla dial fix — attempted live re-confirmation, blocked by lockscreen
+
+Tried the multi-frame screenshot burst again on the throttled-repaint
+fix (previous entry) to actually confirm it, per the standing rule
+that "well-reasoned" isn't "confirmed." Temporarily flipped the Qibla
+More-tile back to enabled, locally, purely to test — reverted before
+committing anything. Blocked partway through: the phone's screen
+locked itself (auto-lock timeout) mid-test, and this session has no
+PIN/pattern to unlock someone's phone — correctly did not attempt to.
+**The throttled-repaint fix is still unconfirmed live**, exactly as
+the previous entry already said — this attempt didn't change that
+either way, just documenting that a real attempt was made and why it
+didn't get further. Needs the phone unlocked and connected at the
+same time to finish.
+
+### Quran reading screens — redesigned to continuous flowing text, real play-button gap found and closed — 2026-08-31
+
+Direct request: both Quran reading screens ("Surah 1, Surah 2..."
+per-surah reader and "The Full Quran" continuous view) read as
+discrete ayah-by-ayah cards — wanted as running Mushaf-style text
+instead, verses flowing together.
+
+- New `ContinuousSurahText` (one `RichText`/`TextSpan` per surah's
+  ayahs, RTL, `TextAlign.justify`) + `AyahEndMark` (a small circled
+  ayah-number ornament, inline via `WidgetSpan`) replace `AyahTile`
+  (one `AppCard` per ayah) on **both** reading screens. `AyahEndMark`
+  is also the bookmark toggle (tap it) and the reading-position anchor
+  — `ReadingPositionTracker` just needs any keyed widget, doesn't care
+  that it's now small instead of a whole card.
+- **Real gap found, not assumed**: checked "the play button is
+  missing" against actual code rather than guessing which screen or
+  re-adding a redundant button. `SurahReaderScreen` (per-surah) always
+  had one, working, in its AppBar. `FullQuranScreen` ("The Full
+  Quran") had **zero** audio controls anywhere, ever — likely the
+  actual screen behind the report. Extracted the existing button logic
+  into a shared `SurahAudioButton` and added one per surah section in
+  `FullQuranScreen` (new `FullQuranSurahSection` widget), reusing the
+  same Juz-Amma-only availability gating, not a new audio path.
+- `FullQuranScreen` also restructured from one `ListView` item per
+  ayah (6,236+114 items) to one item per surah (114 items, each a
+  `FullQuranSurahSection`) — cheaper to build, not just prettier.
+- **Known, stated simplification**: the previous gold-left-border
+  highlight on the exact last-read ayah doesn't carry over cleanly to
+  a continuous-flow paragraph (highlighting one run of inline text
+  mid-sentence, not a whole card) — scroll-to-last-read still works,
+  the visual highlight doesn't yet. Not silently dropped, flagging it.
+- **"Page-turn style navigation" was asked for but not built**: real,
+  Mushaf-accurate pagination needs a verified ayah-to-page mapping for
+  the standard 604-page Uthmani Mushaf, and this project's bundled
+  Tanzil files carry only surah/ayah, no page boundaries. Continuous
+  *flowing text* ships now (the typographic part of the request);
+  fixed-page swipe navigation is a separate, data-gated follow-up —
+  not approximated with invented page breaks, per this project's
+  own non-negotiable rule against unverified religious-content
+  decisions.
+- Deleted `AyahTile` and its test — fully unreferenced once both
+  screens moved to `ContinuousSurahText`, left nothing calling it.
+
+`flutter analyze` clean. New tests: `continuous_surah_text_test.dart`
+(4 cases — renders continuously, bookmark tap reports the right ayah,
+bookmarked marks render filled, every ayah gets a tracked key). Full
+suite 255/255. **Not yet live-verified** — phone was locked with no
+PIN available by the time this was ready; same blocker as the Qibla
+re-confirmation above.

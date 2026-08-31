@@ -8,7 +8,8 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../data/surah_audio_player.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
-import 'widgets/ayah_tile.dart';
+import 'widgets/continuous_surah_text.dart';
+import 'widgets/surah_audio_button.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 /// Ayah-by-ayah view of one surah, with adjustable Arabic font size
@@ -79,30 +80,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
         elevation: 0,
         title: Text(AppLocalizations.of(context)!.surahReaderTitle(widget.surahId)),
         actions: [
-          // Keep recitation discoverable on every reader screen. Only the
-          // bundled, licensed Juz Amma files receive an active callback.
-          Semantics(
-            button: true,
-            label: hasSurahAudio(widget.surahId)
-                ? (_playing ? 'Pause recitation' : 'Play recitation')
-                : 'Recitation unavailable for this Surah',
-            value: _playing ? 'Playing' : 'Stopped',
-            hint: hasSurahAudio(widget.surahId)
-                ? 'Double tap to control recitation'
-                : 'Only Juz Amma recitations are bundled offline',
-            child: IconButton(
-              icon: Icon(
-                _playing ? Icons.pause_circle_outline : Icons.play_circle_outline,
-              ),
-              color: hasSurahAudio(widget.surahId)
-                  ? context.colors.gold
-                  : context.colors.sage,
-              tooltip: hasSurahAudio(widget.surahId)
-                  ? (_playing ? 'Pause recitation' : 'Play recitation')
-                  : 'Recitation unavailable for this Surah',
-              onPressed: hasSurahAudio(widget.surahId) ? _toggleAudio : null,
-            ),
-          ),
+          SurahAudioButton(surahId: widget.surahId, isPlaying: _playing, onToggle: _toggleAudio),
         ],
       ),
       body: Padding(
@@ -115,30 +93,25 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               );
             }
             _maybeScrollToLastRead(state);
+            final bookmarked = {
+              for (final b in state.bookmarks)
+                if (b.surahId == widget.surahId) b.ayahNumber,
+            };
             return ReadingPositionTracker(
               itemKeys: _ayahKeys,
               onPositionChanged: (ayahNumber) => context
                   .read<QuranCubit>()
                   .markLastRead(widget.surahId, ayahNumber),
-              child: ListView(
-                children: [
-                  for (final ayah in state.currentAyahs)
-                    KeyedSubtree(
-                      key: _keyFor(ayah.ayahNumber),
-                      child: AyahTile(
-                        ayah: ayah,
-                        fontScale: state.arabicFontScale,
-                        isBookmarked: state.bookmarks.any(
-                          (b) =>
-                              b.surahId == ayah.surahId &&
-                              b.ayahNumber == ayah.ayahNumber,
-                        ),
-                        onToggleBookmark: () => context
-                            .read<QuranCubit>()
-                            .toggleBookmark(ayah.surahId, ayah.ayahNumber),
-                      ),
-                    ),
-                ],
+              child: SingleChildScrollView(
+                child: ContinuousSurahText(
+                  ayahs: state.currentAyahs,
+                  fontScale: state.arabicFontScale,
+                  bookmarkedAyahNumbers: bookmarked,
+                  onToggleBookmark: (ayahNumber) => context
+                      .read<QuranCubit>()
+                      .toggleBookmark(widget.surahId, ayahNumber),
+                  ayahKeyFor: _keyFor,
+                ),
               ),
             );
           },
