@@ -35,6 +35,14 @@ class AppLocalizationsTa extends AppLocalizations {
   String get openHint => 'திறக்க இருமுறை தட்டவும்';
 
   @override
+  String get comingSoonHint => 'விவரங்களுக்கு இருமுறை தட்டவும்';
+
+  @override
+  String comingSoonMessage(String feature) {
+    return '$feature மீண்டும் கட்டமைக்கப்படுகிறது, விரைவில் திரும்பும்.';
+  }
+
+  @override
   String get cancelLabel => 'ரத்துசெய்';
 
   @override

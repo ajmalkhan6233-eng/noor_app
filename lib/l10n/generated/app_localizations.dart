@@ -148,6 +148,18 @@ abstract class AppLocalizations {
   /// **'Double tap to open'**
   String get openHint;
 
+  /// No description provided for @comingSoonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap for details'**
+  String get comingSoonHint;
+
+  /// No description provided for @comingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{feature} is being rebuilt and will be back soon.'**
+  String comingSoonMessage(String feature);
+
   /// No description provided for @cancelLabel.
   ///
   /// In en, this message translates to:

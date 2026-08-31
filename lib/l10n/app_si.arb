@@ -9,6 +9,8 @@
   "settingsHint": "සැකසුම් විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",
   "openItemHint": "{label} විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",
   "openHint": "විවෘත කිරීමට දෙවරක් තට්ටු කරන්න",
+  "comingSoonHint": "විස්තර සඳහා දෙවරක් තට්ටු කරන්න",
+  "comingSoonMessage": "{feature} නැවත ගොඩනඟමින් පවතී, ඉක්මනින් නැවත පැමිණේ.",
   "cancelLabel": "අවලංගු කරන්න",
   "saveLabel": "සුරකින්න",
   "closeLabel": "වසන්න",

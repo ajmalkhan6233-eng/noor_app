@@ -10,6 +10,11 @@
   "openItemHint": "Double tap to open {label}",
   "@openItemHint": {"placeholders": {"label": {"type": "String"}}},
   "openHint": "Double tap to open",
+  "comingSoonHint": "Double tap for details",
+  "comingSoonMessage": "{feature} is being rebuilt and will be back soon.",
+  "@comingSoonMessage": {
+    "placeholders": { "feature": { "type": "String" } }
+  },
   "cancelLabel": "Cancel",
   "saveLabel": "Save",
   "closeLabel": "Close",

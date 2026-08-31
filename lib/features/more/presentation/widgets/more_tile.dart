@@ -19,6 +19,7 @@ class MoreTile extends StatelessWidget {
     required this.label,
     required this.builder,
     this.onClosed,
+    this.comingSoon = false,
   });
 
   final NoorIconType icon;
@@ -27,15 +28,29 @@ class MoreTile extends StatelessWidget {
   final WidgetBuilder builder;
   final VoidCallback? onClosed;
 
+  /// Keeps the tile's slot in the grid without making the feature
+  /// reachable — used to temporarily pull a screen out of the app
+  /// without deleting its code or reflowing everything else around it
+  /// (2026-08-31, Qibla, pending another look at its live rendering
+  /// glitch). Tapping shows a plain explanation instead of navigating.
+  final bool comingSoon;
+
   @override
   Widget build(BuildContext context) {
+    final tileColor = comingSoon ? context.colors.sage : color;
     return SemanticButton(
-      label: label,
-      hint: AppLocalizations.of(context)!.openHint,
-      onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute<void>(builder: builder));
-        onClosed?.call();
-      },
+      label: comingSoon ? '$label — coming soon' : label,
+      hint: comingSoon
+          ? AppLocalizations.of(context)!.comingSoonHint
+          : AppLocalizations.of(context)!.openHint,
+      onTap: comingSoon
+          ? () => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(AppLocalizations.of(context)!.comingSoonMessage(label))),
+              )
+          : () async {
+              await Navigator.of(context).push(MaterialPageRoute<void>(builder: builder));
+              onClosed?.call();
+            },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -44,10 +59,10 @@ class MoreTile extends StatelessWidget {
             height: 56,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.16),
+              color: tileColor.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: NoorIcon(icon, color: color, size: 26),
+            child: NoorIcon(icon, color: tileColor, size: 26),
           ),
           const SizedBox(height: 8),
           Text(
@@ -55,7 +70,7 @@ class MoreTile extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: context.colors.ink, fontSize: 11),
+            style: TextStyle(color: comingSoon ? context.colors.sage : context.colors.ink, fontSize: 11),
           ),
         ],
       ),

@@ -35,6 +35,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openHint => 'Double tap to open';
 
   @override
+  String get comingSoonHint => 'Double tap for details';
+
+  @override
+  String comingSoonMessage(String feature) {
+    return '$feature is being rebuilt and will be back soon.';
+  }
+
+  @override
   String get cancelLabel => 'Cancel';
 
   @override

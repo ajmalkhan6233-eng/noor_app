@@ -9,6 +9,8 @@
   "settingsHint": "அமைப்புகளைத் திறக்க இருமுறை தட்டவும்",
   "openItemHint": "{label} திறக்க இருமுறை தட்டவும்",
   "openHint": "திறக்க இருமுறை தட்டவும்",
+  "comingSoonHint": "விவரங்களுக்கு இருமுறை தட்டவும்",
+  "comingSoonMessage": "{feature} மீண்டும் கட்டமைக்கப்படுகிறது, விரைவில் திரும்பும்.",
   "cancelLabel": "ரத்துசெய்",
   "saveLabel": "சேமி",
   "closeLabel": "மூடு",

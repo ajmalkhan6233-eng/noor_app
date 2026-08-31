@@ -35,6 +35,14 @@ class AppLocalizationsSi extends AppLocalizations {
   String get openHint => 'විවෘත කිරීමට දෙවරක් තට්ටු කරන්න';
 
   @override
+  String get comingSoonHint => 'විස්තර සඳහා දෙවරක් තට්ටු කරන්න';
+
+  @override
+  String comingSoonMessage(String feature) {
+    return '$feature නැවත ගොඩනඟමින් පවතී, ඉක්මනින් නැවත පැමිණේ.';
+  }
+
+  @override
   String get cancelLabel => 'අවලංගු කරන්න';
 
   @override
