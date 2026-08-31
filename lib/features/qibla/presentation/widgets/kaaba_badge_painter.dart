@@ -17,15 +17,6 @@ class KaabaBadgePainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..shader = RadialGradient(
-          colors: [gold.withValues(alpha: 0.55 * alpha), gold.withValues(alpha: 0)],
-        ).createShader(Rect.fromCircle(center: center, radius: radius)),
-    );
-
     final ringRadius = radius * 0.74;
     canvas.drawCircle(center, ringRadius, Paint()..color = const Color(0xFF0A0D14).withValues(alpha: alpha));
     canvas.drawCircle(

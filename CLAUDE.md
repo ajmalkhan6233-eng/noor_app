@@ -2156,3 +2156,61 @@ Rule, a screen rebuild this size is not "done" until actually seen
 rendered on the device, including a real screen-lock/heads-up
 notification check and confirming the new dial doesn't reproduce (or
 does reproduce) the still-open rendering glitch.
+
+### Compass dial rendering glitch reproduced live, then simplified per direct request — 2026-08-30
+
+Aj reconnected the phone and confirmed live what the report above
+flagged as the open risk: the new dial's Kaaba badge/needle area
+"blinking" and momentarily showing as collapsed/malformed — the exact
+same still-open intermittent GPU/compositor rendering glitch, now
+happening on the new dial too, and *worse* than before: the opaque-
+background fix that resolved the earlier, simpler QiblaNeedle case did
+**not** reliably fix this heavier one (confirmed by re-testing with
+that same fix already applied).
+
+Bisected live: stripped the dial's outer radial-gradient halo, the
+Kaaba badge's radial-gradient glow, and the needle's blurred-gradient
+glow layer (`MaskFilter.blur` + `LinearGradient` combined — a known-
+flaky combination on some GPU/Impeller backends, and a genuinely new
+suspect never tested before, since the earlier investigation only
+ever involved a single Material icon glyph, not a shader+blur). The
+phone disconnected again before the bisection build could be
+independently confirmed fixed.
+
+Direct instruction arrived before that could finish: "no need 3-D,
+just a plain compass," fix it however works, don't block on chasing
+the exact mockup glow. Took that as the final direction rather than
+continuing to re-test the exact bisection: the needle and Kaaba badge
+are now **solid-color fills, no gradients, no blur, no shaders
+anywhere in the dial** — the flattest, most conservative version.
+Needle color itself now carries the locked/searching distinction
+(gold once aligned, cyan otherwise) instead of a gradient, matching
+the color language already used everywhere else on this screen. The
+haptic-on-alignment behavior (`_haptics.tap()` in
+`qibla_compass_area.dart`, already implemented, not new) is
+unaffected — confirmed still wired.
+
+`flutter analyze` clean, 242/242 tests. **Still not independently
+live-confirmed that this specific simplified version stops the
+glitch** — the phone was disconnected again by the time this landed.
+Report this plainly rather than claiming fixed: the simplification is
+real and shipped per direct instruction either way (Aj asked for
+"plain" regardless of whether it turns out to also fix the glitch),
+but whether the flat-color version actually stops the rendering
+collapse is still an open question for the next live check.
+
+### Fresh build pushed to the shared download link — 2026-08-30
+
+Aj was looking at a stale install from earlier tonight's link (before
+the Qibla rebuild) and separately asked about a missing Quran play
+button. Checked the play-button code directly: it's real and correctly
+wired (`surah_reader_screen.dart`) — always visible in the AppBar,
+enabled (gold) only for the 37 bundled Juz Amma surahs (78–114),
+disabled/grayed (sage) with an explanatory semantic hint everywhere
+else, per the documented offline-audio-scope decision. Not a bug —
+likely just read as "missing" on a non-Juz-Amma surah, or on the stale
+build. Rebuilt the `arm64-v8a` release APK with everything through
+tonight's Qibla work and re-pushed it to the `apk-releases` branch at
+the same path (`dist/noor-arm64.apk`), so the link already shared
+(`raw.githubusercontent.com/.../apk-releases/dist/noor-arm64.apk`)
+now serves the current build without needing a new link.

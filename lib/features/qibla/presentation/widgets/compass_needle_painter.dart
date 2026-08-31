@@ -8,40 +8,36 @@
 // control — see the qibla_needle.dart history). Pure vector Path
 // drawing sidesteps that whole class of bug rather than risking a
 // repeat of it in the redesigned dial.
+//
+// Solid fill, not a gradient shader — simplified 2026-08-30, direct
+// request ("no need 3D, just a plain compass"), after the gradient +
+// blurred-glow version of this needle reproduced the same rendering
+// glitch on-device, worse than the plain version ever did. A flat
+// color is the most conservative, most reliably-rendering choice
+// while that glitch's root cause is still unresolved — gold once
+// aligned, cyan otherwise, matching the color language already used
+// everywhere else in this screen (the aligned pill, the old needle).
 
 import 'package:flutter/material.dart';
 
 class CompassNeedlePainter extends CustomPainter {
-  CompassNeedlePainter({required this.alpha, required this.cyan, required this.gold});
+  CompassNeedlePainter({required this.alpha, required this.locked, required this.cyan, required this.gold});
 
   /// 0..1 — dims the needle when the compass reading isn't trustworthy,
   /// same meaning as the previous needle widget's `dimmed` flag.
   final double alpha;
+  final bool locked;
   final Color cyan;
   final Color gold;
 
   @override
   void paint(Canvas canvas, Size size) {
+    final color = locked ? gold : cyan;
     final center = Offset(size.width / 2, size.height / 2);
-    final gradient = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-        colors: [cyan.withValues(alpha: alpha), gold.withValues(alpha: alpha)],
-      ).createShader(Rect.fromCircle(center: center, radius: size.height / 2))
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-
     final tipY = -size.height / 2 + 12;
-    final glowPath = Path()
-      ..moveTo(0, 0)
-      ..lineTo(-9, 0)
-      ..lineTo(0, tipY - 6)
-      ..lineTo(9, 0)
-      ..close();
 
     canvas.save();
     canvas.translate(center.dx, center.dy);
-    canvas.drawPath(glowPath, gradient..color = gradient.color.withValues(alpha: 0.35 * alpha));
 
     final needlePath = Path()
       ..moveTo(0, 0)
@@ -49,15 +45,7 @@ class CompassNeedlePainter extends CustomPainter {
       ..lineTo(0, tipY)
       ..lineTo(8, 0)
       ..close();
-    canvas.drawPath(
-      needlePath,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [cyan.withValues(alpha: alpha), gold.withValues(alpha: alpha)],
-        ).createShader(Rect.fromLTWH(-8, tipY, 16, -tipY)),
-    );
+    canvas.drawPath(needlePath, Paint()..color = color.withValues(alpha: alpha));
 
     final tailPath = Path()
       ..moveTo(0, 0)
@@ -69,5 +57,5 @@ class CompassNeedlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CompassNeedlePainter old) => old.alpha != alpha;
+  bool shouldRepaint(covariant CompassNeedlePainter old) => old.alpha != alpha || old.locked != locked;
 }

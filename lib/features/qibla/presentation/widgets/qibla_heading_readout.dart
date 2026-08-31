@@ -1,9 +1,11 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The small "FACING x° / QIBLA x°" readout tucked to the side of the
-// compass dial (2026-08-30 mockup rebuild) — replaces the old
-// QiblaInfoPanel corner badge, which no longer has a home now that the
-// route card owns the top of the screen.
+// The small "FACING x° / QIBLA x°" readout below the compass dial
+// (2026-08-30 mockup rebuild) — replaces the old QiblaInfoPanel corner
+// badge. Originally drawn inside the dial itself, tucked to one side
+// like the mockup shows; moved to a plain row underneath it after live
+// testing found it could land under the Kaaba badge/needle, which
+// rotates to the live bearing and can point anywhere.
 
 import 'package:flutter/material.dart';
 
@@ -26,13 +28,15 @@ class QiblaHeadingReadout extends StatelessWidget {
     return Semantics(
       label: 'Facing $headingText, qibla bearing $bearingText',
       child: ExcludeSemantics(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(l10n.qiblaFacingReadoutLabel, style: TextStyle(color: colors.sage, fontSize: 9.5)),
+            const SizedBox(width: 6),
             Text(headingText, style: TextStyle(color: colors.ink, fontSize: 13, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 6),
+            const SizedBox(width: 18),
             Text(l10n.qiblaBearingReadoutLabel, style: TextStyle(color: colors.sage, fontSize: 9.5)),
+            const SizedBox(width: 6),
             Text(bearingText, style: TextStyle(color: colors.gold, fontSize: 13, fontWeight: FontWeight.w700)),
           ],
         ),

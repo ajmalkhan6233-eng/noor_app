@@ -17,6 +17,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../logic/qibla_cubit/qibla_state.dart';
 import 'qibla_aligned_pill.dart';
 import 'qibla_compass_dial.dart';
+import 'qibla_heading_readout.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class QiblaCompassArea extends StatefulWidget {
@@ -90,12 +91,9 @@ class _QiblaCompassAreaState extends State<QiblaCompassArea> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        QiblaCompassDial(
-          rotationDegrees: rotation,
-          dimmed: !trustworthy,
-          headingDegrees: state.headingDegrees,
-          bearingDegrees: state.bearingDegrees!,
-        ),
+        QiblaCompassDial(rotationDegrees: rotation, dimmed: !trustworthy, locked: state.isLocked),
+        const SizedBox(height: 12),
+        QiblaHeadingReadout(headingDegrees: state.headingDegrees, bearingDegrees: state.bearingDegrees!),
         QiblaAlignedPill(visible: state.isLocked),
       ],
     );
