@@ -32,17 +32,15 @@ class MoreScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final prayerCubit = context.read<PrayerCubit>();
     final tiles = <MoreTile>[
-      // Pulled from the active app 2026-08-31, direct request, pending
-      // another look at a live-device rendering glitch on its compass
-      // dial — code untouched, tile kept (not deleted) as a "coming
-      // soon" slot so re-enabling later is a one-line flip of
-      // comingSoon back to false, not a rebuild from git history.
+      // Re-enabled 2026-09-01, direct request/decision, after the
+      // dial's rendering-glitch root cause was found and fixed
+      // (unthrottled sensor stream forcing repaints of the whole
+      // Stack — see compass_needle_and_badge.dart).
       MoreTile(
         icon: NoorIconType.qibla,
         color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
         builder: (_) => const QiblaScreen(),
-        comingSoon: true,
       ),
       MoreTile(
         icon: NoorIconType.tasbih,

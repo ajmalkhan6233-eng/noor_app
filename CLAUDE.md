@@ -2340,3 +2340,43 @@ bookmarked marks render filled, every ayah gets a tracked key). Full
 suite 255/255. **Not yet live-verified** — phone was locked with no
 PIN available by the time this was ready; same blocker as the Qibla
 re-confirmation above.
+
+### Decisions received; Qibla re-enabled; Quran reader converted to real page-turn — 2026-09-01
+
+Four decisions received directly: Quran text stays at 1.0.2 (no swap
+pending scholarly review), Qibla re-enabled live now, AAB CI signing
+on hold (Aj adding the GitHub secret himself), Quran translation
+confirmed Arabic-only on reading screens (no change). Qibla tile in
+`more_screen.dart` reverted to normal (comingSoon removed) — the same
+one-line flip the earlier entry said would be needed.
+
+Direct live feedback on the just-shipped continuous-flow Quran reader:
+still one long scroll, wanted actual page-by-page swiping with a
+turning transition. Built for real, not simulated:
+- `surah_page_splitter.dart` — computes page breaks live from the
+  actual viewport size (`TextPainter` measurement against the same
+  style `ContinuousSurahText` renders with), not a fixed character
+  count. These are **not** the real printed Mushaf's 604 page numbers
+  — no verified ayah-to-page mapping exists in this project's bundled
+  Tanzil data for that — they're reflowed at render time the way an
+  ebook reader paginates, stated plainly rather than implied to be
+  official Mushaf pages.
+- `paginated_surah_text.dart` — a `PageView` over those computed
+  pages, each swipe applying a light `Matrix4` Y-rotation + opacity
+  fade (perspective transform) so it reads as a page turning, not a
+  flat slide. No new package added for this — pure Flutter.
+  `SurahReaderScreen` now uses this in place of the plain scroll;
+  opening a surah with a saved reading position jumps to the page
+  containing it instead of scrolling to it.
+- `FullQuranScreen` ("The Full Quran") was **not** changed to
+  page-turn — it stays continuous-flow-per-surah-in-a-vertical-list.
+  That screen's whole point is scrolling through many surahs in
+  sequence; nesting a nested horizontal PageView per surah inside a
+  vertical list is a different, more awkward interaction and wasn't
+  asked for specifically. Flagging this distinction rather than
+  silently applying (or silently not applying) the same treatment
+  everywhere.
+
+`flutter analyze` clean. New tests: `surah_page_splitter_test.dart`
+(4 cases) and `paginated_surah_text_test.dart` (2 cases, including an
+actual swipe gesture). Full suite 261/261.
