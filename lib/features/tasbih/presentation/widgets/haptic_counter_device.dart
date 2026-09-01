@@ -86,6 +86,17 @@ class _HapticCounterDeviceState extends State<HapticCounterDevice> with SingleTi
             Text('${widget.count}', style: AppTypography.counter(context.colors.ink)),
             const SizedBox(height: 20),
             GestureDetector(
+              // Real bug, found live: this inner detector only ever
+              // tracked press state (down/up/cancel) for the scale
+              // animation, with no `onTap` of its own — but Flutter's
+              // gesture arena still let it win taps landing exactly on
+              // the circle, so the outer SemanticButton's `onTap`
+              // (which does the actual counting) never fired there.
+              // Tapping the surrounding card worked because that area
+              // has no competing inner recognizer. Adding `onTap` here
+              // makes the circle actually count, whichever recognizer
+              // wins.
+              onTap: _handleTap,
               onTapDown: (_) => setState(() => _pressed = true),
               onTapUp: (_) => setState(() => _pressed = false),
               onTapCancel: () => setState(() => _pressed = false),

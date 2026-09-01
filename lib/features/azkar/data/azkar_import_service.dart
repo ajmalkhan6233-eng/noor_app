@@ -18,6 +18,7 @@ import 'azkar_import_status.dart';
 import 'azkar_supplementary_import.dart';
 import 'azkar_supplementary_import_2.dart';
 import 'azkar_supplementary_import_3.dart';
+import 'azkar_supplementary_import_4.dart';
 
 class AzkarImportService {
   AzkarImportService({DatabaseHelper? databaseHelper})
@@ -41,6 +42,7 @@ class AzkarImportService {
       await ensureAzkarSupplementaryImported(db);
       await ensureAzkarSupplementary2Imported(db);
       await ensureAzkarSupplementary3Imported(db);
+      await ensureAzkarSupplementary4Imported(db);
       return const AzkarImported();
     }
 
@@ -97,6 +99,7 @@ class AzkarImportService {
     await ensureAzkarSupplementaryImported(db);
     await ensureAzkarSupplementary2Imported(db);
     await ensureAzkarSupplementary3Imported(db);
+    await ensureAzkarSupplementary4Imported(db);
     return const AzkarImported();
   }
 

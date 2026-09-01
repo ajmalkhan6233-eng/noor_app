@@ -56,9 +56,22 @@ const List<String> azkarCreateStatements = [
 /// these via database_migrations.dart's `oldVersion < 6` branch —
 /// this statement only runs for a fresh install.
 const List<String> azkarSeedStatements = [
+  // Every category ever added, original ten plus every migration
+  // since — a fresh install runs createNoorSchema() directly at
+  // latestSchemaVersion and never walks the oldVersion<N migration
+  // branches below, so a category added only to a migration branch
+  // (as the nine 2026-09-01 categories originally were) never gets
+  // seeded on a fresh install; its azkar_items rows then have nowhere
+  // to attach (categoryIds[category] comes back null and the import
+  // silently skips every row) — found live: "During Prayer" showed
+  // the empty state on a fresh uninstall+reinstall despite the JSON
+  // having 52 entries for it.
   "INSERT INTO azkar_categories (category_key, display_order) VALUES "
       "('morning', 0), ('evening', 1), ('after_prayer', 2), "
       "('sleep', 3), ('travel', 4), ('child_protection', 5), "
       "('illness', 6), ('distress', 7), ('debt', 8), "
-      "('visiting_grave', 9), ('visiting_sick', 10)",
+      "('visiting_grave', 9), ('visiting_sick', 10), "
+      "('purification', 11), ('during_prayer', 12), ('death_and_funeral', 13), "
+      "('weather', 14), ('eating_and_fasting', 15), ('daily_life', 16), "
+      "('hajj_umrah', 17), ('remembrance', 18), ('everyday_moments', 19)",
 ];

@@ -66,6 +66,23 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- Impeller disabled 2026-09-01: the Qibla compass dial's
+             rendering glitch (a static RepaintBoundary-cached layer —
+             the ring stack, shouldRepaint always false — vanishing or
+             corrupting to a small stray fragment next to an animating
+             sibling layer, the Ticker-driven needle/badge, in the same
+             Stack) persisted through three different Dart-side fixes
+             (removing gradients/blur, throttling the sensor stream via
+             a decoupled Ticker, flattening to solid colors) that each
+             addressed a plausible but wrong root cause. This exact
+             symptom — a cached static layer glitching beside an
+             animating one — is a known Impeller compositing issue on
+             some Android GPU/driver combinations. Falling back to the
+             Skia renderer is the standard workaround. -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableImpeller"
+            android:value="false" />
+
         <!-- flutter_local_notifications' own receiver: re-arms
              zonedSchedule alarms after boot/app update. -->
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">

@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/features/azkar/data/azkar_category.dart';
 import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_a.dart';
 import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_b.dart';
+import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_c.dart';
 
 CustomPainter _painterFor(AzkarCategory category) {
   const color = Colors.amber;
@@ -20,6 +21,15 @@ CustomPainter _painterFor(AzkarCategory category) {
     AzkarCategory.debt => AzkarDebtIconPainter(color),
     AzkarCategory.visitingGrave => AzkarVisitingGraveIconPainter(color),
     AzkarCategory.visitingSick => AzkarVisitingSickIconPainter(color),
+    AzkarCategory.purification => AzkarPurificationIconPainter(color),
+    AzkarCategory.duringPrayer => AzkarDuringPrayerIconPainter(color),
+    AzkarCategory.deathAndFuneral => AzkarDeathAndFuneralIconPainter(color),
+    AzkarCategory.weather => AzkarWeatherIconPainter(color),
+    AzkarCategory.eatingAndFasting => AzkarEatingAndFastingIconPainter(color),
+    AzkarCategory.dailyLife => AzkarDailyLifeIconPainter(color),
+    AzkarCategory.hajjUmrah => AzkarHajjUmrahIconPainter(color),
+    AzkarCategory.remembrance => AzkarRemembranceIconPainter(color),
+    AzkarCategory.everydayMoments => AzkarEverydayMomentsIconPainter(color),
   };
 }
 

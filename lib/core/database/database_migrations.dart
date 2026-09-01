@@ -27,7 +27,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 10;
+const int latestSchemaVersion = 11;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -153,5 +153,15 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       await db.execute(statement.replaceFirst('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS'));
     }
   }
-  // Next migration: add `if (oldVersion < 11) { ... }` here.
+  if (oldVersion < 11) {
+    // Nine new azkar categories for the full Hisnul Muslim import
+    // (2026-09-01, direct approval — see azkar_supplementary_import_4.dart).
+    await db.execute(
+      "INSERT OR IGNORE INTO azkar_categories (category_key, display_order) VALUES "
+      "('purification', 11), ('during_prayer', 12), ('death_and_funeral', 13), "
+      "('weather', 14), ('eating_and_fasting', 15), ('daily_life', 16), "
+      "('hajj_umrah', 17), ('remembrance', 18), ('everyday_moments', 19)",
+    );
+  }
+  // Next migration: add `if (oldVersion < 12) { ... }` here.
 }

@@ -32,15 +32,22 @@ class MoreScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final prayerCubit = context.read<PrayerCubit>();
     final tiles = <MoreTile>[
-      // Re-enabled 2026-09-01, direct request/decision, after the
-      // dial's rendering-glitch root cause was found and fixed
-      // (unthrottled sensor stream forcing repaints of the whole
-      // Stack — see compass_needle_and_badge.dart).
+      // Disabled again 2026-09-01, direct request ("kibla coming
+      // soon, let's move on") — the compass dial's rendering glitch
+      // survived every attempted fix this session (removing gradients/
+      // blur, decoupling repaint via a Ticker, consolidating to one
+      // CustomPainter with zero layer compositing, disabling Impeller)
+      // and needs a dedicated pass, not more guessing while release
+      // finalization is the priority. Screen/code untouched and fully
+      // intact — see qibla_compass_dial.dart and
+      // compass_dial_painter.dart — flip this back the moment the
+      // real fix lands.
       MoreTile(
         icon: NoorIconType.qibla,
         color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
         builder: (_) => const QiblaScreen(),
+        comingSoon: true,
       ),
       MoreTile(
         icon: NoorIconType.tasbih,
