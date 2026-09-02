@@ -22,8 +22,10 @@ import 'package:noor/features/home/presentation/home_dashboard.dart';
 import 'package:noor/features/home/presentation/widgets/hero_card.dart';
 import 'package:noor/features/home/presentation/widgets/streak_capsule.dart';
 import 'package:noor/features/home/presentation/widgets/bottom_nav/noor_bottom_nav.dart';
+import 'package:noor/features/azkar/presentation/azkar_screen.dart';
 import 'package:noor/features/more/presentation/more_screen.dart';
 import 'package:noor/features/prayer_times/presentation/prayer_times_screen.dart';
+import 'package:noor/features/quran/presentation/quran_screen.dart';
 import 'package:noor/features/tasbih/presentation/tasbih_screen.dart';
 import 'package:noor/features/calendar/presentation/calendar_screen.dart';
 
@@ -131,5 +133,30 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.byType(CalendarScreen), findsOneWidget);
+  });
+
+  testWidgets('other tabs are not built until first visited (startup cost)', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const NoorApp());
+    await _pumpPastSplash(tester);
+    await _settle(tester);
+
+    // Only Home should exist on first frame — Prayer Times/Quran/Azkar/
+    // More each build their own cubits (and the DB reads that come
+    // with them) inside their own screen widget, so none of those
+    // should be constructed yet.
+    expect(find.byType(PrayerTimesScreen), findsNothing);
+    expect(find.byType(QuranScreen), findsNothing);
+    expect(find.byType(AzkarScreen), findsNothing);
+    expect(find.byType(MoreScreen), findsNothing);
+
+    await tester.tap(
+      find.descendant(of: find.byType(NoorBottomNav), matching: find.text('Al Quran')),
+    );
+    await _settle(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(QuranScreen), findsOneWidget);
   });
 }

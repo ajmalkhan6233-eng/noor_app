@@ -40,16 +40,46 @@ class HomeDashboard extends StatefulWidget {
 class _HomeDashboardState extends State<HomeDashboard> {
   int _selectedIndex = 0;
 
-  static const _screens = [
-    HomeOverviewScreen(),
-    PrayerTimesScreen(),
-    QuranScreen(),
-    AzkarScreen(),
-    MoreScreen(),
+  // Only index 0 (Home) is ever visited at launch — the other 4 tabs'
+  // screens (and the cubits/DB reads each one's own build() triggers:
+  // QuranCubit.init(), AzkarCubit(), etc.) are deferred until the user
+  // actually taps that tab, instead of all 5 firing at once on first
+  // frame while only Home is visible (2026-09-02 startup profiling
+  // pass). Once visited, a tab's real widget is always rebuilt at its
+  // Stack position from then on — same widget, same key each time —
+  // so FadeTabSwitcher's element reconciliation keeps its State (and
+  // therefore its scroll position, search text, loaded data) exactly
+  // as before; nothing about the "tabs never reset" guarantee changes
+  // for a tab once it's actually been opened.
+  final Set<int> _visitedIndices = {0};
+
+  static const _screenBuilders = <Widget Function()>[
+    _buildHome,
+    _buildPrayerTimes,
+    _buildQuran,
+    _buildAzkar,
+    _buildMore,
   ];
+
+  static Widget _buildHome() => const HomeOverviewScreen();
+  static Widget _buildPrayerTimes() => const PrayerTimesScreen();
+  static Widget _buildQuran() => const QuranScreen();
+  static Widget _buildAzkar() => const AzkarScreen();
+  static Widget _buildMore() => const MoreScreen();
+
+  void _onTabTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _visitedIndices.add(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screens = [
+      for (var i = 0; i < _screenBuilders.length; i++)
+        _visitedIndices.contains(i) ? _screenBuilders[i]() : const SizedBox.shrink(),
+    ];
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
@@ -66,7 +96,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
         body: Stack(
           children: [
             const Positioned.fill(child: CosmicBackground()),
-            FadeTabSwitcher(index: _selectedIndex, children: _screens),
+            FadeTabSwitcher(index: _selectedIndex, children: screens),
           ],
         ),
         // expanded defaults true, so the dock always shows labels for
@@ -75,7 +105,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
         // again once the background-layer interaction is diagnosed.
         bottomNavigationBar: NoorBottomNav(
           selectedIndex: _selectedIndex,
-          onTap: (index) => setState(() => _selectedIndex = index),
+          onTap: _onTabTap,
         ),
       ),
     );
