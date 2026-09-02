@@ -118,7 +118,22 @@ void main() {
     );
 
     final tomorrow = coordinator.timesScheduled[1];
-    expect(tomorrow.fajr.day, today.add(const Duration(days: 1)).day);
+    // `adhan`'s PrayerTimes converts via .toLocal(), i.e. the *host
+    // machine's* timezone, not a timezone derived from the passed
+    // coordinates — harmless on a real device (whose local timezone
+    // matches wherever its owner actually is), but it means a plain
+    // `.day` comparison is only correct when the machine running this
+    // test happens to share Colombo's UTC+5:30 offset. On a CI runner
+    // (UTC), an early-morning Colombo Fajr for "tomorrow" lands on
+    // UTC's *previous* calendar day — deterministically, not flakily.
+    // DateTime.difference() compares the actual instants regardless of
+    // which timezone each side displays itself in, so this checks the
+    // real invariant (tomorrow's Fajr is a genuinely distinct
+    // computation, roughly a day later) without assuming the test
+    // runner's own timezone.
+    final gap = tomorrow.fajr.difference(todayResult.fajr);
+    expect(gap.inMinutes, greaterThan(23 * 60));
+    expect(gap.inMinutes, lessThan(25 * 60));
     expect(tomorrow, isNot(same(todayResult)));
   });
 }

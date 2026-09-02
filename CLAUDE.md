@@ -2380,3 +2380,29 @@ turning transition. Built for real, not simulated:
 `flutter analyze` clean. New tests: `surah_page_splitter_test.dart`
 (4 cases) and `paginated_surah_text_test.dart` (2 cases, including an
 actual swipe gesture). Full suite 261/261.
+
+# STANDING RULES — append this section into CLAUDE.md (not a one-off task)
+
+These apply to every future session, not just the current queue file. If a task file's instructions ever conflict with these, these win.
+
+## Scope discipline
+- Work through a given task file **one task at a time, in the order listed**. Don't jump ahead or batch multiple tasks into one commit.
+- When a task points at a specific file/block, edit only that file/block. Don't regenerate, rewrite, or "clean up" unrelated code, even if it looks related.
+- If a task's file has a "BLOCKED" section, don't touch those items under any circumstance until explicitly told they're unblocked — that includes not fabricating placeholder content to unblock them yourself.
+
+## Verification, not self-report
+- `flutter analyze` / `flutter test` passing is necessary but not sufficient. Before calling any UI-facing task "done," it needs to actually be checked on-device or emulator — not just confirmed by reading the source you just wrote.
+- If on-device verification genuinely isn't possible in the current environment (e.g. a cloud sandbox with no attached device), say that plainly instead of implying it was checked.
+
+## Content integrity
+- Never generate, paraphrase, or approximate Quranic text, Arabic duas, or Tamil/Sinhala religious text. All religious text comes from the Tanzil Project (Quran) or Hisn al-Muslim (Azkar/Dua) sources already integrated — nowhere else, and never invented.
+- Never bundle or link to audio/text/images without a confirmed, stated reusable license (public domain, CC-BY, or explicit permission). If a source's licensing isn't clearly stated, treat it as unusable and say so rather than proceeding.
+
+## Architecture
+- 100% offline: zero network calls, zero analytics/ads SDKs. Any playback or asset loading pointing at a remote URL is a bug, not a feature — flag it.
+- Cosmic palette only: obsidian `#05070B`, gold `#FFB703`, cyan `#00F2FE`, card surface `#0D1117`, via the existing `AppColorTokens` ThemeExtension. Never introduce a competing palette or token file.
+- Every interactive widget needs explicit `Semantics()` tags.
+
+## Delivery
+- Push to a feature branch / open a PR rather than committing straight to `main`, so changes are reviewable before they land.
+- When a batch of tasks finishes, summarize what actually changed (files touched, what each change does) rather than a bare "done."
