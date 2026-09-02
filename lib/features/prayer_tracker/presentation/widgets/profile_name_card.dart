@@ -18,7 +18,11 @@ import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 
 class ProfileNameCard extends StatefulWidget {
-  const ProfileNameCard({super.key});
+  const ProfileNameCard({super.key, this.onSaved});
+
+  /// Called right after a save fires (checkmark tap, submit, or losing
+  /// focus) — lets the caller know a save happened, not what was saved.
+  final VoidCallback? onSaved;
 
   @override
   State<ProfileNameCard> createState() => _ProfileNameCardState();
@@ -46,6 +50,7 @@ class _ProfileNameCardState extends State<ProfileNameCard> {
 
   void _saveName() {
     context.read<SettingsCubit>().setProfileName(_nameController.text.trim());
+    widget.onSaved?.call();
   }
 
   @override
