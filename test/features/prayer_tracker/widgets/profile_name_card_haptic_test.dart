@@ -43,10 +43,6 @@ void main() {
     await tester.tap(find.byIcon(Icons.check));
     await tester.pump();
 
-    // Fires at least once (the checkmark's own save call); may fire a
-    // second time from the pre-existing focus-loss listener also
-    // calling _saveName() when unfocus() runs right after — unrelated
-    // to this fix, not something to change here.
-    expect(haptics.tapCount, greaterThanOrEqualTo(1));
+    expect(haptics.tapCount, 1);
   });
 }

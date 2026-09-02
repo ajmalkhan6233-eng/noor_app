@@ -5,8 +5,10 @@
 // anywhere) — a stable controller/focus node owned here, not rebuilt
 // inline in build() (that earlier bug recreated the TextEditingController
 // on every SettingsCubit rebuild, including the one setProfileName
-// itself triggers). Saves on both the keyboard's done key and on
-// losing focus.
+// itself triggers). The checkmark and the keyboard's done key both
+// just unfocus the field — _saveName() itself only ever runs from the
+// focus-loss listener below, so it (and the haptic tap it fires) never
+// double-fires for a single save.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,16 +95,13 @@ class _ProfileNameCardState extends State<ProfileNameCard> {
                   suffixIcon: IconButton(
                     icon: Icon(Icons.check, color: context.colors.gold),
                     tooltip: 'Save name',
-                    onPressed: () {
-                      _saveName();
-                      _nameFocusNode.unfocus();
-                    },
+                    // Just unfocus — the listener below calls _saveName()
+                    // on focus loss, so calling it here too used to save
+                    // (and fire the haptic) twice per tap.
+                    onPressed: _nameFocusNode.unfocus,
                   ),
                 ),
-                onSubmitted: (_) {
-                  _saveName();
-                  _nameFocusNode.unfocus();
-                },
+                onSubmitted: (_) => _nameFocusNode.unfocus(),
               ),
             ],
           ),
