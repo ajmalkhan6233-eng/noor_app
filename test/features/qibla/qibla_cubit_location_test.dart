@@ -10,7 +10,10 @@ import 'package:noor/features/settings/data/settings_repository.dart';
 
 // No real magnetometer/accelerometer platform channel in a unit test —
 // both services already support an injectable, empty event source.
-CompassService _noCompass() => CompassService(eventsProvider: () => null);
+CompassService _noCompass() => CompassService(
+  accelerometerProvider: () => null,
+  magnetometerProvider: () => null,
+);
 TiltService _noTilt() => TiltService(eventsProvider: () => null);
 
 class _FakeLocationService extends LocationService {

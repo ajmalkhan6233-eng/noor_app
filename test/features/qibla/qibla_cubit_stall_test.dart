@@ -8,9 +8,9 @@
 // one" as proof the compass was working.
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:fake_async/fake_async.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/core/location/location_service.dart';
 import 'package:noor/core/sensors/compass_service.dart';
@@ -18,8 +18,26 @@ import 'package:noor/core/sensors/tilt_service.dart';
 import 'package:noor/features/qibla/logic/qibla_cubit/qibla_cubit.dart';
 import 'package:noor/features/settings/data/app_settings.dart';
 import 'package:noor/features/settings/data/settings_repository.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 TiltService _noTilt() => TiltService(eventsProvider: () => null);
+
+// A device held flat, screen up — reduces CompassService's tilt-
+// compensation math to `atan2(-mx, my)`, so a magnetometer x/y pair can
+// be picked directly for any desired raw heading (see
+// compass_service_test.dart for the same construction, verified there).
+AccelerometerEvent _flatAccel() =>
+    AccelerometerEvent(0, 0, 9.8, DateTime(2026));
+
+MagnetometerEvent _magFor(double headingDegrees) {
+  final theta = headingDegrees * math.pi / 180;
+  return MagnetometerEvent(
+    -45 * math.sin(theta),
+    45 * math.cos(theta),
+    0,
+    DateTime(2026),
+  );
+}
 
 class _FakeLocationService extends LocationService {
   const _FakeLocationService(this.result);
@@ -51,13 +69,17 @@ void main() {
     'when no event ever arrives',
     () {
       fakeAsync((async) {
-        final controller = StreamController<CompassEvent>();
+        final accelController = StreamController<AccelerometerEvent>();
+        final magController = StreamController<MagnetometerEvent>();
         final cubit = QiblaCubit(
           locationService: const _FakeLocationService(
             Coordinates(latitude: 6.9271, longitude: 79.8612),
           ),
           settingsRepository: _FakeSettingsRepository(const AppSettings()),
-          compassService: CompassService(eventsProvider: () => controller.stream),
+          compassService: CompassService(
+            accelerometerProvider: () => accelController.stream,
+            magnetometerProvider: () => magController.stream,
+          ),
           tiltService: _noTilt(),
         );
 
@@ -65,10 +87,13 @@ void main() {
         async.elapse(Duration.zero);
 
         // Simulate the real device: the stream is alive and keeps
-        // delivering events, but every one has a null heading.
-        controller.add(CompassEvent.fromList(null));
+        // delivering magnetometer events, but no accelerometer sample is
+        // ever paired with them, so no heading can ever be resolved —
+        // the same "stream alive, no usable heading" condition the
+        // original flutter_compass-era null-heading events represented.
+        magController.add(_magFor(0));
         async.elapse(const Duration(seconds: 1));
-        controller.add(CompassEvent.fromList(null));
+        magController.add(_magFor(0));
         async.elapse(const Duration(seconds: 6));
 
         expect(cubit.state.headingDegrees, isNull);
@@ -81,20 +106,25 @@ void main() {
         );
 
         cubit.close();
-        controller.close();
+        accelController.close();
+        magController.close();
       });
     },
   );
 
   test('a genuine heading clears compassStalled even after it was set', () {
     fakeAsync((async) {
-      final controller = StreamController<CompassEvent>();
+      final accelController = StreamController<AccelerometerEvent>();
+      final magController = StreamController<MagnetometerEvent>();
       final cubit = QiblaCubit(
         locationService: const _FakeLocationService(
           Coordinates(latitude: 6.9271, longitude: 79.8612),
         ),
         settingsRepository: _FakeSettingsRepository(const AppSettings()),
-        compassService: CompassService(eventsProvider: () => controller.stream),
+        compassService: CompassService(
+          accelerometerProvider: () => accelController.stream,
+          magnetometerProvider: () => magController.stream,
+        ),
         tiltService: _noTilt(),
       );
 
@@ -103,14 +133,16 @@ void main() {
       async.elapse(const Duration(seconds: 6));
       expect(cubit.state.compassStalled, isTrue);
 
-      controller.add(CompassEvent.fromList([90.0, 0.0, 5.0]));
+      accelController.add(_flatAccel());
+      magController.add(_magFor(90));
       async.elapse(Duration.zero);
 
       expect(cubit.state.compassStalled, isFalse);
       expect(cubit.state.headingDegrees, isNotNull);
 
       cubit.close();
-      controller.close();
+      accelController.close();
+      magController.close();
     });
   });
 }

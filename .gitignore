@@ -45,3 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/build/
+
+# Release signing — never commit the real keystore or its credentials
+key.properties
+android/key.properties
+*.jks
+*.keystore
