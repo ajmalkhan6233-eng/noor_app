@@ -84,6 +84,9 @@
 
   "quranScreenTitle": "Quran",
   "bookmarksLabel": "Bookmarks",
+  "quranCoverTapToBegin": "Tap or swipe to begin",
+  "quranCoverSemanticsLabel": "Quran",
+  "quranCoverSemanticsHint": "Double tap or swipe to open the surah index",
   "noBookmarksMessage": "No bookmarks yet — tap the bookmark icon on any ayah while reading to save it here.",
   "noAzkarBookmarksMessage": "No bookmarks yet — tap the bookmark icon on any dua to save it here.",
   "searchQuranSemanticLabel": "Search the Quran",

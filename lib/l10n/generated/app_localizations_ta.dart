@@ -241,6 +241,16 @@ class AppLocalizationsTa extends AppLocalizations {
   String get bookmarksLabel => 'புத்தகக்குறிகள்';
 
   @override
+  String get quranCoverTapToBegin => 'தொடங்க தட்டவும் அல்லது ஸ்வைப் செய்யவும்';
+
+  @override
+  String get quranCoverSemanticsLabel => 'குர்ஆன்';
+
+  @override
+  String get quranCoverSemanticsHint =>
+      'சூரா குறியீட்டைத் திறக்க இருமுறை தட்டவும் அல்லது ஸ்வைப் செய்யவும்';
+
+  @override
   String get noBookmarksMessage =>
       'இன்னும் புத்தகக்குறிகள் இல்லை — படிக்கும்போது எந்த ஆயத்திலும் புத்தகக்குறி ஐகானைத் தட்டி இங்கு சேமிக்கவும்.';
 

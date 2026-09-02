@@ -11,20 +11,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../settings/data/settings_repository.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
+import '../../settings/logic/settings_cubit/settings_state.dart';
 import '../data/prayer_tracker_repository.dart';
 import '../../../core/constants/app_color_tokens.dart';
-import '../../../core/presentation/widgets/app_card.dart';
+import 'widgets/name_entry_transition.dart';
 import 'widgets/profile_name_card.dart';
+import 'widgets/profile_name_header.dart';
 import 'widgets/progress_hero_stat.dart';
 import 'widgets/recent_days_list.dart';
-import 'widgets/weekly_pattern_row.dart';
+import 'widgets/weekly_pattern_card.dart';
 
 class ProgressScreen extends StatefulWidget {
-  const ProgressScreen({super.key, PrayerTrackerRepository? repository})
-    : _repository = repository;
+  const ProgressScreen({
+    super.key,
+    PrayerTrackerRepository? repository,
+    SettingsRepository? settingsRepository,
+  }) : _repository = repository,
+       _settingsRepository = settingsRepository;
 
   final PrayerTrackerRepository? _repository;
+  final SettingsRepository? _settingsRepository;
 
   @override
   State<ProgressScreen> createState() => _ProgressScreenState();
@@ -35,6 +43,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
       widget._repository ?? PrayerTrackerRepository();
   List<({DateTime date, int completedCount, bool fasted})> _history = const [];
   bool _loading = true;
+
+  /// Forces the entry card back open to edit an already-saved name —
+  /// reset once a save fires again. Independent of whether a name is
+  /// actually saved: that's [SettingsState.settings.profileName].
+  bool _editingName = false;
 
   @override
   void initState() {
@@ -83,39 +96,45 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SettingsCubit()..load(),
-      child: Scaffold(
-        backgroundColor: context.colors.paper,
-        appBar: AppBar(title: const Text('Progress')),
-        body: _loading
-            ? Center(child: CircularProgressIndicator(color: context.colors.gold))
-            : ListView(
-                padding: const EdgeInsets.all(24),
-                children: [
-                  ProgressHeroStat(days: _last7),
-                  const SizedBox(height: 16),
-                  _weeklyPatternCard(),
-                  const SizedBox(height: 16),
-                  const ProfileNameCard(),
-                  const SizedBox(height: 16),
-                  RecentDaysList(days: _history.reversed.toList()),
-                ],
-              ),
-      ),
-    );
-  }
-
-  Widget _weeklyPatternCard() {
-    final last7 = _last7;
-    final rangeLabel = last7.length == 1 ? 'Today' : 'Last ${last7.length} days';
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(rangeLabel, style: TextStyle(color: context.colors.sage, fontSize: 12, letterSpacing: 0.4)),
-          const SizedBox(height: 16),
-          WeeklyPatternRow(days: last7),
-        ],
+      create: (_) => SettingsCubit(repository: widget._settingsRepository)..load(),
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, settingsState) {
+          final name = settingsState.settings.profileName?.trim();
+          final hasName = name != null && name.isNotEmpty;
+          final showEntryCard = !hasName || _editingName;
+          return Scaffold(
+            backgroundColor: context.colors.paper,
+            appBar: AppBar(
+              title: hasName && !showEntryCard
+                  ? ProfileNameHeader(
+                      name: name,
+                      onEdit: () => setState(() => _editingName = true),
+                    )
+                  : const Text('Progress'),
+            ),
+            body: _loading
+                ? Center(child: CircularProgressIndicator(color: context.colors.gold))
+                : ListView(
+                    padding: const EdgeInsets.all(24),
+                    children: [
+                      NameEntryTransition(
+                        show: showEntryCard,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: ProfileNameCard(
+                            onSaved: () => setState(() => _editingName = false),
+                          ),
+                        ),
+                      ),
+                      ProgressHeroStat(days: _last7),
+                      const SizedBox(height: 16),
+                      WeeklyPatternCard(days: _last7),
+                      const SizedBox(height: 16),
+                      RecentDaysList(days: _history.reversed.toList()),
+                    ],
+                  ),
+          );
+        },
       ),
     );
   }

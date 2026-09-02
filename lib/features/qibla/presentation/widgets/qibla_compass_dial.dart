@@ -1,13 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The redesigned Qibla compass dial (2026-08-30 mockup rebuild):
-// ring stack + ticks (compass_rings_painter.dart, static, wrapped in
-// its own RepaintBoundary since it never changes), the rotating
-// needle + Kaaba badge (compass_needle_and_badge.dart — a separate
-// widget specifically so its own Ticker can decouple its repaint rate
-// from the raw compass sensor stream, see that file's header for why
-// that turned out to be the dial's real rendering-glitch root cause),
-// and the Arabic "القبلة" label. ~336dp per the approved design.
+// The Qibla compass dial: needle-only, no ring/tick decoration behind
+// it (2026-09-02 direct request — the ring stack from the 2026-08-30
+// mockup rebuild, compass_rings_painter.dart, is removed here and no
+// longer used anywhere). Just the rotating needle + Kaaba badge
+// (compass_needle_and_badge.dart — a separate widget specifically so
+// its own Ticker can decouple its repaint rate from the raw compass
+// sensor stream, see that file's header for why that turned out to be
+// the dial's real rendering-glitch root cause) and the Arabic
+// "القبلة" label. ~336dp per the approved design.
 //
 // Solid-color needle/badge (no gradients, no blur) per direct request
 // ("no need 3D, just a plain compass") — kept even after finding the
@@ -19,7 +20,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_color_tokens.dart';
 import 'compass_needle_and_badge.dart';
-import 'compass_rings_painter.dart';
 import 'qibla_arabic_label.dart';
 
 class QiblaCompassDial extends StatelessWidget {
@@ -56,15 +56,6 @@ class QiblaCompassDial extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          RepaintBoundary(
-            child: SizedBox(
-              width: diameter,
-              height: diameter,
-              child: CustomPaint(
-                painter: CompassRingsPainter(gold: colors.gold, cyan: colors.accentSecondary, ink: colors.ink, sage: colors.sage),
-              ),
-            ),
-          ),
           Positioned(
             top: diameter * 0.28,
             child: QiblaArabicLabel(color: colors.gold.withValues(alpha: 0.8)),

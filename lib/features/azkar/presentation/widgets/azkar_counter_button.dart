@@ -59,7 +59,7 @@ class _AzkarCounterButtonState extends State<AzkarCounterButton> {
         child: Text(
           widget.done
               ? 'Done · ${widget.count} of ${widget.repeatCount}'
-              : 'Tap to count · ${widget.count} of ${widget.repeatCount}',
+              : '${widget.count} of ${widget.repeatCount}',
           style: TextStyle(
             color: widget.done ? context.colors.gold : context.colors.ink,
             fontWeight: FontWeight.w600,

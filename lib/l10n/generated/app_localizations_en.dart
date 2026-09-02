@@ -235,6 +235,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookmarksLabel => 'Bookmarks';
 
   @override
+  String get quranCoverTapToBegin => 'Tap or swipe to begin';
+
+  @override
+  String get quranCoverSemanticsLabel => 'Quran';
+
+  @override
+  String get quranCoverSemanticsHint =>
+      'Double tap or swipe to open the surah index';
+
+  @override
   String get noBookmarksMessage =>
       'No bookmarks yet — tap the bookmark icon on any ayah while reading to save it here.';
 

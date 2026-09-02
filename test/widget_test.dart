@@ -1,6 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:noor/app.dart';
 import 'package:noor/core/constants/app_strings.dart';
@@ -11,7 +12,14 @@ void main() {
   testWidgets('NoorApp shows the Bismillah then the home dashboard', (
     WidgetTester tester,
   ) async {
+    // Empty prefs => SplashGate has never recorded a prior open, so
+    // this is treated as a genuine first launch and the splash plays.
+    SharedPreferences.setMockInitialValues({});
+
     await tester.pumpWidget(const NoorApp());
+    // One extra pump lets SplashGate's async shared_preferences read
+    // resolve before the splash's own fade-in animation starts.
+    await tester.pump();
 
     await tester.pump(SplashConfig.fadeDuration);
     expect(find.text(AppStrings.splashGreeting), findsOneWidget);

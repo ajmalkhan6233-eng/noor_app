@@ -8,12 +8,15 @@ import '../data/quran_import_status.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'bookmarks_screen.dart';
+import 'widgets/quran_cover_screen.dart';
 import 'widgets/quran_import_notice.dart';
 import 'widgets/surah_index.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/presentation/motion/motion.dart';
 
-/// Quran: surah index and search, or a clear notice when the feature
-/// is disabled (no verified source text on this device).
+/// Quran: a front cover, then the surah index and search — or a clear
+/// notice when the feature is disabled (no verified source text on
+/// this device).
 class QuranScreen extends StatelessWidget {
   const QuranScreen({super.key});
 
@@ -26,11 +29,38 @@ class QuranScreen extends StatelessWidget {
   }
 }
 
-class _QuranView extends StatelessWidget {
+class _QuranView extends StatefulWidget {
   const _QuranView();
 
   @override
+  State<_QuranView> createState() => _QuranViewState();
+}
+
+class _QuranViewState extends State<_QuranView> {
+  // Shown once per app session (this tab stays mounted for the whole
+  // session, same as every other bottom-nav tab — see
+  // fade_tab_switcher.dart), not on every visit to the tab.
+  bool _showCover = true;
+
+  @override
   Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: Motion.effective(context, Motion.duration),
+      switchInCurve: Motion.curve,
+      switchOutCurve: Motion.curve,
+      child: _showCover
+          ? QuranCoverScreen(
+              key: const ValueKey('quran-cover'),
+              onEnter: () => setState(() => _showCover = false),
+            )
+          : KeyedSubtree(
+              key: const ValueKey('quran-index'),
+              child: _buildIndex(context),
+            ),
+    );
+  }
+
+  Widget _buildIndex(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.transparent,
