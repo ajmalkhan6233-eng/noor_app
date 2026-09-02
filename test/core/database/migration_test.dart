@@ -110,6 +110,15 @@ void main() {
       final bookmarks = await upgraded.query('azkar_bookmarks');
       expect(bookmarks, hasLength(1));
 
+      // The version-11 migration added four more azkar categories on
+      // an upgrading install, not just a fresh one.
+      final newCategories = await upgraded.query(
+        'azkar_categories',
+        where: 'category_key IN (?, ?, ?, ?)',
+        whereArgs: ['funeral', 'weather', 'food_fasting', 'marriage'],
+      );
+      expect(newCategories, hasLength(4));
+
       await upgraded.close();
     },
   );

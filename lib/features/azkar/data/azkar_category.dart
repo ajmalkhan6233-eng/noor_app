@@ -12,6 +12,11 @@
 /// [visitingSick] was split out of [illness] 2026-08-26 (direct
 /// request: "Visiting the Sick" as its own category, distinct from
 /// general illness) — see azkar_supplementary_import_3.dart.
+///
+/// [funeral], [weather], [foodFasting], and [marriage] were added to
+/// close real gaps flagged in assets/azkar/README.md's own audit note
+/// — same MIT-licensed asellam/HisnElMuslim source, extracted the
+/// same programmatic way, see azkar_supplementary_import_4.dart.
 enum AzkarCategory {
   morning,
   evening,
@@ -24,6 +29,10 @@ enum AzkarCategory {
   debt,
   visitingGrave,
   visitingSick,
+  funeral,
+  weather,
+  foodFasting,
+  marriage,
 }
 
 extension AzkarCategoryDb on AzkarCategory {
@@ -51,6 +60,14 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'visiting_grave';
       case AzkarCategory.visitingSick:
         return 'visiting_sick';
+      case AzkarCategory.funeral:
+        return 'funeral';
+      case AzkarCategory.weather:
+        return 'weather';
+      case AzkarCategory.foodFasting:
+        return 'food_fasting';
+      case AzkarCategory.marriage:
+        return 'marriage';
     }
   }
 
@@ -78,6 +95,14 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'Visiting the Grave';
       case AzkarCategory.visitingSick:
         return 'Visiting the Sick';
+      case AzkarCategory.funeral:
+        return 'Funeral & Bereavement';
+      case AzkarCategory.weather:
+        return 'Weather';
+      case AzkarCategory.foodFasting:
+        return 'Food & Fasting';
+      case AzkarCategory.marriage:
+        return 'Marriage';
     }
   }
 }

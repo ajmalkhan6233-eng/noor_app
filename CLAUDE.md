@@ -2402,6 +2402,7 @@ These apply to every future session, not just the current queue file. If a task 
 - 100% offline: zero network calls, zero analytics/ads SDKs. Any playback or asset loading pointing at a remote URL is a bug, not a feature — flag it.
 - Cosmic palette only: obsidian `#05070B`, gold `#FFB703`, cyan `#00F2FE`, card surface `#0D1117`, via the existing `AppColorTokens` ThemeExtension. Never introduce a competing palette or token file.
 - Every interactive widget needs explicit `Semantics()` tags.
+- Every "reward"/confirmation moment (completing something, saving something meaningful, hitting a milestone) pairs its visual feedback with `HapticService().tap()` or `.milestonePulse()` — never ship one without the other. Fire it at the same instant the visual transition starts, not before. Reuse the existing `HapticService` (`lib/core/haptics/haptic_service.dart`); don't create a new one.
 
 ## Delivery
 - Push to a feature branch / open a PR rather than committing straight to `main`, so changes are reviewable before they land.

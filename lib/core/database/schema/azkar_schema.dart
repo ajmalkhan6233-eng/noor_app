@@ -48,17 +48,20 @@ const List<String> azkarCreateStatements = [
   ''',
 ];
 
-/// Category keys only — structural metadata, not dhikr text. The
-/// last five (child_protection/illness/distress/debt/visiting_grave)
-/// were added 2026-08-25 — see assets/azkar/README.md's "Source
-/// (child_protection / illness / distress / debt / visiting_grave)"
-/// section for their hisn.json provenance. Upgrading installs get
-/// these via database_migrations.dart's `oldVersion < 6` branch —
-/// this statement only runs for a fresh install.
+/// Category keys only — structural metadata, not dhikr text.
+/// child_protection/illness/distress/debt/visiting_grave were added
+/// 2026-08-25, visiting_sick 2026-08-26, and funeral/weather/
+/// food_fasting/marriage most recently — see assets/azkar/README.md's
+/// "Source" sections for each batch's hisn.json provenance. Upgrading
+/// installs get these via database_migrations.dart's `oldVersion < 6`,
+/// `< 8`, and `< 11` branches — this statement only runs for a fresh
+/// install.
 const List<String> azkarSeedStatements = [
   "INSERT INTO azkar_categories (category_key, display_order) VALUES "
       "('morning', 0), ('evening', 1), ('after_prayer', 2), "
       "('sleep', 3), ('travel', 4), ('child_protection', 5), "
       "('illness', 6), ('distress', 7), ('debt', 8), "
-      "('visiting_grave', 9), ('visiting_sick', 10)",
+      "('visiting_grave', 9), ('visiting_sick', 10), "
+      "('funeral', 11), ('weather', 12), ('food_fasting', 13), "
+      "('marriage', 14)",
 ];
