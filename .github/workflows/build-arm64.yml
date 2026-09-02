@@ -1,0 +1,160 @@
+# Bismillahir Rahmanir Raheem - watermark: ALLAH
+# noor - arm64-only release APK, published to the apk-releases branch's
+# dist/noor-arm64.apk (same path/convention as earlier sessions' manual
+# builds) for direct phone download via a small, stable link — much
+# smaller than the universal (all-ABI) APK noor.yml publishes as a
+# GitHub Release, since it carries only one device architecture's
+# native code. Manual dispatch only; doesn't touch noor.yml's own
+# pipeline or its Release/AAB artifacts.
+#
+# Same debug-signing caveat as noor.yml: falls back to debug signing
+# unless the same 4 release-signing secrets are present.
+
+name: Build arm64-only APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and publish arm64 APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub and Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: noor-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: noor-${{ runner.os }}-
+
+      - name: Ensure asset folders exist
+        run: mkdir -p assets/database
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Pass 1 - Flutter Gradle migration
+        run: timeout 900 flutter build apk --release --target-platform android-arm64 2>&1 | tail -n 12 || true
+
+      - name: Append build overrides
+        run: |
+          F=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          if [ -z "$F" ]; then echo "::error::No android/app/build.gradle[.kts] found"; exit 1; fi
+          if grep -q "NOOR_BUILD_OVERRIDES" "$F"; then
+            echo "Overrides already present in $F"
+          elif [ "${F##*.}" = "kts" ]; then
+            cat >> "$F" << 'KTS'
+
+          // --- NOOR_BUILD_OVERRIDES ---
+          android {
+              compileSdk = 36
+              defaultConfig {
+                  minSdk = 23
+              }
+              compileOptions {
+                  isCoreLibraryDesugaringEnabled = true
+              }
+          }
+
+          dependencies {
+              coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+          }
+          KTS
+          else
+            cat >> "$F" << 'GROOVY'
+
+          // --- NOOR_BUILD_OVERRIDES ---
+          android {
+              compileSdk 36
+              defaultConfig {
+                  minSdkVersion 23
+              }
+              compileOptions {
+                  coreLibraryDesugaringEnabled true
+              }
+          }
+
+          dependencies {
+              coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+          }
+          GROOVY
+          fi
+
+      - name: Configure release signing (if secrets are present)
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+        run: |
+          if [ -n "$RELEASE_KEYSTORE_BASE64" ]; then
+            echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/noor-release.jks"
+            cat > android/key.properties <<EOF
+          storePassword=$RELEASE_STORE_PASSWORD
+          keyPassword=$RELEASE_KEY_PASSWORD
+          keyAlias=$RELEASE_KEY_ALIAS
+          storeFile=$RUNNER_TEMP/noor-release.jks
+          EOF
+            echo "Release signing configured from secrets."
+          else
+            echo "No release-signing secrets set — building with debug signing (unchanged default)."
+          fi
+
+      - name: Build arm64-only release APK
+        run: |
+          set -o pipefail
+          flutter clean
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          flutter build apk --release --target-platform android-arm64 \
+            --build-number "$GITHUB_RUN_NUMBER" \
+            --dart-define=BUILD_SHA="$SHORT_SHA" \
+            --dart-define=BUILD_NUMBER="$GITHUB_RUN_NUMBER"
+
+      - name: Publish to apk-releases branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin apk-releases
+          git worktree add /tmp/apk-releases origin/apk-releases
+          mkdir -p /tmp/apk-releases/dist
+          cp build/app/outputs/flutter-apk/app-release.apk /tmp/apk-releases/dist/noor-arm64.apk
+          cd /tmp/apk-releases
+          git add dist/noor-arm64.apk
+          git commit -m "Update arm64 release APK (build $GITHUB_RUN_NUMBER, $SHORT_SHA)" --allow-empty
+          git push origin HEAD:apk-releases
+
+      - name: Summary
+        run: |
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          {
+            echo "## noor arm64 build #${{ github.run_number }}"
+            echo ""
+            echo "- Size: $(du -h $APK | cut -f1)"
+            echo "- Published to: apk-releases branch, dist/noor-arm64.apk"
+          } >> "$GITHUB_STEP_SUMMARY"
