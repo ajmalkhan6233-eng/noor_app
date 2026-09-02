@@ -12,7 +12,6 @@ import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/core/location/location_service.dart';
 import 'package:noor/core/sensors/compass_reading.dart';
@@ -54,11 +53,15 @@ void main() {
     'a compass stream error degrades to unavailable instead of throwing',
     () {
       fakeAsync((async) {
-        final controller = StreamController<CompassEvent>();
+        final accelController = StreamController<AccelerometerEvent>();
+        final magController = StreamController<MagnetometerEvent>();
         final cubit = QiblaCubit(
           locationService: const _FakeLocationService(_riyadh),
           settingsRepository: _FakeSettingsRepository(const AppSettings()),
-          compassService: CompassService(eventsProvider: () => controller.stream),
+          compassService: CompassService(
+            accelerometerProvider: () => accelController.stream,
+            magnetometerProvider: () => magController.stream,
+          ),
           tiltService: TiltService(eventsProvider: () => null),
         );
 
@@ -67,7 +70,7 @@ void main() {
 
         // Simulate a cloud-emulator platform channel failure — this
         // must not surface as an unhandled exception.
-        controller.addError(PlatformException(code: 'no-sensor'));
+        magController.addError(PlatformException(code: 'no-sensor'));
         async.elapse(Duration.zero);
 
         expect(cubit.state.compassAccuracy, CompassAccuracy.unavailable);
@@ -75,7 +78,8 @@ void main() {
         expect(cubit.state.compassStalled, isTrue);
 
         cubit.close();
-        controller.close();
+        accelController.close();
+        magController.close();
       });
     },
   );
@@ -86,7 +90,10 @@ void main() {
       final cubit = QiblaCubit(
         locationService: const _FakeLocationService(_riyadh),
         settingsRepository: _FakeSettingsRepository(const AppSettings()),
-        compassService: CompassService(eventsProvider: () => null),
+        compassService: CompassService(
+          accelerometerProvider: () => null,
+          magnetometerProvider: () => null,
+        ),
         tiltService: TiltService(eventsProvider: () => controller.stream),
       );
 
