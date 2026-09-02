@@ -13,16 +13,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/haptics/haptic_service.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 
 class ProfileNameCard extends StatefulWidget {
-  const ProfileNameCard({super.key, this.onSaved});
+  const ProfileNameCard({super.key, this.onSaved, this.hapticService = const HapticService()});
 
   /// Called right after a save fires (checkmark tap, submit, or losing
   /// focus) — lets the caller know a save happened, not what was saved.
   final VoidCallback? onSaved;
+
+  final HapticService hapticService;
 
   @override
   State<ProfileNameCard> createState() => _ProfileNameCardState();
@@ -50,6 +53,13 @@ class _ProfileNameCardState extends State<ProfileNameCard> {
 
   void _saveName() {
     context.read<SettingsCubit>().setProfileName(_nameController.text.trim());
+    // Fired here, alongside onSaved, so it lands at the same instant
+    // the card starts its dismiss transition (name_entry_transition.dart)
+    // rather than before it. A light tap, same as a goal tick — this
+    // can fire again on every future edit (tap the name header to
+    // re-open the card), so it stays a routine confirmation rather
+    // than milestonePulse()'s heavier one-time-event feel.
+    widget.hapticService.tap();
     widget.onSaved?.call();
   }
 
