@@ -1,6 +1,6 @@
 # Azkar source data — provenance and licence
 
-Five files:
+Six files:
 
 - `adhkar-ar.json` — Arabic text, per-item source citation (morning/evening).
 - `adhkar-en.json` — English translation, transliteration, and the
@@ -14,18 +14,22 @@ Five files:
   situation as the file above).
 - `hisn-supplementary-3.json` — Arabic text and source citation for
   visiting_sick (added 2026-08-26 — see its own section below).
+- `hisn-supplementary-4.json` — Arabic text and source citation for
+  funeral, weather, food_fasting, and marriage (see its own section
+  below; same no-translation situation as the files above).
 
 `AzkarImportService` SHA-256-verifies the first two before importing,
 and separately (via `azkar_supplementary_import.dart`,
-`azkar_supplementary_import_2.dart`, and
-`azkar_supplementary_import_3.dart`) SHA-256-verifies the third,
-fourth, and fifth before backfilling them.
+`azkar_supplementary_import_2.dart`, `azkar_supplementary_import_3.dart`,
+and `azkar_supplementary_import_4.dart`) SHA-256-verifies the rest
+before backfilling them.
 
     adhkar-ar.json             sha256: 9e0dd6a10d26ddc0e2b36b94098c287644996c7f81b707f8ad24f1ce40b8c821
     adhkar-en.json             sha256: eec053c4138bed6f3ec7dc3c0e06e926a935dca24663788e5b97a0bfb5f71896
     hisn-supplementary.json    sha256: 0f683306e391af8a80c09457a620bd29ef56b7e5c973ebf4339bc30321b335c3
     hisn-supplementary-2.json  sha256: fbd0674bfbce9cde4fa09819c3224307c5b36439837dadeeed4b4df95632c47f
     hisn-supplementary-3.json  sha256: 457a887f2da5da4d32e8dee7d28cdad132038f740b031976262bdeec2c290ea8
+    hisn-supplementary-4.json  sha256: d34174c694cda975660f83b1dcb2f70767ebf4230779edacfd2257e733444164
 
 ## Source (morning / evening)
 
@@ -119,16 +123,35 @@ chapters:
 part of the original combined batch that's about the sick person's
 own state, not the visitor's.
 
-Other standard Hisn al-Muslim sections checked and found **not yet
-covered**, flagged rather than added speculatively in this same pass:
-a funeral/bereavement cluster (chapters covering talqin for one dying,
-the funeral prayer for adult and child, condolence, and burial — 8
-chapters, ~14 items, currently only the single "visiting the grave"
-chapter is in-app), a weather cluster (wind, thunder, rain, drought),
-a food-and-fasting cluster (breaking fast, before/after eating, guest
-duas), and a marriage cluster (dua for the one marrying, before
-intercourse). Each would need its own chapter selection, extraction,
-and verification pass same as this one.
+## Source (funeral / weather / food_fasting / marriage)
+
+**Repository/file:** same `asellam/HisnElMuslim` `hisn.json` as above,
+re-downloaded fresh and re-verified this session (MIT licence
+re-confirmed by fetching `LICENSE.md` directly — the repo has since
+renamed the file from `LICENSE`). These are exactly the four gaps
+this file's own earlier audit note flagged as missing:
+
+- `funeral` ← chapters 53-60: "تَلْقِينُ المُحْتَضِرِ" (talqin for
+  one dying), "دُعَاءُ مَنْ أُصِيبَ بِمُصِيبَةٍ" (dua for one
+  afflicted by calamity), "الدُّعَاءُ عِنْدَ إِغْمَاضِ المَيِّتِ"
+  (closing the eyes of the deceased), the funeral-prayer duas for an
+  adult and for a child, "دُعَاءُ التَّعْزِيَةِ" (condolence), and
+  the duas at burial and after — 14 items. (Chapter 61, "visiting the
+  grave," is deliberately excluded — already its own category.)
+- `weather` ← chapters 62-67: wind, thunder, prayers for rain, when
+  it rains, after rain, and for clear skies — 9 items.
+- `food_fasting` ← chapters 69-77: breaking the fast, before/after
+  eating, guest duas, breaking fast at someone's home, a fasting
+  person around food or when insulted, and seeing the season's first
+  fruit — 12 items. (Chapter 68, sighting the new moon, was left out —
+  belongs more naturally with the Hijri calendar than food/fasting.)
+- `marriage` ← chapters 80-82: dua for the one marrying, the newly
+  married/buying an animal, and before intimacy with one's wife — 3
+  items.
+
+Same extraction method as every batch above: downloaded fresh,
+`Text`/`Reference` fields copied verbatim into `content`/`source`,
+never hand-typed. No English translation exists for these entries.
 
 ## Coverage
 
@@ -136,9 +159,10 @@ and verification pass same as this one.
 evening-only), English translation included. `after_prayer`: 8 items.
 `sleep`: 15 items. `travel`: 1 item. `child_protection`: 1 item.
 `illness`: 3 items. `distress`: 6 items. `debt`: 2 items.
-`visiting_grave`: 1 item. `visiting_sick`: 3 items. All eleven of the
-app's azkar categories are now populated — none remain genuinely
-unsourced.
+`visiting_grave`: 1 item. `visiting_sick`: 3 items. `funeral`: 14
+items. `weather`: 9 items. `food_fasting`: 12 items. `marriage`: 3
+items. All fifteen of the app's azkar categories are now populated —
+none remain genuinely unsourced.
 
 ## Updating
 
@@ -147,12 +171,15 @@ unsourced.
     shasum -a 256 assets/azkar/hisn-supplementary.json
     shasum -a 256 assets/azkar/hisn-supplementary-2.json
     shasum -a 256 assets/azkar/hisn-supplementary-3.json
+    shasum -a 256 assets/azkar/hisn-supplementary-4.json
 
 Set the results as `AzkarImportService.expectedArSha256` /
 `expectedEnSha256` (`lib/features/azkar/data/azkar_import_service.dart`),
 `azkarSupplementaryExpectedSha256`
 (`lib/features/azkar/data/azkar_supplementary_import.dart`),
 `azkarSupplementary2ExpectedSha256`
-(`lib/features/azkar/data/azkar_supplementary_import_2.dart`), and
+(`lib/features/azkar/data/azkar_supplementary_import_2.dart`),
 `azkarSupplementary3ExpectedSha256`
-(`lib/features/azkar/data/azkar_supplementary_import_3.dart`).
+(`lib/features/azkar/data/azkar_supplementary_import_3.dart`), and
+`azkarSupplementary4ExpectedSha256`
+(`lib/features/azkar/data/azkar_supplementary_import_4.dart`).
