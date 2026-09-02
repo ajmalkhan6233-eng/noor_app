@@ -7,9 +7,11 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_item.dart';
+import '../../data/azkar_speech_controller.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
 import '../../logic/azkar_cubit/azkar_state.dart';
 import 'azkar_counter_button.dart';
+import 'azkar_translation_audio_button.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 /// One dhikr with a tap-to-count repetition counter. Text size follows
@@ -73,13 +75,33 @@ class AzkarItemTile extends StatelessWidget {
                     ),
                   ),
                 ],
-                if (item.translation != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    item.translation!,
-                    style: TextStyle(color: context.colors.sage, fontSize: 12 * fontScale),
-                  ),
-                ],
+                const SizedBox(height: 2),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (item.translation != null)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            item.translation!,
+                            style: TextStyle(color: context.colors.sage, fontSize: 12 * fontScale),
+                          ),
+                        ),
+                      ),
+                    ValueListenableBuilder<int?>(
+                      valueListenable: AzkarSpeechController.instance,
+                      builder: (context, speakingItemId, _) {
+                        return AzkarTranslationAudioButton(
+                          available: item.translation != null,
+                          isPlaying: speakingItemId == item.id,
+                          onToggle: () =>
+                              AzkarSpeechController.instance.toggle(item.id, item.translation!),
+                        );
+                      },
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 12),
                 AzkarCounterButton(
                   count: count,
