@@ -43,7 +43,8 @@ class LocationOnboardingScreen extends StatefulWidget {
 class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
   final _locationService = const LocationService();
   bool _resolving = false;
-  bool _gpsFailed = false;
+  bool _locationStepDone = false;
+  bool _gpsSucceeded = false;
   String? _pickedDistrict;
   AppLocaleOption _selectedLocale = AppLocaleOption.english;
 
@@ -63,13 +64,10 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
     setState(() => _resolving = true);
     final coordinates = await _locationService.getCurrentCoordinates();
     if (!mounted) return;
-    if (coordinates != null) {
-      await _finish();
-      return;
-    }
     setState(() {
       _resolving = false;
-      _gpsFailed = true;
+      _locationStepDone = true;
+      _gpsSucceeded = coordinates != null;
     });
   }
 
@@ -135,11 +133,15 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                   child: Text(_resolving ? 'Locating…' : 'Enable location'),
                 ),
               ),
-              if (_gpsFailed) ...[
+              if (_locationStepDone) ...[
                 const SizedBox(height: 16),
                 Text(
-                  "Couldn't get a GPS fix — pick your district instead, "
-                  "just this once.",
+                  _gpsSucceeded
+                      ? 'Your prayer times are set from GPS. You can also pick '
+                            'your district below — it\'s used as a backup and '
+                            'for local holiday info.'
+                      : "Couldn't get a GPS fix — pick your district instead, "
+                            "just this once.",
                   style: TextStyle(color: context.colors.sage, height: 1.4),
                 ),
                 const SizedBox(height: 12),
@@ -151,7 +153,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _pickedDistrict == null
+                    onPressed: (!_gpsSucceeded && _pickedDistrict == null)
                         ? null
                         : () => _finish(district: _pickedDistrict),
                     style: ElevatedButton.styleFrom(
