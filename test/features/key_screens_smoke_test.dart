@@ -14,6 +14,7 @@
 // or "this text disappeared" even without a rendered screenshot.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:noor/app.dart';
 import 'package:noor/core/constants/splash_config.dart';
@@ -53,6 +54,12 @@ Future<void> _settle(WidgetTester tester, {int frames = 8}) async {
 }
 
 void main() {
+  setUp(() {
+    // Empty prefs => SplashGate treats every test run as a first
+    // launch, same as test/widget_test.dart.
+    SharedPreferences.setMockInitialValues({});
+  });
+
   testWidgets('Home tab renders HeroCard without throwing', (
     tester,
   ) async {
