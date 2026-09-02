@@ -239,6 +239,17 @@ class AppLocalizationsSi extends AppLocalizations {
   String get bookmarksLabel => 'පිටු සලකුණු';
 
   @override
+  String get quranCoverTapToBegin =>
+      'ආරම්භ කිරීමට තට්ටු කරන්න හෝ ස්වයිප් කරන්න';
+
+  @override
+  String get quranCoverSemanticsLabel => 'අල් කුර්ආනය';
+
+  @override
+  String get quranCoverSemanticsHint =>
+      'සූරා දර්ශකය විවෘත කිරීමට දෙවරක් තට්ටු කරන්න හෝ ස්වයිප් කරන්න';
+
+  @override
   String get noBookmarksMessage =>
       'තවම පිටු සලකුණු නොමැත — කියවන අතරතුර ඕනෑම ආයාවක් මත පිටු සලකුණු අයිකනය තට්ටු කර එය මෙහි සුරකින්න.';
 

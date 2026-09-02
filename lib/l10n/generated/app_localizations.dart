@@ -508,6 +508,24 @@ abstract class AppLocalizations {
   /// **'Bookmarks'**
   String get bookmarksLabel;
 
+  /// No description provided for @quranCoverTapToBegin.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap or swipe to begin'**
+  String get quranCoverTapToBegin;
+
+  /// No description provided for @quranCoverSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran'**
+  String get quranCoverSemanticsLabel;
+
+  /// No description provided for @quranCoverSemanticsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap or swipe to open the surah index'**
+  String get quranCoverSemanticsHint;
+
   /// No description provided for @noBookmarksMessage.
   ///
   /// In en, this message translates to:
