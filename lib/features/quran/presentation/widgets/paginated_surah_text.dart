@@ -8,13 +8,12 @@
 // numbers. Each swipe applies a light 3D rotation so it reads as a
 // page turning, not a flat slide.
 
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
 import '../../data/quran_ayah.dart';
 import 'continuous_surah_text.dart';
+import 'page_turn_transition.dart';
 import 'surah_page_splitter.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
@@ -91,21 +90,9 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
         return PageView.builder(
           controller: _controller,
           itemCount: _pages.length,
-          itemBuilder: (context, index) => AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              var offset = 0.0;
-              if (_controller.position.haveDimensions) {
-                offset = (_controller.page ?? index.toDouble()) - index;
-              }
-              return Transform(
-                alignment: offset > 0 ? Alignment.centerLeft : Alignment.centerRight,
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.0015)
-                  ..rotateY(offset * -0.6 * math.pi / 4),
-                child: Opacity(opacity: (1 - offset.abs() * 0.4).clamp(0.5, 1.0), child: child),
-              );
-            },
+          itemBuilder: (context, index) => PageTurnTransition(
+            controller: _controller,
+            index: index,
             child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 8),
