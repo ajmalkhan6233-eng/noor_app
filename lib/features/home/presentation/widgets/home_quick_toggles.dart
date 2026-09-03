@@ -1,24 +1,25 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // Silent Mode and the pre-adhan reminder, moved to Home's front page
-// (2026-08-24 live-device review: both were "buried in Settings",
-// wanted as easily-reachable controls). Silent Mode is a quick master
-// on/off toggling all five prayers together — per-prayer
-// customization stays in Settings. The reminder chip opens a minutes
-// dropdown directly here (5/10/15/20/30, or off) rather than only
-// toggling on/off — picking a value was previously Settings-only,
-// which is exactly the "shouldn't need to leave the front page for
-// this" friction flagged in the same review.
+// (2026-08-24: both were "buried in Settings"). Silent Mode is a
+// quick master on/off toggling all five prayers together — per-prayer
+// customization stays in Settings.
+//
+// 2026-09-03: restyled as glass pills — see home_quick_toggle_pill.dart
+// for the shared GlassPill/GlowIcon styling and why it's deliberately
+// static (no per-frame redraw), and pre_adhan_reminder_chip.dart for
+// the reminder chip's own file (split out here to stay under the
+// 150-line limit, which this file was already over before tonight).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/silent_mode_channel.dart';
 import '../../../prayer_times/data/silent_mode_settings.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
-import '../../../../core/constants/app_color_tokens.dart';
+import 'home_quick_toggle_pill.dart';
+import 'pre_adhan_reminder_chip.dart';
 
 class HomeQuickToggles extends StatefulWidget {
   const HomeQuickToggles({super.key, SilentModeChannel? channel})
@@ -117,8 +118,7 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(
-              child: _chip(
-                context,
+              child: QuickToggleChip(
                 icon: silentOn ? Icons.notifications_off : Icons.notifications_off_outlined,
                 label: 'Silent Mode',
                 on: silentOn,
@@ -138,99 +138,11 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
             ),
             const SizedBox(width: 12),
             Flexible(
-              child: _reminderChip(context, reminderOn, state.settings.preReminderMinutes),
+              child: PreAdhanReminderChip(on: reminderOn, minutes: state.settings.preReminderMinutes),
             ),
           ],
         );
       },
-    );
-  }
-
-  static const _minuteOptions = [5, 10, 15, 20, 30];
-
-  Widget _reminderChip(BuildContext context, bool on, int minutes) {
-    final label = on ? 'Reminder: $minutes min' : 'Pre-adhan reminder';
-    return PopupMenuButton<int>(
-      // -1 means "off"; a real minute value both enables and sets it.
-      onSelected: (value) {
-        final cubit = context.read<SettingsCubit>();
-        if (value < 0) {
-          cubit.setPreReminderEnabled(false);
-        } else {
-          cubit.setPreReminderMinutes(value);
-          cubit.setPreReminderEnabled(true);
-        }
-      },
-      color: context.colors.card,
-      itemBuilder: (context) => [
-        for (final m in _minuteOptions)
-          PopupMenuItem(
-            value: m,
-            child: Text('$m minutes before', style: TextStyle(color: context.colors.ink)),
-          ),
-        PopupMenuItem(
-          value: -1,
-          child: Text('Off', style: TextStyle(color: context.colors.sage)),
-        ),
-      ],
-      child: Semantics(
-        label: label,
-        hint: 'Double tap to choose reminder timing',
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: on ? context.colors.card : Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: on ? context.colors.gold : context.colors.hairline),
-          ),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  on ? Icons.notifications_active : Icons.notifications_active_outlined,
-                  size: 16,
-                  color: on ? context.colors.gold : context.colors.sage,
-                ),
-                const SizedBox(width: 6),
-                Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: 12)),
-                Icon(Icons.arrow_drop_down, size: 16, color: context.colors.sage),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _chip(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required bool on,
-    required VoidCallback onTap,
-  }) {
-    return SemanticButton(
-      label: label,
-      hint: on ? 'On. Double tap to turn off' : 'Off. Double tap to turn on',
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: on ? context.colors.card : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: on ? context.colors.gold : context.colors.hairline),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 16, color: on ? context.colors.gold : context.colors.sage),
-            const SizedBox(width: 6),
-            Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: 12)),
-          ],
-        ),
-      ),
     );
   }
 }
