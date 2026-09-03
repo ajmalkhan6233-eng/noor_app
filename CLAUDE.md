@@ -2499,3 +2499,63 @@ already checked before any had occurred (observed at 03:33 with Fajr
 at 04:52, not yet due). Not investigated further tonight — noting what
 was observed for whoever picks this up next, per the existing
 2026-08-30 entry's own unresolved MIUI-backup-path theory.
+
+### Live verification pass — 2026-09-03, phone reconnected, 4-item check
+
+Phone came back mid-session. Ran a full fresh `flutter clean` +
+`flutter build apk --release --split-per-abi`, full uninstall + clean
+install (not update-in-place), and four specific checks — all with
+real evidence, not source-reading:
+
+1. **Home glass-pill restyle (`f6b589b`) — confirmed live.** Screenshot
+   of Home shows Silent Mode and Pre-adhan reminder as proper rounded
+   glass pills, correct borders, correct labels
+   ("Silent Mode", "Pre-adhan reminder ▾"). No crash, no layout break.
+   Did not tap-test the toggles this pass (would open the system DND
+   permission screen; skipped under real time pressure to hand the
+   phone back) — visual render confirmed, functional tap-through still
+   not independently re-verified.
+2. **CI "Configure release signing" step — re-confirmed, unchanged.**
+   Latest run (`33742699099`) still shows step conclusion `failure`,
+   not either graceful branch. Per the workflow script, the only way
+   this exact step fails non-gracefully is `base64 --decode` erroring
+   on `RELEASE_KEYSTORE_BASE64` — meaning that secret is set but isn't
+   valid base64. Neither "Release signing configured from secrets."
+   nor "No release-signing secrets set." was ever printed. Full job
+   log still isn't fetchable (403, admin-only) — this remains a
+   derived diagnosis from the step conclusion + script logic, not a
+   read of the literal log text. **Fix is Aj's own action**: regenerate/
+   re-paste `RELEASE_KEYSTORE_BASE64` correctly in GitHub repo Settings
+   → Secrets.
+3. **Real app size — measured, not estimated.**
+   - arm64-v8a release APK: **71,100,024 bytes ≈ 71.1MB** raw (fresh
+     build this pass).
+   - Real Play-Store-simulated download size, via `bundletool
+     build-apks` + `get-size total` on a fresh release AAB (all device
+     configs): **57.8MB–59.0MB (55.1–56.3MB* MIN/MAX)** — essentially
+     unchanged from, very slightly below, the 58.6MB baseline. No
+     regression from tonight's work.
+4. **Qibla needle (`b1e861f` simplified needle) — objectively still
+   broken, NOT fixed.** Captured an 8-frame screenshot burst while Aj
+   physically rotated the phone, then decoded every PNG pixel-by-pixel
+   (custom Node.js decoder, not eyeballed) and cropped the compass-dial
+   region for direct visual confirmation. **Every single frame failed
+   to render a correct dial** — no rings, ticks, full needle, Kaaba
+   badge, or "القبلة" label ever appeared in any of the 8 frames.
+   Frame 1: a plain filled gold square, nothing else. Frame 6: a
+   broken partial gold arc fragment. Gold-pixel count in the dial
+   region swung 121→741 across frames with no full dial ever forming.
+   This is the same GPU/compositor collapse glitch as every prior
+   session's finding — the `b1e861f` "simplify the needle" pass did
+   **not** fix the underlying rendering bug, only reduced its visual
+   complexity. Root cause is still open; the next real diagnostic step
+   remains what the handoff doc already named (draw-call-count
+   correlation → a native GPU/compositor trace), not another paint
+   simplification. **Do not report Qibla as fixed based on any future
+   source-only or single-screenshot check** — this exact burst method
+   (multi-frame, pixel-decoded, not eyeballed) is the only check that
+   has reliably caught this bug across every session it's been tested.
+
+No source files changed this pass — verification only, working tree
+was already clean before and after. Nothing to commit for items 1-4
+themselves; this log entry is the only diff.
