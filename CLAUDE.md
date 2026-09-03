@@ -2559,3 +2559,38 @@ real evidence, not source-reading:
 No source files changed this pass — verification only, working tree
 was already clean before and after. Nothing to commit for items 1-4
 themselves; this log entry is the only diff.
+
+### Next-session checklist item added: Qibla GPU/compositor trace
+Per direct request, adding this explicitly so it isn't lost between
+sessions. Next Qibla session should start here, not with another paint
+simplification:
+- Capture a real GPU/compositor trace (e.g. Android GPU Inspector, or
+  `adb shell dumpsys gfxinfo com.noorapp.noor framestats` around a
+  reproduction) during the exact moment the dial collapses, to see
+  what the compositor is actually doing on the frames that render
+  wrong — not another guess-and-simplify pass on the paint code.
+- Cross-reference against the draw-call-count correlation already
+  suspected (more layered CustomPainter calls = worse collapse rate)
+  using the trace's per-frame draw-call/layer counts, not assumption.
+- Use the same multi-frame pixel-decoded screenshot burst method (see
+  above) to confirm/deny any fix candidate this produces — a single
+  screenshot or source-only check is not sufficient evidence for this
+  bug, confirmed repeatedly across sessions.
+
+### RELEASE_KEYSTORE_BASE64 fix — this is Aj's own action, not code
+The CI "Configure release signing" failure (see above, re-confirmed
+2026-09-03) is not fixable from inside this repo or by Claude Code —
+it needs the actual secret value corrected in GitHub's own UI. Steps,
+for the record, so this isn't re-derived every session:
+1. Reopen keystore.b64 from the noor-keystore folder in Notepad.
+2. Select and copy only the block of text between the BEGIN and END
+   lines — not those two lines themselves, just the random-looking
+   characters in between.
+3. On GitHub: repo -> Settings -> Secrets and variables -> Actions ->
+   click RELEASE_KEYSTORE_BASE64 -> Update -> paste the corrected
+   value -> Update secret.
+Once updated, the next CI run's "Configure release signing" step
+conclusion flipping from failure to success (and printing "Release
+signing configured from secrets.") is the confirmation this actually
+worked — re-check via the Actions API the same way this session did,
+don't just assume the paste was correct.
