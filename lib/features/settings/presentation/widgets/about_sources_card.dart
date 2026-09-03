@@ -50,13 +50,15 @@ class AboutSourcesCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(l10n.englishTranslationAttribution, style: AppTypography.caption(context.colors.sage)),
           const SizedBox(height: 12),
-          // Recitation audio (Juz Amma only — see
-          // assets/quran/audio/juz_amma/README.md) is CC BY 4.0,
-          // which requires attribution as a licence condition, not
-          // just a courtesy.
+          // Recitation audio (Juz Amma plus a few individually curated
+          // surahs — see assets/quran/audio/juz_amma/README.md and
+          // assets/quran/audio/popular/README.md) is CC BY 4.0, which
+          // requires attribution as a licence condition, not just a
+          // courtesy. Both sets are the same reciter/source item, so
+          // one attribution line covers both.
           Text(
-            'Recitation audio (Juz Amma): Moeed Alharthi, Hafs '
-            "narration — Dhikr Al-Huda collection, CC BY 4.0.",
+            'Recitation audio (Juz Amma and curated surahs): Moeed '
+            'Alharthi, Hafs narration — Dhikr Al-Huda collection, CC BY 4.0.',
             style: AppTypography.caption(context.colors.sage),
           ),
           const SizedBox(height: 12),

@@ -35,7 +35,7 @@ class SurahAudioButton extends StatelessWidget {
       value: isPlaying ? 'Playing' : 'Stopped',
       hint: available
           ? 'Double tap to control recitation'
-          : 'Only Juz Amma recitations are bundled offline',
+          : 'Only Juz Amma and a few individually curated surahs are bundled offline',
       child: IconButton(
         icon: Icon(isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline),
         color: available ? context.colors.gold : context.colors.sage,

@@ -74,6 +74,7 @@ flutter:
     - assets/azkar/
     - assets/audio/adhan/
     - assets/quran/audio/juz_amma/
+    - assets/quran/audio/popular/
   fonts:
     - family: Cormorant Garamond
       fonts:
