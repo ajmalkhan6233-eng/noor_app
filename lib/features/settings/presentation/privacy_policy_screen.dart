@@ -1,11 +1,16 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Required even for a fully offline app (CLAUDE.md's Phase 3 release
+// Required even for a mostly-offline app (CLAUDE.md's Phase 3 release
 // checklist) — a static page, no network call to fetch it. Every
 // claim here is a direct statement of what this codebase actually
-// does: no INTERNET permission in AndroidManifest.xml, no ad/
-// analytics SDK in pubspec.yaml, location read via Geolocator and
-// only ever written to the on-device encrypted database.
+// does: no ad/analytics SDK in pubspec.yaml, location read via
+// Geolocator and only ever written to the on-device encrypted
+// database. 2026-09-03: this app's one deliberate, scoped exception —
+// optional, user-initiated Quran audio downloads
+// (surah_audio_download_service.dart) — means the blanket "no
+// INTERNET permission at all" claim below no longer holds; updated to
+// describe the actual, narrower scope instead of leaving a stale
+// absolute claim standing.
 
 import 'package:flutter/material.dart';
 
@@ -51,8 +56,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'If you enable location, it is used only to calculate '
                   'prayer times and the Qibla direction for where you are. '
                   'It is read from the device, used on the device, and '
-                  'never leaves the device — noor has no network '
-                  'permission to send it anywhere even if it wanted to. '
+                  'never sent anywhere — this has nothing to do with the '
+                  'optional audio-download feature described below, and '
+                  'no code path ever connects the two. '
                   'You can clear or change it at any time in Settings, or '
                   'pick a district manually instead.',
                   style: TextStyle(color: context.colors.ink, height: 1.5),
@@ -87,8 +93,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 Text(
                   '• Location — prayer times and Qibla direction.\n'
                   '• Notifications and exact alarms — adhan and iqamah reminders.\n'
-                  '• Do Not Disturb access — only if you turn on Silent Mode.\n\n'
-                  'noor requests no internet access permission at all.',
+                  '• Do Not Disturb access — only if you turn on Silent Mode.\n'
+                  '• Internet — used only if you choose to download extra '
+                  'Quran recitation audio. Every other feature in noor, '
+                  'including everything above, works with zero connectivity '
+                  'and makes no network call of any kind.',
                   style: TextStyle(color: context.colors.ink, height: 1.5),
                 ),
               ],

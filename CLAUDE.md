@@ -147,8 +147,20 @@ ignore any prior doc that says otherwise; this app has no JS runtime.
 State: flutter_bloc / Cubit. DB: sqflite_sqlcipher. Prayer math: adhan.
 
 ## Non-Negotiable Architecture
-1. Offline-first, absolute: zero ad SDKs, zero analytics, zero remote
-   network calls, zero INTERNET permission in AndroidManifest.xml.
+1. Offline-first by default, with exactly one deliberate, scoped
+   exception: optional, user-initiated Quran audio downloads
+   (surah_audio_download_service.dart, added 2026-09-03, direct
+   request — "the first network-capable feature this app will ever
+   have"). Every other feature has zero remote network calls, always.
+   `INTERNET`/`ACCESS_NETWORK_STATE` are declared in
+   AndroidManifest.xml solely for that one feature, with a comment
+   saying so. Zero ad SDKs, zero analytics, ever — that part is still
+   absolute. Before this date this line read "zero INTERNET permission,
+   full stop" — revising it here rather than leaving that stale
+   absolute claim standing anywhere in the app or these docs, per the
+   same request. Any *other* new network-touching feature is a
+   separate decision to make explicitly and knowingly, the same way
+   this one was — not something to slide in by extension of this one.
 2. No Play Billing / IAP library, ever. Monetization is handled entirely
    at the Play Store listing level — see Monetization Timeline below
    for the launch-free-then-paid sequencing. Nothing billing-related
@@ -379,19 +391,19 @@ verify against what's actually on the device, not the source tree.
       Play Console submission itself needs the policy hosted at a
       public URL for the store listing — the in-app page alone doesn't
       satisfy that, only the "does the app have one" half of this item.
-- [x] Confirm manifest has no INTERNET permission and no billing
-      dependency anywhere in the dependency tree — verified 2026-08-28
-      by actually running the Gradle manifest-merge task
-      (`processReleaseMainManifest`, not just reading the app's own
-      `AndroidManifest.xml`) and reading the real merged output at
-      `build/app/intermediates/merged_manifest/release/
-      processReleaseMainManifest/AndroidManifest.xml`: zero
-      `INTERNET` permission. The *debug* merged manifest does show
-      `INTERNET` — that's Flutter's own dev-tooling injection for
-      hot reload/DevTools on debug builds only, stripped in release;
-      worth knowing so a future debug-manifest check doesn't
-      misdiagnose it as a plugin leak. `pubspec.lock` has no
-      billing/`in_app_purchase`/IAP package of any kind.
+- [x] Confirm manifest has no billing dependency anywhere in the
+      dependency tree — verified 2026-08-28, `pubspec.lock` has no
+      billing/`in_app_purchase`/IAP package of any kind. Still true.
+- **Superseded 2026-09-03**: this item used to also confirm zero
+  `INTERNET` permission via the merged manifest
+  (`processReleaseMainManifest`) — no longer applicable. `INTERNET`
+  and `ACCESS_NETWORK_STATE` are now deliberately declared, scoped to
+  the one optional Quran-audio-download feature (see Non-Negotiable
+  Architecture item 1 above). Not re-checking for absence; the release
+  check going forward is instead "the manifest's `INTERNET` comment
+  still names only that one feature, and nothing else in the app
+  actually makes a network call" — worth re-verifying at the next
+  release pass, not assumed from this note alone.
 
 ### Phase 4 — Submission
 - [ ] Google Play developer account registered

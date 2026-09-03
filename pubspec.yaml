@@ -43,12 +43,21 @@ dependencies:
   # network call noor itself makes; adds no INTERNET permission.
   url_launcher: ^6.2.0
 
-  # Local-asset Adhan playback only — never streams, never fetches
-  # remote audio (see assets/audio/adhan/README.md for provenance)
+  # Adhan and bundled Quran playback are local-asset only, never
+  # streamed (see assets/audio/adhan/README.md for provenance).
+  # Downloaded Quran audio (surah_audio_download_service.dart) plays
+  # from a local file too, once saved — audioplayers itself never
+  # makes a network call either way.
   audioplayers: ^5.2.1
   cryptography: ^2.9.0
   share_plus: ^12.0.2
   path_provider: ^2.1.6
+
+  # This app's one and only network-capable feature: optional,
+  # user-initiated Quran audio downloads (see
+  # surah_audio_download_service.dart and CLAUDE.md's Non-Negotiable
+  # Architecture section for the full scoping decision).
+  http: ^1.2.0
 
   # On-device text-to-speech (Android TextToSpeech / iOS
   # AVSpeechSynthesizer) for reading Azkar/Dua English translations

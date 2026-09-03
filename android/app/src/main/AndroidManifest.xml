@@ -32,6 +32,16 @@
          not enable anything by itself; the user still has to accept
          the system dialog. -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <!-- 2026-09-03: this app's first and only network-capable feature —
+         optional, user-initiated Quran audio downloads for surahs
+         outside the bundled Juz Amma/curated set (see
+         surah_audio_download_service.dart). Used only for that; no
+         other feature in this app makes network calls. Every download
+         is triggered by an explicit tap on a download icon, never
+         automatic. See CLAUDE.md's Non-Negotiable Architecture section
+         for the full scoping decision. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:label="noor"
         android:name="${applicationName}"
