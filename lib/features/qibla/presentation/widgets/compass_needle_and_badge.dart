@@ -14,12 +14,23 @@
 // is restored here, now scoped to just this rotating layer via its
 // own RepaintBoundary so the static rings/label beneath never need to
 // repaint alongside it either.
+//
+// 2026-09-03: the needle switched from a CustomPainter (Canvas/Path
+// draw calls issued fresh every frame) to a pre-rendered static PNG
+// (scripts/gen_qibla_needle.js) rotated via plain Transform.rotate —
+// every version of the CustomPainter needle (original, jeweled-star,
+// simplified) reproduced the same blank/collapse rendering glitch on
+// the test device, tracking with draw-call count rather than any one
+// shape's complexity. A static image rotated by the compositor is a
+// GPU texture-rotate, not a redraw, which is the actual thing being
+// tested here — see CLAUDE.md's log for the live pixel-diffed burst
+// result. The Kaaba badge still uses its own CustomPainter (untouched,
+// out of scope for this pass) since the request targeted the needle.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../../../core/utils/angle_math.dart';
-import 'compass_needle_painter.dart';
 import 'kaaba_badge_painter.dart';
 
 class CompassNeedleAndBadge extends StatefulWidget {
@@ -29,7 +40,6 @@ class CompassNeedleAndBadge extends StatefulWidget {
     required this.targetRotationDegrees,
     required this.alpha,
     required this.locked,
-    required this.cyan,
     required this.gold,
   });
 
@@ -37,7 +47,6 @@ class CompassNeedleAndBadge extends StatefulWidget {
   final double targetRotationDegrees;
   final double alpha;
   final bool locked;
-  final Color cyan;
   final Color gold;
 
   @override
@@ -77,11 +86,12 @@ class _CompassNeedleAndBadgeState extends State<CompassNeedleAndBadge> with Sing
         children: [
           Transform.rotate(
             angle: angle,
-            child: SizedBox(
-              width: widget.diameter,
-              height: widget.diameter,
-              child: CustomPaint(
-                painter: CompassNeedlePainter(alpha: widget.alpha, locked: widget.locked, cyan: widget.cyan, gold: widget.gold),
+            child: Opacity(
+              opacity: widget.alpha,
+              child: Image.asset(
+                widget.locked ? 'assets/qibla/needle_gold.png' : 'assets/qibla/needle_cyan.png',
+                width: widget.diameter,
+                height: widget.diameter,
               ),
             ),
           ),

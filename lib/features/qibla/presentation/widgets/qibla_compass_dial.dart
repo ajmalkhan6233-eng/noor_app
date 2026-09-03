@@ -65,7 +65,6 @@ class QiblaCompassDial extends StatelessWidget {
             targetRotationDegrees: rotationDegrees,
             alpha: alpha,
             locked: locked,
-            cyan: colors.accentSecondary,
             gold: colors.gold,
           ),
         ],
