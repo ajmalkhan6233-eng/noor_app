@@ -9,14 +9,19 @@
 // drawing sidesteps that whole class of bug rather than risking a
 // repeat of it in the redesigned dial.
 //
-// No real Shader/Gradient/MaskFilter.blur anywhere in this file —
-// 2026-08-30's gradient+blurred-glow version of this exact needle
-// reproduced the same rendering glitch on-device, worse than the flat
-// version ever did. The 2026-09-03 jeweled-star restyle still fakes a
-// gold-to-bronze shade and a glowing jewel centre, but only via
-// layered flat-color facets/concentric circles — visually close to a
-// gradient/glow without the technique that's already confirmed to
-// break rendering here.
+// 2026-09-03: the jeweled-star version of this needle (multiple gold/
+// bronze facets, a stroked cyan edge, three concentric jewel circles —
+// ~12 draw calls per frame) reproduced the SAME blank/near-invisible
+// rendering glitch live, confirmed via a pixel-diffed screenshot burst
+// (4 of 8 frames collapsed to a tiny speck, phone stationary). The
+// earlier 2026-08-30 fix (flat colors, no gradient/blur) wasn't
+// enough on its own this time — the glitch tracks with how many draw
+// calls this needle makes per frame, not just shader use. Simplified
+// back down hard: one solid-fill long point, one plain single-color
+// cross accent (two lines, not filled facets), one solid-fill jewel
+// dot — 4 draw calls total, close to the original two-triangle
+// needle's footprint, the configuration already proven stable. Still
+// flat colors only, still no Shader/Gradient/MaskFilter.blur anywhere.
 
 import 'package:flutter/material.dart';
 
@@ -27,81 +32,53 @@ class CompassNeedlePainter extends CustomPainter {
   /// same meaning as the previous needle widget's `dimmed` flag.
   final double alpha;
 
-  /// Reuses `QiblaState.isLocked` (already "within a few degrees of
-  /// true qibla") as the alignment-brighten signal — there's no finer-
-  /// grained closeness value on `QiblaState` today, so this stays
-  /// binary rather than inventing a new continuous field for it.
+  /// Brightens the needle slightly when aligned — reuses
+  /// `QiblaState.isLocked` (already "within a few degrees of true
+  /// qibla"); there's no finer-grained closeness value on `QiblaState`
+  /// today, so this stays binary.
   final bool locked;
   final Color cyan;
   final Color gold;
 
-  static const _bronze = Color(0xFF7A4A12);
-
   @override
   void paint(Canvas canvas, Size size) {
-    final glowBoost = locked ? 1.0 : 0.0;
+    final color = locked ? gold : cyan;
     final center = Offset(size.width / 2, size.height / 2);
-    final longTip = -size.height / 2 + 10;
-    final crossReach = size.height * 0.16;
+    final tipY = -size.height / 2 + 12;
+    final crossReach = size.height * 0.14;
 
     canvas.save();
     canvas.translate(center.dx, center.dy);
 
-    // Long point (toward the bearing) — outer gold facet, inner bronze
-    // facet drawn smaller so the flat colors read as a gold-to-bronze
-    // shade toward the centre.
-    _drawKitePoint(canvas, Offset(0, longTip), 9, gold.withValues(alpha: alpha));
-    _drawKitePoint(canvas, Offset(0, longTip * 0.55), 5, _bronze.withValues(alpha: alpha * 0.9));
+    // Long point, toward the bearing.
+    final needlePath = Path()
+      ..moveTo(0, 0)
+      ..lineTo(-7, 0)
+      ..lineTo(0, tipY)
+      ..lineTo(7, 0)
+      ..close();
+    canvas.drawPath(needlePath, Paint()..color = color.withValues(alpha: alpha));
 
-    // Short cross-points, star-style: perpendicular pair + a shorter
-    // tail, all sharing the same gold/bronze facet treatment at a
-    // smaller scale.
-    for (final dir in const [Offset(1, 0), Offset(-1, 0), Offset(0, 1)]) {
-      final tip = dir * crossReach;
-      _drawKitePoint(canvas, tip, 5, gold.withValues(alpha: alpha * 0.85));
-      _drawKitePoint(canvas, tip * 0.5, 3, _bronze.withValues(alpha: alpha * 0.8));
-    }
+    // Tail.
+    final tailPath = Path()
+      ..moveTo(0, 0)
+      ..lineTo(0, size.height / 2 - 20)
+      ..lineTo(-5, 0)
+      ..close();
+    canvas.drawPath(tailPath, Paint()..color = const Color(0xFF3B3C42).withValues(alpha: 0.55 * alpha));
 
-    // Cyan inner-glow edge along the long point — a thin flat-color
-    // stroke, not a blurred shader, tracing just inside the gold facet.
-    final edgeGlow = Path()
-      ..moveTo(0, longTip * 0.85)
-      ..lineTo(-4, 0)
-      ..moveTo(0, longTip * 0.85)
-      ..lineTo(4, 0);
-    canvas.drawPath(
-      edgeGlow,
-      Paint()
-        ..color = cyan.withValues(alpha: alpha * (0.35 + 0.25 * glowBoost))
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4,
-    );
+    // Short cross-points — plain strokes, not filled facets, to keep
+    // the star silhouette without extra fill draw calls.
+    final crossStroke = Paint()
+      ..color = gold.withValues(alpha: alpha * 0.8)
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(Offset(-crossReach, 0), Offset(crossReach, 0), crossStroke);
 
-    // Glowing jewel pivot — concentric flat-color circles standing in
-    // for a radial-gradient glow, brightest at the core.
-    final jewelAlpha = alpha * (0.85 + 0.15 * glowBoost);
-    canvas.drawCircle(Offset.zero, 8 + 2 * glowBoost, Paint()..color = gold.withValues(alpha: jewelAlpha * 0.25));
-    canvas.drawCircle(Offset.zero, 5, Paint()..color = _bronze.withValues(alpha: jewelAlpha * 0.7));
-    canvas.drawCircle(Offset.zero, 2.4, Paint()..color = cyan.withValues(alpha: jewelAlpha));
+    // Jewel pivot — a single solid dot, no concentric glow layers.
+    canvas.drawCircle(Offset.zero, 3, Paint()..color = gold.withValues(alpha: alpha));
 
     canvas.restore();
-  }
-
-  /// A small elongated kite/diamond — the repeated facet shape used for
-  /// every point of the star (long bearing point and the shorter
-  /// cross-points alike), just at different scales.
-  void _drawKitePoint(Canvas canvas, Offset tip, double halfWidth, Color color) {
-    final perp = Offset(-tip.dy, tip.dx);
-    final perpLen = perp.distance;
-    if (perpLen == 0) return;
-    final side = perp / perpLen * halfWidth;
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(side.dx, side.dy)
-      ..lineTo(tip.dx, tip.dy)
-      ..lineTo(-side.dx, -side.dy)
-      ..close();
-    canvas.drawPath(path, Paint()..color = color);
   }
 
   @override
