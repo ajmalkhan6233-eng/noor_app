@@ -7,45 +7,60 @@
 // per the approved mockup: QiblaCompassDial replaces the old plain
 // QiblaNeedle, and a QiblaAlignedPill (not a dialog) shows/hides with
 // the same lock signal.
+//
+// 2026-09-02: self-contained BlocConsumer instead of taking `state` as
+// a constructor prop. QiblaScreen's outer BlocBuilder now has a
+// buildWhen that ignores raw sensor churn (headingDegrees/tiltX/tiltY)
+// so the rest of the screen (route card, calibration banner, caption)
+// stops rebuilding on every compass tick — see qibla_screen.dart. This
+// widget is the one place that still needs to react to every heading
+// reading, so it reads QiblaCubit directly with its own narrow
+// buildWhen, decoupled from the outer rebuild entirely. The lock-burst
+// side effect moved from didUpdateWidget to a BlocListener (listenWhen
+// on isLocked) since there's no more `state` prop to diff against.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/haptics/haptic_service.dart';
 import '../../../../core/sensors/compass_reading.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../logic/qibla_cubit/qibla_cubit.dart';
 import '../../logic/qibla_cubit/qibla_state.dart';
 import 'qibla_aligned_pill.dart';
 import 'qibla_compass_dial.dart';
 import 'qibla_heading_readout.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
-class QiblaCompassArea extends StatefulWidget {
-  const QiblaCompassArea({super.key, required this.state});
+class QiblaCompassArea extends StatelessWidget {
+  const QiblaCompassArea({super.key});
 
-  final QiblaState state;
-
-  @override
-  State<QiblaCompassArea> createState() => _QiblaCompassAreaState();
-}
-
-class _QiblaCompassAreaState extends State<QiblaCompassArea> {
   static const _haptics = HapticService();
 
   @override
-  void didUpdateWidget(QiblaCompassArea oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.state.isLocked && !oldWidget.state.isLocked) {
-      // Smaller, calmer than the tasbih milestone burst — a quiet
-      // confirmation, not a celebration.
-      ParticleBurst.play(context, intensity: 0.35);
-      _haptics.tap();
-    }
+  Widget build(BuildContext context) {
+    return BlocConsumer<QiblaCubit, QiblaState>(
+      listenWhen: (previous, current) => previous.isLocked != current.isLocked,
+      listener: (context, state) {
+        if (state.isLocked) {
+          // Smaller, calmer than the tasbih milestone burst — a quiet
+          // confirmation, not a celebration.
+          ParticleBurst.play(context, intensity: 0.35);
+          _haptics.tap();
+        }
+      },
+      buildWhen: (previous, current) =>
+          previous.headingDegrees != current.headingDegrees ||
+          previous.bearingDegrees != current.bearingDegrees ||
+          previous.compassAccuracy != current.compassAccuracy ||
+          previous.displayAccuracy != current.displayAccuracy ||
+          previous.compassStalled != current.compassStalled,
+      builder: (context, state) => _buildContent(context, state),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final state = widget.state;
+  Widget _buildContent(BuildContext context, QiblaState state) {
     if (state.displayAccuracy == CompassAccuracy.unavailable) {
       return Center(
         child: Padding(

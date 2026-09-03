@@ -2,6 +2,21 @@
 //
 // Presentation only dispatches `start()`/`setManualLocation()` and
 // reads state. Sensor-stream wiring lives in qibla_sensor_binder.dart.
+//
+// 2026-09-03: gyroscope fusion (CompassService's own accelerometer+
+// magnetometer+gyroscope complementary filter) disabled here in
+// production — live on-device testing right after shipping it reported
+// worse flickering than before and the needle settling on a visibly
+// wrong bearing, not fixed by figure-eight calibration. The yaw-rate
+// sign/axis derivation was cross-checked against the already-verified
+// static heading formula in a unit test, but that only proves internal
+// self-consistency, not correctness against this device's real
+// gyroscope axis convention — unlike accelerometer/magnetometer, which
+// had prior working code in this app to validate against, gyroscope
+// had none. Falling back to the accel+magnetometer-only heading
+// (CompassService's behavior with no gyroscope stream, unchanged from
+// earlier tonight) until the sign issue is actually diagnosed on a
+// real device, not guessed at again blind.
 
 import 'dart:async';
 
@@ -26,7 +41,8 @@ class QiblaCubit extends Cubit<QiblaState> {
     TiltService? tiltService,
     SettingsRepository? settingsRepository,
   }) : _locationService = locationService ?? const LocationService(),
-       _compassService = compassService ?? CompassService(),
+       _compassService =
+           compassService ?? CompassService(gyroscopeProvider: () => null),
        _tiltService = tiltService ?? TiltService(),
        _settingsRepository = settingsRepository ?? SettingsRepository(),
        super(const QiblaState());
