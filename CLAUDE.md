@@ -2407,3 +2407,83 @@ These apply to every future session, not just the current queue file. If a task 
 ## Delivery
 - Push to a feature branch / open a PR rather than committing straight to `main`, so changes are reviewable before they land.
 - When a batch of tasks finishes, summarize what actually changed (files touched, what each change does) rather than a bare "done."
+
+## Session — 2026-09-03: gyroscope fusion added; Qibla needle confirmed frozen live, root cause still open
+
+### Qibla: gyroscope fusion added to CompassService (`7d637ab`)
+Direct request after live testing showed the accel+mag-only heading
+(from the earlier `flutter_compass` -> `sensors_plus` swap, same day)
+flickers/jumps under real handheld motion — every reading depended on
+the instantaneous accelerometer sample alone, and any hand tremor
+corrupted that instant's "which way is gravity" estimate.
+`CompassService` now runs a complementary filter: heading is integrated
+from the gyroscope's angular velocity between magnetometer updates,
+with the magnetometer still gently correcting long-run drift. Falls
+back to the exact previous accel+mag-only behavior with no gyroscope
+stream (verified by a dedicated no-gyro test case). The yaw-rate sign
+was derived by hand (documented in `_yawRateDegPerSec`'s doc comment)
+and cross-checked in `compass_service_gyro_test.dart` against the
+already-verified static heading formula — rotating a raw magnetometer
+reading by a known angle must match integrating the equivalent
+gyroscope reading over time by the same amount. 297/297 tests passing,
+`flutter analyze` clean.
+
+### Qibla needle — objectively confirmed frozen live, not fixed
+Installed the gyroscope-fusion build and had Aj physically rotate the
+phone in hand while 6 screenshots were captured over ~6 seconds. Did
+not just eyeball the result: wrote a small dependency-free PNG decoder
+to pixel-diff the needle's position across all 6 frames. **The needle
+position is bit-for-bit identical in every frame** (same pixel range,
+same average x-position) — not subtly moving, not flickering, not
+spinning, not stuck loading. Frozen at a single fixed angle,
+unresponsive to real physical rotation. `adb logcat` showed no crash,
+no exception, nothing gyroscope/sensor-related.
+
+This is very likely NOT caused by tonight's gyroscope-fusion change —
+`qibla_screen.dart` and `qibla_compass_area.dart` already had
+substantial **uncommitted, in-progress changes sitting in the working
+tree before tonight's session touched anything** (dated 2026-09-02 in
+their own header comments, not authored tonight): a
+`BlocBuilder`/`BlocConsumer` rebuild-scoping refactor splitting the
+outer screen rebuild from `QiblaCompassArea`'s own narrower
+`buildWhen`, meant to stop the whole screen repainting on every raw
+sensor tick. Every debug build installed and live-tested tonight
+(including the one used for this check) silently included this
+unfinished work, since building from the working tree picks up
+uncommitted changes same as committed ones. Read through both files —
+the wiring looks internally consistent (rotation flows
+`QiblaState.needleRotationDegrees` -> `QiblaCompassDial` ->
+`CompassNeedleAndBadge`'s own `Ticker`, no rotation freeze gated on
+`dimmed`/accuracy anywhere in that chain) — but this is **not
+confirmed** as the root cause, just the leading suspect, because there
+wasn't time tonight to bisect with vs. without that WIP change to
+prove it.
+
+**Next session should start here**: first try reverting/stashing just
+those two uncommitted files and re-testing live before touching
+anything else — if the needle moves again, that confirms the
+rebuild-scoping refactor (not the gyroscope work) is the actual cause,
+and it needs its own fix rather than blaming sensors_plus. If the
+needle is still frozen with those files reverted, the bug is
+elsewhere — check whether `sensors_plus`'s magnetometer/gyroscope
+streams are producing any events at all on this specific device (it's
+possible, though unconfirmed, that this budget MIUI device either
+lacks a gyroscope or restricts background sensor access) before
+assuming the fusion code itself is broken, since it already passed
+independent-cross-check unit tests.
+
+### Known issue, not fixed tonight: Azkar/Dua content gap
+Real count, parsed directly from the bundled JSON assets (not
+estimated): **114 items** across 11 categories. Aj asked for 150+ —
+that's roughly 36 items short. Needs more sourced entries later, each
+requiring a real Hisn al-Muslim source fetch and character-by-character
+diff per `noor-religious-text-verification` — not rushed.
+
+### Known issue, not fixed tonight: fresh-install daily checklist pre-checked
+Reproduced again live tonight, same pattern as the 2026-08-30 log
+entry: on a genuinely fresh install, with a real district/GPS location
+just set, Home's "Today's Spiritual Goals" showed Fajr/Dhuhr/Asr/Maghrib
+already checked before any had occurred (observed at 03:33 with Fajr
+at 04:52, not yet due). Not investigated further tonight — noting what
+was observed for whoever picks this up next, per the existing
+2026-08-30 entry's own unresolved MIUI-backup-path theory.
