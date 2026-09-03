@@ -91,6 +91,7 @@ void main() {
           const AppSettings(selectedDistrict: 'Kandy'),
         ),
         compassService: CompassService(
+        gyroscopeProvider: () => null,
           accelerometerProvider: () => controllers.accel.stream,
           magnetometerProvider: () => controllers.mag.stream,
         ),
@@ -118,6 +119,7 @@ void main() {
         locationService: const _FakeLocationService(null),
         settingsRepository: _FakeSettingsRepository(const AppSettings()),
         compassService: CompassService(
+        gyroscopeProvider: () => null,
           accelerometerProvider: () => controllers.accel.stream,
           magnetometerProvider: () => controllers.mag.stream,
         ),
@@ -151,6 +153,7 @@ void main() {
           const AppSettings(selectedDistrict: 'Kandy'),
         ),
         compassService: CompassService(
+        gyroscopeProvider: () => null,
           accelerometerProvider: () => accelController.stream,
           magnetometerProvider: () => magController.stream,
         ),

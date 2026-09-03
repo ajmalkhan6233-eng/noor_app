@@ -59,6 +59,7 @@ void main() {
           locationService: const _FakeLocationService(_riyadh),
           settingsRepository: _FakeSettingsRepository(const AppSettings()),
           compassService: CompassService(
+        gyroscopeProvider: () => null,
             accelerometerProvider: () => accelController.stream,
             magnetometerProvider: () => magController.stream,
           ),
@@ -91,6 +92,7 @@ void main() {
         locationService: const _FakeLocationService(_riyadh),
         settingsRepository: _FakeSettingsRepository(const AppSettings()),
         compassService: CompassService(
+        gyroscopeProvider: () => null,
           accelerometerProvider: () => null,
           magnetometerProvider: () => null,
         ),

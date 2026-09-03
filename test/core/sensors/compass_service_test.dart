@@ -30,6 +30,7 @@ void main() {
   group('CompassService.readings', () {
     test('reports unavailable when there is no accelerometer stream at all', () async {
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => null,
         magnetometerProvider: () => Stream.value(_magFor(0)),
       );
@@ -40,6 +41,7 @@ void main() {
 
     test('reports unavailable when there is no magnetometer stream at all', () async {
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => Stream.value(_flatAccel()),
         magnetometerProvider: () => null,
       );
@@ -53,6 +55,7 @@ void main() {
       'accelerometer sample has ever been paired with it',
       () async {
         final service = CompassService(
+        gyroscopeProvider: () => null,
           accelerometerProvider: () => const Stream.empty(),
           magnetometerProvider: () => Stream.value(_magFor(90)),
         );
@@ -66,6 +69,7 @@ void main() {
       final accelController = StreamController<AccelerometerEvent>();
       final magController = StreamController<MagnetometerEvent>();
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => accelController.stream,
         magnetometerProvider: () => magController.stream,
       );
@@ -100,6 +104,7 @@ void main() {
 
     test('a typical Earth-range field magnitude classifies as good', () async {
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => Stream.value(_flatAccel()),
         magnetometerProvider: () => Stream.value(_magFor(90, magnitude: 45)),
       );
@@ -110,6 +115,7 @@ void main() {
 
     test('a field magnitude just outside the typical range classifies as low', () async {
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => Stream.value(_flatAccel()),
         magnetometerProvider: () => Stream.value(_magFor(90, magnitude: 75)),
       );
@@ -119,6 +125,7 @@ void main() {
 
     test('a far-outside-range field magnitude classifies as uncalibrated', () async {
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => Stream.value(_flatAccel()),
         magnetometerProvider: () => Stream.value(_magFor(90, magnitude: 5)),
       );
@@ -130,6 +137,7 @@ void main() {
       final accelController = StreamController<AccelerometerEvent>();
       final magController = StreamController<MagnetometerEvent>();
       final service = CompassService(
+        gyroscopeProvider: () => null,
         smoothingFactor: 0.5,
         accelerometerProvider: () => accelController.stream,
         magnetometerProvider: () => magController.stream,
@@ -157,6 +165,7 @@ void main() {
       final accelController = StreamController<AccelerometerEvent>();
       final magController = StreamController<MagnetometerEvent>();
       final service = CompassService(
+        gyroscopeProvider: () => null,
         accelerometerProvider: () => accelController.stream,
         magnetometerProvider: () => magController.stream,
       );

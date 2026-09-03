@@ -11,6 +11,7 @@ import 'package:noor/features/settings/data/settings_repository.dart';
 // No real magnetometer/accelerometer platform channel in a unit test —
 // both services already support an injectable, empty event source.
 CompassService _noCompass() => CompassService(
+        gyroscopeProvider: () => null,
   accelerometerProvider: () => null,
   magnetometerProvider: () => null,
 );

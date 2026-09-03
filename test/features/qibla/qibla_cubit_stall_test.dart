@@ -77,6 +77,7 @@ void main() {
           ),
           settingsRepository: _FakeSettingsRepository(const AppSettings()),
           compassService: CompassService(
+        gyroscopeProvider: () => null,
             accelerometerProvider: () => accelController.stream,
             magnetometerProvider: () => magController.stream,
           ),
@@ -122,6 +123,7 @@ void main() {
         ),
         settingsRepository: _FakeSettingsRepository(const AppSettings()),
         compassService: CompassService(
+        gyroscopeProvider: () => null,
           accelerometerProvider: () => accelController.stream,
           magnetometerProvider: () => magController.stream,
         ),
