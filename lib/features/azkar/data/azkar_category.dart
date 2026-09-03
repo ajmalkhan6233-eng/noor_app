@@ -17,6 +17,11 @@
 /// close real gaps flagged in assets/azkar/README.md's own audit note
 /// — same MIT-licensed asellam/HisnElMuslim source, extracted the
 /// same programmatic way, see azkar_supplementary_import_4.dart.
+///
+/// [wakingUp], [home], [clothing], [toilet], [wudu], [mosque], [anger],
+/// [fear], and [sneezing] (2026-09-03) close nine more real gaps — same
+/// source, same programmatic extraction, see
+/// azkar_supplementary_import_5.dart.
 enum AzkarCategory {
   morning,
   evening,
@@ -33,6 +38,15 @@ enum AzkarCategory {
   weather,
   foodFasting,
   marriage,
+  wakingUp,
+  home,
+  clothing,
+  toilet,
+  wudu,
+  mosque,
+  anger,
+  fear,
+  sneezing,
 }
 
 extension AzkarCategoryDb on AzkarCategory {
@@ -68,6 +82,24 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'food_fasting';
       case AzkarCategory.marriage:
         return 'marriage';
+      case AzkarCategory.wakingUp:
+        return 'waking_up';
+      case AzkarCategory.home:
+        return 'home';
+      case AzkarCategory.clothing:
+        return 'clothing';
+      case AzkarCategory.toilet:
+        return 'toilet';
+      case AzkarCategory.wudu:
+        return 'wudu';
+      case AzkarCategory.mosque:
+        return 'mosque';
+      case AzkarCategory.anger:
+        return 'anger';
+      case AzkarCategory.fear:
+        return 'fear';
+      case AzkarCategory.sneezing:
+        return 'sneezing';
     }
   }
 
@@ -103,6 +135,24 @@ extension AzkarCategoryDb on AzkarCategory {
         return 'Food & Fasting';
       case AzkarCategory.marriage:
         return 'Marriage';
+      case AzkarCategory.wakingUp:
+        return 'Waking Up';
+      case AzkarCategory.home:
+        return 'Home';
+      case AzkarCategory.clothing:
+        return 'Clothing';
+      case AzkarCategory.toilet:
+        return 'Toilet';
+      case AzkarCategory.wudu:
+        return 'Wudu';
+      case AzkarCategory.mosque:
+        return 'Mosque';
+      case AzkarCategory.anger:
+        return 'Anger';
+      case AzkarCategory.fear:
+        return 'Fear';
+      case AzkarCategory.sneezing:
+        return 'Sneezing';
     }
   }
 }

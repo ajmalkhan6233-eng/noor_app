@@ -17,12 +17,16 @@ Six files:
 - `hisn-supplementary-4.json` — Arabic text and source citation for
   funeral, weather, food_fasting, and marriage (see its own section
   below; same no-translation situation as the files above).
+- `hisn-supplementary-5.json` — Arabic text and source citation for
+  waking_up, home, clothing, toilet, wudu, mosque, anger, fear, and
+  sneezing (see its own section below; same no-translation situation
+  as the files above).
 
 `AzkarImportService` SHA-256-verifies the first two before importing,
 and separately (via `azkar_supplementary_import.dart`,
 `azkar_supplementary_import_2.dart`, `azkar_supplementary_import_3.dart`,
-and `azkar_supplementary_import_4.dart`) SHA-256-verifies the rest
-before backfilling them.
+`azkar_supplementary_import_4.dart`, and `azkar_supplementary_import_5.dart`)
+SHA-256-verifies the rest before backfilling them.
 
     adhkar-ar.json             sha256: 9e0dd6a10d26ddc0e2b36b94098c287644996c7f81b707f8ad24f1ce40b8c821
     adhkar-en.json             sha256: eec053c4138bed6f3ec7dc3c0e06e926a935dca24663788e5b97a0bfb5f71896
@@ -30,6 +34,7 @@ before backfilling them.
     hisn-supplementary-2.json  sha256: fbd0674bfbce9cde4fa09819c3224307c5b36439837dadeeed4b4df95632c47f
     hisn-supplementary-3.json  sha256: 457a887f2da5da4d32e8dee7d28cdad132038f740b031976262bdeec2c290ea8
     hisn-supplementary-4.json  sha256: d34174c694cda975660f83b1dcb2f70767ebf4230779edacfd2257e733444164
+    hisn-supplementary-5.json  sha256: e056cca9f292f68be05acd7f17179ed55ab38d05683527e7b9fdc889275446fe
 
 ## Source (morning / evening)
 
@@ -152,6 +157,41 @@ this file's own earlier audit note flagged as missing:
 Same extraction method as every batch above: downloaded fresh,
 `Text`/`Reference` fields copied verbatim into `content`/`source`,
 never hand-typed. No English translation exists for these entries.
+
+## Source (waking_up / home / clothing / toilet / wudu / mosque / anger / fear / sneezing)
+
+**Repository/file:** same `asellam/HisnElMuslim` `hisn.json` as above,
+re-downloaded fresh this session (2026-09-03) rather than reused from
+any cache, MIT licence re-confirmed. Found by listing every one of the
+133 chapters programmatically and checking each against what this app
+already covers — not assumed complete from memory:
+
+- `waking_up` ← chapter 1: "أَذْكَارُ الِاسْتِيقَاظِ مِنَ النَّوْمِ"
+  (waking from sleep) — 4 items. A real gap: the app already had
+  `sleep` (going to sleep) but nothing for waking up.
+- `clothing` ← chapters 2-5: dressing, putting on new clothes (two
+  variants), and undressing — 5 items.
+- `toilet` ← chapters 6-7: entering and leaving the toilet — 2 items.
+- `wudu` ← chapters 8-9: before and after ablution — 4 items.
+- `home` ← chapters 10-11: leaving and entering the house — 3 items.
+- `mosque` ← chapters 12-15: going to the mosque, entering it, leaving
+  it, and the adhan — 12 items.
+- `anger` ← chapter 83: "دُعَاءُ الغَضَبِ" (dua for anger) — 1 item.
+- `fear` ← chapters 31, 93, 127: fright during sleep/loneliness, fear
+  of shirk, and what's said at a sudden fright — 3 items. Deliberately
+  distinct from the existing `distress` category (anxiety/sorrow/
+  hardship), not a duplicate of it.
+- `sneezing` ← chapters 78-79: the sneezer's own dua, and what's said
+  to a non-Muslim who sneezes and praises God — 2 items.
+
+36 items total. Extraction method identical to every batch above:
+the source file was parsed programmatically, chapter titles printed
+and visually cross-checked against the full 133-chapter list before
+any file was written, and each item's `Text`/`Reference` fields copied
+directly into `content`/`source` — never hand-typed, never
+paraphrased. Checked for zero text overlap against every prior batch
+programmatically before writing the file. No English translation
+exists for these entries either.
 
 ## Coverage
 

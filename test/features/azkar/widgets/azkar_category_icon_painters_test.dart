@@ -6,6 +6,8 @@ import 'package:noor/features/azkar/data/azkar_category.dart';
 import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_a.dart';
 import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_b.dart';
 import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_c.dart';
+import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_d.dart';
+import 'package:noor/features/azkar/presentation/widgets/azkar_category_icon_painters_e.dart';
 
 CustomPainter _painterFor(AzkarCategory category) {
   const color = Colors.amber;
@@ -25,6 +27,15 @@ CustomPainter _painterFor(AzkarCategory category) {
     AzkarCategory.weather => AzkarWeatherIconPainter(color),
     AzkarCategory.foodFasting => AzkarFoodFastingIconPainter(color),
     AzkarCategory.marriage => AzkarMarriageIconPainter(color),
+    AzkarCategory.wakingUp => AzkarWakingUpIconPainter(color),
+    AzkarCategory.home => AzkarHomeIconPainter(color),
+    AzkarCategory.clothing => AzkarClothingIconPainter(color),
+    AzkarCategory.toilet => AzkarToiletIconPainter(color),
+    AzkarCategory.wudu => AzkarWuduIconPainter(color),
+    AzkarCategory.mosque => AzkarMosqueIconPainter(color),
+    AzkarCategory.anger => AzkarAngerIconPainter(color),
+    AzkarCategory.fear => AzkarFearIconPainter(color),
+    AzkarCategory.sneezing => AzkarSneezingIconPainter(color),
   };
 }
 

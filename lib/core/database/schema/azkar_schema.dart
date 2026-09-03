@@ -63,5 +63,7 @@ const List<String> azkarSeedStatements = [
       "('illness', 6), ('distress', 7), ('debt', 8), "
       "('visiting_grave', 9), ('visiting_sick', 10), "
       "('funeral', 11), ('weather', 12), ('food_fasting', 13), "
-      "('marriage', 14)",
+      "('marriage', 14), ('waking_up', 15), ('home', 16), "
+      "('clothing', 17), ('toilet', 18), ('wudu', 19), "
+      "('mosque', 20), ('anger', 21), ('fear', 22), ('sneezing', 23)",
 ];

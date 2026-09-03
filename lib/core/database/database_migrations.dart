@@ -27,7 +27,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 11;
+const int latestSchemaVersion = 12;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -165,5 +165,19 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       "('marriage', 14)",
     );
   }
-  // Next migration: add `if (oldVersion < 12) { ... }` here.
+  if (oldVersion < 12) {
+    // Nine more azkar categories — waking up, home, clothing, toilet,
+    // wudu, mosque, anger, fear, sneezing — closing real gaps found
+    // while auditing the source dataset's full 133-chapter coverage.
+    // Item-level import is azkar_supplementary_import_5.dart's job;
+    // this only adds the rows the category_id foreign key will point
+    // at.
+    await db.execute(
+      "INSERT OR IGNORE INTO azkar_categories (category_key, display_order) VALUES "
+      "('waking_up', 15), ('home', 16), ('clothing', 17), "
+      "('toilet', 18), ('wudu', 19), ('mosque', 20), ('anger', 21), "
+      "('fear', 22), ('sneezing', 23)",
+    );
+  }
+  // Next migration: add `if (oldVersion < 13) { ... }` here.
 }

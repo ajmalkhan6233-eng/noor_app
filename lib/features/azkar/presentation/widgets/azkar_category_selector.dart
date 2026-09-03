@@ -18,6 +18,8 @@ import '../../../../core/constants/app_color_tokens.dart';
 import 'azkar_category_icon_painters_a.dart';
 import 'azkar_category_icon_painters_b.dart';
 import 'azkar_category_icon_painters_c.dart';
+import 'azkar_category_icon_painters_d.dart';
+import 'azkar_category_icon_painters_e.dart';
 
 extension _AzkarCategoryIcon on AzkarCategory {
   CustomPainter painter(Color color) {
@@ -37,6 +39,15 @@ extension _AzkarCategoryIcon on AzkarCategory {
       AzkarCategory.weather => AzkarWeatherIconPainter(color),
       AzkarCategory.foodFasting => AzkarFoodFastingIconPainter(color),
       AzkarCategory.marriage => AzkarMarriageIconPainter(color),
+      AzkarCategory.wakingUp => AzkarWakingUpIconPainter(color),
+      AzkarCategory.home => AzkarHomeIconPainter(color),
+      AzkarCategory.clothing => AzkarClothingIconPainter(color),
+      AzkarCategory.toilet => AzkarToiletIconPainter(color),
+      AzkarCategory.wudu => AzkarWuduIconPainter(color),
+      AzkarCategory.mosque => AzkarMosqueIconPainter(color),
+      AzkarCategory.anger => AzkarAngerIconPainter(color),
+      AzkarCategory.fear => AzkarFearIconPainter(color),
+      AzkarCategory.sneezing => AzkarSneezingIconPainter(color),
     };
   }
 }
