@@ -2594,3 +2594,45 @@ conclusion flipping from failure to success (and printing "Release
 signing configured from secrets.") is the confirmation this actually
 worked — re-check via the Actions API the same way this session did,
 don't just assume the paste was correct.
+
+### Daily-checklist-pre-checked bug — deeper source audit, no device this pass
+No phone connected this pass, so worked source-only per the standing
+rule (stated as such, not claimed live-verified). Re-audited the
+entire tracker path end to end looking for an app-code bug, since the
+MIUI-backup theory has stood unconfirmed for several sessions:
+`daily_goals_list.dart`'s gating (`enabled: !isToday || _hasOccurred`),
+`PrayerTrackerCubit.load()`/`togglePrayer()`, `PrayerTrackerRepository`
+(plain per-date-key SQL, no seeding), and
+`prayer_tracker_schema.dart`'s `CREATE TABLE` (no INSERT anywhere) —
+all clean. There is no code path in this feature that marks a prayer
+done other than a real user tap. This rules out an app-logic bug more
+thoroughly than any prior pass.
+
+**Real refinement of the MIUI theory, source-grounded, not guessed**:
+`SecurePassphraseService` (`lib/core/security/secure_passphrase_service.dart`)
+calls `flutter_secure_storage` with default Android options — the
+passphrase ciphertext sits in a SharedPreferences file, keyed by an
+Android-Keystore-backed AES key. Normally uninstalling an app clears
+its Keystore entries, so a reinstall should always mint a brand-new
+random passphrase, and any old encrypted DB file that somehow survived
+would fail to decrypt against it — not silently show stale data.
+Xiaomi/MIUI devices, however, have their own **Mi Cloud key-backup**
+feature that can restore Android-Keystore-backed secrets across a
+reinstall, independent of AOSP's `allowBackup` (already confirmed not
+the active path here, per the 2026-08-30 `dumpsys backup` finding). If
+that's active on this device, a reinstall reads back the *same*
+passphrase, decrypts the *same* old DB file, and reproduces exactly
+what's been observed.
+
+**Not implemented as a fix.** A real mitigation (detect a suspected
+cross-install restore and wipe/reset) has a genuine, real tradeoff:
+it would also defeat a legitimate user's real backup/restore on an
+actual phone swap, which some users may want to keep working. That's
+a product decision, not something to guess at unilaterally — flagging
+it here for Aj to decide rather than silently picking a side. If
+confirmed worth pursuing, the concrete next diagnostic step is: check
+whether the *same* passphrase value survives an `adb uninstall` +
+`adb install` cycle (read it via a temporary debug log on a debug
+build) — if it does, that's direct proof the Keystore entry itself is
+being restored, which would settle this conclusively without needing
+Mi Cloud settings screenshots.
