@@ -47,6 +47,18 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
   List<List<QuranAyah>> _pages = const [];
   bool _initialPageSet = false;
 
+  // Memoized the same way paginated_full_quran_text.dart's sibling
+  // fix is — see that file's header for the real bug this class of
+  // recompute-on-every-rebuild caused there. One surah's worth of
+  // measurement is cheap enough that it was never visibly a problem
+  // here, but re-measuring on every unrelated rebuild is still wasted
+  // work, and keeping both readers consistent avoids the same trap
+  // resurfacing if this surah reader is ever pointed at more text.
+  double? _paginatedWidth;
+  double? _paginatedHeight;
+  double? _paginatedFontScale;
+  int? _paginatedAyahCount;
+
   TextStyle _textStyle(BuildContext context) => TextStyle(
         fontFamily: AppTypography.arabicFamily,
         color: context.colors.ink,
@@ -61,12 +73,23 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
   }
 
   void _paginate(BoxConstraints constraints, BuildContext context) {
+    final unchanged = _paginatedWidth == constraints.maxWidth &&
+        _paginatedHeight == constraints.maxHeight &&
+        _paginatedFontScale == widget.fontScale &&
+        _paginatedAyahCount == widget.ayahs.length;
+    if (unchanged) return;
+
     _pages = splitIntoPages(
       ayahs: widget.ayahs,
       style: _textStyle(context),
       maxWidth: constraints.maxWidth,
       maxHeight: constraints.maxHeight,
     );
+    _paginatedWidth = constraints.maxWidth;
+    _paginatedHeight = constraints.maxHeight;
+    _paginatedFontScale = widget.fontScale;
+    _paginatedAyahCount = widget.ayahs.length;
+
     if (!_initialPageSet) {
       _initialPageSet = true;
       final target = widget.initialAyahNumber;

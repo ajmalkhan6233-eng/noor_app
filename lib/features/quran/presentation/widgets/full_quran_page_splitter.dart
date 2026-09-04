@@ -77,3 +77,13 @@ List<BookPage> splitBookIntoPages({
   }
   return pages;
 }
+
+/// Index of the page containing [surahId]/[ayahNumber], or -1 if not
+/// found (or either argument is null) — used to jump straight to a
+/// saved reading position instead of always opening at page 0.
+int findInitialPageIndex(List<BookPage> pages, int? surahId, int? ayahNumber) {
+  if (surahId == null || ayahNumber == null) return -1;
+  return pages.indexWhere(
+    (p) => p.surah.id == surahId && p.ayahs.any((a) => a.ayahNumber == ayahNumber),
+  );
+}

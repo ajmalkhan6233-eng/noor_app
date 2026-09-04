@@ -13,9 +13,9 @@ import '../../../../core/constants/app_typography.dart';
 import '../../data/quran_ayah.dart';
 import '../../data/quran_surah.dart';
 import 'continuous_surah_text.dart';
+import 'full_quran_page_header.dart';
 import 'full_quran_page_splitter.dart';
 import 'page_turn_transition.dart';
-import 'surah_audio_button.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class PaginatedFullQuranText extends StatefulWidget {
@@ -42,8 +42,7 @@ class PaginatedFullQuranText extends StatefulWidget {
   final int? playingSurahId;
   final ValueChanged<int> onToggleAudio;
 
-  /// Opens straight to the page containing this ayah (last-read
-  /// resume) instead of always starting at page 1.
+  /// Jumps straight to this ayah (last-read resume) instead of page 1.
   final int? initialSurahId;
   final int? initialAyahNumber;
 
@@ -55,6 +54,14 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   late final _controller = PageController(initialPage: 0);
   List<BookPage> _pages = const [];
   bool _initialPageSet = false;
+
+  // Memoized: repaginating the whole Quran on every rebuild (even a
+  // routine ReadingPositionTracker update) froze the UI thread for
+  // tens of seconds — the "gets stuck" bug found live 2026-09-04.
+  double? _paginatedWidth;
+  double? _paginatedHeight;
+  double? _paginatedFontScale;
+  int? _paginatedAyahCount;
 
   TextStyle _textStyle(BuildContext context) => TextStyle(
         fontFamily: AppTypography.arabicFamily,
@@ -70,6 +77,12 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   }
 
   void _paginate(BoxConstraints constraints, BuildContext context) {
+    final unchanged = _paginatedWidth == constraints.maxWidth &&
+        _paginatedHeight == constraints.maxHeight &&
+        _paginatedFontScale == widget.fontScale &&
+        _paginatedAyahCount == widget.ayahs.length;
+    if (unchanged) return;
+
     _pages = splitBookIntoPages(
       ayahs: widget.ayahs,
       surahs: widget.surahs,
@@ -77,40 +90,19 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
       maxWidth: constraints.maxWidth,
       maxHeight: constraints.maxHeight,
     );
+    _paginatedWidth = constraints.maxWidth;
+    _paginatedHeight = constraints.maxHeight;
+    _paginatedFontScale = widget.fontScale;
+    _paginatedAyahCount = widget.ayahs.length;
+
     if (_initialPageSet) return;
     _initialPageSet = true;
-    final surahId = widget.initialSurahId;
-    final ayahNumber = widget.initialAyahNumber;
-    if (surahId == null || ayahNumber == null) return;
-    final pageIndex = _pages.indexWhere(
-      (p) => p.surah.id == surahId && p.ayahs.any((a) => a.ayahNumber == ayahNumber),
-    );
+    final pageIndex = findInitialPageIndex(_pages, widget.initialSurahId, widget.initialAyahNumber);
     if (pageIndex > 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_controller.hasClients) _controller.jumpToPage(pageIndex);
       });
     }
-  }
-
-  Widget _pageHeader(BuildContext context, BookPage page) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              '${page.surah.id}. ${page.surah.displayName}',
-              style: AppTypography.sectionHeader(context.colors.sage).copyWith(color: context.colors.gold, fontSize: 20),
-            ),
-          ),
-          SurahAudioButton(
-            surahId: page.surah.id,
-            isPlaying: widget.playingSurahId == page.surah.id,
-            onToggle: () => widget.onToggleAudio(page.surah.id),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -133,7 +125,12 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (page.isFirstPageOfSurah) _pageHeader(context, page),
+                    if (page.isFirstPageOfSurah)
+                      FullQuranPageHeader(
+                        page: page,
+                        isPlaying: widget.playingSurahId == page.surah.id,
+                        onToggleAudio: () => widget.onToggleAudio(page.surah.id),
+                      ),
                     ContinuousSurahText(
                       ayahs: page.ayahs,
                       fontScale: widget.fontScale,
