@@ -15,7 +15,7 @@ import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
-import '../../qibla/presentation/qibla_screen.dart';
+import '../../qibla/presentation/qibla_coming_soon_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../../settings/presentation/support_developer_screen.dart';
@@ -32,15 +32,17 @@ class MoreScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final prayerCubit = context.read<PrayerCubit>();
     final tiles = <MoreTile>[
-      // Re-enabled 2026-09-01, direct request/decision, after the
-      // dial's rendering-glitch root cause was found and fixed
-      // (unthrottled sensor stream forcing repaints of the whole
-      // Stack — see compass_needle_and_badge.dart).
+      // Routed to the "coming soon" placeholder for this release
+      // (2026-09-04, direct request) — the compass dial has a real,
+      // unresolved GPU/compositor rendering glitch (see CLAUDE.md).
+      // QiblaScreen and all its sensor/rendering code are untouched;
+      // swap the builder back to `const QiblaScreen()` once it's
+      // actually fixed.
       MoreTile(
         icon: NoorIconType.qibla,
         color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
-        builder: (_) => const QiblaScreen(),
+        builder: (_) => const QiblaComingSoonScreen(),
       ),
       MoreTile(
         icon: NoorIconType.tasbih,
