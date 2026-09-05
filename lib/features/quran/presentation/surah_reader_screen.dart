@@ -11,6 +11,7 @@ import '../logic/quran_cubit/quran_state.dart';
 import 'widgets/paginated_surah_text.dart';
 import 'widgets/surah_audio_button.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
 
 /// Page-by-page view of one surah (2026-09-01: swipeable pages with a
 /// turning transition, replacing a single continuous scroll — see
@@ -88,9 +89,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (context, state) {
             if (state.currentSurahId != widget.surahId) {
-              return Center(
-                child: CircularProgressIndicator(color: context.colors.gold),
-              );
+              return const Center(child: DhikrLoadingIndicator());
             }
             final bookmarked = {
               for (final b in state.bookmarks)

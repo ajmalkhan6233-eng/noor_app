@@ -22,6 +22,7 @@ import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'widgets/paginated_full_quran_text.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
 
 int _positionKey(int surahId, int ayahNumber) => surahId * 1000 + ayahNumber;
 
@@ -80,7 +81,7 @@ class _FullQuranScreenState extends State<FullQuranScreen> {
           builder: (context, state) {
             final ayahs = state.fullQuranAyahs;
             if (ayahs == null) {
-              return Center(child: CircularProgressIndicator(color: context.colors.gold));
+              return const Center(child: DhikrLoadingIndicator());
             }
             final bookmarksBySurah = <int, Set<int>>{};
             for (final b in state.bookmarks) {
