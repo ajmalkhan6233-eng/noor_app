@@ -72,9 +72,17 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
     super.dispose();
   }
 
+  // Rounded to the nearest logical pixel (2026-09-05 fix, matching
+  // paginated_full_quran_text.dart's sibling fix): exact `==` on raw
+  // constraints re-triggers on sub-pixel system-UI jitter alone, with
+  // no real layout change.
+  double _rounded(double value) => value.roundToDouble();
+
   void _paginate(BoxConstraints constraints, BuildContext context) {
-    final unchanged = _paginatedWidth == constraints.maxWidth &&
-        _paginatedHeight == constraints.maxHeight &&
+    final width = _rounded(constraints.maxWidth);
+    final height = _rounded(constraints.maxHeight);
+    final unchanged = _paginatedWidth == width &&
+        _paginatedHeight == height &&
         _paginatedFontScale == widget.fontScale &&
         _paginatedAyahCount == widget.ayahs.length;
     if (unchanged) return;
@@ -82,11 +90,11 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
     _pages = splitIntoPages(
       ayahs: widget.ayahs,
       style: _textStyle(context),
-      maxWidth: constraints.maxWidth,
-      maxHeight: constraints.maxHeight,
+      maxWidth: width,
+      maxHeight: height,
     );
-    _paginatedWidth = constraints.maxWidth;
-    _paginatedHeight = constraints.maxHeight;
+    _paginatedWidth = width;
+    _paginatedHeight = height;
     _paginatedFontScale = widget.fontScale;
     _paginatedAyahCount = widget.ayahs.length;
 

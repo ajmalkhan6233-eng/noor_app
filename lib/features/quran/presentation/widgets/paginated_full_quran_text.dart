@@ -112,9 +112,18 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
     super.dispose();
   }
 
+  // Rounded to the nearest logical pixel (2026-09-05 fix): comparing
+  // raw constraints with exact `==` meant a sub-pixel jitter in the
+  // available height — e.g. MIUI's status bar clock/battery redrawing
+  // and shifting MediaQuery's top inset by a fraction of a pixel —
+  // read as "the size changed" and re-triggered the whole ~30s
+  // measurement pass, repeatedly, minutes apart, with no real layout
+  // change ("still loading every couple of minutes", direct report).
+  double _rounded(double value) => value.roundToDouble();
+
   bool _needsRepaginate(BoxConstraints constraints) {
-    return _paginatedWidth != constraints.maxWidth ||
-        _paginatedHeight != constraints.maxHeight ||
+    return _paginatedWidth != _rounded(constraints.maxWidth) ||
+        _paginatedHeight != _rounded(constraints.maxHeight) ||
         _paginatedFontScale != widget.fontScale ||
         _paginatedAyahCount != widget.ayahs.length;
   }
@@ -129,8 +138,8 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   Future<void> _startPaginating(BoxConstraints constraints, TextStyle style) async {
     if (_isPaginating) return;
     _isPaginating = true;
-    final width = constraints.maxWidth;
-    final height = constraints.maxHeight;
+    final width = _rounded(constraints.maxWidth);
+    final height = _rounded(constraints.maxHeight);
     final fontScale = widget.fontScale;
     final ayahCount = widget.ayahs.length;
 
