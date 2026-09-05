@@ -102,6 +102,23 @@ class AzkarRepository {
     return rows.first['count']! as int;
   }
 
+  /// Progress counts for every id in [itemIds], in a single query
+  /// instead of one round-trip per item. Ids with no saved progress
+  /// are simply absent from the result (treat as 0).
+  Future<Map<int, int>> progressForItems(List<int> itemIds) async {
+    if (itemIds.isEmpty) return {};
+    final db = await _dbHelper.database;
+    final placeholders = List.filled(itemIds.length, '?').join(',');
+    final rows = await db.query(
+      'azkar_progress',
+      where: 'item_id IN ($placeholders)',
+      whereArgs: itemIds,
+    );
+    return {
+      for (final row in rows) row['item_id']! as int: row['count']! as int,
+    };
+  }
+
   Future<int> incrementProgress(int itemId) async {
     final current = await progressFor(itemId);
     final next = current + 1;
