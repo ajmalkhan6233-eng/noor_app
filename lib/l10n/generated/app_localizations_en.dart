@@ -73,6 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tasbihIncrementHint => 'Double tap to increment';
 
   @override
+  String get tasbihVibrationLabel => 'Vibration';
+
+  @override
   String get dhikrSelectorSemanticLabel => 'Dhikr to count';
 
   @override

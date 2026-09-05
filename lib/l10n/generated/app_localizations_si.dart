@@ -73,6 +73,9 @@ class AppLocalizationsSi extends AppLocalizations {
   String get tasbihIncrementHint => 'එකතු කිරීමට දෙවරක් තට්ටු කරන්න';
 
   @override
+  String get tasbihVibrationLabel => 'කම්පනය';
+
+  @override
   String get dhikrSelectorSemanticLabel => 'ගණන් කළ යුතු ධික්ර්';
 
   @override

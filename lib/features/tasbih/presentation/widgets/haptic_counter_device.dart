@@ -1,10 +1,17 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Replaces the drag-and-spring-back TasbihOrb, 2026-08-30, per direct
-// request: fixed in place, tap only, styled like a small clicker
-// device instead of an orb you have to chase. A milestone (33/66/100)
-// still gets its own particle burst + shake, same as the orb did —
-// only the idle/drag physics are gone, not the milestone feedback.
+// "Glass Bead" — a glossy 3D sphere in the same material language as
+// the bottom-nav orb badges (noor_icon_style.dart's paintNavOrbBadge),
+// scaled up into a touch target. Pressing it sinks the highlight and
+// tightens the shadow rather than just recoloring.
+//
+// 2026-09-05: replaced an inner GestureDetector (onTapDown/Up/Cancel
+// only, no onTap) that was silently winning the gesture arena over
+// this widget's own SemanticButton — the visual press worked but the
+// actual tap (onTap -> TasbihCubit.increment()) never fired. Fixed by
+// driving the press-visual off a Listener instead, which doesn't
+// participate in tap gesture resolution at all, so there's only ever
+// one recognizer competing for the tap.
 
 import 'package:flutter/material.dart';
 
@@ -30,19 +37,8 @@ class HapticCounterDevice extends StatefulWidget {
   State<HapticCounterDevice> createState() => _HapticCounterDeviceState();
 }
 
-class _HapticCounterDeviceState extends State<HapticCounterDevice> with SingleTickerProviderStateMixin {
-  late final AnimationController _tapController;
+class _HapticCounterDeviceState extends State<HapticCounterDevice> {
   bool _pressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _tapController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 260),
-      reverseDuration: const Duration(milliseconds: 260),
-    );
-  }
 
   @override
   void didUpdateWidget(HapticCounterDevice oldWidget) {
@@ -53,23 +49,12 @@ class _HapticCounterDeviceState extends State<HapticCounterDevice> with SingleTi
   }
 
   @override
-  void dispose() {
-    _tapController.dispose();
-    super.dispose();
-  }
-
-  void _handleTap() {
-    _tapController.forward().then((_) => _tapController.reverse());
-    widget.onTap();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return SemanticButton(
       label: semanticCountLabel(l10n.tasbihCounterSemanticLabel, widget.count),
       hint: l10n.tasbihIncrementHint,
-      onTap: _handleTap,
+      onTap: widget.onTap,
       child: Container(
         width: 200,
         padding: const EdgeInsets.symmetric(vertical: 28),
@@ -85,28 +70,45 @@ class _HapticCounterDeviceState extends State<HapticCounterDevice> with SingleTi
           children: [
             Text('${widget.count}', style: AppTypography.counter(context.colors.ink)),
             const SizedBox(height: 20),
-            GestureDetector(
-              onTapDown: (_) => setState(() => _pressed = true),
-              onTapUp: (_) => setState(() => _pressed = false),
-              onTapCancel: () => setState(() => _pressed = false),
-              child: AnimatedScale(
-                scale: _pressed ? 0.92 : 1.0,
-                duration: const Duration(milliseconds: 80),
-                child: Container(
-                  width: 76,
-                  height: 76,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: context.colors.gold,
-                    boxShadow: [
-                      BoxShadow(
-                        color: context.colors.gold.withValues(alpha: 0.5),
-                        blurRadius: _pressed ? 4 : 16,
-                        spreadRadius: _pressed ? 0 : 2,
-                      ),
-                    ],
+            Listener(
+              onPointerDown: (_) => setState(() => _pressed = true),
+              onPointerUp: (_) => setState(() => _pressed = false),
+              onPointerCancel: (_) => setState(() => _pressed = false),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 90),
+                width: 84,
+                height: 84,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    center: _pressed ? const Alignment(0, 0) : const Alignment(-0.35, -0.4),
+                    radius: 0.9,
+                    colors: _pressed
+                        ? const [Color(0xFFB87A00), Color(0xFFFFDD8C)]
+                        : const [Color(0xFFFFEFC2), Color(0xFFFFB703), Color(0xFFB87A00)],
                   ),
+                  border: Border.all(color: const Color(0xFF8A5A00), width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: _pressed ? 0.5 : 0.3),
+                      blurRadius: _pressed ? 4 : 14,
+                      spreadRadius: _pressed ? -2 : 1,
+                    ),
+                  ],
                 ),
+                child: _pressed
+                    ? null
+                    : Align(
+                        alignment: const Alignment(-0.4, -0.5),
+                        child: Container(
+                          width: 26,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white.withValues(alpha: 0.35),
+                          ),
+                        ),
+                      ),
               ),
             ),
           ],

@@ -40,8 +40,27 @@ class _TasbihView extends StatelessWidget {
       body: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.all(24),
+            padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
             child: Center(child: DhikrSelector()),
+          ),
+          BlocBuilder<TasbihCubit, TasbihState>(
+            buildWhen: (a, b) => a.hapticsEnabled != b.hapticsEnabled,
+            builder: (context, state) => Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.vibration, size: 18, color: context.colors.sage),
+                  const SizedBox(width: 8),
+                  Text(l10n.tasbihVibrationLabel, style: TextStyle(color: context.colors.sage, fontSize: 13)),
+                  Switch(
+                    value: state.hapticsEnabled,
+                    onChanged: (_) => context.read<TasbihCubit>().toggleHaptics(),
+                    activeTrackColor: context.colors.gold,
+                  ),
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: BlocConsumer<TasbihCubit, TasbihState>(

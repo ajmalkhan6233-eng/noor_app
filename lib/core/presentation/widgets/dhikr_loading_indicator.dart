@@ -27,7 +27,7 @@ class _DhikrLoadingIndicatorState extends State<DhikrLoadingIndicator>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 2600))
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _controller.forward(from: 0);
