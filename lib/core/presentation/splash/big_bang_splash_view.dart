@@ -1,14 +1,14 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // The "Big Bang" splash: a gold/cyan particle burst expands from the
-// screen's centre; the Arabic Bismillah forms over its back half,
-// scaling in from depth (as if arriving from behind the screen, not
-// a flat fade); then it dissolves into the "NOOR" wordmark, which is
-// the last thing on screen before the dashboard. No English text
-// appears before the Arabic anywhere in this sequence — live-device
-// review (2026-08-24) explicitly asked for that ordering. Falls back
-// to the calm, still PlainSplashView under reduced motion (a burst —
-// or a dissolve — has no meaningful "settled" instant to jump to).
+// screen's centre, holds briefly, then dissolves into the "NOOR"
+// wordmark, which is the last thing on screen before the dashboard.
+// The Arabic Bismillah used to form over the burst's back half here —
+// moved out entirely (2026-09-05, direct request) and now leads the
+// "Assalamu Alaikum" greeting on Home instead (see hero_card.dart).
+// Falls back to the calm, still PlainSplashView under reduced motion
+// (a burst — or a dissolve — has no meaningful "settled" instant to
+// jump to).
 
 import 'dart:math' as math;
 
@@ -19,7 +19,6 @@ import '../../constants/splash_config.dart';
 import '../../effects/particle_burst_painter.dart';
 import '../motion/motion.dart';
 import '../widgets/noor_splash_wordmark.dart';
-import 'bismillah_reveal.dart';
 import 'plain_splash_view.dart';
 
 class BigBangSplashView extends StatefulWidget {
@@ -94,10 +93,6 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                 ),
               ),
             ),
-            BismillahReveal(
-              burstController: _burstController,
-              dissolveController: _dissolveController,
-            ),
             AnimatedBuilder(
               animation: _dissolveController,
               builder: (context, child) {
@@ -110,11 +105,10 @@ class _BigBangSplashViewState extends State<BigBangSplashView>
                 // arriving at a constant rate and just halting.
                 //
                 // Only the SECOND half of the dissolve belongs to
-                // fading this in — see BismillahReveal's matching note:
-                // the two used to span the same 0..1 range with
-                // different curves, so Bismillah was still highly
-                // visible at the same instant NOOR had already faded
-                // most of the way in, a real overlap (2026-08-29).
+                // fading this in — this used to also cross-fade the
+                // Bismillah reveal that lived here (removed 2026-09-05,
+                // see this file's header), where the same span-mismatch
+                // once caused a real, visible overlap (2026-08-29).
                 final linear = ((_dissolveController.value - 0.5) / 0.5).clamp(0.0, 1.0);
                 final t = Curves.easeOutCubic.transform(linear);
                 final opacity = t;

@@ -81,6 +81,10 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
         title: Text(AppLocalizations.of(context)!.surahReaderTitle(widget.surahId)),
         actions: [
           SurahAudioButton(surahId: widget.surahId, isPlaying: _playing, onToggle: _toggleAudio),
+          // Trailing gap so the play/download icon isn't flush against
+          // the screen's right edge, where it read as "cut off" on a
+          // curved-edge display (direct report, 2026-09-05).
+          const SizedBox(width: 12),
         ],
       ),
       body: Padding(
