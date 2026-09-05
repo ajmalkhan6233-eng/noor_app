@@ -54,6 +54,7 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   late final _controller = PageController(initialPage: 0);
   List<BookPage> _pages = const [];
   bool _initialPageSet = false;
+  bool _isPaginating = false;
 
   // Memoized: repaginating the whole Quran on every rebuild (even a
   // routine ReadingPositionTracker update) froze the UI thread for
@@ -63,6 +64,20 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   double? _paginatedFontScale;
   int? _paginatedAyahCount;
 
+  // Cached at the class level, not per State instance (2026-09-05 fix):
+  // Navigator always creates a fresh State when this screen is pushed,
+  // so the instance-level memoization above only ever helped within one
+  // visit — leaving and reopening "Read the full Quran" re-ran the same
+  // ~30s whole-book measurement pass every time ("took the same amount
+  // of time to load back", direct report). Reused as long as the
+  // layout size, font scale, and ayah count haven't actually changed;
+  // invalidated automatically otherwise.
+  static List<BookPage>? _cachedPages;
+  static double? _cachedWidth;
+  static double? _cachedHeight;
+  static double? _cachedFontScale;
+  static int? _cachedAyahCount;
+
   TextStyle _textStyle(BuildContext context) => TextStyle(
         fontFamily: AppTypography.arabicFamily,
         color: context.colors.ink,
@@ -71,29 +86,76 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
       );
 
   @override
+  void initState() {
+    super.initState();
+    if (_cachedPages != null &&
+        _cachedFontScale == widget.fontScale &&
+        _cachedAyahCount == widget.ayahs.length) {
+      _pages = _cachedPages!;
+      _paginatedWidth = _cachedWidth;
+      _paginatedHeight = _cachedHeight;
+      _paginatedFontScale = _cachedFontScale;
+      _paginatedAyahCount = _cachedAyahCount;
+      _initialPageSet = true;
+      final pageIndex = findInitialPageIndex(_pages, widget.initialSurahId, widget.initialAyahNumber);
+      if (pageIndex > 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_controller.hasClients) _controller.jumpToPage(pageIndex);
+        });
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  void _paginate(BoxConstraints constraints, BuildContext context) {
-    final unchanged = _paginatedWidth == constraints.maxWidth &&
-        _paginatedHeight == constraints.maxHeight &&
-        _paginatedFontScale == widget.fontScale &&
-        _paginatedAyahCount == widget.ayahs.length;
-    if (unchanged) return;
+  bool _needsRepaginate(BoxConstraints constraints) {
+    return _paginatedWidth != constraints.maxWidth ||
+        _paginatedHeight != constraints.maxHeight ||
+        _paginatedFontScale != widget.fontScale ||
+        _paginatedAyahCount != widget.ayahs.length;
+  }
 
-    _pages = splitBookIntoPages(
+  // Runs the whole-book measurement pass asynchronously instead of
+  // inline during build (2026-09-05 fix — see full_quran_page_splitter's
+  // own doc comment): a single first pass over ~6,236 ayahs still takes
+  // real time even after the 2026-09-04 memoization fix stopped it from
+  // repeating on every rebuild, and running that synchronously inside
+  // LayoutBuilder's builder blocked the entire UI thread for it, which
+  // read as "still gets stuck" even though it would eventually finish.
+  Future<void> _startPaginating(BoxConstraints constraints, TextStyle style) async {
+    if (_isPaginating) return;
+    _isPaginating = true;
+    final width = constraints.maxWidth;
+    final height = constraints.maxHeight;
+    final fontScale = widget.fontScale;
+    final ayahCount = widget.ayahs.length;
+
+    final pages = await splitBookIntoPages(
       ayahs: widget.ayahs,
       surahs: widget.surahs,
-      style: _textStyle(context),
-      maxWidth: constraints.maxWidth,
-      maxHeight: constraints.maxHeight,
+      style: style,
+      maxWidth: width,
+      maxHeight: height,
     );
-    _paginatedWidth = constraints.maxWidth;
-    _paginatedHeight = constraints.maxHeight;
-    _paginatedFontScale = widget.fontScale;
-    _paginatedAyahCount = widget.ayahs.length;
+    if (!mounted) return;
+
+    setState(() {
+      _pages = pages;
+      _paginatedWidth = width;
+      _paginatedHeight = height;
+      _paginatedFontScale = fontScale;
+      _paginatedAyahCount = ayahCount;
+      _isPaginating = false;
+    });
+    _cachedPages = pages;
+    _cachedWidth = width;
+    _cachedHeight = height;
+    _cachedFontScale = fontScale;
+    _cachedAyahCount = ayahCount;
 
     if (_initialPageSet) return;
     _initialPageSet = true;
@@ -109,8 +171,15 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        _paginate(constraints, context);
-        if (_pages.isEmpty) return const SizedBox.shrink();
+        if (_needsRepaginate(constraints) && !_isPaginating) {
+          final style = _textStyle(context);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _startPaginating(constraints, style);
+          });
+        }
+        if (_pages.isEmpty) {
+          return Center(child: CircularProgressIndicator(color: context.colors.gold));
+        }
         return PageView.builder(
           controller: _controller,
           itemCount: _pages.length,
