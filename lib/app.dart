@@ -46,8 +46,15 @@ class _NoorAppState extends State<NoorApp> {
       if (!mounted) return;
       setState(() => _showSplash = shouldShow);
       // A skipped splash never calls _onSplashFinished, so this is the
-      // only place that triggers onboarding for that path.
-      if (!shouldShow) _maybePushOnboarding();
+      // only place that triggers onboarding for that path — and it
+      // must check settings first, the same as every other caller,
+      // rather than pushing unconditionally (that bug meant onboarding
+      // re-showed on every reload once the splash itself had already
+      // been seen recently, regardless of hasSeenLocationOnboarding).
+      if (!shouldShow) {
+        final settings = await SettingsRepository().load();
+        if (mounted && !settings.hasSeenLocationOnboarding) _maybePushOnboarding();
+      }
     });
     SettingsRepository().load().then((settings) {
       // Only seed the controller if Settings hasn't already changed it

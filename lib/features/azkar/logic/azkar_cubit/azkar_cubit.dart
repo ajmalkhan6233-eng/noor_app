@@ -51,10 +51,7 @@ class AzkarCubit extends Cubit<AzkarState> {
 
   Future<void> loadBookmarks() async {
     final items = await _bookmarkRepository.bookmarkedItems();
-    final progress = <int, int>{};
-    for (final item in items) {
-      progress[item.id] = await _repository.progressFor(item.id);
-    }
+    final progress = await _repository.progressForItems([for (final item in items) item.id]);
     emit(
       state.copyWith(
         bookmarkedItems: items,
@@ -66,11 +63,7 @@ class AzkarCubit extends Cubit<AzkarState> {
   Future<void> selectCategory(AzkarCategory category) async {
     emit(state.copyWith(category: category, isLoading: true));
     final items = await _repository.itemsForCategory(category);
-
-    final progress = <int, int>{};
-    for (final item in items) {
-      progress[item.id] = await _repository.progressFor(item.id);
-    }
+    final progress = await _repository.progressForItems([for (final item in items) item.id]);
 
     emit(
       state.copyWith(

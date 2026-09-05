@@ -74,6 +74,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get tasbihIncrementHint => 'எண்ணிக்கையை அதிகரிக்க இருமுறை தட்டவும்';
 
   @override
+  String get tasbihVibrationLabel => 'அதிர்வு';
+
+  @override
   String get dhikrSelectorSemanticLabel => 'எண்ண வேண்டிய திக்ர்';
 
   @override

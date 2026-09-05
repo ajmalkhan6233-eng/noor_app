@@ -9,6 +9,7 @@ class TasbihState extends Equatable {
     this.dhikrLabel = 'SubhanAllah',
     this.target,
     this.justHitMilestone = false,
+    this.hapticsEnabled = true,
   });
 
   /// Current tap count.
@@ -24,20 +25,26 @@ class TasbihState extends Equatable {
   /// is reached, so the UI can trigger a matching visual pulse.
   final bool justHitMilestone;
 
+  /// Whether a tap fires haptic feedback — user-toggleable, on by
+  /// default. Persisted separately from the dhikr count itself.
+  final bool hapticsEnabled;
+
   TasbihState copyWith({
     int? count,
     String? dhikrLabel,
     int? target,
     bool? justHitMilestone,
+    bool? hapticsEnabled,
   }) {
     return TasbihState(
       count: count ?? this.count,
       dhikrLabel: dhikrLabel ?? this.dhikrLabel,
       target: target ?? this.target,
       justHitMilestone: justHitMilestone ?? false,
+      hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
     );
   }
 
   @override
-  List<Object?> get props => [count, dhikrLabel, target, justHitMilestone];
+  List<Object?> get props => [count, dhikrLabel, target, justHitMilestone, hapticsEnabled];
 }

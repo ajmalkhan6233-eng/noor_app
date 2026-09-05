@@ -220,6 +220,12 @@ abstract class AppLocalizations {
   /// **'Double tap to increment'**
   String get tasbihIncrementHint;
 
+  /// No description provided for @tasbihVibrationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration'**
+  String get tasbihVibrationLabel;
+
   /// No description provided for @dhikrSelectorSemanticLabel.
   ///
   /// In en, this message translates to:
