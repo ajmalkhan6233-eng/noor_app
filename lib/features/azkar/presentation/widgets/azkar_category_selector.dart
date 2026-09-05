@@ -78,6 +78,10 @@ class AzkarCategorySelector extends StatelessWidget {
   }
 
   Widget _row(BuildContext context, AzkarCategory category) {
+    // Alternate gold/cyan badge tint per row purely for cute visual
+    // variety — stays on the two locked accent tokens, no new palette.
+    final index = AzkarCategory.values.indexOf(category);
+    final accent = index.isEven ? context.colors.gold : context.colors.accentSecondary;
     return SemanticButton(
       label: '${category.label} azkar',
       hint: 'Double tap to open',
@@ -93,17 +97,37 @@ class AzkarCategorySelector extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
-            SizedBox(width: 20, height: 20, child: CustomPaint(painter: category.painter(context.colors.gold))),
-            const SizedBox(width: 14),
+            _iconBadge(accent, category),
+            const SizedBox(width: 16),
             Expanded(
               child: Text(category.label, style: TextStyle(color: context.colors.ink)),
             ),
             Icon(Icons.chevron_right, color: context.colors.sage, size: 20),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _iconBadge(Color accent, AzkarCategory category) {
+    return Container(
+      width: 46,
+      height: 46,
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          colors: [accent.withValues(alpha: 0.22), accent.withValues(alpha: 0.08)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: accent.withValues(alpha: 0.35), width: 1.2),
+        boxShadow: [
+          BoxShadow(color: accent.withValues(alpha: 0.18), blurRadius: 8, offset: const Offset(0, 3)),
+        ],
+      ),
+      child: Center(
+        child: SizedBox(width: 26, height: 26, child: CustomPaint(painter: category.painter(accent))),
       ),
     );
   }

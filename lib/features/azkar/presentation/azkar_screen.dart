@@ -90,9 +90,15 @@ class _AzkarScreenState extends State<AzkarScreen> {
                       style: TextStyle(color: context.colors.ink),
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: context.colors.sage),
-                        hintText: 'Search duas — e.g. "sleep", "travel"',
-                        hintStyle: TextStyle(color: context.colors.sage),
+                        hintText: 'Search duas, e.g. "sleep"',
+                        hintMaxLines: 1,
+                        hintStyle: TextStyle(
+                          color: context.colors.ink.withValues(alpha: 0.6),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
                         border: InputBorder.none,
+                        isDense: true,
                       ),
                       onChanged: _search,
                     ),
