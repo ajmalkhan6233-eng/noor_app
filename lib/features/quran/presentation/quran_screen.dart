@@ -13,6 +13,7 @@ import 'widgets/quran_import_notice.dart';
 import 'widgets/surah_index.dart';
 import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/presentation/motion/motion.dart';
+import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
 
 /// Quran: a front cover, then the surah index and search — or a clear
 /// notice when the feature is disabled (no verified source text on
@@ -94,9 +95,7 @@ class _QuranViewState extends State<_QuranView> {
               return QuranImportNotice(status: state.importStatus!);
             }
             if (state.isLoading) {
-              return Center(
-                child: CircularProgressIndicator(color: context.colors.gold),
-              );
+              return const Center(child: DhikrLoadingIndicator());
             }
             if (!state.isImported) {
               return QuranImportNotice(status: state.importStatus!);

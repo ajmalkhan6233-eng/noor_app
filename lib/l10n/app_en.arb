@@ -26,6 +26,7 @@
   "resetLabel": "Reset",
   "tasbihResetHint": "Double tap to reset the count to zero",
   "tasbihIncrementHint": "Double tap to increment",
+  "tasbihVibrationLabel": "Vibration",
   "dhikrSelectorSemanticLabel": "Dhikr to count",
   "currentlyCountingLabel": "Currently counting {dhikr}",
   "@currentlyCountingLabel": {"placeholders": {"dhikr": {"type": "String"}}},

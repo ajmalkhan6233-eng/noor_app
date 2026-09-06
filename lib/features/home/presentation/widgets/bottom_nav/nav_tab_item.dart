@@ -1,9 +1,10 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// A single bottom-nav tab: active shows the icon inside a glowing
-// gold circle with a gold label; inactive shows a plain outline icon
-// with a gray label. Split out of NoorBottomNav to keep both files
-// under the project's line-count convention.
+// A single bottom-nav tab: the glyph itself paints its own glossy
+// "orb" badge (see noor_icon_style.dart's paintNavOrbBadge) — active
+// glows gold-rimmed and full color, inactive is a dim matte sphere.
+// Split out of NoorBottomNav to keep both files under the project's
+// line-count convention.
 
 import 'package:flutter/material.dart';
 
@@ -40,25 +41,14 @@ class NavTabItem extends StatelessWidget {
             AnimatedContainer(
               duration: duration,
               curve: Motion.curve,
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: active ? context.colors.gold : Colors.transparent,
-                boxShadow: active
-                    ? [
-                        BoxShadow(
-                          color: context.colors.gold.withValues(alpha: 0.55),
-                          blurRadius: 14,
-                          spreadRadius: 1,
-                        ),
-                      ]
-                    : null,
-              ),
+              width: 44,
+              height: 44,
+              alignment: Alignment.center,
               child: NoorIcon(
                 icon,
-                color: active ? context.colors.paper : context.colors.sage,
-                size: 22,
+                color: active ? context.colors.gold : context.colors.sage,
+                active: active,
+                size: 40,
               ),
             ),
             const SizedBox(height: 4),

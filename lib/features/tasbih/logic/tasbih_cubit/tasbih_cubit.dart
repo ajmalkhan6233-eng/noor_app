@@ -5,9 +5,12 @@
 // HapticFeedback calls, and no math happen in the UI layer.
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/haptics/haptic_service.dart';
 import '../../data/tasbih_repository.dart';
 import 'tasbih_state.dart';
+
+const _hapticsPrefKey = 'tasbih_haptics_enabled';
 
 class TasbihCubit extends Cubit<TasbihState> {
   TasbihCubit({
@@ -21,12 +24,19 @@ class TasbihCubit extends Cubit<TasbihState> {
   final TasbihRepository _repository;
   final HapticService _haptics;
 
-  /// Restores the last saved count for the current dhikr, if any.
+  /// Restores the last saved count for the current dhikr, and the
+  /// user's vibration preference, if any.
   Future<void> loadSaved() async {
     final saved = await _repository.loadSession(state.dhikrLabel);
-    if (saved != null) {
-      emit(state.copyWith(count: saved.count, target: saved.target));
-    }
+    final prefs = await SharedPreferences.getInstance();
+    final hapticsEnabled = prefs.getBool(_hapticsPrefKey) ?? true;
+    emit(
+      state.copyWith(
+        count: saved?.count,
+        target: saved?.target,
+        hapticsEnabled: hapticsEnabled,
+      ),
+    );
   }
 
   /// Switches the active dhikr, restoring whatever count was last
@@ -38,8 +48,17 @@ class TasbihCubit extends Cubit<TasbihState> {
         dhikrLabel: dhikrLabel,
         count: saved?.count ?? 0,
         target: saved?.target,
+        hapticsEnabled: state.hapticsEnabled,
       ),
     );
+  }
+
+  /// Flips whether taps fire haptic feedback, persisting the choice.
+  Future<void> toggleHaptics() async {
+    final enabled = !state.hapticsEnabled;
+    emit(state.copyWith(hapticsEnabled: enabled));
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_hapticsPrefKey, enabled);
   }
 
   /// Increments the count by one, fires the appropriate haptic
@@ -49,7 +68,7 @@ class TasbihCubit extends Cubit<TasbihState> {
     final hitMilestone = _haptics.isMilestone(newCount);
 
     emit(state.copyWith(count: newCount, justHitMilestone: hitMilestone));
-    await _haptics.feedbackForCount(newCount);
+    if (state.hapticsEnabled) await _haptics.feedbackForCount(newCount);
     await _persist();
   }
 

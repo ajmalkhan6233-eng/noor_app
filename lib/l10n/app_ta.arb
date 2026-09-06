@@ -22,6 +22,7 @@
   "resetLabel": "மீட்டமை",
   "tasbihResetHint": "எண்ணிக்கையை பூஜ்ஜியமாக மீட்டமைக்க இருமுறை தட்டவும்",
   "tasbihIncrementHint": "எண்ணிக்கையை அதிகரிக்க இருமுறை தட்டவும்",
+  "tasbihVibrationLabel": "அதிர்வு",
   "dhikrSelectorSemanticLabel": "எண்ண வேண்டிய திக்ர்",
   "currentlyCountingLabel": "தற்போது எண்ணப்படுவது: {dhikr}",
 

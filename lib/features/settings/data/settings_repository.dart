@@ -3,6 +3,8 @@
 // Only this file touches the `app_settings` table. Always a single
 // row (`id = 1`); loading before any save exists returns the defaults.
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import '../../../core/database/database_helper.dart';
 import '../../prayer_times/data/adhan_reciter.dart';
 import '../../prayer_times/data/iqamath_offsets.dart';
@@ -22,6 +24,18 @@ class SettingsRepository {
   final DatabaseHelper _dbHelper;
 
   Future<AppSettings> load() async {
+    // TEMP (2026-09-05, direct request): sqflite_sqlcipher has no web
+    // implementation at all — the real database call below never
+    // resolves on web, hanging every screen that awaits settings.
+    // This app doesn't target web (see CLAUDE.md); this exists solely
+    // to unblock a local `flutter run -d web-server` preview session
+    // with no DB dependency, defaulting to Gampaha with onboarding
+    // already seen. Remove once the web preview is no longer needed —
+    // it never runs on a real device/test build (kIsWeb is false
+    // there).
+    if (kIsWeb) {
+      return const AppSettings(selectedDistrict: 'Gampaha', hasSeenLocationOnboarding: true);
+    }
     final db = await _dbHelper.database;
     final rows = await db.query('app_settings', where: 'id = 1', limit: 1);
     if (rows.isEmpty) return const AppSettings();
