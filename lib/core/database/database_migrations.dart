@@ -56,6 +56,8 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
     for (final statement in prayerTrackerCreateStatements) {
       await db.execute(statement);
     }
+    // Ensure no stray seed rows are left
+    await db.delete('prayer_completions');
   }
   if (oldVersion < 3) {
     await db.execute(
