@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../prayer_times/data/adhan_reciter.dart';
+import '../../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 
@@ -37,8 +38,15 @@ class AdhanSoundSection extends StatelessWidget {
                     button: true,
                     child: SemanticButton(
                       label: reciter.label,
-                      onTap: () =>
-                          context.read<SettingsCubit>().setAdhanReciter(reciter),
+                      // Selecting a reciter also plays its Adhan
+                      // immediately (2026-09-05, direct request) — so
+                      // it can be heard and compared right there,
+                      // rather than needing a separate trip down to
+                      // Test Adhan for every option.
+                      onTap: () {
+                        context.read<SettingsCubit>().setAdhanReciter(reciter);
+                        context.read<AdhanPreviewCubit>().playOnce(reciter);
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(

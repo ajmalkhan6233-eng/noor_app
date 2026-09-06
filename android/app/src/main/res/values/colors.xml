@@ -4,6 +4,10 @@
          window so there is no white flash before Flutter's first frame. -->
     <color name="splash_background">#FF05070B</color>
 
-    <!-- Adaptive-icon background layer — same locked obsidian. -->
-    <color name="ic_launcher_background">#FF05070B</color>
+    <!-- Adaptive-icon background layer — matches the new "noor"
+         wordmark artwork's own navy gradient edge tone (2026-09-05,
+         direct request: user-supplied icon), not the app's locked
+         obsidian, so the mask-cropped area blends with the artwork
+         instead of showing a mismatched ring around it. -->
+    <color name="ic_launcher_background">#FF1E2F43</color>
 </resources>

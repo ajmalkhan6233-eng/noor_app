@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 
 import '../../data/surah_audio_download_service.dart';
 import '../../data/surah_audio_player.dart';
-import 'audio_download_disclosure.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 enum _AudioAvailability { checking, bundledOrDownloaded, downloadable }
@@ -69,8 +68,9 @@ class _SurahAudioButtonState extends State<SurahAudioButton> {
   }
 
   Future<void> _startDownload() async {
-    await maybeShowAudioDownloadDisclosure(context);
-    if (!mounted) return;
+    // No interstitial "this requires internet" dialog before
+    // downloading (2026-09-05, direct request) — just the button;
+    // tapping it downloads directly.
     setState(() {
       _downloadProgress = 0;
       _error = null;

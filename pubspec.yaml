@@ -59,13 +59,6 @@ dependencies:
   # Architecture section for the full scoping decision).
   http: ^1.2.0
 
-  # On-device text-to-speech (Android TextToSpeech / iOS
-  # AVSpeechSynthesizer) for reading Azkar/Dua English translations
-  # aloud — no network call from the app itself; the OS may prompt to
-  # install a voice pack via system settings if none exists, same as
-  # any other OS-level capability.
-  flutter_tts: ^4.2.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
