@@ -7,9 +7,12 @@
 // name/audio header renders only on that surah's first page, and a
 // page never spans two surahs.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
+import '../../data/full_quran_pagination_cache.dart';
 import '../../data/quran_ayah.dart';
 import '../../data/quran_surah.dart';
 import 'continuous_surah_text.dart';
@@ -143,13 +146,27 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
     final fontScale = widget.fontScale;
     final ayahCount = widget.ayahs.length;
 
-    final pages = await splitBookIntoPages(
+    // Disk cache checked first (2026-09-05): survives the app being
+    // fully killed and reopened, unlike the in-memory static cache
+    // below, which only helps within one running process — this is
+    // what makes the ~30s first-ever pass a true one-time cost instead
+    // of "first time after every cold start".
+    final cached = await loadFullQuranPaginationCache(
       ayahs: widget.ayahs,
       surahs: widget.surahs,
-      style: style,
-      maxWidth: width,
-      maxHeight: height,
+      width: width,
+      height: height,
+      fontScale: fontScale,
+      ayahCount: ayahCount,
     );
+    final pages = cached ??
+        await splitBookIntoPages(
+          ayahs: widget.ayahs,
+          surahs: widget.surahs,
+          style: style,
+          maxWidth: width,
+          maxHeight: height,
+        );
     if (!mounted) return;
 
     setState(() {
@@ -165,6 +182,15 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
     _cachedHeight = height;
     _cachedFontScale = fontScale;
     _cachedAyahCount = ayahCount;
+    if (cached == null) {
+      unawaited(saveFullQuranPaginationCache(
+        pages: pages,
+        width: width,
+        height: height,
+        fontScale: fontScale,
+        ayahCount: ayahCount,
+      ));
+    }
 
     if (_initialPageSet) return;
     _initialPageSet = true;

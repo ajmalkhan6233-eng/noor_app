@@ -24,5 +24,13 @@
         <item name="android:windowBackground">@drawable/launch_background</item>
         <item name="android:windowSplashScreenBackground">@color/splash_background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <!-- Zeroed (2026-09-05, direct report: "tapping the app icon
+             zooms it up to fill the screen") — Android 12+'s
+             SplashScreen API animates windowSplashScreenAnimatedIcon
+             by default; this is that zoom. Can't be fully disabled
+             (the API always shows the icon phase), but a 0ms duration
+             removes the visible scale animation itself, so the icon
+             phase reads as instant rather than a zoom-in. -->
+        <item name="android:windowSplashScreenAnimationDuration">0</item>
     </style>
 </resources>

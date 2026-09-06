@@ -2733,3 +2733,107 @@ guessed at:
   search that didn't verify a clear rights chain was reported as
   nothing shippable, never guessed), this needs a specific source name
   from Aj before any work starts — not guessed at.
+
+## Session — 2026-09-05/06: 4-item report (icon/zoom/search/Quran-cache), new launcher icon, web-preview experiment
+
+### New launcher icon (user-supplied artwork) + splash-zoom fix + Quran disk cache — built, uncommitted
+Per direct request with an uploaded 1024x1024 PNG (rounded-square navy
+gradient, white "نور" Arabic wordmark, sparkle decorations): replaced
+the launcher icon entirely (legacy + adaptive-foreground PNGs at all 5
+densities, generated via a hand-rolled `pngjs` box-average resize
+script — no ImageMagick/PIL available in this environment), and
+updated `ic_launcher_background` in colors.xml to the artwork's own
+navy edge tone (`#FF1E2F43`), replacing the locked-obsidian value used
+for the old gold-crescent icon.
+
+Also implemented, same pass:
+- **Launch-icon zoom fix**: Android 12+'s SplashScreen API animates
+  `windowSplashScreenAnimatedIcon` by default — this is the zoom seen
+  on tapping the app icon, an OS default, not something the app added.
+  Fixed via `android:windowSplashScreenAnimationDuration=0` in
+  `values-v31/styles.xml` (API 31+ only).
+- **"Read the full Quran" disk-persisted pagination cache**
+  (`full_quran_pagination_cache.dart`, new file) — the existing
+  in-memory static cache only survived within one running process;
+  this persists page boundaries (surah id + ayah numbers per page,
+  not ayah text) to `SharedPreferences`, so the ~30s first-pass
+  measurement becomes a true one-time cost across app restarts, not
+  just within one session. Wired into `paginated_full_quran_text.dart`.
+
+All of this sat uncommitted on `claude/azkar-tts-removal-and-fixes-0905`
+across a context-compaction boundary this session — confirmed intact
+before continuing (`git status` matched exactly what was expected,
+nothing extra bled in from the `local-combined-test` branch used
+earlier for a one-off combined test build).
+
+### Azkar search-tap (item 2 of the 4-item report) — still not re-verified live
+This remains the single most explicitly-specified open item from Aj's
+own report: reproduce the search-result tap live with logcat capture
+during the actual tap, on a fresh install, to find the real cause or
+confirm the earlier `ParallaxItem`-removal fix (`4dd25f5`) actually
+holds. Multiple fresh-install/build cycles ran this session but the
+live tap-plus-logcat reproduction itself was not completed before the
+session's direction shifted to a web-preview detour (see below) and
+then to "run like yesterday, debug build, I'll check it myself" —
+**Aj's own direct instruction, this session**, to stop doing the
+automated tap/screenshot/logcat verification loop and just install
+the debug build for him to check on his own device and report back.
+This is the standing mode from here: build clean, install, wait for
+Aj's own report — not self-verify via automated adb taps.
+
+### Web-preview experiment (Chrome, `flutter build web`) — real, useful for layout, real dead ends for anything DB-backed
+Aj didn't have the phone available and asked to preview the app "on
+the web" instead, understanding it's a different platform. Tried
+`flutter run -d chrome` conceptually first but ruled it out
+immediately, consistent with this session's already-settled hot-reload
+finding: `flutter run`'s interactive reload needs a real terminal
+(stdin.hasTerminal), and this tool's shell has none at any layer —
+that already-proven dead end applies to any `flutter run` target, web
+included, not just Android. Used a one-shot `flutter build web
+--release` instead (not hot reload, a static build), served via a
+small hand-written Node static file server (Python wasn't actually
+present despite being on PATH — the WindowsApps python.exe stub just
+errors asking to install from the Store), opened in the Claude Code
+Browser pane.
+
+**Genuinely useful for what it's good for**: Home, Azkar's list/header/
+icons, the More screen's full 7-tile custom-icon grid, the Al Quran
+hub screen, and Prayer Times all rendered correctly — real confirmation
+that layout, the custom-painted icon set, colors, and fonts are all
+intact, without needing the phone at all.
+
+**Confirmed real dead ends, not app bugs**: anything reading the
+encrypted SQLite database doesn't work on web. Two concrete
+symptoms, both traced to the same root cause
+(`sqflite_sqlcipher`/`flutter_secure_storage` have no real web
+implementation):
+- Azkar search returned "No matching duas found" even for an exact
+  category-name match ("morning") — the underlying Azkar item list
+  never actually loaded, since import depends on the DB.
+- Settings screen hung on an indeterminate spinner indefinitely,
+  confirmed via `read_console_messages` showing repeated uncaught
+  Dart exceptions (`dartException: HK`) rather than resolving or
+  erroring visibly — `AppSettings` load depends on the DB and
+  apparently never completes or fails cleanly on web.
+
+**Neither of these is evidence about any real on-device bug** (the
+Azkar search-tap issue in particular needs the actual phone, not this
+web build, to test meaningfully) — flagging this plainly so a future
+session doesn't mistake "broken on the web preview" for "broken on
+Android." If a fast non-phone preview is wanted again later, Home/
+Azkar-browsing/More/Quran-hub/Prayer-Times are the screens that
+actually render usefully in it; Settings and anything Azkar-search-
+dependent won't, structurally, without a real web SQLite/secure-storage
+backend being added — which is out of scope, not a bug to fix.
+
+### Current standing instruction: manual verification handoff
+Per Aj's direct words this session: stop doing automated on-device
+verification (tap/screenshot/logcat loops) for now — build clean,
+install a debug APK, and let him check it directly on his phone and
+report back what he finds. This supersedes, for the current work in
+flight, the more thorough automated 4-item verification pattern used
+earlier in the session (which was itself correct per Rule 1's
+"never claim something works without real proof" — but Aj is now
+doing that checking himself). Resume the automated verification
+pattern only if asked to, or if Aj's own report needs a live
+logcat-capture-style investigation to root-cause something he found.
