@@ -19,14 +19,15 @@ import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 import '../progress_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
-// Reads the PrayerTrackerCubit provided by HomeDashboard (shared with
-// Home's DailyGoalsList) rather than creating its own — so marking a
-// prayer done here shows up on the Home tab immediately instead of
-// each tab holding its own stale copy. [todayTimes] gates today's
-// rows to prayers whose adhan has actually happened, same as
-// DailyGoalsList — was missing here (2026-08-24 live-device review:
-// "in the second page, today's prayer can select... should not be
-// able to select because it's not yet finished").
+// Reads the PrayerTrackerCubit provided by HomeDashboard rather than
+// creating its own — so marking a prayer done here shows up on the
+// Home tab immediately instead of each tab holding its own stale
+// copy (this card is shown on both Home and Prayer Times as of
+// 2026-09-06, sharing one cubit instance). [todayTimes] gates today's
+// rows to prayers whose adhan has actually happened (2026-08-24
+// live-device review: "in the second page, today's prayer can
+// select... should not be able to select because it's not yet
+// finished").
 class PrayerTrackerCard extends StatelessWidget {
   const PrayerTrackerCard({super.key, this.todayTimes});
 

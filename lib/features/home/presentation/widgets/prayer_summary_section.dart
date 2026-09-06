@@ -5,10 +5,11 @@
 // from Prayer Times, 2026-08-24 live-device review — "this circle
 // design ... you can put it in the first page"), the smart iqamah
 // line, and the full prayer-times row — or the "set a location"
-// prompt when times aren't computed yet. The full prayer list with
-// per-prayer notification toggles and Suhoor/Iftar times now live
-// only on the Prayer Times tab (see PrayerTimesScreen) — showing them
-// here too was the exact duplication flagged in Section B.
+// prompt when times aren't computed yet. The per-prayer notification
+// toggle list stays Prayer-Times-tab-only (see PrayerTimesScreen);
+// Suhoor/Iftar and the completion tracker were deliberately
+// duplicated onto Home as well as of 2026-09-06 (explicit request) —
+// see SuhoorIftarRow/PrayerTrackerCard in home_overview_screen.dart.
 
 import 'package:flutter/material.dart';
 

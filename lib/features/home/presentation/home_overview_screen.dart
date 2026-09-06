@@ -5,9 +5,11 @@
 // reminder toggles, the astrolabe countdown ring (moved here from
 // Prayer Times, now with the live clock built into it — see
 // PrayerHero), the smart iqamah line, the full prayer-times row,
-// today's prayer checklist, Ayah of the Day, then Sunnah Fasting last
-// (moved down twice now per follow-up feedback — from leading the
-// screen originally, to below the checklist, to last). The debug
+// Suhoor/Iftar and the prayer-completion tracker (SuhoorIftarRow +
+// PrayerTrackerCard, duplicated here from Prayer Times as of
+// 2026-09-06, explicit request), Ayah of the Day, then Sunnah Fasting
+// last (moved down twice now per follow-up feedback — from leading
+// the screen originally, to below the checklist, to last). The debug
 // build stamp moved to the About screen — see BuildStampFooter.
 
 import 'package:flutter/material.dart';
@@ -20,8 +22,9 @@ import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../settings/logic/settings_cubit/settings_state.dart';
+import '../../prayer_times/presentation/widgets/suhoor_iftar_row.dart';
+import '../../prayer_tracker/presentation/widgets/prayer_tracker_card.dart';
 import 'widgets/ayah_of_day_card.dart';
-import 'widgets/daily_goals_list.dart';
 import 'widgets/hero_card.dart';
 import 'widgets/home_quick_toggles.dart';
 import 'widgets/prayer_summary_section.dart';
@@ -68,8 +71,12 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                       const HomeQuickToggles(),
                       const SizedBox(height: 4),
                       PrayerSummarySection(state: prayerState, settingsState: settingsState),
+                      if (prayerState.result is PrayerTimesComputed) ...[
+                        const SizedBox(height: 12),
+                        SuhoorIftarRow(times: prayerState.result as PrayerTimesComputed),
+                      ],
                       const SizedBox(height: 12),
-                      DailyGoalsList(
+                      PrayerTrackerCard(
                         todayTimes: prayerState.result is PrayerTimesComputed
                             ? prayerState.result as PrayerTimesComputed
                             : null,

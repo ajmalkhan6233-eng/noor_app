@@ -85,8 +85,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
         BlocProvider(create: (_) => PrayerCubit()..loadSettings()),
         BlocProvider(create: (_) => SettingsCubit()..load()),
         BlocProvider(create: (_) => AdhanPreviewCubit()),
-        // Shared by Home's DailyGoalsList and Prayer Times'
-        // PrayerTrackerCard — one instance so marking a prayer done on
+        // Shared by the PrayerTrackerCard shown on both Home and
+        // Prayer Times — one instance so marking a prayer done on
         // either tab shows up on the other immediately, instead of
         // each tab holding its own stale copy.
         BlocProvider(create: (_) => PrayerTrackerCubit()..load()),
