@@ -18,7 +18,7 @@ abstract final class AppStrings {
   /// review (2026-08-24) asked for the splash to open on Arabic, not
   /// the earlier Latin-transliteration text — this constant's value
   /// changed, not just its display treatment.
-  static const String splashGreeting = 'TEST SPLASH';
+  static const String splashGreeting = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 
   /// English fallback for [splashGreeting]'s Semantics label only —
   /// screen readers announcing raw Arabic script by codepoint is not
