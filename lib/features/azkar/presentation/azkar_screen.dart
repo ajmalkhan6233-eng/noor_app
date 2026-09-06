@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
+import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'azkar_category_screen.dart';
 import '../data/azkar_category.dart';
@@ -139,30 +140,24 @@ class _AzkarScreenState extends State<AzkarScreen> {
         // here either.
         return AppCard(
           padding: EdgeInsets.zero,
-          child: Semantics(
-            button: true,
+          child: SemanticButton(
             label: '${category.label}: $resultLabel',
             hint: 'Double tap to open this dua',
-            child: InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: () => _openCategory(category),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: ExcludeSemantics(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: 11)),
-                      const SizedBox(height: 4),
-                      Text(
-                        resultLabel,
-                        style: TextStyle(color: context.colors.ink),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+            onTap: () => _openCategory(category),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: 11)),
+                  const SizedBox(height: 4),
+                  Text(
+                    resultLabel,
+                    style: TextStyle(color: context.colors.ink),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
+                ],
               ),
             ),
           ),
