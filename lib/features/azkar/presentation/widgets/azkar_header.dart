@@ -13,9 +13,9 @@
 // ambient rather than a reactive moment.
 
 import 'package:flutter/material.dart';
-
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../ui/ui_constants.dart';
 
 class AzkarHeader extends StatefulWidget {
   const AzkarHeader({super.key, required this.title});
@@ -48,7 +48,7 @@ class _AzkarHeaderState extends State<AzkarHeader> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     final colors = context.colors;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(top: 16, bottom: 20),
       child: Center(
         child: AnimatedBuilder(
           animation: _glowController,
@@ -67,7 +67,7 @@ class _AzkarHeaderState extends State<AzkarHeader> with SingleTickerProviderStat
               child: child,
             );
           },
-          child: Text(widget.title, style: AppTypography.heroDisplay(colors.ink)),
+          child: Text(widget.title, style: UIConstants.titleStyle),
         ),
       ),
     );
