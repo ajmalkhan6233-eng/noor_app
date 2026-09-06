@@ -23,6 +23,11 @@ class _FakeAzkarRepository extends AzkarRepository {
   Future<int> progressFor(int itemId) async => _progress[itemId] ?? 0;
 
   @override
+  Future<Map<int, int>> progressForItems(List<int> itemIds) async => {
+        for (final id in itemIds) id: _progress[id] ?? 0,
+      };
+
+  @override
   Future<int> incrementProgress(int itemId) async {
     final next = (_progress[itemId] ?? 0) + 1;
     _progress[itemId] = next;
