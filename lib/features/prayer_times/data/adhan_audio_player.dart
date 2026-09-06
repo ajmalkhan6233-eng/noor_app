@@ -18,7 +18,22 @@ String? adhanAssetForPrayer(String prayerName) =>
 /// Thin wrapper so callers (a Cubit, never a widget directly) don't
 /// depend on the `audioplayers` package type.
 class AdhanAudioPlayer {
-  AdhanAudioPlayer({AudioPlayer? player}) : _player = player ?? AudioPlayer();
+  AdhanAudioPlayer({AudioPlayer? player}) : _player = player ?? AudioPlayer() {
+    // Explicitly bind to the media (STREAM_MUSIC) audio stream so the
+    // hardware volume rocker adjusts this playback in real time —
+    // left at audioplayers' implicit default, some OEM skins (MIUI)
+    // route a freshly-started clip to the ringer/notification volume
+    // instead until a stream is explicitly requested.
+    _player.setAudioContext(
+      const AudioContext(
+        android: AudioContextAndroid(
+          contentType: AndroidContentType.music,
+          usageType: AndroidUsageType.media,
+          audioFocus: AndroidAudioFocus.gain,
+        ),
+      ),
+    );
+  }
 
   final AudioPlayer _player;
 
