@@ -66,7 +66,7 @@ class _QuranViewState extends State<_QuranView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: context.colors.paper,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(l10n.quranScreenTitle, style: UIConstants.titleStyle),
         actions: [
           Semantics(
