@@ -164,6 +164,7 @@ If a task file's instructions ever conflict with these, these win.
   narrowed to reinstall-specific (not reproducible via `pm clear`),
   most likely an OEM (MIUI) backup path restoring the old DB alongside
   its Keystore passphrase — outside what `allowBackup=false` prevents.
+- Added one‑time guard in `main.dart` to clear restored `prayer_completions` on first launch. This mitigates OEM backup restoration issues despite `allowBackup=false`. The guard writes a flag `hasCleanedRestoredPrayerData` to `SharedPreferences`.
 - Azkar/Dua library still short of a fuller set (74 vs. a desired
   ~150) — each new entry needs a real Hisn al-Muslim source fetch and
   diff, not rushed.
