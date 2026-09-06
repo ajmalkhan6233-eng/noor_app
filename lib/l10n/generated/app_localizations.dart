@@ -238,6 +238,12 @@ abstract class AppLocalizations {
   /// **'Currently counting {dhikr}'**
   String currentlyCountingLabel(String dhikr);
 
+  /// No description provided for @selectDhikrHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to count {dhikr} instead'**
+  String selectDhikrHint(String dhikr);
+
   /// No description provided for @prayerTimesScreenTitle.
   ///
   /// In en, this message translates to:

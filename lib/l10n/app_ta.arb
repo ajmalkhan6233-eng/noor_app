@@ -25,6 +25,7 @@
   "tasbihVibrationLabel": "அதிர்வு",
   "dhikrSelectorSemanticLabel": "எண்ண வேண்டிய திக்ர்",
   "currentlyCountingLabel": "தற்போது எண்ணப்படுவது: {dhikr}",
+  "selectDhikrHint": "இதற்கு பதிலாக {dhikr} எண்ண இருமுறை தட்டவும்",
 
   "prayerTimesScreenTitle": "தொழுகை நேரங்கள்",
   "openMonthlyTimetableSemanticLabel": "மாதாந்திர தொழுகை அட்டவணையைத் திற",
