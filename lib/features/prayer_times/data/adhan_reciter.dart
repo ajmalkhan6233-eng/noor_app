@@ -12,7 +12,16 @@
 // content-appropriateness was a real question raised in a prior
 // session and is included again here only because it was explicitly
 // re-requested).
-enum AdhanReciter { doha, indonesia, marrakech, aroumd, hamtramck }
+//
+// Al-Sudais (Sheikh Abdul Rahman Al-Sudais): added 2026-09-07 per
+// direct founder request. LICENCE OUTSTANDING — the archive.org
+// source has informal "free to use" wording from an uploader, not a
+// formal CC or verifiable licence. To complete this: obtain or verify
+// a properly licensed source, place the file at
+// assets/audio/adhan/sudais.mp3, and remove the TODO comment in
+// adhanAssetFor below. Until then, the chip appears in the UI but
+// plays nothing (falls back to null → silent).
+enum AdhanReciter { doha, indonesia, marrakech, aroumd, hamtramck, sudais }
 
 extension AdhanReciterLabel on AdhanReciter {
   String get label => switch (this) {
@@ -21,6 +30,7 @@ extension AdhanReciterLabel on AdhanReciter {
     AdhanReciter.marrakech => 'Marrakech, Morocco',
     AdhanReciter.aroumd => 'Aroumd, Morocco',
     AdhanReciter.hamtramck => 'Hamtramck, Michigan',
+    AdhanReciter.sudais => 'Sheikh Al-Sudais',
   };
 
   /// Short attribution line — the actual licence condition for the
@@ -36,6 +46,9 @@ extension AdhanReciterLabel on AdhanReciter {
     AdhanReciter.hamtramck =>
       '"Islamic Call to Prayer (Dhuhr Adhan), Hamtramck, MI" by '
           'RJStefanski (Freesound.org), CC BY 3.0',
+    AdhanReciter.sudais =>
+      'Sheikh Abdul Rahman Al-Sudais — licence pending: '
+          'audio file needed before this option plays.',
   };
 }
 
@@ -59,6 +72,10 @@ String? adhanAssetFor(AdhanReciter reciter, String prayerName) {
     AdhanReciter.marrakech => 'audio/adhan/marrakech.mp3',
     AdhanReciter.aroumd => 'audio/adhan/aroumd.mp3',
     AdhanReciter.hamtramck => 'audio/adhan/hamtramck.mp3',
+    // TODO: place licensed audio at assets/audio/adhan/sudais.mp3
+    // Source: archive.org — licence pending formal verification.
+    // Until the file exists, this returns null (silent).
+    AdhanReciter.sudais => null,
     AdhanReciter.doha => null, // unreachable, handled above
   };
 }

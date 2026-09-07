@@ -30,7 +30,12 @@ enum PrayerMadhab { shafi, hanafi }
 /// always visible on screen, never silently assumed.
 class PrayerSettings {
   const PrayerSettings({
-    this.method = PrayerCalculationMethod.muslimWorldLeague,
+    // Karachi method is the standard used by the Department of Islamic
+    // Affairs of Sri Lanka and matches local mosque times — changed
+    // from muslimWorldLeague (2026-09-07) after user-reported timing
+    // discrepancy. Existing users who already saved settings keep their
+    // stored value; this only affects fresh installs.
+    this.method = PrayerCalculationMethod.karachi,
     this.madhab = PrayerMadhab.shafi,
     this.highLatitudeRule = PrayerHighLatitudeRule.middleOfNight,
     this.adjustments = const PrayerAdjustmentMinutes(),
