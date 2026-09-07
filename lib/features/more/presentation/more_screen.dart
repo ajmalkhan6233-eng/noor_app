@@ -15,7 +15,7 @@ import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
-import '../../qibla/presentation/qibla_screen.dart';
+import '../../qibla/presentation/qibla_coming_soon_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../../settings/presentation/support_developer_screen.dart';
@@ -42,9 +42,14 @@ class MoreScreen extends StatelessWidget {
         icon: NoorIconType.qibla,
         color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
+        // BlocProvider.value, not const QiblaComingSoonScreen(): a
+        // pushed route lands on the root Navigator as a sibling of
+        // this MultiBlocProvider, not a descendant, so the screen's
+        // own BlocBuilder<PrayerCubit> would otherwise throw
+        // ProviderNotFoundException the moment it built.
         builder: (_) => BlocProvider.value(
           value: prayerCubit,
-          child: const QiblaScreen(),
+          child: const QiblaComingSoonScreen(),
         ),
       ),
       MoreTile(
