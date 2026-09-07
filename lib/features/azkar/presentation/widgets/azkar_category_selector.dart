@@ -103,7 +103,14 @@ class AzkarCategorySelector extends StatelessWidget {
             _iconBadge(accent, category),
             const SizedBox(width: 16),
             Expanded(
-              child: Text(category.label, style: TextStyle(color: context.colors.ink)),
+              child: Text(
+                category.label,
+                style: TextStyle(
+                  color: context.colors.ink,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             Icon(Icons.chevron_right, color: context.colors.sage, size: 20),
           ],

@@ -67,7 +67,15 @@ class _AzkarHeaderState extends State<AzkarHeader> with SingleTickerProviderStat
               child: child,
             );
           },
-          child: Text(widget.title, style: UIConstants.titleStyle),
+          child: Text(
+            widget.title,
+            style: const TextStyle(
+              fontSize: 34,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
+              height: 1.1,
+            ).merge(UIConstants.titleStyle),
+          ),
         ),
       ),
     );

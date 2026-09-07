@@ -14,6 +14,7 @@ import 'widgets/surah_index.dart';
 import '../../../../ui/ui_constants.dart';
 import '../../../core/presentation/motion/motion.dart';
 import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
+import '../../../core/constants/app_color_tokens.dart';
 
 /// Quran: a front cover, then the surah index and search — or a clear
 /// notice when the feature is disabled (no verified source text on
@@ -88,7 +89,7 @@ class _QuranViewState extends State<_QuranView> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (context, state) {
             if (state.importStatus is QuranImporting) {
@@ -103,6 +104,20 @@ class _QuranViewState extends State<_QuranView> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Bold "Al-Quran" heading directly below AppBar with no gap
+                Padding(
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                  child: Text(
+                    l10n.quranScreenTitle,
+                    style: TextStyle(
+                      color: context.colors.gold,
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.5,
+                      height: 1.0,
+                    ),
+                  ),
+                ),
                 Expanded(child: SurahIndex(state: state)),
               ],
             );
