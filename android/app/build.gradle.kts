@@ -57,6 +57,18 @@ android {
 
     buildTypes {
         release {
+            // R8 minification + resource shrinking — enabled for Play
+            // Store builds to reduce APK/AAB size and strip unused code.
+            // proguard-rules.pro keeps every plugin that uses reflection.
+            // If a future plugin breaks under shrinking, add its keep
+            // rules to proguard-rules.pro (check the plugin's README).
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
             signingConfig = if (hasReleaseSigning) {
                 signingConfigs.getByName("release")
             } else {
