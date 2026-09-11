@@ -10,9 +10,10 @@
 
 import 'dart:async';
 
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/allah_calligraphy.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
@@ -33,11 +34,17 @@ class _HeroCardState extends State<HeroCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _greetingOpacity;
+  Timer? _midHoldTimer;
   Timer? _holdTimer;
-  // Set once the initial reveal completes, so the later fade-out
-  // (controller running 1 -> 0) fades the whole greeting rather than
-  // dropping characters in reverse — see noor-text-reveal: builds up,
-  // holds, then fades away as a whole, not a reversed typewriter.
+  // 0 = Bismillah revealing/holding, 1 = the Assalamu Alaikum greeting
+  // revealing/holding/fading. Moved here from the splash sequence
+  // (2026-09-05, direct request) — Bismillah now leads this greeting
+  // on Home instead of appearing during app launch.
+  int _phase = 0;
+  // Set once the current phase's reveal completes, so its later
+  // fade-out (controller running 1 -> 0) fades the whole line rather
+  // than dropping characters in reverse — see noor-text-reveal: builds
+  // up, holds, then fades away as a whole, not a reversed typewriter.
   bool _revealed = false;
 
   @override
@@ -47,24 +54,37 @@ class _HeroCardState extends State<HeroCard>
         vsync: this, duration: const Duration(milliseconds: 600));
     _greetingOpacity =
         CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed && mounted) {
-        setState(() => _revealed = true);
-      }
-    });
+    _controller.addStatusListener(_onStatusChanged);
     _controller.forward();
-    // A real cancelable Timer, not Future.delayed — a pending
-    // Future.delayed left running when this widget is torn down
-    // (e.g. switching tabs mid-hold) fails flutter_test's "no pending
-    // timers" invariant even with the mounted guard, since the timer
-    // itself is still scheduled either way.
-    _holdTimer = Timer(const Duration(milliseconds: 2200), () {
-      if (mounted) _controller.reverse();
-    });
+  }
+
+  void _onStatusChanged(AnimationStatus status) {
+    if (status != AnimationStatus.completed || !mounted) return;
+    if (_phase == 0) {
+      // Bismillah finished revealing — hold briefly, then give way to
+      // the greeting. A real cancelable Timer, not Future.delayed — a
+      // pending Future.delayed left running when this widget is torn
+      // down (e.g. switching tabs mid-hold) fails flutter_test's "no
+      // pending timers" invariant even with the mounted guard, since
+      // the timer itself is still scheduled either way.
+      _midHoldTimer = Timer(const Duration(milliseconds: 900), () {
+        if (!mounted) return;
+        setState(() => _phase = 1);
+        _controller
+          ..reset()
+          ..forward();
+      });
+    } else {
+      setState(() => _revealed = true);
+      _holdTimer = Timer(const Duration(milliseconds: 2200), () {
+        if (mounted) _controller.reverse();
+      });
+    }
   }
 
   @override
   void dispose() {
+    _midHoldTimer?.cancel();
     _holdTimer?.cancel();
     _controller.dispose();
     super.dispose();
@@ -129,10 +149,32 @@ class _HeroCardState extends State<HeroCard>
             child: AnimatedBuilder(
               animation: _controller,
               builder: (context, _) {
+                // Character-by-character build-up during each phase's
+                // reveal (noor-text-reveal) — once fully revealed,
+                // stays whole through that phase's hold-then-fade.
+                if (_phase == 0) {
+                  const bismillah = AppStrings.splashGreeting;
+                  final visibleChars = _revealed
+                      ? bismillah.length
+                      : (bismillah.length * _controller.value).round();
+                  return Semantics(
+                    label: AppStrings.splashGreetingSemanticLabel,
+                    child: ExcludeSemantics(
+                      child: Text(
+                        bismillah.substring(0, visibleChars),
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontFamily: AppTypography.arabicFamily,
+                          fontSize: 17,
+                          height: 1.5,
+                          color: context.colors.gold,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 final greeting = l10n.assalamuAlaikumGreeting;
-                // Character-by-character build-up during the initial
-                // reveal only (noor-text-reveal) — once fully revealed,
-                // stays whole through the later hold-then-fade.
                 final visibleChars = _revealed
                     ? greeting.length
                     : (greeting.length * _controller.value).round();

@@ -4,12 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:noor/app.dart';
-import 'package:noor/core/constants/app_strings.dart';
 import 'package:noor/core/constants/splash_config.dart';
+import 'package:noor/core/presentation/widgets/noor_splash_wordmark.dart';
 import 'package:noor/features/home/presentation/home_dashboard.dart';
 
 void main() {
-  testWidgets('NoorApp shows the Bismillah then the home dashboard', (
+  testWidgets('NoorApp shows the splash then the home dashboard', (
     WidgetTester tester,
   ) async {
     // Empty prefs => SplashGate has never recorded a prior open, so
@@ -21,8 +21,11 @@ void main() {
     // resolve before the splash's own fade-in animation starts.
     await tester.pump();
 
+    // Bismillah moved off the splash and onto Home's greeting instead
+    // (2026-09-05) — the splash itself is just the particle burst
+    // dissolving into the NOOR wordmark now.
     await tester.pump(SplashConfig.fadeDuration);
-    expect(find.text(AppStrings.splashGreeting), findsOneWidget);
+    expect(find.byType(NoorSplashWordmark), findsOneWidget);
 
     // Advance past hold + fade-out in small steps rather than one big
     // pump or pumpAndSettle — some dashboard tabs show an

@@ -42,6 +42,7 @@
          for the full scoping decision. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- Some OEMs (e.g., MIUI) may restore the app's SQLite database despite allowBackup="false"; see main.dart's startup guard. -->
     <application
         android:label="noor"
         android:name="${applicationName}"

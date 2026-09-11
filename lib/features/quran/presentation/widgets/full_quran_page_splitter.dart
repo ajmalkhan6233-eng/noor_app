@@ -36,13 +36,23 @@ class BookPage {
 /// surah_page_splitter.dart's own (n)-suffix approximation.
 const double surahHeaderReservedHeight = 64;
 
-List<BookPage> splitBookIntoPages({
+/// Async and chunked, not a plain loop (2026-09-05 fix): measuring all
+/// ~6,236 ayahs' text via [TextPainter] in one uninterrupted pass takes
+/// roughly 30 seconds on a real device — the earlier memoization fix
+/// (2026-09-04) only stopped this from re-running on every rebuild, it
+/// didn't make the one unavoidable first pass any faster, so opening
+/// "Read the full Quran" still froze the whole UI thread for that long
+/// with no way to tell it wasn't actually hung. Yielding after every
+/// surah lets the engine pump frames between chunks, so the screen's
+/// loading spinner keeps animating and the app stays responsive while
+/// this runs, instead of looking stuck.
+Future<List<BookPage>> splitBookIntoPages({
   required List<QuranAyah> ayahs,
   required List<QuranSurah> surahs,
   required TextStyle style,
   required double maxWidth,
   required double maxHeight,
-}) {
+}) async {
   final surahsById = {for (final s in surahs) s.id: s};
   final pages = <BookPage>[];
   var i = 0;
@@ -61,7 +71,10 @@ List<BookPage> splitBookIntoPages({
       maxWidth: maxWidth,
       maxHeight: maxHeight - surahHeaderReservedHeight,
     );
-    if (firstPagePortion.isEmpty) continue;
+    if (firstPagePortion.isEmpty) {
+      await Future<void>.delayed(Duration.zero);
+      continue;
+    }
     pages.add(BookPage(surah: surah, ayahs: firstPagePortion.first, isFirstPageOfSurah: true));
 
     final rest = surahAyahs.sublist(firstPagePortion.first.length);
@@ -74,6 +87,8 @@ List<BookPage> splitBookIntoPages({
     for (final page in restPages) {
       pages.add(BookPage(surah: surah, ayahs: page, isFirstPageOfSurah: false));
     }
+
+    await Future<void>.delayed(Duration.zero);
   }
   return pages;
 }

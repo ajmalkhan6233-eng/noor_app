@@ -164,6 +164,7 @@ If a task file's instructions ever conflict with these, these win.
   narrowed to reinstall-specific (not reproducible via `pm clear`),
   most likely an OEM (MIUI) backup path restoring the old DB alongside
   its Keystore passphrase — outside what `allowBackup=false` prevents.
+- Added one‑time guard in `main.dart` to clear restored `prayer_completions` on first launch. This mitigates OEM backup restoration issues despite `allowBackup=false`. The guard writes a flag `hasCleanedRestoredPrayerData` to `SharedPreferences`.
 - Azkar/Dua library still short of a fuller set (74 vs. a desired
   ~150) — each new entry needs a real Hisn al-Muslim source fetch and
   diff, not rushed.
@@ -332,3 +333,17 @@ target web). Added a branded loading indicator to Quran's loading
 states. Opened PR #9 with all of this; refined this file (moved the
 full diary to CLAUDE_HISTORY.md, added the efficiency/reporting
 standing rules).
+
+**Week of 2026-09-05–06 (PR #10)**: Azkar: removed the translation
+TTS/speaker button (a crash surface), fixed the search-result tap
+(ParallaxItem was swallowing taps), added cute category icon badges,
+nudged the bookmark icon. Quran: converted both readers to real
+page-turn navigation, fixed a repagination freeze/jitter bug, and
+persisted full-book pagination to disk so the first-load cost is a
+true one-time cost across app restarts. Replaced the launcher icon
+with user-supplied navy/نور artwork and zeroed the Android 12+
+launch-icon zoom animation. Moved the splash Bismillah to lead
+Home's greeting instead. Adhan reciters now preview on tap. Tried a
+one-shot `flutter build web` for a non-phone layout/icon preview —
+useful for UI review, confirmed unusable for anything reading the
+encrypted database (no real web backend for sqflite_sqlcipher).

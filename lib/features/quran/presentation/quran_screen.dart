@@ -11,7 +11,7 @@ import 'bookmarks_screen.dart';
 import 'widgets/quran_cover_screen.dart';
 import 'widgets/quran_import_notice.dart';
 import 'widgets/surah_index.dart';
-import '../../../core/constants/app_color_tokens.dart';
+import '../../../../ui/ui_constants.dart';
 import '../../../core/presentation/motion/motion.dart';
 import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
 
@@ -66,8 +66,8 @@ class _QuranViewState extends State<_QuranView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: context.colors.paper,
-        title: Text(l10n.quranScreenTitle),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Text(l10n.quranScreenTitle, style: UIConstants.titleStyle),
         actions: [
           Semantics(
             label: l10n.bookmarksLabel,

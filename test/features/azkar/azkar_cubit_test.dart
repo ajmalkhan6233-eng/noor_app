@@ -24,7 +24,8 @@ class _FakeAzkarRepository extends AzkarRepository {
 
   @override
   Future<Map<int, int>> progressForItems(List<int> itemIds) async => {
-        for (final id in itemIds) id: _progress[id] ?? 0,
+        for (final id in itemIds)
+          if (_progress[id] != null) id: _progress[id]!,
       };
 
   @override
