@@ -84,6 +84,11 @@ class AppLocalizationsSi extends AppLocalizations {
   }
 
   @override
+  String selectDhikrHint(String dhikr) {
+    return 'ඒ වෙනුවට $dhikr ගණන් කිරීමට දෙවරක් තට්ටු කරන්න';
+  }
+
+  @override
   String get prayerTimesScreenTitle => 'සලාත් වේලාවන්';
 
   @override

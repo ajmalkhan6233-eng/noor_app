@@ -29,6 +29,8 @@
   "tasbihVibrationLabel": "Vibration",
   "dhikrSelectorSemanticLabel": "Dhikr to count",
   "currentlyCountingLabel": "Currently counting {dhikr}",
+  "selectDhikrHint": "Double tap to count {dhikr} instead",
+  "@selectDhikrHint": {"placeholders": {"dhikr": {"type": "String"}}},
   "@currentlyCountingLabel": {"placeholders": {"dhikr": {"type": "String"}}},
 
   "prayerTimesScreenTitle": "Prayer Times",
