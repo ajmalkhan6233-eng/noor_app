@@ -7,12 +7,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/effects/particle_burst.dart';
 import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
 import '../../logic/prayer_countdown_phase.dart';
+import '../../logic/time_of_day_gradient_phase.dart';
 import 'iqama_gap_row.dart';
 import 'prayer_countdown_row.dart';
+import 'prayer_hero_gradient.dart';
 
 class PrayerHero extends StatefulWidget {
   const PrayerHero({super.key, required this.times, required this.offsets});
@@ -70,23 +73,38 @@ class _PrayerHeroState extends State<PrayerHero> {
         '$prayerName iqamah in ${_ariaCountdown(remaining)}',
     };
 
-    return Column(
-      children: [
-        Semantics(
-          liveRegion: true,
-          label: label,
-          child: switch (phase) {
-            NextPrayerPhase(:final prayerName, :final remaining) =>
-              PrayerCountdownRow(
-                prayerName: prayerName,
-                remaining: remaining,
-                now: _now,
-              ),
-            IqamaGapPhase(:final prayerName, :final remaining) =>
-              IqamaGapRow(prayerName: prayerName, remaining: remaining),
-          },
-        ),
-      ],
+    final colors = context.colors;
+    // Nebula-only, per app rule: the gradient never touches Dawn (light).
+    final gradient = colors.brightness == Brightness.dark
+        ? prayerHeroGradientFor(
+            computeTimeOfDayGradientPhase(times: widget.times, now: _now),
+            colors,
+          )
+        : null;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        children: [
+          Semantics(
+            liveRegion: true,
+            label: label,
+            child: switch (phase) {
+              NextPrayerPhase(:final prayerName, :final remaining) =>
+                PrayerCountdownRow(
+                  prayerName: prayerName,
+                  remaining: remaining,
+                  now: _now,
+                ),
+              IqamaGapPhase(:final prayerName, :final remaining) =>
+                IqamaGapRow(prayerName: prayerName, remaining: remaining),
+            },
+          ),
+        ],
+      ),
     );
   }
 
