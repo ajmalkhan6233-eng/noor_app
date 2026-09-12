@@ -35,7 +35,7 @@ class PrayerTrackerCard extends StatelessWidget {
 
   bool _hasOccurred(String prayer) {
     final times = todayTimes;
-    if (times == null) return true;
+    if (times == null) return false;
     final now = DateTime.now();
     for (final (name, time) in times.prayerEntries) {
       if (name == prayer) return !time.isAfter(now);

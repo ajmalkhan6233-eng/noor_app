@@ -22,6 +22,15 @@ class QuranCubit extends Cubit<QuranState> {
   final QuranImportService _importService;
   final SettingsRepository _settingsRepository;
 
+  // Serializes toggleBookmark calls: quran_bookmarks has no unique
+  // constraint on (surah_id, ayah_number), so two taps landing before
+  // the first's DB round trip and state re-emit completed used to
+  // both see "not bookmarked yet" and both insert, leaving a duplicate
+  // row. Chaining onto this makes the second call wait for the first
+  // to actually finish (and its result reflected in state) before it
+  // decides whether to add or remove.
+  Future<void> _bookmarkOp = Future.value();
+
   Future<void> init() async {
     final appSettings = await _settingsRepository.load();
     final status = await _importService.ensureImported(
@@ -75,7 +84,13 @@ class QuranCubit extends Cubit<QuranState> {
     emit(state.copyWith(searchResults: results));
   }
 
-  Future<void> toggleBookmark(int surahId, int ayahNumber) async {
+  Future<void> toggleBookmark(int surahId, int ayahNumber) {
+    final op = _bookmarkOp.then((_) => _toggleBookmark(surahId, ayahNumber));
+    _bookmarkOp = op;
+    return op;
+  }
+
+  Future<void> _toggleBookmark(int surahId, int ayahNumber) async {
     final existing = state.bookmarks.where(
       (b) => b.surahId == surahId && b.ayahNumber == ayahNumber,
     );

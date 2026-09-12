@@ -14,6 +14,11 @@ Future<void> main() async {
   if (!(prefs.getBool('hasCleanedRestoredPrayerData') ?? false)) {
     final db = await DatabaseHelper.instance.database;
     await db.delete('prayer_completions');
+    // Same false-progress problem as prayer_completions (see comment
+    // history): an OEM-restored DB would otherwise claim fasting days
+    // were observed on an install where the user hasn't fasted at
+    // all yet, inflating currentFastingStreak from day one.
+    await db.delete('fasting_days');
     await prefs.setBool('hasCleanedRestoredPrayerData', true);
   }
   runApp(const NoorApp());

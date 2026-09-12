@@ -11,7 +11,7 @@ import 'prayer_tracker_state.dart';
 class PrayerTrackerCubit extends Cubit<PrayerTrackerState> {
   PrayerTrackerCubit({PrayerTrackerRepository? repository})
     : _repository = repository ?? PrayerTrackerRepository(),
-      super(PrayerTrackerState());
+      super(const PrayerTrackerState());
 
   final PrayerTrackerRepository _repository;
 
@@ -21,7 +21,7 @@ class PrayerTrackerCubit extends Cubit<PrayerTrackerState> {
   static const _maxDaysBack = 2;
 
   static DateTime _today() {
-    final now = DateTime.now();
+    final now = PrayerTrackerState.debugNowOverride();
     return DateTime(now.year, now.month, now.day);
   }
 
@@ -44,15 +44,14 @@ class PrayerTrackerCubit extends Cubit<PrayerTrackerState> {
   }
 
   Future<void> goToPreviousDay() async {
-    final earliest = _today().subtract(const Duration(days: _maxDaysBack));
-    if (!state.viewedDate.isAfter(earliest)) return;
-    emit(state.copyWith(viewedDate: state.viewedDate.subtract(const Duration(days: 1))));
+    if (state.daysBack >= _maxDaysBack) return;
+    emit(state.copyWith(daysBack: state.daysBack + 1));
     await load();
   }
 
   Future<void> goToNextDay() async {
     if (state.isViewingToday) return;
-    emit(state.copyWith(viewedDate: state.viewedDate.add(const Duration(days: 1))));
+    emit(state.copyWith(daysBack: state.daysBack - 1));
     await load();
   }
 
