@@ -49,14 +49,27 @@ class AzkarRepository {
   }
 
   /// Every item across every category whose transliteration or
-  /// translation contains [query] (case-insensitive) — lets someone
-  /// type e.g. "sleep" and find the relevant dua without knowing
-  /// which category it lives in first.
+  /// translation contains [query] (case-insensitive), OR whose
+  /// category's display label matches [query] — lets someone type
+  /// e.g. "sleep" (or "sleeping") and find every Sleep-category item
+  /// even if that exact word never appears in a given item's own
+  /// translation text, without knowing which category it lives in
+  /// first.
   Future<List<(AzkarCategory category, AzkarItem item)>> searchItems(String query) async {
     final trimmed = query.trim();
     if (trimmed.isEmpty) return [];
+    final lowerQuery = trimmed.toLowerCase();
+
+    final matchingCategoryKeys = AzkarCategory.values
+        .where((c) {
+          final label = c.label.toLowerCase();
+          return label.contains(lowerQuery) || lowerQuery.contains(label);
+        })
+        .map((c) => c.dbKey)
+        .toList();
 
     final db = await _dbHelper.database;
+    final categoryPlaceholders = matchingCategoryKeys.map((_) => '?').join(',');
     final rows = await db.rawQuery(
       '''
       SELECT azkar_items.*, azkar_categories.category_key AS category_key
@@ -64,9 +77,10 @@ class AzkarRepository {
       JOIN azkar_categories ON azkar_categories.id = azkar_items.category_id
       WHERE LOWER(azkar_items.transliteration) LIKE ?
          OR LOWER(azkar_items.translation) LIKE ?
+         ${matchingCategoryKeys.isEmpty ? '' : 'OR azkar_categories.category_key IN ($categoryPlaceholders)'}
       ORDER BY azkar_categories.id ASC, azkar_items.display_order ASC
       ''',
-      ['%${trimmed.toLowerCase()}%', '%${trimmed.toLowerCase()}%'],
+      ['%$lowerQuery%', '%$lowerQuery%', ...matchingCategoryKeys],
     );
 
     final results = <(AzkarCategory, AzkarItem)>[];
