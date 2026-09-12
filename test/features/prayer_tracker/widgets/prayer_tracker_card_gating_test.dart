@@ -1,19 +1,22 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Regression test for the 2026-08-26 fix: with no location set
+// Regression test for the 2026-08-24 fix: with no location set
 // (todayTimes null), every prayer used to be markable regardless of
 // whether it had actually happened yet — found live ("now I can
 // select all the prayers... not satisfied"). A prayer whose adhan
 // hasn't happened must never be toggleable, whether or not today's
-// times are known yet.
+// times are known yet. Originally covered DailyGoalsList; that widget
+// was deleted 2026-09-06 in favor of PrayerTrackerCard (which carries
+// the same _hasOccurred gating), so this test now targets that widget
+// directly.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:noor/features/home/presentation/widgets/daily_goals_list.dart';
 import 'package:noor/features/prayer_times/data/prayer_times_result.dart';
 import 'package:noor/features/prayer_tracker/data/prayer_tracker_repository.dart';
 import 'package:noor/features/prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
+import 'package:noor/features/prayer_tracker/presentation/widgets/prayer_tracker_card.dart';
 import 'package:noor/l10n/generated/app_localizations.dart';
 
 class _FakeTrackerRepository extends PrayerTrackerRepository {
@@ -52,7 +55,7 @@ Widget _wrap(PrayerTrackerCubit cubit, {PrayerTimesComputed? todayTimes}) {
     home: Scaffold(
       body: BlocProvider.value(
         value: cubit,
-        child: DailyGoalsList(todayTimes: todayTimes),
+        child: PrayerTrackerCard(todayTimes: todayTimes),
       ),
     ),
   );
