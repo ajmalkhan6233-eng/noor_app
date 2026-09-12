@@ -3,46 +3,57 @@
 import 'package:equatable/equatable.dart';
 
 class PrayerTrackerState extends Equatable {
-  PrayerTrackerState({
+  const PrayerTrackerState({
     this.completedPrayers = const {},
     this.fastingToday = false,
     this.prayerStreak = 0,
     this.fastingStreak = 0,
-    DateTime? viewedDate,
-  }) : viewedDate = viewedDate ?? _today();
+    this.daysBack = 0,
+  });
 
   final Set<String> completedPrayers;
   final bool fastingToday;
   final int prayerStreak;
   final int fastingStreak;
 
-  /// The calendar day the checklist is currently showing/editing —
-  /// defaults to today. Marking a prayer done on a day other than
-  /// today is for catching up on the last couple of days only (see
-  /// PrayerTrackerCubit's clamp); there is no reason to ever view a
-  /// future day here.
-  final DateTime viewedDate;
+  /// How many days back from *today* the checklist is showing/editing
+  /// — 0 is today, 1 is yesterday, etc. Stored as an offset rather than
+  /// an absolute date so a cubit instance that outlives midnight (this
+  /// one is shared across Home and Prayer Times for the app's whole
+  /// lifetime) keeps tracking the real "today" instead of freezing on
+  /// whatever date it happened to be constructed on — a stored absolute
+  /// date used to go stale across a midnight rollover and log a
+  /// still-open Isha completion against the wrong day.
+  final int daysBack;
+
+  /// Overridable only from tests, to simulate a midnight rollover
+  /// without a real clock wait — never reassigned in app code. Not
+  /// `@visibleForTesting`-restricted since PrayerTrackerCubit (a
+  /// different file) also needs to read the same clock.
+  static DateTime Function() debugNowOverride = DateTime.now;
 
   static DateTime _today() {
-    final now = DateTime.now();
+    final now = debugNowOverride();
     return DateTime(now.year, now.month, now.day);
   }
 
-  bool get isViewingToday => viewedDate == _today();
+  DateTime get viewedDate => _today().subtract(Duration(days: daysBack));
+
+  bool get isViewingToday => daysBack == 0;
 
   PrayerTrackerState copyWith({
     Set<String>? completedPrayers,
     bool? fastingToday,
     int? prayerStreak,
     int? fastingStreak,
-    DateTime? viewedDate,
+    int? daysBack,
   }) {
     return PrayerTrackerState(
       completedPrayers: completedPrayers ?? this.completedPrayers,
       fastingToday: fastingToday ?? this.fastingToday,
       prayerStreak: prayerStreak ?? this.prayerStreak,
       fastingStreak: fastingStreak ?? this.fastingStreak,
-      viewedDate: viewedDate ?? this.viewedDate,
+      daysBack: daysBack ?? this.daysBack,
     );
   }
 
@@ -52,6 +63,6 @@ class PrayerTrackerState extends Equatable {
     fastingToday,
     prayerStreak,
     fastingStreak,
-    viewedDate,
+    daysBack,
   ];
 }
