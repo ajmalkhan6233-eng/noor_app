@@ -52,7 +52,16 @@ class _AzkarScreenState extends State<AzkarScreen> {
     if (mounted) setState(() => _results = results);
   }
 
-  void _openCategory(AzkarCategory category) {
+  /// [context] must be a descendant of this build's own BlocProvider
+  /// (e.g. an itemBuilder's context) — `this.context` (the State's
+  /// own context) sits ABOVE that BlocProvider, since it's created
+  /// fresh inside this State's own build() output, so `context.read`
+  /// from `this.context` can never find it. That mismatch was the
+  /// real cause of search results being silently un-tappable
+  /// (2026-09-12): the read threw a ProviderNotFoundException inside
+  /// the onTap callback — not during build, so nothing crashed
+  /// visibly, the tap just silently did nothing.
+  void _openCategory(BuildContext context, AzkarCategory category) {
     final cubit = context.read<AzkarCubit>();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -143,7 +152,7 @@ class _AzkarScreenState extends State<AzkarScreen> {
           child: SemanticButton(
             label: '${category.label}: $resultLabel',
             hint: 'Double tap to open this dua',
-            onTap: () => _openCategory(category),
+            onTap: () => _openCategory(context, category),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
