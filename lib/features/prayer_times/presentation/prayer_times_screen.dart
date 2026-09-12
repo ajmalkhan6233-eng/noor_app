@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
+import '../../../core/presentation/widgets/glow_hero_title.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../prayer_tracker/presentation/widgets/prayer_tracker_card.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
@@ -53,6 +54,7 @@ class PrayerTimesScreen extends StatelessWidget {
     return BlocBuilder<PrayerCubit, PrayerState>(
       builder: (context, state) => CollapsingScaffold(
         title: l10n.prayerTimesScreenTitle,
+        largeTitle: GlowHeroTitle(l10n.prayerTimesScreenTitle, color: context.colors.gold),
         transparentBody: true,
         actions: [
           Semantics(
