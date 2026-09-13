@@ -72,7 +72,7 @@ class PrayerCountdownRow extends StatelessWidget {
       children: [
         Text(
           prayerName,
-          style: AppTypography.heroDisplay(context.colors.ink).copyWith(fontWeight: FontWeight.w600),
+          style: AppTypography.heroDisplay(context.colors.gold).copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 2),
         Text('Next prayer in', style: _labelStyle(context.colors.sage)),

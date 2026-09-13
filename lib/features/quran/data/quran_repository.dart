@@ -62,18 +62,37 @@ class QuranRepository {
     return _toAyahs(rows);
   }
 
-  /// Diacritic-insensitive search over the Arabic text.
+  /// Diacritic-insensitive search over the Arabic text, the English
+  /// translation text, and surah names (English name and
+  /// transliteration) — so an English query like a common word or a
+  /// surah name ("Kahf" / "The Cave") returns real results, not just
+  /// an Arabic-script query.
   Future<List<QuranAyah>> search(String query) async {
-    final stripped = stripArabicDiacritics(query).trim();
-    if (stripped.isEmpty) return [];
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) return [];
+    final strippedArabic = stripArabicDiacritics(trimmed);
+    final lowerQuery = trimmed.toLowerCase();
 
     final db = await _dbHelper.database;
-    final rows = await db.query(
-      'quran_ayahs',
-      where: 'arabic_text_stripped LIKE ?',
-      whereArgs: ['%$stripped%'],
-      orderBy: 'surah_id ASC, ayah_number ASC',
-      limit: 200,
+
+    final matchingSurahRows = await db.query(
+      'quran_surahs',
+      where: 'LOWER(name_english) LIKE ? OR LOWER(name_translit) LIKE ?',
+      whereArgs: ['%$lowerQuery%', '%$lowerQuery%'],
+    );
+    final matchingSurahIds = [for (final row in matchingSurahRows) row['id']! as int];
+    final surahPlaceholders = matchingSurahIds.map((_) => '?').join(',');
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT * FROM quran_ayahs
+      WHERE arabic_text_stripped LIKE ?
+         OR LOWER(translation) LIKE ?
+         ${matchingSurahIds.isEmpty ? '' : 'OR surah_id IN ($surahPlaceholders)'}
+      ORDER BY surah_id ASC, ayah_number ASC
+      LIMIT 200
+      ''',
+      ['%$strippedArabic%', '%$lowerQuery%', ...matchingSurahIds],
     );
     return _toAyahs(rows);
   }

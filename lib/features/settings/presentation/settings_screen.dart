@@ -20,7 +20,6 @@ import 'widgets/high_latitude_rule_section.dart';
 import 'widgets/language_section.dart';
 import 'widgets/location_section.dart';
 import 'widgets/method_madhab_section.dart';
-import 'widgets/pre_reminder_section.dart';
 import 'widgets/test_adhan_section.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
@@ -74,9 +73,6 @@ class _SettingsView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const AppCard(child: AdvancedTimingSection()),
-                  const SizedBox(height: 16),
-                  SectionHeader(l10n.preReminderSectionHeader),
-                  const AppCard(child: PreReminderSection()),
                   const SizedBox(height: 16),
                   const SectionHeader('Adhan Sound'),
                   const AppCard(child: AdhanSoundSection()),
