@@ -35,12 +35,12 @@ class _SurahIndexState extends State<SurahIndex> {
     super.dispose();
   }
 
-  void _open(BuildContext context, int surahId) {
+  void _open(BuildContext context, int surahId, {int? ayahNumber}) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => BlocProvider.value(
           value: context.read<QuranCubit>(),
-          child: SurahReaderScreen(surahId: surahId),
+          child: SurahReaderScreen(surahId: surahId, initialAyahNumber: ayahNumber),
         ),
       ),
     );
@@ -123,7 +123,7 @@ class _SurahIndexState extends State<SurahIndex> {
                       for (final ayah in state.searchResults)
                         QuranSearchResultTile(
                           ayah: ayah,
-                          onTap: () => _open(context, ayah.surahId),
+                          onTap: () => _open(context, ayah.surahId, ayahNumber: ayah.ayahNumber),
                         ),
                   ],
                 ),

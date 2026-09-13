@@ -78,9 +78,16 @@ class QuranCubit extends Cubit<QuranState> {
     emit(state.copyWith(currentSurahId: surahId, currentAyahs: ayahs));
   }
 
+  // Guards against an earlier (slower) search's DB round trip resolving
+  // after a later (faster) keystroke's and overwriting its results —
+  // only the response matching the most recently issued query is applied.
+  int _searchGeneration = 0;
+
   Future<void> search(String query) async {
+    final generation = ++_searchGeneration;
     emit(state.copyWith(searchQuery: query));
     final results = await _repository.search(query);
+    if (generation != _searchGeneration) return;
     emit(state.copyWith(searchResults: results));
   }
 

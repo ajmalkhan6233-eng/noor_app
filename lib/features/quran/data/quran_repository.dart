@@ -62,16 +62,20 @@ class QuranRepository {
     return _toAyahs(rows);
   }
 
-  /// Diacritic-insensitive search over the Arabic text.
+  /// Diacritic-insensitive search over the Arabic text, plus a plain
+  /// (case-insensitive via `LIKE`) match over the English translation
+  /// — an English query like "mercy" previously matched nothing
+  /// because only the Arabic column was searched.
   Future<List<QuranAyah>> search(String query) async {
-    final stripped = stripArabicDiacritics(query).trim();
-    if (stripped.isEmpty) return [];
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) return [];
+    final stripped = stripArabicDiacritics(trimmed);
 
     final db = await _dbHelper.database;
     final rows = await db.query(
       'quran_ayahs',
-      where: 'arabic_text_stripped LIKE ?',
-      whereArgs: ['%$stripped%'],
+      where: 'arabic_text_stripped LIKE ? OR translation LIKE ?',
+      whereArgs: ['%$stripped%', '%$trimmed%'],
       orderBy: 'surah_id ASC, ayah_number ASC',
       limit: 200,
     );

@@ -19,9 +19,14 @@ import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
 /// Settings), bookmarking, and last-read tracking: opening a surah
 /// with a saved position jumps straight to the page containing it.
 class SurahReaderScreen extends StatefulWidget {
-  const SurahReaderScreen({super.key, required this.surahId});
+  const SurahReaderScreen({super.key, required this.surahId, this.initialAyahNumber});
 
   final int surahId;
+
+  /// Overrides the last-read lookup below — set when opening from a
+  /// search result, so the reader jumps straight to the matched ayah
+  /// instead of always landing on page 1.
+  final int? initialAyahNumber;
 
   @override
   State<SurahReaderScreen> createState() => _SurahReaderScreenState();
@@ -67,6 +72,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   int? _initialAyahNumber(QuranState state) {
     if (_scrolledToLastRead) return null;
     _scrolledToLastRead = true;
+    if (widget.initialAyahNumber != null) return widget.initialAyahNumber;
     final lastRead = state.lastRead;
     if (lastRead == null || lastRead.surahId != widget.surahId) return null;
     return lastRead.ayahNumber;
