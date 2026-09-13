@@ -129,7 +129,12 @@ class PrayerCubit extends Cubit<PrayerState> {
       date: state.date,
       settings: state.settings,
     );
-    emit(state.copyWith(result: result));
+    // locationError passed through explicitly: copyWith resets it to
+    // null when omitted (by design, so a fresh resolve attempt clears
+    // a stale error), but that would otherwise wipe out the Colombo-
+    // fallback message the moment this recalculates the result right
+    // after setting it.
+    emit(state.copyWith(result: result, locationError: state.locationError));
     // Fire-and-forget; see notification_horizon_scheduler.dart.
     unawaited(
       scheduleNotificationHorizon(
