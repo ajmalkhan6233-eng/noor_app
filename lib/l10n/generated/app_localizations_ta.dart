@@ -415,6 +415,16 @@ class AppLocalizationsTa extends AppLocalizations {
       'வரம்பற்ற பேட்டரி பயன்பாட்டை அனுமதிக்கவும்';
 
   @override
+  String get exactAlarmSectionHeader => 'சரியான நேர அறிவிப்புகள்';
+
+  @override
+  String get exactAlarmNotGrantedMessage =>
+      '\"அலாரங்கள் & நினைவூட்டல்கள்\" அனுமதி இல்லாமல், Android அதான் அறிவிப்புகளை சரியான நேரத்திற்கு பதிலாக ஒரு மணி நேரம் வரை தாமதமாக அனுப்பக்கூடும்.';
+
+  @override
+  String get grantExactAlarmPermissionLabel => 'சரியான அலாரங்களை அனுமதிக்கவும்';
+
+  @override
   String get sunnahFastingCardTitle => 'இன்று சுன்னத் நோன்பு';
 
   @override

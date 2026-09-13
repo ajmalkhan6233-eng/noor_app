@@ -412,6 +412,16 @@ class AppLocalizationsSi extends AppLocalizations {
       'අසීමිත බැටරි භාවිතයට ඉඩ දෙන්න';
 
   @override
+  String get exactAlarmSectionHeader => 'නිවැරදි වේලාවට දැනුම්දීම්';
+
+  @override
+  String get exactAlarmNotGrantedMessage =>
+      '\"එලාම හා මතක් කිරීම්\" අවසරය නොමැති නම්, Android විසින් අදාන් දැනුම්දීම් නිවැරදි වේලාවට වඩා පැයක් දක්වා ප්‍රමාද කර ලබා දිය හැක.';
+
+  @override
+  String get grantExactAlarmPermissionLabel => 'නිවැරදි එලාම වලට අවසර දෙන්න';
+
+  @override
   String get sunnahFastingCardTitle => 'අද සුන්නත් උපවාසය';
 
   @override

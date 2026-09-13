@@ -16,6 +16,7 @@ import 'widgets/battery_optimization_section.dart';
 import 'widgets/country_section.dart';
 import 'widgets/display_section.dart';
 import 'widgets/downloaded_audio_section.dart';
+import 'widgets/exact_alarm_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
 import 'widgets/language_section.dart';
 import 'widgets/location_section.dart';
@@ -84,6 +85,7 @@ class _SettingsView extends StatelessWidget {
                   const SectionHeader('Test Adhan'),
                   const AppCard(child: TestAdhanSection()),
                   const SizedBox(height: 16),
+                  const ExactAlarmSection(),
                   const BatteryOptimizationSection(),
                   const DownloadedAudioSection(),
                   SectionHeader(l10n.displaySectionHeader),

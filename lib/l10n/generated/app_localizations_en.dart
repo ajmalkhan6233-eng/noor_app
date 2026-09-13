@@ -405,6 +405,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Allow unrestricted battery use';
 
   @override
+  String get exactAlarmSectionHeader => 'On-time notifications';
+
+  @override
+  String get exactAlarmNotGrantedMessage =>
+      'Without the \"Alarms & reminders\" permission, Android may deliver adhan notifications up to an hour late instead of at the exact prayer time.';
+
+  @override
+  String get grantExactAlarmPermissionLabel => 'Allow exact alarms';
+
+  @override
   String get sunnahFastingCardTitle => 'Sunnah Fasting Today';
 
   @override

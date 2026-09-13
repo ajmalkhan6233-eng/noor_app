@@ -790,6 +790,24 @@ abstract class AppLocalizations {
   /// **'Allow unrestricted battery use'**
   String get grantBatteryOptimizationExemptionLabel;
 
+  /// No description provided for @exactAlarmSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'On-time notifications'**
+  String get exactAlarmSectionHeader;
+
+  /// No description provided for @exactAlarmNotGrantedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Without the \"Alarms & reminders\" permission, Android may deliver adhan notifications up to an hour late instead of at the exact prayer time.'**
+  String get exactAlarmNotGrantedMessage;
+
+  /// No description provided for @grantExactAlarmPermissionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow exact alarms'**
+  String get grantExactAlarmPermissionLabel;
+
   /// No description provided for @sunnahFastingCardTitle.
   ///
   /// In en, this message translates to:
