@@ -117,6 +117,39 @@ If a task file's instructions ever conflict with these, these win.
 - When a batch of tasks finishes, summarize what actually changed
   (files touched, what each change does) rather than a bare "done."
 
+## Post-v1.0 Update Discipline
+
+Once version 1.0.0 is submitted to Play Store, this project moves from
+"full manual verification each session" to normal versioned updates.
+This changes how work gets done from here on:
+
+1. Version every change. This build is 1.0.0. Every fix after this
+   gets its own version bump (1.0.1, 1.0.2, ...) in pubspec.yaml.
+   Never batch unrelated fixes into one version — one clear change (or
+   a small tightly-related group) per version number.
+
+2. Scope each task to exactly what was asked. If Aj reports "the Adhan
+   sound doesn't play," fix and verify that specific thing — do not
+   re-verify the whole app, re-check unrelated screens, or expand
+   scope beyond what was actually reported.
+
+3. Verification matches the size of the change. A small, isolated fix
+   gets a targeted test proving that specific bug is fixed — not a
+   full rebuild-uninstall-reinstall-screenshot-everything cycle. Full
+   end-to-end verification is reserved for genuinely large or
+   structural changes, not routine small fixes.
+
+4. Delivery is via Play Store, not manual installs. Once 1.0.0 is
+   live (even in closed testing), do not ask Aj to manually install
+   APK files for routine updates — build the new version, and it
+   reaches devices through Play Store's own update mechanism once
+   uploaded to Play Console. Manual installs are only for genuinely
+   pre-release/experimental work that isn't ready for that track yet.
+
+5. Keep commits and version bumps tightly matched — each version bump
+   should correspond to a clear, reviewable set of changes, not an
+   accumulation of loosely-related work.
+
 ## Current Status (2026-09-05)
 
 ### Confirmed working
