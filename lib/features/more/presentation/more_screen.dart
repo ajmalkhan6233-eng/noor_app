@@ -14,6 +14,7 @@ import '../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
+import '../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../qibla/presentation/qibla_coming_soon_screen.dart';
 import '../../settings/presentation/about_screen.dart';
@@ -31,6 +32,7 @@ class MoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final prayerCubit = context.read<PrayerCubit>();
+    final adhanPreviewCubit = context.read<AdhanPreviewCubit>();
     final tiles = <MoreTile>[
       // Routed to the "coming soon" placeholder for this release
       // (2026-09-04, direct request) — the compass dial has a real,
@@ -81,7 +83,15 @@ class MoreScreen extends StatelessWidget {
         icon: NoorIconType.settings,
         color: context.colors.accentSecondary,
         label: l10n.settingsSemanticLabel,
-        builder: (_) => const SettingsScreen(),
+        // BlocProvider.value, not const SettingsScreen(): same
+        // ProviderNotFoundException shape as the Qibla fix above —
+        // AdhanSoundSection (inside SettingsScreen) reads
+        // AdhanPreviewCubit, which only ever lives in HomeDashboard's
+        // tab tree, not on this separately-pushed route.
+        builder: (_) => BlocProvider.value(
+          value: adhanPreviewCubit,
+          child: const SettingsScreen(),
+        ),
         onClosed: () => prayerCubit.loadSettings(),
       ),
       MoreTile(
