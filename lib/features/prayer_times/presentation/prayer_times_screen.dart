@@ -54,7 +54,11 @@ class PrayerTimesScreen extends StatelessWidget {
     return BlocBuilder<PrayerCubit, PrayerState>(
       builder: (context, state) => CollapsingScaffold(
         title: l10n.prayerTimesScreenTitle,
-        largeTitle: GlowHeroTitle(l10n.prayerTimesScreenTitle, color: context.colors.gold),
+        largeTitle: GlowHeroTitle(
+          l10n.prayerTimesScreenTitle,
+          color: context.colors.gold,
+          style: AppTypography.heroDisplay(context.colors.gold).copyWith(fontSize: 32),
+        ),
         transparentBody: true,
         actions: [
           Semantics(
@@ -74,6 +78,16 @@ class PrayerTimesScreen extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: StaggeredFadeIn(
                 children: [
+                  if (state.locationError != null) ...[
+                    Center(
+                      child: Text(
+                        state.locationError!,
+                        textAlign: TextAlign.center,
+                        style: AppTypography.caption(context.colors.sage),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   _buildResult(context, state),
                   if (state.result is PrayerTimesComputed) ...[
                     const SizedBox(height: 16),
