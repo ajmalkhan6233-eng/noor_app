@@ -13,13 +13,12 @@
 //
 // GPS has no network fallback in this app (zero INTERNET permission,
 // locked) — a pure on-device GPS fix can fail indoors or time out.
-// The old version discarded that failure silently and always
-// finished onboarding anyway, leaving the app half-configured until
-// the user found their own way to Settings to pick a district
-// (2026-08-25 live-device review: "the [app] should be displayed...
-// without that I have to go inside settings"). Now a failed fix
-// reveals the same district picker inline, right here, so one tap of
-// "Enable location" always ends with a fully working app either way.
+// The manual district picker that used to cover that case was removed
+// (2026-09-13, GPS-only going forward): a failed fix here just lets
+// onboarding finish anyway, since PrayerCubit itself now falls back to
+// Colombo's coordinates automatically (see coordinate_bounds.dart) —
+// the app is never left half-configured, just told to check location
+// permission from Settings when it matters.
 
 import 'package:flutter/material.dart';
 
@@ -27,7 +26,6 @@ import '../app_locale_controller.dart';
 import '../constants/app_color_tokens.dart';
 import '../location/location_service.dart';
 import '../utils/semantics_helpers.dart';
-import '../../features/prayer_times/presentation/widgets/district_selector.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
 
@@ -45,17 +43,12 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
   bool _resolving = false;
   bool _locationStepDone = false;
   bool _gpsSucceeded = false;
-  String? _pickedDistrict;
   AppLocaleOption _selectedLocale = AppLocaleOption.english;
 
-  Future<void> _finish({String? district}) async {
+  Future<void> _finish() async {
     final repository = SettingsRepository();
     final settings = await repository.load();
-    await repository.save(
-      settings
-          .copyWith(hasSeenLocationOnboarding: true, locale: _selectedLocale)
-          .withSelectedDistrict(district ?? settings.selectedDistrict),
-    );
+    await repository.save(settings.copyWith(hasSeenLocationOnboarding: true, locale: _selectedLocale));
     AppLocaleController.instance.locale.value = _selectedLocale.locale;
     if (mounted) widget.onFinished();
   }
@@ -137,25 +130,17 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 const SizedBox(height: 16),
                 Text(
                   _gpsSucceeded
-                      ? 'Your prayer times are set from GPS. You can also pick '
-                            'your district below — it\'s used as a backup and '
-                            'for local holiday info.'
-                      : "Couldn't get a GPS fix — pick your district instead, "
-                            "just this once.",
+                      ? 'Your prayer times are set from GPS.'
+                      : "Couldn't get a GPS fix — noor will show prayer times "
+                            'for Colombo until location works. You can retry any '
+                            'time from Settings.',
                   style: TextStyle(color: context.colors.sage, height: 1.4),
-                ),
-                const SizedBox(height: 12),
-                DistrictSelector(
-                  selectedDistrict: _pickedDistrict,
-                  onSelected: (district) => setState(() => _pickedDistrict = district.name),
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: (!_gpsSucceeded && _pickedDistrict == null)
-                        ? null
-                        : () => _finish(district: _pickedDistrict),
+                    onPressed: _finish,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.colors.gold,
                       foregroundColor: context.colors.paper,
@@ -170,14 +155,14 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: _resolving ? null : () => _finish(),
+                  onPressed: _resolving ? null : _finish,
                   style: OutlinedButton.styleFrom(
                     foregroundColor: context.colors.gold,
                     side: BorderSide(color: context.colors.goldBorder),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Not now — I\'ll set a district in Settings'),
+                  child: const Text('Not now — I\'ll enable location in Settings'),
                 ),
               ),
             ],

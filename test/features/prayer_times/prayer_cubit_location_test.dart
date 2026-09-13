@@ -48,7 +48,7 @@ void main() {
       expect(cubit.state.result, isA<PrayerTimesComputed>());
     });
 
-    test('leaves coordinates unset (no hang) when GPS fails', () async {
+    test('falls back to Colombo with a clear message when GPS fails (no hang, no blank screen)', () async {
       final cubit = PrayerCubit(
         locationService: const _FakeLocationService(null),
         settingsRepository: _FakeSettingsRepository(const AppSettings()),
@@ -56,23 +56,12 @@ void main() {
       await cubit.loadSettings();
 
       expect(cubit.state.isResolvingLocation, isFalse);
-      expect(cubit.state.hasCoordinates, isFalse);
-    });
-
-    test('a persisted district is sticky and is not overridden by GPS', () async {
-      final cubit = PrayerCubit(
-        locationService: const _FakeLocationService(
-          Coordinates(latitude: 6.9271, longitude: 79.8612),
-        ),
-        settingsRepository: _FakeSettingsRepository(
-          const AppSettings(selectedDistrict: 'Kandy'),
-        ),
-      );
-      await cubit.loadSettings();
-
+      expect(cubit.state.hasCoordinates, isTrue);
       expect(cubit.state.usingGps, isFalse);
-      expect(cubit.state.latitude, 7.2906);
-      expect(cubit.state.longitude, 80.6337);
+      expect(cubit.state.latitude, 6.9271);
+      expect(cubit.state.longitude, 79.8612);
+      expect(cubit.state.locationError, isNotNull);
+      expect(cubit.state.result, isA<PrayerTimesComputed>());
     });
   });
 }

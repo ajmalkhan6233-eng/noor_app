@@ -13,7 +13,6 @@ import '../../../settings/data/settings_repository.dart';
 import '../../data/coordinate_bounds.dart';
 import '../../data/prayer_notification_coordinator.dart';
 import '../../data/prayer_repository.dart';
-import '../../data/sri_lanka_district.dart';
 import 'notification_horizon_scheduler.dart';
 import 'prayer_state.dart';
 
@@ -39,11 +38,11 @@ class PrayerCubit extends Cubit<PrayerState> {
   /// Settings screen closes, since Settings is the only place location
   /// is ever changed now and doesn't share this cubit. Always re-runs
   /// resolution (not just when coordinates are still unknown) so a
-  /// district change or a fresh GPS fix made in Settings takes effect
-  /// immediately rather than waiting for the next app launch.
-  /// District, if set, always wins — sticky, never silently overridden
-  /// by GPS. [_autoFetchLocation] is cheap to call even when a fix is
-  /// already known: it returns the cached one instead of touching GPS
+  /// fresh GPS fix made in Settings takes effect immediately rather
+  /// than waiting for the next app launch. GPS-only: no district
+  /// override any more (2026-09-13, district picker removed) —
+  /// [_autoFetchLocation] is cheap to call even when a fix is already
+  /// known, since it returns the cached one instead of touching GPS
   /// again.
   Future<void> loadSettings() async {
     final appSettings = await _settingsRepository.load();
@@ -58,42 +57,36 @@ class PrayerCubit extends Cubit<PrayerState> {
         adhanReciter: appSettings.adhanReciter,
       ),
     );
-    final district = findSriLankaDistrict(appSettings.selectedDistrict);
-    if (district != null) {
-      emit(
-        state.copyWith(
-          latitude: district.latitude,
-          longitude: district.longitude,
-          usingGps: false,
-        ),
-      );
-      _recalculate();
-    } else {
-      await _autoFetchLocation();
-    }
+    await _autoFetchLocation();
   }
 
   /// Explicit tap — forces a fresh reading, bypassing the auto cache.
   Future<void> useGps() => _resolveLocation(forceFresh: true);
 
   /// On first open: cached fix if known, else a bounded GPS attempt
-  /// that never hangs — manual/district selectors are the fallback.
+  /// that never hangs — the Colombo fallback below covers the rest.
   Future<void> _autoFetchLocation() => _resolveLocation(forceFresh: false);
 
+  /// GPS-only (2026-09-13, district picker removed). When GPS genuinely
+  /// fails or permission is denied, falls back to Colombo's coordinates
+  /// rather than leaving the screen blank — [gpsFailedFallbackMessage]
+  /// tells the user why and invites them to check permissions.
   Future<void> _resolveLocation({required bool forceFresh}) async {
     emit(state.copyWith(isResolvingLocation: true, locationError: null));
     final coordinates = forceFresh
         ? await _locationService.getCurrentCoordinates()
         : await _locationService.autoFetchCoordinates();
     if (coordinates == null) {
-      // Auto-fetch fails silently into the selectors below; only a
-      // manual tap gets an explicit message, as a direct response.
       emit(
         state.copyWith(
+          latitude: colomboFallbackLatitude,
+          longitude: colomboFallbackLongitude,
+          usingGps: false,
           isResolvingLocation: false,
-          locationError: forceFresh ? manualEntryPromptMessage : null,
+          locationError: gpsFailedFallbackMessage,
         ),
       );
+      _recalculate();
       return;
     }
     emit(
