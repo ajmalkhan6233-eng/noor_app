@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../prayer_times/data/silent_mode_channel.dart';
 import '../../../prayer_times/data/silent_mode_settings.dart';
+import '../../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 import 'home_quick_toggle_pill.dart';
@@ -62,20 +63,31 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
     _finishEnableIfGranted();
   }
 
-  Future<void> _finishEnableIfGranted() async {
-    if (!await widget._channel.hasNotificationPolicyAccess()) return;
-    if (!mounted) return;
-    final s = context.read<SettingsCubit>().state.settings.silentMode;
-    context.read<SettingsCubit>().setSilentMode(
+  // Persisting alone isn't enough — PrayerCubit.loadSettings() is what
+  // actually re-schedules the on-device ringer windows; without this,
+  // Silent Mode toggled here stayed "on" in the DB with the ringer
+  // change never actually scheduled (same bug as the prayer bell on
+  // the Prayer Times screen — see prayer_times_screen.dart).
+  Future<void> _setAllPrayers(SilentModeSettings s, bool value) async {
+    await context.read<SettingsCubit>().setSilentMode(
       SilentModeSettings(
-        fajr: true,
-        dhuhr: true,
-        asr: true,
-        maghrib: true,
-        isha: true,
+        fajr: value,
+        dhuhr: value,
+        asr: value,
+        maghrib: value,
+        isha: value,
         extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
       ),
     );
+    if (mounted) {
+      context.read<PrayerCubit>().loadSettings();
+    }
+  }
+
+  Future<void> _finishEnableIfGranted() async {
+    if (!await widget._channel.hasNotificationPolicyAccess()) return;
+    if (!mounted) return;
+    await _setAllPrayers(context.read<SettingsCubit>().state.settings.silentMode, true);
   }
 
   // Settings' own Silent Mode section (with its "Grant Do Not Disturb
@@ -84,23 +96,9 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
   // the only other place that button lived, so turning Silent Mode on
   // here now has to request that access itself, or the toggle would go
   // on visually while the ringer never actually changes.
-  Future<void> _enableSilentMode(
-    BuildContext context,
-    SilentModeSettings s,
-  ) async {
+  Future<void> _enableSilentMode(SilentModeSettings s) async {
     if (await widget._channel.hasNotificationPolicyAccess()) {
-      if (context.mounted) {
-        context.read<SettingsCubit>().setSilentMode(
-          SilentModeSettings(
-            fajr: true,
-            dhuhr: true,
-            asr: true,
-            maghrib: true,
-            isha: true,
-            extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
-          ),
-        );
-      }
+      if (mounted) await _setAllPrayers(s, true);
       return;
     }
     _awaitingPolicyAccessResume = true;
@@ -122,18 +120,7 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
                 icon: silentOn ? Icons.notifications_off : Icons.notifications_off_outlined,
                 label: 'Silent Mode',
                 on: silentOn,
-                onTap: () => silentOn
-                    ? context.read<SettingsCubit>().setSilentMode(
-                        SilentModeSettings(
-                          fajr: false,
-                          dhuhr: false,
-                          asr: false,
-                          maghrib: false,
-                          isha: false,
-                          extraMinutesAfterIqamath: s.extraMinutesAfterIqamath,
-                        ),
-                      )
-                    : _enableSilentMode(context, s),
+                onTap: () => silentOn ? _setAllPrayers(s, false) : _enableSilentMode(s),
               ),
             ),
             const SizedBox(width: 12),

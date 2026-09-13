@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import 'home_quick_toggle_pill.dart';
 import '../../../../core/constants/app_color_tokens.dart';
@@ -26,13 +27,21 @@ class PreAdhanReminderChip extends StatelessWidget {
     final label = on ? 'Reminder: $minutes min' : 'Pre-adhan reminder';
     return PopupMenuButton<int>(
       // -1 means "off"; a real minute value both enables and sets it.
-      onSelected: (value) {
+      // Persisting alone isn't enough — PrayerCubit.loadSettings() is
+      // what actually re-schedules the on-device alarms; without this
+      // call the reminder toggled here stayed "on" in the DB with no
+      // alarm ever scheduled for it (same bug as the prayer bell on
+      // the Prayer Times screen — see prayer_times_screen.dart).
+      onSelected: (value) async {
         final cubit = context.read<SettingsCubit>();
         if (value < 0) {
-          cubit.setPreReminderEnabled(false);
+          await cubit.setPreReminderEnabled(false);
         } else {
-          cubit.setPreReminderMinutes(value);
-          cubit.setPreReminderEnabled(true);
+          await cubit.setPreReminderMinutes(value);
+          await cubit.setPreReminderEnabled(true);
+        }
+        if (context.mounted) {
+          context.read<PrayerCubit>().loadSettings();
         }
       },
       color: context.colors.card,

@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/features/home/presentation/widgets/home_quick_toggles.dart';
 import 'package:noor/features/prayer_times/data/silent_mode_settings.dart';
+import 'package:noor/features/prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import 'package:noor/features/settings/data/app_settings.dart';
 import 'package:noor/features/settings/data/settings_repository.dart';
 import 'package:noor/features/settings/logic/settings_cubit/settings_cubit.dart';
@@ -27,10 +28,26 @@ class _FakeSettingsRepository extends SettingsRepository {
   Future<void> save(AppSettings settings) async => _settings = settings;
 }
 
+// A no-op PrayerCubit — HomeQuickToggles now calls loadSettings() after
+// every Silent Mode change so the alarm scheduling actually picks up
+// the new setting (see home_quick_toggles.dart); these tests only
+// care about what's persisted in SettingsCubit, so a bare instance
+// (default deps, never asserted on) is enough for the provider lookup
+// to succeed.
 Widget _wrap(SettingsCubit cubit) {
   return MaterialApp(
     home: Scaffold(
-      body: BlocProvider.value(value: cubit, child: const HomeQuickToggles()),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: cubit),
+          BlocProvider(
+            create: (_) => PrayerCubit(
+              settingsRepository: _FakeSettingsRepository(const AppSettings()),
+            ),
+          ),
+        ],
+        child: const HomeQuickToggles(),
+      ),
     ),
   );
 }

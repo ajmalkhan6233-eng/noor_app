@@ -122,11 +122,23 @@ class PrayerTimesScreen extends StatelessWidget {
           times: result,
           iqamathOffsets: state.iqamathOffsets,
           notifications: settingsState.settings.notifications,
-          onToggleNotification: (prayer, enabled) => context
-              .read<SettingsCubit>()
-              .setNotifications(
-                settingsState.settings.notifications.withPrayer(prayer, enabled),
-              ),
+          // Persisting the toggle alone isn't enough — PrayerCubit is
+          // what actually schedules the on-device alarms, and it only
+          // re-reads settings via loadSettings() (Home mount, or the
+          // Settings screen closing). Without this second call, a bell
+          // flipped on here stayed "enabled" in the DB with no alarm
+          // ever scheduled for it — a real "notification set, nothing
+          // fires" bug, not a hypothetical one.
+          onToggleNotification: (prayer, enabled) async {
+            await context
+                .read<SettingsCubit>()
+                .setNotifications(
+                  settingsState.settings.notifications.withPrayer(prayer, enabled),
+                );
+            if (context.mounted) {
+              context.read<PrayerCubit>().loadSettings();
+            }
+          },
         ),
       ),
     };
