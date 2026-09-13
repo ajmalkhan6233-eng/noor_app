@@ -13,7 +13,6 @@ import 'widgets/about_donate_section.dart';
 import 'widgets/adhan_sound_section.dart';
 import 'widgets/advanced_timing_section.dart';
 import 'widgets/battery_optimization_section.dart';
-import 'widgets/country_section.dart';
 import 'widgets/display_section.dart';
 import 'widgets/downloaded_audio_section.dart';
 import 'widgets/high_latitude_rule_section.dart';
@@ -87,9 +86,6 @@ class _SettingsView extends StatelessWidget {
                   const SizedBox(height: 16),
                   SectionHeader(l10n.languageSectionHeader),
                   const AppCard(child: LanguageSection()),
-                  const SizedBox(height: 16),
-                  SectionHeader(l10n.countrySectionHeader),
-                  const AppCard(child: CountrySection()),
                   const SizedBox(height: 24),
                   const AboutDonateSection(),
                 ],
