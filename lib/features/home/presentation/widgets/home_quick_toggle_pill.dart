@@ -96,7 +96,8 @@ class GlowIcon extends StatelessWidget {
           ? BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
-                BoxShadow(color: context.colors.gold.withValues(alpha: 0.45), blurRadius: 8, spreadRadius: 1),
+                // Softened ~45% (2026-09-14, direct feedback).
+                BoxShadow(color: context.colors.gold.withValues(alpha: 0.25), blurRadius: 5, spreadRadius: 0),
               ],
             )
           : null,

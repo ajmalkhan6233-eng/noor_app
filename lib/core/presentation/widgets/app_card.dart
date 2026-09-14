@@ -55,11 +55,12 @@ class AppCard extends StatelessWidget {
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
+          // Softened ~40% (2026-09-14, direct feedback).
           if (glowColor != null)
             BoxShadow(
-              color: glowColor!.withValues(alpha: 0.35),
-              blurRadius: 20,
-              spreadRadius: 1,
+              color: glowColor!.withValues(alpha: 0.20),
+              blurRadius: 12,
+              spreadRadius: 0,
             ),
         ],
       ),

@@ -67,9 +67,10 @@ class _DhikrLoadingIndicatorState extends State<DhikrLoadingIndicator>
                       shape: BoxShape.circle,
                       color: Color.lerp(colors.sage, colors.gold, pulse),
                       boxShadow: [
+                        // Softened ~40% (2026-09-14, direct feedback).
                         BoxShadow(
-                          color: colors.gold.withValues(alpha: pulse * 0.6),
-                          blurRadius: 6 * pulse,
+                          color: colors.gold.withValues(alpha: pulse * 0.35),
+                          blurRadius: 3.5 * pulse,
                         ),
                       ],
                     ),

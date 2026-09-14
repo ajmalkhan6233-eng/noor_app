@@ -123,7 +123,8 @@ class AzkarCategorySelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: accent.withValues(alpha: 0.35), width: 1.2),
         boxShadow: [
-          BoxShadow(color: accent.withValues(alpha: 0.18), blurRadius: 8, offset: const Offset(0, 3)),
+          // Softened ~40% (2026-09-14, direct feedback).
+          BoxShadow(color: accent.withValues(alpha: 0.11), blurRadius: 5, offset: const Offset(0, 3)),
         ],
       ),
       child: Center(

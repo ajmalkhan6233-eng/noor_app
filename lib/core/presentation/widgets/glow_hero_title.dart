@@ -50,14 +50,16 @@ class _GlowHeroTitleState extends State<GlowHeroTitle> with SingleTickerProvider
     return AnimatedBuilder(
       animation: _glowController,
       builder: (context, child) {
-        final glowAlpha = 0.15 + _glowController.value * 0.15;
+        // Softened ~45% (2026-09-14, direct feedback: too intense for
+        // sustained reading) — a gentle warmth, not a light source.
+        final glowAlpha = 0.08 + _glowController.value * 0.08;
         return DecoratedBox(
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
                 color: widget.color.withValues(alpha: glowAlpha),
-                blurRadius: 40,
-                spreadRadius: 6,
+                blurRadius: 22,
+                spreadRadius: 3,
               ),
             ],
           ),

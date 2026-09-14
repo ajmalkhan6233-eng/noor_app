@@ -43,7 +43,8 @@ class QiblaAlignedPill extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [colors.gold.withValues(alpha: 0.2), colors.gold.withValues(alpha: 0.08)],
                     ),
-                    boxShadow: [BoxShadow(color: colors.gold.withValues(alpha: 0.28), blurRadius: 22)],
+                    // Softened ~40% (2026-09-14, direct feedback).
+                    boxShadow: [BoxShadow(color: colors.gold.withValues(alpha: 0.16), blurRadius: 13)],
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

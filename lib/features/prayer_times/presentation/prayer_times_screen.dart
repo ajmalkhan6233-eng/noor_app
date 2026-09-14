@@ -56,8 +56,8 @@ class PrayerTimesScreen extends StatelessWidget {
         title: l10n.prayerTimesScreenTitle,
         largeTitle: GlowHeroTitle(
           l10n.prayerTimesScreenTitle,
-          color: context.colors.gold,
-          style: AppTypography.heroDisplay(context.colors.gold).copyWith(fontSize: 32),
+          color: context.colors.goldMuted,
+          style: AppTypography.heroDisplay(context.colors.goldMuted).copyWith(fontSize: 32),
         ),
         transparentBody: true,
         actions: [

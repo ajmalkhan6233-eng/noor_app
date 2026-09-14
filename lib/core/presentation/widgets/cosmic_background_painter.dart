@@ -42,7 +42,8 @@ class DriftingParticle {
         radius: 0.8 + random.nextDouble() * 1.8,
         phase: random.nextDouble() * 2 * math.pi,
         gold: i.isEven,
-        opacity: 0.12 + random.nextDouble() * 0.18,
+        // Softened ~40% (2026-09-14, direct feedback).
+        opacity: 0.07 + random.nextDouble() * 0.11,
       );
     });
   }

@@ -23,6 +23,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     required this.hairline,
     required this.goldBorder,
     required this.gold,
+    required this.goldMuted,
     required this.accentSecondary,
     required this.brightness,
   });
@@ -45,8 +46,16 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
   /// 1px border for featured/dua cards.
   final Color goldBorder;
 
-  /// Primary accent — the one constant across both themes.
+  /// Primary accent — the one constant across both themes. Small
+  /// accents/icons only; large text blocks use [goldMuted] instead
+  /// (2026-09-14, direct feedback: full-saturation gold across a big
+  /// glowing header was too visually intense for sustained reading).
   final Color gold;
+
+  /// A desaturated/softer version of [gold] for large text blocks —
+  /// screen headers (GlowHeroTitle), never small accents/icons, which
+  /// keep the fully-saturated [gold].
+  final Color goldMuted;
 
   /// Secondary accent, used sparingly.
   final Color accentSecondary;
@@ -68,6 +77,10 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     hairline: Color(0x3300F2FE),
     goldBorder: Color(0x33FFB703),
     gold: Color(0xFFFFB703),
+    // Desaturated ~35% from full gold, slightly deeper so it still
+    // reads warm on obsidian without the saturated version's glare
+    // across a large glowing headline.
+    goldMuted: Color(0xFFE0AC4D),
     accentSecondary: Color(0xFF00F2FE),
     brightness: Brightness.dark,
   );
@@ -78,7 +91,10 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
   /// sensibly instead of clashing).
   static const light = AppColorTokens(
     paper: Color(0xFFF7F5F1),
-    card: Color(0xFFFFFFFF),
+    // Warmed from pure white (2026-09-14, direct feedback: stark white
+    // cards next to a warm background read harsh for long reading —
+    // Quran, Azkar). A very light cream, not a visible color shift.
+    card: Color(0xFFFFFDF8),
     ink: Color(0xFF1B1B1F),
     // Bumped from 0x6B6F76 (direct feedback, 2026-08-28, after
     // confirming Light looked good overall: a subtle further contrast
@@ -88,6 +104,9 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     hairline: Color(0x1A1B1B1F),
     goldBorder: Color(0x40FFB703),
     gold: Color(0xFFFFB703),
+    // Same desaturated gold as Cosmic, darkened slightly further for
+    // contrast against a light background rather than Cosmic's dark one.
+    goldMuted: Color(0xFFB8842E),
     accentSecondary: Color(0xFFCB8F00),
     brightness: Brightness.light,
   );
@@ -101,6 +120,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     Color? hairline,
     Color? goldBorder,
     Color? gold,
+    Color? goldMuted,
     Color? accentSecondary,
     Brightness? brightness,
   }) {
@@ -112,6 +132,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
       hairline: hairline ?? this.hairline,
       goldBorder: goldBorder ?? this.goldBorder,
       gold: gold ?? this.gold,
+      goldMuted: goldMuted ?? this.goldMuted,
       accentSecondary: accentSecondary ?? this.accentSecondary,
       brightness: brightness ?? this.brightness,
     );

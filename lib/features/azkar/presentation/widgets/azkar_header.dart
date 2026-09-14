@@ -23,7 +23,7 @@ class AzkarHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 20),
-      child: Center(child: GlowHeroTitle(title, color: context.colors.gold)),
+      child: Center(child: GlowHeroTitle(title, color: context.colors.goldMuted)),
     );
   }
 }
