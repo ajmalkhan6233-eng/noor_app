@@ -11,7 +11,7 @@ import 'package:noor/features/prayer_times/data/silent_mode_settings.dart';
 import 'package:noor/features/settings/data/notification_settings.dart';
 
 /// Records scheduled windows instead of touching the native
-/// `com.noorapp.noor/silent_mode` MethodChannel — no platform channel
+/// `com.noorapp.noorprayer/silent_mode` MethodChannel — no platform channel
 /// is available in this offline unit-test environment.
 class _FakeSilentModeChannel extends SilentModeChannel {
   const _FakeSilentModeChannel(this.scheduled, this.cancelled);

@@ -1,6 +1,6 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Clean Dart face on the native `com.noorapp.noor/silent_mode`
+// Clean Dart face on the native `com.noorapp.noorprayer/silent_mode`
 // MethodChannel — the only file that knows the channel name or its
 // method/argument shapes. See `android/.../MainActivity.kt` and
 // `SilentModeReceiver.kt` for the platform side. This cannot be
@@ -19,7 +19,7 @@ class SilentModeChannel {
   const SilentModeChannel();
 
   static const MethodChannel _channel = MethodChannel(
-    'com.noorapp.noor/silent_mode',
+    'com.noorapp.noorprayer/silent_mode',
   );
 
   /// Whether Do Not Disturb / notification-policy access has been

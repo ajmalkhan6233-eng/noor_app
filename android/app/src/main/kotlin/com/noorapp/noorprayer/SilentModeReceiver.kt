@@ -15,7 +15,7 @@
 // environment; written to standard AudioManager/BroadcastReceiver
 // conventions but not runtime-verified.
 
-package com.noorapp.noor
+package com.noorapp.noorprayer
 
 import android.content.BroadcastReceiver
 import android.content.Context

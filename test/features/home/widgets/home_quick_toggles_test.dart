@@ -36,7 +36,7 @@ Widget _wrap(SettingsCubit cubit) {
 }
 
 void main() {
-  const channel = MethodChannel('com.noorapp.noor/silent_mode');
+  const channel = MethodChannel('com.noorapp.noorprayer/silent_mode');
   final calls = <String>[];
   var accessGranted = false;
 

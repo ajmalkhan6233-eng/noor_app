@@ -1,6 +1,6 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Exposes a single MethodChannel ("com.noorapp.noor/silent_mode") for
+// Exposes a single MethodChannel ("com.noorapp.noorprayer/silent_mode") for
 // Silent Mode: checking/requesting Do-Not-Disturb access, and
 // scheduling/cancelling the two AlarmManager alarms (silence, then
 // restore) that bracket a prayer's adhan-to-iqamath window. All state
@@ -10,7 +10,7 @@
 // environment; written to standard AlarmManager/NotificationManager
 // conventions but not runtime-verified.
 
-package com.noorapp.noor
+package com.noorapp.noorprayer
 
 import android.app.AlarmManager
 import android.app.NotificationManager
@@ -25,7 +25,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    private val channelName = "com.noorapp.noor/silent_mode"
+    private val channelName = "com.noorapp.noorprayer/silent_mode"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
