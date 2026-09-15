@@ -54,10 +54,13 @@ class PrayerTimesScreen extends StatelessWidget {
     return BlocBuilder<PrayerCubit, PrayerState>(
       builder: (context, state) => CollapsingScaffold(
         title: l10n.prayerTimesScreenTitle,
+        // Same call shape as AzkarHeader — no custom style override, so
+        // this is the exact same font/size/glow as Azkar's title
+        // (2026-09-15, direct feedback: Prayer Times' title read far
+        // too large next to Azkar's).
         largeTitle: GlowHeroTitle(
           l10n.prayerTimesScreenTitle,
           color: context.colors.goldMuted,
-          style: AppTypography.heroDisplay(context.colors.goldMuted).copyWith(fontSize: 32),
         ),
         transparentBody: true,
         actions: [
