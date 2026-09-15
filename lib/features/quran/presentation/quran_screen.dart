@@ -11,8 +11,10 @@ import 'bookmarks_screen.dart';
 import 'widgets/quran_cover_screen.dart';
 import 'widgets/quran_import_notice.dart';
 import 'widgets/surah_index.dart';
+import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/presentation/motion/motion.dart';
 import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
+import '../../../core/presentation/widgets/glow_hero_title.dart';
 
 /// Quran: a front cover, then the surah index and search — or a clear
 /// notice when the feature is disabled (no verified source text on
@@ -65,8 +67,10 @@ class _QuranViewState extends State<_QuranView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        // No title here — the large, glowing header below (matching
+        // Azkar and Prayer Times, 2026-09-15 direct feedback) is the
+        // title now; this bar only carries the bookmarks action.
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Text(l10n.quranScreenTitle),
         actions: [
           Semantics(
             label: l10n.bookmarksLabel,
@@ -88,24 +92,32 @@ class _QuranViewState extends State<_QuranView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
-        child: BlocBuilder<QuranCubit, QuranState>(
-          builder: (context, state) {
-            if (state.importStatus is QuranImporting) {
-              return QuranImportNotice(status: state.importStatus!);
-            }
-            if (state.isLoading) {
-              return const Center(child: DhikrLoadingIndicator());
-            }
-            if (!state.isImported) {
-              return QuranImportNotice(status: state.importStatus!);
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: SurahIndex(state: state)),
-              ],
-            );
-          },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Center(
+                child: GlowHeroTitle(l10n.quranScreenTitle, color: context.colors.goldMuted),
+              ),
+            ),
+            Expanded(
+              child: BlocBuilder<QuranCubit, QuranState>(
+                builder: (context, state) {
+                  if (state.importStatus is QuranImporting) {
+                    return QuranImportNotice(status: state.importStatus!);
+                  }
+                  if (state.isLoading) {
+                    return const Center(child: DhikrLoadingIndicator());
+                  }
+                  if (!state.isImported) {
+                    return QuranImportNotice(status: state.importStatus!);
+                  }
+                  return SurahIndex(state: state);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -12,14 +12,20 @@ import 'dart:async';
 
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/app_theme_controller.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/allah_calligraphy.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/hijri_date.dart';
+import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../settings/data/app_theme_mode.dart';
+import '../../../settings/logic/settings_cubit/settings_cubit.dart';
+import '../../../settings/logic/settings_cubit/settings_state.dart';
 
 class HeroCard extends StatefulWidget {
   const HeroCard({super.key, required this.hijriOffsetDays});
@@ -111,7 +117,7 @@ class _HeroCardState extends State<HeroCard>
           // a headline.
           Positioned(
             top: 0,
-            right: 0,
+            right: 36,
             // Sized up slightly (22→26) per direct feedback (2026-08-25:
             // "little little big") — best-guess target given the note
             // was ambiguous about which mark it meant; still a
@@ -119,8 +125,19 @@ class _HeroCardState extends State<HeroCard>
             child:
                 Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 26)),
           ),
+          // Quick theme toggle — moved here from deep inside Settings
+          // (2026-09-15, direct request: "more accessible place"). This
+          // is the very first thing on screen, one tap away, instead of
+          // requiring More > Settings > Display. The full 3-way control
+          // (including "Follow system") still lives in Settings; this
+          // is a fast dark/light flip for the common case.
+          const Positioned(
+            top: 0,
+            right: 0,
+            child: _ThemeToggleButton(),
+          ),
           Padding(
-            padding: const EdgeInsets.only(right: 40),
+            padding: const EdgeInsets.only(right: 76),
             child: _content(l10n, dateSubtitle, hijri),
           ),
         ],
@@ -220,6 +237,45 @@ class _HeroCardState extends State<HeroCard>
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ThemeToggleButton extends StatelessWidget {
+  const _ThemeToggleButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        final current = state.settings.themeMode;
+        final isDark = current == AppThemeModeOption.system
+            ? MediaQuery.platformBrightnessOf(context) == Brightness.dark
+            : current == AppThemeModeOption.dark;
+        final next = isDark ? AppThemeModeOption.light : AppThemeModeOption.dark;
+        return SemanticButton(
+          label: isDark ? 'Switch to Dawn (light) theme' : 'Switch to Nebula (dark) theme',
+          hint: 'Double tap to toggle theme',
+          onTap: () {
+            context.read<SettingsCubit>().setThemeMode(next);
+            AppThemeController.instance.themeMode.value = next.flutterThemeMode;
+          },
+          child: Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: context.colors.paper,
+              border: Border.all(color: context.colors.hairline),
+            ),
+            child: Icon(
+              isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+              color: context.colors.gold,
+              size: 18,
+            ),
+          ),
+        );
+      },
     );
   }
 }
