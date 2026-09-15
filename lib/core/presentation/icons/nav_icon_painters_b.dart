@@ -3,11 +3,10 @@
 // Quran and Duas bottom-nav glyphs — split out of nav_icon_painters.dart
 // to stay under this project's 150-line-per-file convention.
 //
-// Clean, minimal gold-line aesthetic (2026-09-11) — same treatment as
-// [HomeIconPainter]: no orb badge, no fills/gradients, just [color]
-// strokes at matching weights, so the bottom-nav set reads as one
-// consistent family. Quran keeps its open-book silhouette; Duas keeps
-// its crescent-and-light motif — just re-drawn as line art.
+// Both share HomeIconPainter's glossy orb badge (2026-09-15, direct
+// request: consistent illuminated treatment across all 5 tabs, not
+// just Home) — gold-line strokes drawn on top of it. Quran keeps its
+// open-book silhouette; Duas keeps its crescent-and-light motif.
 
 import 'package:flutter/material.dart';
 
@@ -21,6 +20,7 @@ class QuranIconPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     scaleToBox(canvas, size);
+    paintNavOrbBadge(canvas, active: active);
 
     final stroke = noorIconStroke(color, width: active ? 1.7 : 1.4);
     final thinStroke = noorIconStroke(color, width: active ? 1.3 : 1.1);
@@ -65,6 +65,7 @@ class DuasIconPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     scaleToBox(canvas, size);
+    paintNavOrbBadge(canvas, active: active);
 
     final stroke = noorIconStroke(color, width: active ? 1.7 : 1.4);
     final thinStroke = noorIconStroke(color, width: active ? 1.3 : 1.1);

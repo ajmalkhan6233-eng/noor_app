@@ -101,10 +101,9 @@ class HomeIconPainter extends CustomPainter {
 /// generic wall clock, since this tab is specifically about the five
 /// prayer times, not time in general.
 ///
-/// Clean, minimal gold-line aesthetic (2026-09-11) — same treatment as
-/// [HomeIconPainter]: no orb badge, no fills/gradients, just [color]
-/// strokes at matching weights, so the bottom-nav set reads as one
-/// consistent family.
+/// Shares [HomeIconPainter]'s glossy orb badge (2026-09-15, direct
+/// request: consistent illuminated treatment across all 5 tabs, not
+/// just Home) — gold-line strokes drawn on top of it.
 class PrayerTimesIconPainter extends CustomPainter {
   PrayerTimesIconPainter(this.color, {this.active = true});
   final Color color;
@@ -113,6 +112,7 @@ class PrayerTimesIconPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     scaleToBox(canvas, size);
+    paintNavOrbBadge(canvas, active: active);
 
     final stroke = noorIconStroke(color, width: active ? 1.7 : 1.4);
     final thinStroke = noorIconStroke(color, width: active ? 1.3 : 1.1);
