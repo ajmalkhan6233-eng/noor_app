@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
-class CollapsingScaffold extends StatelessWidget {
+class CollapsingScaffold extends StatefulWidget {
   const CollapsingScaffold({
     super.key,
     required this.title,
@@ -45,35 +45,100 @@ class CollapsingScaffold extends StatelessWidget {
   final Widget? largeTitle;
 
   @override
+  State<CollapsingScaffold> createState() => _CollapsingScaffoldState();
+}
+
+class _CollapsingScaffoldState extends State<CollapsingScaffold> {
+  // Matches SliverAppBar.large's own default expanded height (152 =
+  // kToolbarHeight 56 + this) so switching to a manually-driven
+  // crossfade below doesn't change the bar's size from before.
+  static const double _expandedExtra = 96;
+
+  final _scrollController = ScrollController();
+  double _collapseFraction = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Only [largeTitle] screens need the crossfade — the plain-title
+    // path below never changes this value, so no listener needed.
+    if (widget.largeTitle != null) {
+      _scrollController.addListener(_onScroll);
+    }
+  }
+
+  void _onScroll() {
+    final fraction = (_scrollController.offset / _expandedExtra).clamp(0.0, 1.0);
+    if (fraction != _collapseFraction) {
+      setState(() => _collapseFraction = fraction);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final largeTitle = this.largeTitle;
+    final largeTitle = widget.largeTitle;
+
+    // No largeTitle: unchanged from before this fix — a single title
+    // rendered by SliverAppBar.large's own built-in large/small style.
+    if (largeTitle == null) {
+      return Scaffold(
+        backgroundColor: widget.transparentBody ? Colors.transparent : context.colors.paper,
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar.large(
+              title: Text(widget.title),
+              backgroundColor: context.colors.paper,
+              foregroundColor: context.colors.ink,
+              surfaceTintColor: Colors.transparent,
+              stretch: true,
+              pinned: true,
+              actions: widget.actions,
+            ),
+            ...widget.slivers,
+          ],
+        ),
+      );
+    }
+
+    // With largeTitle: a custom flexibleSpace bypasses .large's
+    // built-in crossfade, leaving the plain `title` always visible
+    // underneath largeTitle (the reported overlap). Fixed by driving
+    // both titles' opacity from real scroll position instead.
     return Scaffold(
-      backgroundColor: transparentBody ? Colors.transparent : context.colors.paper,
+      backgroundColor: widget.transparentBody ? Colors.transparent : context.colors.paper,
       body: CustomScrollView(
+        controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverAppBar.large(
-            title: Text(
-              title,
-              style: largeTitle == null
-                  ? null
-                  : TextStyle(color: context.colors.gold, fontWeight: FontWeight.w600),
+          SliverAppBar(
+            title: Opacity(
+              opacity: _collapseFraction,
+              child: Text(
+                widget.title,
+                style: TextStyle(color: context.colors.gold, fontWeight: FontWeight.w600),
+              ),
             ),
+            expandedHeight: kToolbarHeight + _expandedExtra,
             backgroundColor: context.colors.paper,
             foregroundColor: context.colors.ink,
             surfaceTintColor: Colors.transparent,
             stretch: true,
             pinned: true,
-            actions: actions,
-            flexibleSpace: largeTitle == null
-                ? null
-                : FlexibleSpaceBar(
-                    centerTitle: false,
-                    titlePadding: const EdgeInsetsDirectional.only(start: 16, bottom: 16),
-                    title: largeTitle,
-                  ),
+            actions: widget.actions,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              titlePadding: const EdgeInsetsDirectional.only(start: 16, bottom: 16),
+              title: Opacity(opacity: 1 - _collapseFraction, child: largeTitle),
+            ),
           ),
-          ...slivers,
+          ...widget.slivers,
         ],
       ),
     );
