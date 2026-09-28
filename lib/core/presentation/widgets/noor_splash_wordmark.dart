@@ -1,7 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // The "NOOR" wordmark shown once, at the end of the splash sequence,
-// after the Bismillah dissolves into it — see big_bang_splash_view.dart.
+// after the Bismillah dissolves into it — see noor_sequence_splash_view.dart.
 // Not shown anywhere else: the persistent top bar deliberately dropped
 // this same mark (2026-08-24 live-device review) since repeating it on
 // every screen made it the dominant element site-wide. This is a
@@ -13,9 +13,12 @@ import '../../constants/app_typography.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 class NoorSplashWordmark extends StatelessWidget {
-  const NoorSplashWordmark({super.key, this.fontSize = 40});
+  const NoorSplashWordmark({super.key, this.fontSize = 40, this.glow = false});
 
   final double fontSize;
+
+  /// Splash-only: a strong gold bloom behind the letters.
+  final bool glow;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,12 @@ class NoorSplashWordmark extends StatelessWidget {
             fontWeight: FontWeight.w600,
             letterSpacing: 10,
             color: context.colors.gold,
+            shadows: glow
+                ? [
+                    Shadow(color: context.colors.gold.withValues(alpha: 0.85), blurRadius: 24),
+                    Shadow(color: context.colors.gold.withValues(alpha: 0.5), blurRadius: 48),
+                  ]
+                : null,
           ),
         ),
       ),

@@ -46,7 +46,7 @@ class NavTabItem extends StatelessWidget {
               alignment: Alignment.center,
               child: NoorIcon(
                 icon,
-                color: active ? context.colors.gold : context.colors.sage,
+                color: active ? context.colors.gold : context.colors.accentSecondary,
                 active: active,
                 size: 40,
               ),

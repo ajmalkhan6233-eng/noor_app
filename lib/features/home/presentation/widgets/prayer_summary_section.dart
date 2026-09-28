@@ -38,6 +38,23 @@ class PrayerSummarySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final result = state.result;
+    // Exactly one of skeleton / prompt / content is ever mounted, and
+    // the switcher's layout shows only the current child — the default
+    // layout stacks outgoing + incoming, which is what let the skeleton
+    // and real content paint on top of each other.
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 200),
+      layoutBuilder: (current, previous) => current ?? const SizedBox.shrink(),
+      child: KeyedSubtree(
+        key: ValueKey(result is PrayerTimesComputed
+            ? 'content'
+            : state.isResolvingLocation ? 'skeleton' : 'prompt'),
+        child: _body(context, l10n, result),
+      ),
+    );
+  }
+
+  Widget _body(BuildContext context, AppLocalizations l10n, Object? result) {
     if (result is! PrayerTimesComputed) {
       if (state.isResolvingLocation) return const PrayerLoadingSkeleton();
       return AppCard(

@@ -49,9 +49,7 @@ void paintNavOrbBadge(Canvas canvas, {required bool active}) {
   final base = RadialGradient(
     center: const Alignment(-0.35, -0.45),
     radius: 0.95,
-    colors: active
-        ? const [Color(0xFF2E4658), Color(0xFF0C1620)]
-        : const [Color(0xFF1B2732), Color(0xFF0A1219)],
+    colors: const [Color(0xFF2E4658), Color(0xFF0C1620)],
   );
   canvas.drawCircle(center, radius, Paint()..shader = base.createShader(bounds));
 
@@ -63,7 +61,7 @@ void paintNavOrbBadge(Canvas canvas, {required bool active}) {
       ..strokeWidth = 0.9
       ..color = active
           ? const Color(0xFFFFB703).withValues(alpha: 0.6)
-          : const Color(0xFF00F2FE).withValues(alpha: 0.22),
+          : const Color(0xFF00F2FE).withValues(alpha: 0.5),
   );
 
   if (active) {
@@ -88,7 +86,7 @@ void paintNavOrbBadge(Canvas canvas, {required bool active}) {
     Paint()
       ..shader = RadialGradient(
         colors: [
-          Colors.white.withValues(alpha: active ? 0.4 : 0.2),
+          Colors.white.withValues(alpha: 0.4),
           Colors.white.withValues(alpha: 0),
         ],
       ).createShader(highlightLocal),

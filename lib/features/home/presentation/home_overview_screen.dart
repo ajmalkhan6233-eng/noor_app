@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../prayer_times/data/prayer_times_result.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
@@ -56,7 +57,8 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
           padding: const EdgeInsets.all(20),
           child: BlocBuilder<SettingsCubit, SettingsState>(
             builder: (context, settingsState) => BlocBuilder<PrayerCubit, PrayerState>(
-              builder: (context, prayerState) => ListView(
+              builder: (context, prayerState) => SubtleCardBorders(
+                child: ListView(
                 controller: _scrollController,
                 children: [
                   StaggeredFadeIn(
@@ -91,6 +93,7 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                     ],
                   ),
                 ],
+                ),
               ),
             ),
           ),

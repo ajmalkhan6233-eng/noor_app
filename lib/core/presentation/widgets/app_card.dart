@@ -24,6 +24,19 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 
+/// Wrap a screen in this to give every [AppCard] beneath it a quiet
+/// low-opacity hairline instead of the default cyan one (Home only,
+/// 2026-09-28 — the cyan outline read too bright there).
+class SubtleCardBorders extends InheritedWidget {
+  const SubtleCardBorders({super.key, required super.child});
+
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<SubtleCardBorders>() != null;
+
+  @override
+  bool updateShouldNotify(SubtleCardBorders oldWidget) => false;
+}
+
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
@@ -81,7 +94,12 @@ class AppCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: borderColor ?? context.colors.hairline),
+            border: Border.all(
+              color: borderColor ??
+                  (SubtleCardBorders.of(context)
+                      ? context.colors.ink.withValues(alpha: 0.08)
+                      : context.colors.hairline),
+            ),
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,

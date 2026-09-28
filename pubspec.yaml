@@ -84,6 +84,7 @@ flutter:
     - assets/quran/audio/juz_amma/
     - assets/quran/audio/popular/
     - assets/qibla/
+    - design/noor_icon_master.png
   fonts:
     - family: Cormorant Garamond
       fonts:

@@ -4,7 +4,7 @@
 // ("Big Bang") from centre, settling into the Allah calligraphy —
 // the Cosmic Expansion art direction's entry point. Falls back to
 // PlainSplashView (a calm, still greeting, no motion) under reduced
-// motion — see BigBangSplashView.
+// motion — see NoorSequenceSplashView.
 
 abstract final class SplashConfig {
   /// How long the burst takes to fully expand and fade, and for the
@@ -43,7 +43,13 @@ abstract final class SplashConfig {
   /// [fadeDuration] below, this Dart-side sequence now totals ~1.95s —
   /// under the 2.5s ceiling with margin for whatever the native splash
   /// screen adds on top before Dart even starts.
-  static const Duration holdDuration = Duration(milliseconds: 1700);
+  static const Duration holdDuration = Duration(milliseconds: 4200);
+
+  /// Total length of the icon -> NOOR -> Bismillah -> Assalamu Alaikum
+  /// sequence (NoorSequenceSplashView). Steps overlap as crossfades so
+  /// there is never an empty frame between them; the last step holds
+  /// until [holdDuration] fades the whole splash out.
+  static const Duration sequenceDuration = Duration(milliseconds: 3800);
 
   /// Fade-in and fade-out duration for the whole splash (reduced-
   /// motion path only for the fade-*in* — the burst path fades itself

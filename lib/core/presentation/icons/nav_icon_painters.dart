@@ -31,14 +31,12 @@ class HomeIconPainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: active
-              ? const [Color(0xFF1A3A45), Color(0xFF081821)]
-              : const [Color(0xFF101820), Color(0xFF0B1116)],
+          colors: const [Color(0xFF1A3A45), Color(0xFF081821)],
         ).createShader(wallRect),
     );
     canvas.drawRect(
       wallRect,
-      noorIconStroke(active ? const Color(0xFF00F2FE) : const Color(0xFF6B7C90), width: 1.3),
+      noorIconStroke(const Color(0xFF00F2FE), width: 1.3),
     );
 
     final roofPath = Path()
@@ -56,14 +54,12 @@ class HomeIconPainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: active
-              ? const [Color(0xFFFFDD8C), Color(0xFFC98A00)]
-              : const [Color(0xFF3A3020), Color(0xFF22201A)],
+          colors: const [Color(0xFFFFDD8C), Color(0xFFC98A00)],
         ).createShader(roofRect),
     );
     canvas.drawPath(
       roofPath,
-      noorIconStroke(active ? const Color(0xFF8A5A00) : const Color(0xFF6B7C90), width: 0.7),
+      noorIconStroke(const Color(0xFF8A5A00), width: 0.7),
     );
     if (active) {
       canvas.drawLine(
@@ -79,14 +75,12 @@ class HomeIconPainter extends CustomPainter {
       doorRRect,
       Paint()
         ..shader = LinearGradient(
-          colors: active
-              ? const [Color(0xFFB87A00), Color(0xFF7A5000)]
-              : const [Color(0xFF22201A), Color(0xFF1C1A14)],
+          colors: const [Color(0xFFB87A00), Color(0xFF7A5000)],
         ).createShader(doorRect),
     );
     canvas.drawRRect(
       doorRRect,
-      noorIconStroke(active ? const Color(0xFF5A3B00) : const Color(0xFF6B7C90), width: 0.6),
+      noorIconStroke(const Color(0xFF5A3B00), width: 0.6),
     );
     if (active) {
       canvas.drawCircle(const Offset(13.4, 17), 0.4, noorIconFill(const Color(0xFFFFE9B0)));
