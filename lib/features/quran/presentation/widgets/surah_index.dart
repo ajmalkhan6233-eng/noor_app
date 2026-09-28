@@ -104,32 +104,50 @@ class _SurahIndexState extends State<SurahIndex> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: ListView(
-            controller: _scrollController,
-            children: [
-              ParallaxItem(
-                controller: _scrollController,
-                depth: 0.04,
-                child: StaggeredFadeIn(
-                  children: [
-                    for (final surah in (state.searchQuery.isEmpty
-                        ? state.surahs
-                        : const []))
-                      SurahListTile(
-                        surah: surah,
-                        onTap: () => _open(context, surah.id),
+          child: state.searchQuery.isNotEmpty
+              // Search results: plain ListView.builder, NO StaggeredFadeIn
+              // or ParallaxItem. StaggeredFadeIn re-runs its entire fade
+              // animation on every rebuild — each keystroke emits a new
+              // QuranState, the children list is recreated, and the fade
+              // restarts from zero so everything disappears while you type.
+              // Plain builder = stable, visible, tappable items.
+              // (2026-09-07 fix.)
+              ? (state.searchResults.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No results found.',
+                        style: TextStyle(color: context.colors.sage),
                       ),
-                    if (state.searchQuery.isNotEmpty)
-                      for (final ayah in state.searchResults)
-                        QuranSearchResultTile(
+                    )
+                  : ListView.builder(
+                      controller: _scrollController,
+                      itemCount: state.searchResults.length,
+                      itemBuilder: (context, index) {
+                        final ayah = state.searchResults[index];
+                        return QuranSearchResultTile(
                           ayah: ayah,
                           onTap: () => _open(context, ayah.surahId),
-                        ),
+                        );
+                      },
+                    ))
+              : ListView(
+                  controller: _scrollController,
+                  children: [
+                    ParallaxItem(
+                      controller: _scrollController,
+                      depth: 0.04,
+                      child: StaggeredFadeIn(
+                        children: [
+                          for (final surah in state.surahs)
+                            SurahListTile(
+                              surah: surah,
+                              onTap: () => _open(context, surah.id),
+                            ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
         ),
       ],
     );
