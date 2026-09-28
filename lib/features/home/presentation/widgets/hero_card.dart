@@ -1,100 +1,28 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Home's top card. The "Assalamu Alaikum" greeting fades in once on
-// open, holds briefly, then fades out and collapses — a one-time
-// greeting, not something permanently taking up space every time this
-// screen is glanced at (2026-08-24 live-device review). What stays
-// permanently is a small compact row: the Hijri date pill and the
-// Gregorian date, both shrunk down from their previous size — this
-// card's job now is "confirm today's date", not carry a headline.
-
-import 'dart:async';
+// Home's top card: a compact "confirm today's date" card — the Gregorian
+// date and the Hijri date pill, with a small engraved "Allah" watermark
+// in the corner. The Bismillah / Assalamu Alaikum greeting that used to
+// animate here now plays only in the launch splash (2026-09-28, direct
+// request — it was duplicating the splash sequence).
 
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/allah_calligraphy.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/hijri_date.dart';
-import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
-class HeroCard extends StatefulWidget {
+class HeroCard extends StatelessWidget {
   const HeroCard({super.key, required this.hijriOffsetDays});
 
   final int hijriOffsetDays;
 
   @override
-  State<HeroCard> createState() => _HeroCardState();
-}
-
-class _HeroCardState extends State<HeroCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _greetingOpacity;
-  Timer? _midHoldTimer;
-  Timer? _holdTimer;
-  // 0 = Bismillah revealing/holding, 1 = the Assalamu Alaikum greeting
-  // revealing/holding/fading. Moved here from the splash sequence
-  // (2026-09-05, direct request) — Bismillah now leads this greeting
-  // on Home instead of appearing during app launch.
-  int _phase = 0;
-  // Set once the current phase's reveal completes, so its later
-  // fade-out (controller running 1 -> 0) fades the whole line rather
-  // than dropping characters in reverse — see noor-text-reveal: builds
-  // up, holds, then fades away as a whole, not a reversed typewriter.
-  bool _revealed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
-    _greetingOpacity =
-        CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _controller.addStatusListener(_onStatusChanged);
-    _controller.forward();
-  }
-
-  void _onStatusChanged(AnimationStatus status) {
-    if (status != AnimationStatus.completed || !mounted) return;
-    if (_phase == 0) {
-      // Bismillah finished revealing — hold briefly, then give way to
-      // the greeting. A real cancelable Timer, not Future.delayed — a
-      // pending Future.delayed left running when this widget is torn
-      // down (e.g. switching tabs mid-hold) fails flutter_test's "no
-      // pending timers" invariant even with the mounted guard, since
-      // the timer itself is still scheduled either way.
-      _midHoldTimer = Timer(const Duration(milliseconds: 900), () {
-        if (!mounted) return;
-        setState(() => _phase = 1);
-        _controller
-          ..reset()
-          ..forward();
-      });
-    } else {
-      setState(() => _revealed = true);
-      _holdTimer = Timer(const Duration(milliseconds: 2200), () {
-        if (mounted) _controller.reverse();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _midHoldTimer?.cancel();
-    _holdTimer?.cancel();
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final hijri = HijriDate.fromGregorian(DateTime.now(),
-        offsetDays: widget.hijriOffsetDays);
+    final hijri = HijriDate.fromGregorian(DateTime.now(), offsetDays: hijriOffsetDays);
     final dateSubtitle = DateFormat.yMMMMEEEEd(
       Localizations.localeOf(context).toLanguageTag(),
     ).format(DateTime.now());
@@ -104,122 +32,46 @@ class _HeroCardState extends State<HeroCard>
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // A small, quiet engraved "Allah" in the card's own corner —
-          // never overlapping the date text next to it, unlike the old
-          // top-bar wordmark that was removed for dominating every
-          // screen (2026-08-24). Low opacity keeps it a watermark, not
-          // a headline.
+          // Quiet corner watermark, never overlapping the date text.
           Positioned(
             top: 0,
             right: 0,
-            // Sized up slightly (22→26) per direct feedback (2026-08-25:
-            // "little little big") — best-guess target given the note
-            // was ambiguous about which mark it meant; still a
-            // watermark, not a headline, at this opacity.
-            child:
-                Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 26)),
+            child: Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 26)),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 40),
-            child: _content(l10n, dateSubtitle, hijri),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _content(AppLocalizations l10n, String dateSubtitle, HijriDate hijri) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) => _controller.value == 0
-              ? const SizedBox.shrink()
-              : ClipRect(
-                  child: Align(
-                    heightFactor: _controller.value,
-                    child:
-                        Opacity(opacity: _greetingOpacity.value, child: child),
-                  ),
-                ),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) {
-                // Character-by-character build-up during each phase's
-                // reveal (noor-text-reveal) — once fully revealed,
-                // stays whole through that phase's hold-then-fade.
-                if (_phase == 0) {
-                  const bismillah = AppStrings.splashGreeting;
-                  final visibleChars = _revealed
-                      ? bismillah.length
-                      : (bismillah.length * _controller.value).round();
-                  return Semantics(
-                    label: AppStrings.splashGreetingSemanticLabel,
-                    child: ExcludeSemantics(
-                      child: Text(
-                        bismillah.substring(0, visibleChars),
-                        textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: AppTypography.arabicFamily,
-                          fontSize: 17,
-                          height: 1.5,
-                          color: context.colors.gold,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                final greeting = l10n.assalamuAlaikumGreeting;
-                final visibleChars = _revealed
-                    ? greeting.length
-                    : (greeting.length * _controller.value).round();
-                return Text(
-                  greeting.substring(0, visibleChars),
-                  style: TextStyle(
-                    fontFamily: AppTypography.displayFamily,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: context.colors.ink,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        // Stacked, not side-by-side (2026-08-25 live-device review: the
-        // Gregorian date was getting clipped to "Tuesday, August 2..."
-        // whenever the Hijri pill was wide enough to squeeze its Row
-        // sibling below one line's worth of space). Each date now gets
-        // its own full-width line so neither ever truncates the other.
-        Text(dateSubtitle, style: AppTypography.caption(context.colors.sage)),
-        const SizedBox(height: 6),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: context.colors.paper,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: context.colors.hairline),
-            ),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.brightness_2_outlined,
-                    color: context.colors.gold, size: 12),
-                const SizedBox(width: 4),
-                Text(hijri.formatted,
-                    style: AppTypography.caption(context.colors.sage).copyWith(fontSize: 11)),
+                // Stacked, not side-by-side, so neither date ever
+                // truncates the other (2026-08-25 live-device review).
+                Text(dateSubtitle, style: AppTypography.caption(context.colors.sage)),
+                const SizedBox(height: 6),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: context.colors.paper,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: context.colors.hairline),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.brightness_2_outlined, color: context.colors.gold, size: 12),
+                      const SizedBox(width: 4),
+                      Text(
+                        hijri.formatted,
+                        style: AppTypography.caption(context.colors.sage).copyWith(fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

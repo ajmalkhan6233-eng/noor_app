@@ -1,7 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
 // The Home tab, reordered per the 2026-08-24 live-device review:
-// a one-time fading greeting (see HeroCard), quick Silent Mode/
+// the date card (see HeroCard), quick Silent Mode/
 // reminder toggles, the astrolabe countdown ring (moved here from
 // Prayer Times, now with the live clock built into it — see
 // PrayerHero), the smart iqamah line, the full prayer-times row,
