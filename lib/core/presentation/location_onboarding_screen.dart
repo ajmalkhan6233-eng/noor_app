@@ -26,6 +26,7 @@ import '../app_locale_controller.dart';
 import '../constants/app_color_tokens.dart';
 import '../location/location_service.dart';
 import '../utils/semantics_helpers.dart';
+import 'exact_alarm_prompt.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
 
@@ -43,9 +44,19 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
   bool _resolving = false;
   bool _locationStepDone = false;
   bool _gpsSucceeded = false;
+  bool _exactAlarmPrompted = false;
   AppLocaleOption _selectedLocale = AppLocaleOption.english;
 
+  // Once per setup, right after the location step (or on finish if
+  // location was skipped) — see exact_alarm_prompt.dart.
+  Future<void> _promptExactAlarmOnce() async {
+    if (_exactAlarmPrompted || !mounted) return;
+    _exactAlarmPrompted = true;
+    await maybePromptExactAlarm(context);
+  }
+
   Future<void> _finish() async {
+    await _promptExactAlarmOnce();
     final repository = SettingsRepository();
     final settings = await repository.load();
     await repository.save(settings.copyWith(hasSeenLocationOnboarding: true, locale: _selectedLocale));
@@ -62,6 +73,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
       _locationStepDone = true;
       _gpsSucceeded = coordinates != null;
     });
+    await _promptExactAlarmOnce();
   }
 
   @override

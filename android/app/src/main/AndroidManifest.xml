@@ -77,6 +77,15 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- flutter_local_notifications' scheduled-notification receiver.
+             AlarmManager fires its PendingIntent at this class; without it
+             declared here the broadcast had no target, so every scheduled
+             adhan/iqamath/reminder/calendar notification was silently
+             dropped while the exact alarm itself fired on time (verified
+             live 2026-09-28: app alive, alarm delivered, nothing posted;
+             installed app listed only the Boot receiver). -->
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+
         <!-- flutter_local_notifications' own receiver: re-arms
              zonedSchedule alarms after boot/app update. -->
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
