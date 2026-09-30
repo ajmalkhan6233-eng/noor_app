@@ -156,10 +156,7 @@ ThemeData buildAppTheme(AppColorTokens tokens) {
       textStyle: TextStyle(color: tokens.ink),
     ),
     textTheme: TextTheme(
-      titleLarge: TextStyle(
-        fontFamily: AppTypography.displayFamily,
-        color: tokens.ink,
-      ),
+      titleLarge: TextStyle(color: tokens.ink),
       titleMedium: TextStyle(color: tokens.ink),
       bodyLarge: TextStyle(color: tokens.ink),
       bodyMedium: TextStyle(color: tokens.ink),

@@ -1,10 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Three families, each with one job. Display (Cormorant Garamond) for
-// prayer times, the Bismillah, and section headers — letterspaced,
-// light, generous. Body (Inter) for everything else: labels,
-// settings, controls. Arabic (Amiri) for Arabic text wherever it
-// appears. Bundled as assets — never fetched at runtime.
+// Inter is the single UI family for every screen. Arabic (Amiri) remains
+// reserved for Arabic text. All fonts are bundled as assets — never
+// fetched at runtime.
 //
 // The colour-bearing styles below take their colour as a parameter
 // (usually `context.colors.ink` or `context.colors.sage`) instead of a
@@ -15,8 +13,8 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppTypography {
-  static const String displayFamily = 'Cormorant Garamond';
   static const String bodyFamily = 'Inter';
+  static const String displayFamily = bodyFamily;
   static const String arabicFamily = 'Amiri';
 
   /// Additional UI-chrome typefaces for languages Inter has no glyphs
@@ -46,7 +44,6 @@ abstract final class AppTypography {
 
   /// The largest display moment — the next-prayer name.
   static TextStyle heroDisplay(Color color) => TextStyle(
-        fontFamily: displayFamily,
         fontWeight: FontWeight.w300,
         fontSize: 44,
         letterSpacing: 1.2,
@@ -55,7 +52,6 @@ abstract final class AppTypography {
 
   /// Small letterspaced caption headers above a section's content.
   static TextStyle sectionHeader(Color color) => TextStyle(
-        fontFamily: displayFamily,
         fontWeight: FontWeight.w500,
         fontSize: 13,
         letterSpacing: 2.4,
@@ -64,7 +60,6 @@ abstract final class AppTypography {
 
   /// Quiet caption text — e.g. the active method/madhab line.
   static TextStyle caption(Color color) => TextStyle(
-        fontFamily: bodyFamily,
         fontSize: 12,
         letterSpacing: 0.4,
         color: color,
@@ -72,7 +67,6 @@ abstract final class AppTypography {
 
   /// Tabular-figure time display (prayer times list).
   static TextStyle time(Color color) => TextStyle(
-        fontFamily: bodyFamily,
         fontFeatures: const [FontFeature.tabularFigures()],
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -87,7 +81,6 @@ abstract final class AppTypography {
 
   /// A large tap-to-count number — the tasbih counter.
   static TextStyle counter(Color color) => TextStyle(
-        fontFamily: bodyFamily,
         fontFeatures: const [FontFeature.tabularFigures()],
         fontSize: 56,
         fontWeight: FontWeight.bold,
