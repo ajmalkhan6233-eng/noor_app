@@ -19,9 +19,8 @@ import '../../../core/constants/app_color_tokens.dart';
 import 'widgets/name_entry_transition.dart';
 import 'widgets/profile_name_card.dart';
 import 'widgets/profile_name_header.dart';
-import 'widgets/progress_hero_stat.dart';
+import 'progress/progress_card.dart';
 import 'widgets/recent_days_list.dart';
-import 'widgets/weekly_pattern_card.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({
@@ -90,9 +89,6 @@ class _ProgressScreenState extends State<ProgressScreen> {
     }
   }
 
-  List<({DateTime date, int completedCount, bool fasted})> get _last7 =>
-      _history.length > 7 ? _history.sublist(_history.length - 7) : _history;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -126,9 +122,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                           ),
                         ),
                       ),
-                      ProgressHeroStat(days: _last7),
-                      const SizedBox(height: 16),
-                      WeeklyPatternCard(days: _last7),
+                      ProgressCard(repository: widget._repository),
                       const SizedBox(height: 16),
                       RecentDaysList(days: _history.reversed.toList()),
                     ],

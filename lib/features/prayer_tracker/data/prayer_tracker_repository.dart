@@ -110,6 +110,24 @@ class PrayerTrackerRepository {
     return results;
   }
 
+  /// Completed-prayer count for every day that has at least one tick,
+  /// in a single grouped query - backs the Progress card's best-streak
+  /// and weekly numbers without one query per day.
+  Future<Map<DateTime, int>> completionCountsByDay() async {
+    final db = await _dbHelper.database;
+    final rows = await db.rawQuery(
+      'SELECT date, COUNT(*) AS n FROM prayer_completions GROUP BY date',
+    );
+    final counts = <DateTime, int>{};
+    for (final row in rows) {
+      final parts = (row['date']! as String).split('-');
+      if (parts.length != 3) continue;
+      final day = DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
+      counts[day] = row['n']! as int;
+    }
+    return counts;
+  }
+
   static String _dateKey(DateTime date) {
     final y = date.year.toString().padLeft(4, '0');
     final m = date.month.toString().padLeft(2, '0');
