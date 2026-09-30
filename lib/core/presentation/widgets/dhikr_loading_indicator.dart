@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_color_tokens.dart';
 import '../../../features/tasbih/data/dhikr_option.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class DhikrLoadingIndicator extends StatefulWidget {
   const DhikrLoadingIndicator({super.key});
@@ -47,7 +48,7 @@ class _DhikrLoadingIndicatorState extends State<DhikrLoadingIndicator>
   Widget build(BuildContext context) {
     final colors = context.colors;
     return Semantics(
-      label: 'Loading',
+      label: AppLocalizations.of(context)!.loadingGeneric,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

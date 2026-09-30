@@ -20,13 +20,14 @@ class DisplaySection extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         final settings = state.settings;
+        final l10n = AppLocalizations.of(context)!;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _themeSegments(context, settings.themeMode),
             const SizedBox(height: 12),
             Semantics(
-              label: 'Quran text size',
+              label: l10n.settingsQuranTextSize,
               value: '${settings.arabicFontScale.toStringAsFixed(2)}x',
               slider: true,
               child: Slider(
@@ -44,17 +45,20 @@ class DisplaySection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Hijri offset',
+                  l10n.settingsHijriOffset,
                   style: TextStyle(color: context.colors.ink),
                 ),
                 Row(
                   children: [
                     SemanticButton(
-                      label: 'Decrease Hijri offset',
+                      label: l10n.settingsHijriDecrease,
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays - 1),
-                      child: Icon(Icons.remove, color: context.colors.gold),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(Icons.remove, color: context.colors.gold),
+                      ),
                     ),
                     SizedBox(
                       width: 32,
@@ -65,11 +69,14 @@ class DisplaySection extends StatelessWidget {
                       ),
                     ),
                     SemanticButton(
-                      label: 'Increase Hijri offset',
+                      label: l10n.settingsHijriIncrease,
                       onTap: () => context
                           .read<SettingsCubit>()
                           .setHijriOffsetDays(settings.hijriOffsetDays + 1),
-                      child: Icon(Icons.add, color: context.colors.gold),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(Icons.add, color: context.colors.gold),
+                      ),
                     ),
                   ],
                 ),
@@ -86,14 +93,15 @@ class DisplaySection extends StatelessWidget {
   // immediately) alongside the persisted SettingsCubit value.
   Widget _themeSegments(BuildContext context, AppThemeModeOption selected) {
     final l10n = AppLocalizations.of(context)!;
-    String labelOf(AppThemeModeOption m) =>
-        switch (m) {
-          AppThemeModeOption.mushaf => l10n.themeMushaf,
-          AppThemeModeOption.emeraldNight => l10n.themeEmeraldNight,
-          _ => m.label,
-        };
+    String labelOf(AppThemeModeOption m) => switch (m) {
+      AppThemeModeOption.dark => l10n.themeNebula,
+      AppThemeModeOption.light => l10n.themeDawn,
+      AppThemeModeOption.system => l10n.themeFollowSystem,
+      AppThemeModeOption.mushaf => l10n.themeMushaf,
+      AppThemeModeOption.emeraldNight => l10n.themeEmeraldNight,
+    };
     return Semantics(
-      label: 'Theme',
+      label: l10n.settingsThemeLabel,
       value: labelOf(selected),
       child: Wrap(
         spacing: 8,

@@ -13,6 +13,7 @@ import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../quran/data/surah_audio_download_service.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class DownloadedAudioSection extends StatefulWidget {
   const DownloadedAudioSection({
@@ -61,23 +62,25 @@ class _DownloadedAudioSectionState extends State<DownloadedAudioSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SectionHeader('Downloaded Audio'),
+        SectionHeader(AppLocalizations.of(context)!.downloadedAudioTitle),
         AppCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 _count == null
-                    ? 'Checking...'
-                    : '$_count downloaded surah${_count == 1 ? '' : 's'} — '
-                          '${_formatSize(_bytesUsed ?? 0)} of storage',
+                    ? AppLocalizations.of(context)!.downloadedAudioChecking
+                    : AppLocalizations.of(context)!.downloadedAudioSummary(
+                        _count!,
+                        _formatSize(_bytesUsed ?? 0),
+                      ),
                 style: TextStyle(color: context.colors.sage),
               ),
               const SizedBox(height: 8),
               if (_count != null && _count! > 0)
                 SemanticButton(
-                  label: 'Delete downloaded audio',
-                  hint: 'Frees the storage used by downloaded surah recitations — bundled audio is unaffected',
+                  label: AppLocalizations.of(context)!.downloadedAudioDelete,
+                  hint: AppLocalizations.of(context)!.downloadedAudioDeleteHint,
                   onTap: () async {
                     if (_deleting) return;
                     setState(() => _deleting = true);
@@ -88,7 +91,9 @@ class _DownloadedAudioSectionState extends State<DownloadedAudioSection> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     child: Text(
-                      _deleting ? 'Deleting...' : 'Delete downloaded audio',
+                      _deleting
+                          ? AppLocalizations.of(context)!.downloadedAudioDeleting
+                          : AppLocalizations.of(context)!.downloadedAudioDelete,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: context.colors.gold),
                     ),

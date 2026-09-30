@@ -1174,4 +1174,115 @@ class AppLocalizationsEn extends AppLocalizations {
   String progressBarSemantics(String day, int count) {
     return '$day: $count of 5 prayers';
   }
+
+  @override
+  String get trackerPreviousDay => 'Previous day';
+
+  @override
+  String get trackerNextDay => 'Next day';
+
+  @override
+  String get trackerViewProgress => 'View your progress';
+
+  @override
+  String get settingsThemeLabel => 'Theme';
+
+  @override
+  String get settingsQuranTextSize => 'Quran text size';
+
+  @override
+  String get settingsHijriOffset => 'Hijri offset';
+
+  @override
+  String get settingsHijriDecrease => 'Decrease Hijri offset';
+
+  @override
+  String get settingsHijriIncrease => 'Increase Hijri offset';
+
+  @override
+  String get themeNebula => 'Nebula';
+
+  @override
+  String get themeDawn => 'Dawn';
+
+  @override
+  String get themeFollowSystem => 'Follow system';
+
+  @override
+  String get quickSilentMode => 'Silent Mode';
+
+  @override
+  String get supportHomeMessage =>
+      'noor stays free for everyone. If it helps you, consider supporting its upkeep.';
+
+  @override
+  String get supportHomeSemantics =>
+      'noor stays free for everyone. If it helps you, consider supporting its upkeep. Opens Support screen.';
+
+  @override
+  String get supportHomeDismiss => 'Dismiss support message';
+
+  @override
+  String get loadingPrayerTimes => 'Loading prayer times';
+
+  @override
+  String get loadingGeneric => 'Loading';
+
+  @override
+  String get exactAlarmTitle => 'Allow exact prayer alarms';
+
+  @override
+  String get exactAlarmBody =>
+      'So the adhan sounds at the exact prayer time, allow \"Alarms & reminders\" for noor on the next screen.';
+
+  @override
+  String get commonNotNow => 'Not now';
+
+  @override
+  String get exactAlarmOpenSettings => 'Open settings';
+
+  @override
+  String get onboardingContinue => 'Continue';
+
+  @override
+  String get onboardingNotNowLocation =>
+      'Not now — I\'ll enable location in Settings';
+
+  @override
+  String get azkarNoMatches => 'No matching duas found.';
+
+  @override
+  String get nudgeSupportNoor => 'Support noor';
+
+  @override
+  String get downloadedAudioTitle => 'Downloaded Audio';
+
+  @override
+  String get downloadedAudioChecking => 'Checking...';
+
+  @override
+  String get downloadedAudioDelete => 'Delete downloaded audio';
+
+  @override
+  String get downloadedAudioDeleting => 'Deleting...';
+
+  @override
+  String get downloadedAudioDeleteHint =>
+      'Frees the storage used by downloaded surah recitations — bundled audio is unaffected';
+
+  @override
+  String currentTimeSemantics(String time) {
+    return 'Current time $time';
+  }
+
+  @override
+  String downloadedAudioSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count downloaded surahs',
+      one: '1 downloaded surah',
+    );
+    return '$_temp0 — $size of storage';
+  }
 }

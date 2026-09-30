@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/presentation/widgets/skeleton_box.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class PrayerLoadingSkeleton extends StatelessWidget {
   const PrayerLoadingSkeleton({super.key});
@@ -19,7 +20,7 @@ class PrayerLoadingSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Loading prayer times',
+      label: AppLocalizations.of(context)!.loadingPrayerTimes,
       child: AppCard(
         padding: const EdgeInsets.all(20),
         child: Column(

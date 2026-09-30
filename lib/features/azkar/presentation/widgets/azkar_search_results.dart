@@ -7,6 +7,7 @@ import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_category.dart';
 import '../../data/azkar_item.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class AzkarSearchResults extends StatelessWidget {
   const AzkarSearchResults({
@@ -24,7 +25,7 @@ class AzkarSearchResults extends StatelessWidget {
   Widget build(BuildContext context) {
     if (results.isEmpty) {
       return Center(
-        child: Text('No matching duas found.', style: TextStyle(color: context.colors.sage)),
+        child: Text(AppLocalizations.of(context)!.azkarNoMatches, style: TextStyle(color: context.colors.sage)),
       );
     }
     return ListView.separated(

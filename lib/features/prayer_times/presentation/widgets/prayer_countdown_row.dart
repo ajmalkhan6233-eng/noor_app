@@ -21,6 +21,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/motion.dart';
 import 'prayer_time_format.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class PrayerCountdownRow extends StatelessWidget {
   const PrayerCountdownRow({
@@ -128,7 +129,7 @@ class _CurrentTimeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Current time ${formatClock(now)}',
+      label: AppLocalizations.of(context)!.currentTimeSemantics(formatClock(now)),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(

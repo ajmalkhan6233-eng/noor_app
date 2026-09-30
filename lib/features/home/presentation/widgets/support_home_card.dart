@@ -11,6 +11,7 @@ import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/support/support_prompt_service.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../settings/presentation/support_developer_screen.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class SupportHomeCard extends StatefulWidget {
   const SupportHomeCard({super.key});
@@ -60,19 +61,21 @@ class _SupportHomeCardState extends State<SupportHomeCard> {
         children: [
           Expanded(
             child: SemanticButton(
-              label: 'noor stays free for everyone. If it helps you, consider supporting its upkeep. Opens Support screen.',
+              label: AppLocalizations.of(context)!.supportHomeSemantics,
               onTap: _openSupportScreen,
               child: Text(
-                'noor stays free for everyone. If it helps you, '
-                'consider supporting its upkeep.',
+                AppLocalizations.of(context)!.supportHomeMessage,
                 style: TextStyle(color: context.colors.sage, fontSize: 13),
               ),
             ),
           ),
           SemanticButton(
-            label: 'Dismiss support message',
+            label: AppLocalizations.of(context)!.supportHomeDismiss,
             onTap: _dismiss,
-            child: Icon(Icons.close, size: 18, color: context.colors.hairline),
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Icon(Icons.close, size: 18, color: context.colors.hairline),
+            ),
           ),
         ],
       ),

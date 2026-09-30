@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../constants/app_color_tokens.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 Future<void> maybePromptExactAlarm(BuildContext context) async {
   final android = FlutterLocalNotificationsPlugin()
@@ -26,20 +27,19 @@ Future<void> maybePromptExactAlarm(BuildContext context) async {
     context: context,
     builder: (ctx) => AlertDialog(
       backgroundColor: ctx.colors.card,
-      title: Text('Allow exact prayer alarms', style: TextStyle(color: ctx.colors.ink)),
+      title: Text(AppLocalizations.of(ctx)!.exactAlarmTitle, style: TextStyle(color: ctx.colors.ink)),
       content: Text(
-        'So the adhan sounds at the exact prayer time, allow '
-        '"Alarms & reminders" for noor on the next screen.',
+        AppLocalizations.of(ctx)!.exactAlarmBody,
         style: TextStyle(color: ctx.colors.sage, height: 1.4),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(false),
-          child: Text('Not now', style: TextStyle(color: ctx.colors.sage)),
+          child: Text(AppLocalizations.of(ctx)!.commonNotNow, style: TextStyle(color: ctx.colors.sage)),
         ),
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(true),
-          child: Text('Open settings', style: TextStyle(color: ctx.colors.gold)),
+          child: Text(AppLocalizations.of(ctx)!.exactAlarmOpenSettings, style: TextStyle(color: ctx.colors.gold)),
         ),
       ],
     ),

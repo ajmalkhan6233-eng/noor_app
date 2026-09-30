@@ -59,17 +59,23 @@ class PrayerTrackerCard extends StatelessWidget {
                 children: [
                   Expanded(child: SectionHeader(l10n.todaysPrayersLabel)),
                   SemanticButton(
-                    label: 'Previous day',
+                    label: l10n.trackerPreviousDay,
                     onTap: cubit.goToPreviousDay,
-                    child: Icon(Icons.chevron_left, color: context.colors.gold, size: 20),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Icon(Icons.chevron_left, color: context.colors.gold, size: 20),
+                    ),
                   ),
                   SemanticButton(
-                    label: 'Next day',
+                    label: l10n.trackerNextDay,
                     onTap: cubit.goToNextDay,
-                    child: Icon(
-                      Icons.chevron_right,
-                      color: isToday ? context.colors.hairline : context.colors.gold,
-                      size: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Icon(
+                        Icons.chevron_right,
+                        color: isToday ? context.colors.hairline : context.colors.gold,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
@@ -131,7 +137,7 @@ class PrayerTrackerCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               SemanticButton(
-                label: 'View your progress',
+                label: l10n.trackerViewProgress,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => const ProgressScreen()),
                 ),
@@ -140,7 +146,7 @@ class PrayerTrackerCard extends StatelessWidget {
                   children: [
                     Icon(Icons.bar_chart, color: context.colors.gold, size: 16),
                     const SizedBox(width: 6),
-                    Text('View your progress', style: TextStyle(color: context.colors.gold)),
+                    Text(l10n.trackerViewProgress, style: TextStyle(color: context.colors.gold)),
                   ],
                 ),
               ),

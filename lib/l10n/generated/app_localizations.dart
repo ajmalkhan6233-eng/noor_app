@@ -2140,6 +2140,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{day}: {count} of 5 prayers'**
   String progressBarSemantics(String day, int count);
+
+  /// No description provided for @trackerPreviousDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get trackerPreviousDay;
+
+  /// No description provided for @trackerNextDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get trackerNextDay;
+
+  /// No description provided for @trackerViewProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'View your progress'**
+  String get trackerViewProgress;
+
+  /// No description provided for @settingsThemeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get settingsThemeLabel;
+
+  /// No description provided for @settingsQuranTextSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran text size'**
+  String get settingsQuranTextSize;
+
+  /// No description provided for @settingsHijriOffset.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri offset'**
+  String get settingsHijriOffset;
+
+  /// No description provided for @settingsHijriDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease Hijri offset'**
+  String get settingsHijriDecrease;
+
+  /// No description provided for @settingsHijriIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase Hijri offset'**
+  String get settingsHijriIncrease;
+
+  /// No description provided for @themeNebula.
+  ///
+  /// In en, this message translates to:
+  /// **'Nebula'**
+  String get themeNebula;
+
+  /// No description provided for @themeDawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Dawn'**
+  String get themeDawn;
+
+  /// No description provided for @themeFollowSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow system'**
+  String get themeFollowSystem;
+
+  /// No description provided for @quickSilentMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent Mode'**
+  String get quickSilentMode;
+
+  /// No description provided for @supportHomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'noor stays free for everyone. If it helps you, consider supporting its upkeep.'**
+  String get supportHomeMessage;
+
+  /// No description provided for @supportHomeSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'noor stays free for everyone. If it helps you, consider supporting its upkeep. Opens Support screen.'**
+  String get supportHomeSemantics;
+
+  /// No description provided for @supportHomeDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss support message'**
+  String get supportHomeDismiss;
+
+  /// No description provided for @loadingPrayerTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading prayer times'**
+  String get loadingPrayerTimes;
+
+  /// No description provided for @loadingGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loadingGeneric;
+
+  /// No description provided for @exactAlarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow exact prayer alarms'**
+  String get exactAlarmTitle;
+
+  /// No description provided for @exactAlarmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'So the adhan sounds at the exact prayer time, allow \"Alarms & reminders\" for noor on the next screen.'**
+  String get exactAlarmBody;
+
+  /// No description provided for @commonNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get commonNotNow;
+
+  /// No description provided for @exactAlarmOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get exactAlarmOpenSettings;
+
+  /// No description provided for @onboardingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingContinue;
+
+  /// No description provided for @onboardingNotNowLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now — I\'ll enable location in Settings'**
+  String get onboardingNotNowLocation;
+
+  /// No description provided for @azkarNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching duas found.'**
+  String get azkarNoMatches;
+
+  /// No description provided for @nudgeSupportNoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Support noor'**
+  String get nudgeSupportNoor;
+
+  /// No description provided for @downloadedAudioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded Audio'**
+  String get downloadedAudioTitle;
+
+  /// No description provided for @downloadedAudioChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking...'**
+  String get downloadedAudioChecking;
+
+  /// No description provided for @downloadedAudioDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete downloaded audio'**
+  String get downloadedAudioDelete;
+
+  /// No description provided for @downloadedAudioDeleting.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting...'**
+  String get downloadedAudioDeleting;
+
+  /// No description provided for @downloadedAudioDeleteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Frees the storage used by downloaded surah recitations — bundled audio is unaffected'**
+  String get downloadedAudioDeleteHint;
+
+  /// No description provided for @currentTimeSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Current time {time}'**
+  String currentTimeSemantics(String time);
+
+  /// No description provided for @downloadedAudioSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 downloaded surah} other{{count} downloaded surahs}} — {size} of storage'**
+  String downloadedAudioSummary(int count, String size);
 }
 
 class _AppLocalizationsDelegate

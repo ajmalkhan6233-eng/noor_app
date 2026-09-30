@@ -20,6 +20,7 @@ import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import '../../../settings/logic/settings_cubit/settings_state.dart';
 import 'home_quick_toggle_pill.dart';
 import 'pre_adhan_reminder_chip.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class HomeQuickToggles extends StatefulWidget {
   const HomeQuickToggles({super.key, SilentModeChannel? channel})
@@ -120,7 +121,7 @@ class _HomeQuickTogglesState extends State<HomeQuickToggles> with WidgetsBinding
             Flexible(
               child: QuickToggleChip(
                 icon: silentOn ? Icons.notifications_off : Icons.notifications_off_outlined,
-                label: 'Silent Mode',
+                label: AppLocalizations.of(context)!.quickSilentMode,
                 on: silentOn,
                 onTap: () => silentOn
                     ? context.read<SettingsCubit>().setSilentMode(

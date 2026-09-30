@@ -15,6 +15,7 @@ import 'package:noor/features/prayer_times/data/silent_mode_settings.dart';
 import 'package:noor/features/settings/data/app_settings.dart';
 import 'package:noor/features/settings/data/settings_repository.dart';
 import 'package:noor/features/settings/logic/settings_cubit/settings_cubit.dart';
+import 'package:noor/l10n/generated/app_localizations.dart';
 
 class _FakeSettingsRepository extends SettingsRepository {
   _FakeSettingsRepository(this._settings);
@@ -29,6 +30,8 @@ class _FakeSettingsRepository extends SettingsRepository {
 
 Widget _wrap(SettingsCubit cubit) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(
       body: BlocProvider.value(value: cubit, child: const HomeQuickToggles()),
     ),

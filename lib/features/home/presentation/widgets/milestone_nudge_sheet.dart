@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/support/support_prompt_service.dart';
 import '../../../settings/presentation/support_developer_screen.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 Future<void> maybeShowMilestoneNudge({
   required BuildContext context,
@@ -48,11 +49,11 @@ Future<void> maybeShowMilestoneNudge({
                 MaterialPageRoute<void>(builder: (_) => const SupportDeveloperScreen()),
               );
             },
-            child: Text('Support noor', style: TextStyle(color: sheetContext.colors.gold)),
+            child: Text(AppLocalizations.of(sheetContext)!.nudgeSupportNoor, style: TextStyle(color: sheetContext.colors.gold)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(sheetContext),
-            child: Text('Not now', style: TextStyle(color: sheetContext.colors.sage)),
+            child: Text(AppLocalizations.of(sheetContext)!.commonNotNow, style: TextStyle(color: sheetContext.colors.sage)),
           ),
         ],
       ),

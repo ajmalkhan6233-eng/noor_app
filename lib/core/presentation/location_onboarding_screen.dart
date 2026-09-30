@@ -29,6 +29,7 @@ import '../utils/semantics_helpers.dart';
 import 'exact_alarm_prompt.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 class LocationOnboardingScreen extends StatefulWidget {
   const LocationOnboardingScreen({super.key, required this.onFinished});
@@ -159,7 +160,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Continue'),
+                    child: Text(AppLocalizations.of(context)!.onboardingContinue),
                   ),
                 ),
               ],
@@ -174,7 +175,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Not now — I\'ll enable location in Settings'),
+                  child: Text(AppLocalizations.of(context)!.onboardingNotNowLocation),
                 ),
               ),
             ],

@@ -7,3 +7,4 @@
 5. **Tamil/Sinhala strings for all new UI** (progress card, Mushaf, Emerald Night, Help/FAQ, etc.) are English-only placeholders. Religious wording and translations need your approval/translator.
 6. **SCHEDULE_EXACT_ALARM in the Play Console.** Play requires a declaration for this permission; confirm the adhan use-case answer you want to give.
 7. **Bundled audio (44 MB) and the 1.8 MB Cormorant font** dominate app size. Moving audio to an on-demand download would change the offline-first rule, so it is your call.
+8. **Prayer names in the tracker chips (finding #18)** are the English names from the code. Showing Tamil/Sinhala names is religious wording, so it was left for you.
