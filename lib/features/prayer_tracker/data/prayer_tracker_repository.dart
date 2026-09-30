@@ -4,6 +4,8 @@
 // are stored as plain "YYYY-MM-DD" keys (no time component) since a
 // prayer or fast is completed for a calendar day, not an instant.
 
+import 'package:sqflite_sqlcipher/sqflite.dart' show ConflictAlgorithm;
+
 import '../../../core/database/database_helper.dart';
 
 /// The five daily prayers, in their canonical order.
@@ -23,7 +25,11 @@ class PrayerTrackerRepository {
     final db = await _dbHelper.database;
     final key = _dateKey(date);
     if (completed) {
-      await db.insert('prayer_completions', {'date': key, 'prayer': prayer});
+      await db.insert(
+        'prayer_completions',
+        {'date': key, 'prayer': prayer},
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
     } else {
       await db.delete(
         'prayer_completions',
@@ -47,7 +53,11 @@ class PrayerTrackerRepository {
     final db = await _dbHelper.database;
     final key = _dateKey(date);
     if (fasted) {
-      await db.insert('fasting_days', {'date': key});
+      await db.insert(
+        'fasting_days',
+        {'date': key},
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
     } else {
       await db.delete('fasting_days', where: 'date = ?', whereArgs: [key]);
     }

@@ -66,9 +66,7 @@ class SettingsRepository {
         maghrib: (row['notify_maghrib']! as int) != 0,
         isha: (row['notify_isha']! as int) != 0,
       ),
-      themeMode: AppThemeModeOption.values.byName(
-        row['theme_mode']! as String,
-      ),
+      themeMode: appThemeModeFromName(row['theme_mode'] as String?),
       arabicFontScale: row['arabic_font_scale']! as double,
       hijriOffsetDays: row['hijri_offset_days']! as int,
       locationLabel: row['location_label'] as String?,

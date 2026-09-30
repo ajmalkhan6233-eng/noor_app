@@ -23,6 +23,7 @@ import '../../more/presentation/more_screen.dart';
 import '../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../prayer_times/presentation/prayer_times_screen.dart';
+import '../../prayer_times/presentation/widgets/day_rollover_watcher.dart';
 import '../../prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../quran/presentation/quran_screen.dart';
 import '../../settings/logic/settings_cubit/settings_cubit.dart';
@@ -78,7 +79,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Widget build(BuildContext context) {
     final screens = [
       for (var i = 0; i < _screenBuilders.length; i++)
-        _visitedIndices.contains(i) ? _screenBuilders[i]() : const SizedBox.shrink(),
+        _visitedIndices.contains(i)
+            ? _screenBuilders[i]()
+            : const SizedBox.shrink(),
     ];
     return MultiBlocProvider(
       providers: [
@@ -91,21 +94,23 @@ class _HomeDashboardState extends State<HomeDashboard> {
         // each tab holding its own stale copy.
         BlocProvider(create: (_) => PrayerTrackerCubit()..load()),
       ],
-      child: Scaffold(
-        backgroundColor: context.colors.paper,
-        body: Stack(
-          children: [
-            const Positioned.fill(child: CosmicBackground()),
-            FadeTabSwitcher(index: _selectedIndex, children: screens),
-          ],
-        ),
-        // expanded defaults true, so the dock always shows labels for
-        // now — the scroll-driven compress/expand logic in
-        // NoorBottomNav/NavTabItem is intact and ready to be driven
-        // again once the background-layer interaction is diagnosed.
-        bottomNavigationBar: NoorBottomNav(
-          selectedIndex: _selectedIndex,
-          onTap: _onTabTap,
+      child: DayRolloverWatcher(
+        child: Scaffold(
+          backgroundColor: context.colors.paper,
+          body: Stack(
+            children: [
+              const Positioned.fill(child: CosmicBackground()),
+              FadeTabSwitcher(index: _selectedIndex, children: screens),
+            ],
+          ),
+          // expanded defaults true, so the dock always shows labels for
+          // now — the scroll-driven compress/expand logic in
+          // NoorBottomNav/NavTabItem is intact and ready to be driven
+          // again once the background-layer interaction is diagnosed.
+          bottomNavigationBar: NoorBottomNav(
+            selectedIndex: _selectedIndex,
+            onTap: _onTabTap,
+          ),
         ),
       ),
     );

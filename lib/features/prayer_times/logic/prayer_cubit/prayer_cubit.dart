@@ -22,16 +22,31 @@ class PrayerCubit extends Cubit<PrayerState> {
     LocationService? locationService,
     SettingsRepository? settingsRepository,
     PrayerNotificationCoordinator? notificationCoordinator,
-  }) : _repository = repository ?? const PrayerRepository(),
+    DateTime Function()? clock,
+  }) : _clock = clock ?? DateTime.now,
+       _repository = repository ?? const PrayerRepository(),
        _locationService = locationService ?? const LocationService(),
        _settingsRepository = settingsRepository ?? SettingsRepository(),
        _notificationCoordinator = notificationCoordinator ?? PrayerNotificationCoordinator(),
-       super(PrayerState(date: DateTime.now()));
+       super(PrayerState(date: (clock ?? DateTime.now)()));
 
   final PrayerRepository _repository;
   final LocationService _locationService;
   final SettingsRepository _settingsRepository;
   final PrayerNotificationCoordinator _notificationCoordinator;
+  final DateTime Function() _clock;
+
+  /// `state.date` is set once at construction; without this the cubit
+  /// keeps showing (and scheduling from) the launch day after midnight.
+  /// Returns true when the day had changed and times were recalculated.
+  bool refreshIfDayChanged() {
+    final now = _clock();
+    final d = state.date;
+    if (d.year == now.year && d.month == now.month && d.day == now.day) return false;
+    emit(state.copyWith(date: now, locationError: state.locationError));
+    _recalculate();
+    return true;
+  }
 
   /// Re-reads every setting from the DB and re-resolves location —
   /// called on first load (HomeDashboard mount) and every time the
