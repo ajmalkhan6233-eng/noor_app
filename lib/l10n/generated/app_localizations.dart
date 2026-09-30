@@ -2008,6 +2008,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know.'**
   String get religiousContentQuietNote;
+
+  /// No description provided for @progressCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer progress'**
+  String get progressCardTitle;
+
+  /// No description provided for @progressHelpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'How is this calculated?'**
+  String get progressHelpButton;
+
+  /// No description provided for @progressHelpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to open an explanation'**
+  String get progressHelpHint;
+
+  /// No description provided for @progressHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How your progress is worked out'**
+  String get progressHelpTitle;
+
+  /// No description provided for @progressHelpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The percentage is the prayers you ticked in the last 7 days divided by the prayers possible in those days (5 per day). If you only started recently, only the days since your first tick count, so a new install does not start at 0%.'**
+  String get progressHelpBody;
+
+  /// No description provided for @progressHelpStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'A streak is the number of days in a row with all five prayers ticked. Today does not break your streak while it is still in progress. Best streak is your longest run ever.'**
+  String get progressHelpStreak;
+
+  /// No description provided for @progressHelpPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything here is worked out on your phone from your own ticks. Nothing is sent anywhere.'**
+  String get progressHelpPrivacy;
+
+  /// No description provided for @progressHelpClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get progressHelpClose;
+
+  /// No description provided for @progressPercentCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'of prayers kept, last 7 days'**
+  String get progressPercentCaption;
+
+  /// No description provided for @progressCurrentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current streak (days)'**
+  String get progressCurrentStreak;
+
+  /// No description provided for @progressBestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Best streak (days)'**
+  String get progressBestStreak;
+
+  /// No description provided for @progressPrayersKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayers kept this week'**
+  String get progressPrayersKept;
+
+  /// No description provided for @progressMsgStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Every journey begins with one prayer. Start with the next one.'**
+  String get progressMsgStart;
+
+  /// No description provided for @progressMsgKeepGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going, every prayer counts.'**
+  String get progressMsgKeepGoing;
+
+  /// No description provided for @progressMsgAlmost.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there, you are doing well today.'**
+  String get progressMsgAlmost;
+
+  /// No description provided for @progressMsgPerfect.
+  ///
+  /// In en, this message translates to:
+  /// **'All five prayers today. May Allah accept them.'**
+  String get progressMsgPerfect;
+
+  /// No description provided for @progressMsgStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days in a row. Keep it going.'**
+  String progressMsgStreak(int count);
+
+  /// No description provided for @progressTodaySemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 5 prayers done today'**
+  String progressTodaySemantics(int count);
+
+  /// No description provided for @progressPercentSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} percent of prayers kept in the last 7 days'**
+  String progressPercentSemantics(int percent);
+
+  /// No description provided for @progressBarSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}: {count} of 5 prayers'**
+  String progressBarSemantics(String day, int count);
 }
 
 class _AppLocalizationsDelegate

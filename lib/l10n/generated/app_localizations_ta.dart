@@ -1115,4 +1115,77 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get religiousContentQuietNote =>
       'இந்த உள்ளடக்கம் கவனமாக மூலமாக்கப்பட்டு சரிபார்க்கப்பட்டுள்ளது, மேலும் தொடர்ச்சியான அறிஞர் மறுஆய்வின் கீழ் உள்ளது. திருத்தம் தேவைப்படும் ஏதேனும் கண்டீர்களா? தயவுசெய்து எங்களுக்குத் தெரியப்படுத்துங்கள்.';
+
+  @override
+  String get progressCardTitle => 'Prayer progress';
+
+  @override
+  String get progressHelpButton => 'How is this calculated?';
+
+  @override
+  String get progressHelpHint => 'Double tap to open an explanation';
+
+  @override
+  String get progressHelpTitle => 'How your progress is worked out';
+
+  @override
+  String get progressHelpBody =>
+      'The percentage is the prayers you ticked in the last 7 days divided by the prayers possible in those days (5 per day). If you only started recently, only the days since your first tick count, so a new install does not start at 0%.';
+
+  @override
+  String get progressHelpStreak =>
+      'A streak is the number of days in a row with all five prayers ticked. Today does not break your streak while it is still in progress. Best streak is your longest run ever.';
+
+  @override
+  String get progressHelpPrivacy =>
+      'Everything here is worked out on your phone from your own ticks. Nothing is sent anywhere.';
+
+  @override
+  String get progressHelpClose => 'Got it';
+
+  @override
+  String get progressPercentCaption => 'of prayers kept, last 7 days';
+
+  @override
+  String get progressCurrentStreak => 'Current streak (days)';
+
+  @override
+  String get progressBestStreak => 'Best streak (days)';
+
+  @override
+  String get progressPrayersKept => 'Prayers kept this week';
+
+  @override
+  String get progressMsgStart =>
+      'Every journey begins with one prayer. Start with the next one.';
+
+  @override
+  String get progressMsgKeepGoing => 'Keep going, every prayer counts.';
+
+  @override
+  String get progressMsgAlmost => 'Almost there, you are doing well today.';
+
+  @override
+  String get progressMsgPerfect =>
+      'All five prayers today. May Allah accept them.';
+
+  @override
+  String progressMsgStreak(int count) {
+    return '$count days in a row. Keep it going.';
+  }
+
+  @override
+  String progressTodaySemantics(int count) {
+    return '$count of 5 prayers done today';
+  }
+
+  @override
+  String progressPercentSemantics(int percent) {
+    return '$percent percent of prayers kept in the last 7 days';
+  }
+
+  @override
+  String progressBarSemantics(String day, int count) {
+    return '$day: $count of 5 prayers';
+  }
 }

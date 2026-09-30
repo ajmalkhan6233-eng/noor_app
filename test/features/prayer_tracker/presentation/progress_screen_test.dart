@@ -12,6 +12,7 @@ import 'package:noor/features/prayer_tracker/presentation/progress_screen.dart';
 import 'package:noor/features/prayer_tracker/presentation/widgets/profile_name_header.dart';
 import 'package:noor/features/settings/data/app_settings.dart';
 import 'package:noor/features/settings/data/settings_repository.dart';
+import 'package:noor/l10n/generated/app_localizations.dart';
 
 class _FakeSettingsRepository extends SettingsRepository {
   _FakeSettingsRepository(this._settings);
@@ -30,10 +31,15 @@ class _EmptyPrayerTrackerRepository extends PrayerTrackerRepository {
     DateTime start,
     DateTime end,
   ) async => const [];
+
+  @override
+  Future<Map<DateTime, int>> completionCountsByDay() async => const {};
 }
 
 Widget _wrap({required SettingsRepository settingsRepository}) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
     home: ProgressScreen(
       repository: _EmptyPrayerTrackerRepository(),
       settingsRepository: settingsRepository,
