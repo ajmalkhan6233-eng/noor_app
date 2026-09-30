@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_locale_controller.dart';
 import '../../../../core/constants/app_color_tokens.dart';
-import '../../../../core/constants/app_typography.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/app_locale.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
@@ -38,14 +37,7 @@ class LanguageSection extends StatelessWidget {
               for (final option in AppLocaleOption.values)
                 DropdownMenuItem(
                   value: option,
-                  child: Text(
-                    option.nativeName,
-                    style: TextStyle(
-                      fontFamily: AppTypography.uiFamilyForLanguageCode(
-                        option.languageCode,
-                      ),
-                    ),
-                  ),
+                  child: Text(option.nativeName),
                 ),
             ],
             onChanged: (option) {

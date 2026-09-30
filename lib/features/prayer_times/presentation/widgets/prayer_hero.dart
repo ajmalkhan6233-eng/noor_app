@@ -1,6 +1,6 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// The astrolabe ring, the next prayer's name in Cormorant Garamond,
+// The astrolabe ring, the next prayer's name in Inter,
 // and its live countdown — one ticking clock driving all three.
 
 import 'dart:async';

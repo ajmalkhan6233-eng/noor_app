@@ -95,11 +95,11 @@ class AboutScreen extends StatelessWidget {
         children: [
           const SectionHeader('Typefaces'),
           const FontCredit(
-            family: 'Cormorant Garamond',
-            role: 'Display — prayer times, the Bismillah, headers',
+            family: 'Inter',
+            role: 'All UI text — titles, body, labels, settings, controls',
           ),
           const SizedBox(height: 12),
-          const FontCredit(family: 'Inter', role: 'Body — labels, settings, controls'),
+          const FontCredit(family: 'Amiri', role: 'Quran and Arabic text'),
           const SizedBox(height: 12),
           const FontCredit(
             family: 'Noto Sans Tamil',
