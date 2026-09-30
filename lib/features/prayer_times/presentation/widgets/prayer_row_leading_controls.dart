@@ -35,7 +35,7 @@ class PrayerRowLeadingControls extends StatelessWidget {
         if (name != 'Sunrise')
           AdhanPreviewButton(prayerName: name)
         else
-          Visibility(
+          const Visibility(
             visible: false,
             maintainSize: true,
             maintainAnimation: true,

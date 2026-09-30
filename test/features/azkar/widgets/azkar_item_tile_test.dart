@@ -33,7 +33,7 @@ void main() {
   );
 
   testWidgets('text sizes scale with fontScale', (tester) async {
-    await tester.pumpWidget(_wrap(AzkarItemTile(item: item, fontScale: 1.5)));
+    await tester.pumpWidget(_wrap(const AzkarItemTile(item: item, fontScale: 1.5)));
 
     final arabic = tester.widget<Text>(find.text('سُبْحَانَ اللَّهِ'));
     expect(arabic.style?.fontSize, 26 * 1.5);
@@ -46,7 +46,7 @@ void main() {
   });
 
   testWidgets('defaults to fontScale 1.0 when not provided', (tester) async {
-    await tester.pumpWidget(_wrap(AzkarItemTile(item: item)));
+    await tester.pumpWidget(_wrap(const AzkarItemTile(item: item)));
 
     final arabic = tester.widget<Text>(find.text('سُبْحَانَ اللَّهِ'));
     expect(arabic.style?.fontSize, 26);

@@ -46,10 +46,10 @@ void paintNavOrbBadge(Canvas canvas, {required bool active}) {
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.6),
   );
 
-  final base = RadialGradient(
-    center: const Alignment(-0.35, -0.45),
+  const base = RadialGradient(
+    center: Alignment(-0.35, -0.45),
     radius: 0.95,
-    colors: const [Color(0xFF2E4658), Color(0xFF0C1620)],
+    colors: [Color(0xFF2E4658), Color(0xFF0C1620)],
   );
   canvas.drawCircle(center, radius, Paint()..shader = base.createShader(bounds));
 

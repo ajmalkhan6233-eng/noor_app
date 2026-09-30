@@ -2,6 +2,8 @@
 //
 /// One day's row in the monthly timetable: day number, then five prayer
 /// times. Alternating rows aid scanning, while today gets a full outline.
+library;
+
 
 import 'package:flutter/material.dart';
 

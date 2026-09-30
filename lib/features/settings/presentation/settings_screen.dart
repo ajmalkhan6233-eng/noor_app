@@ -62,9 +62,9 @@ class _SettingsView extends StatelessWidget {
                   const AppCard(child: LocationSection()),
                   const SizedBox(height: 16),
                   SectionHeader(l10n.calculationSectionHeader),
-                  AppCard(
+                  const AppCard(
                     child: Column(
-                      children: const [
+                      children: [
                         MethodMadhabSection(),
                         SizedBox(height: 12),
                         HighLatitudeRuleSection(),

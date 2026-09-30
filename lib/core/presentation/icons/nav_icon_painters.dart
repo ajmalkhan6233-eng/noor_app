@@ -28,10 +28,10 @@ class HomeIconPainter extends CustomPainter {
     canvas.drawRect(
       wallRect,
       Paint()
-        ..shader = LinearGradient(
+        ..shader = const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: const [Color(0xFF1A3A45), Color(0xFF081821)],
+          colors: [Color(0xFF1A3A45), Color(0xFF081821)],
         ).createShader(wallRect),
     );
     canvas.drawRect(
@@ -51,10 +51,10 @@ class HomeIconPainter extends CustomPainter {
     canvas.drawPath(
       roofPath,
       Paint()
-        ..shader = LinearGradient(
+        ..shader = const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: const [Color(0xFFFFDD8C), Color(0xFFC98A00)],
+          colors: [Color(0xFFFFDD8C), Color(0xFFC98A00)],
         ).createShader(roofRect),
     );
     canvas.drawPath(
@@ -74,8 +74,8 @@ class HomeIconPainter extends CustomPainter {
     canvas.drawRRect(
       doorRRect,
       Paint()
-        ..shader = LinearGradient(
-          colors: const [Color(0xFFB87A00), Color(0xFF7A5000)],
+        ..shader = const LinearGradient(
+          colors: [Color(0xFFB87A00), Color(0xFF7A5000)],
         ).createShader(doorRect),
     );
     canvas.drawRRect(

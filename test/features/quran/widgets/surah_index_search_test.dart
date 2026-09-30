@@ -36,7 +36,7 @@ void main() {
       isLoading: false,
       searchQuery: 'Rahman',
       searchResults: [
-        QuranAyah(surahId: 1, ayahNumber: 1, arabicText: 'بِسْمِ ٱللَّهِ'),
+        const QuranAyah(surahId: 1, ayahNumber: 1, arabicText: 'بِسْمِ ٱللَّهِ'),
       ],
     );
 

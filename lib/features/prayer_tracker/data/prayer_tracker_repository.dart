@@ -76,28 +76,35 @@ class PrayerTrackerRepository {
 
   /// Consecutive days up to and including [date] with all five prayers
   /// completed, walking backwards day by day until one breaks the chain.
+  /// One grouped query, then the walk happens in memory.
   Future<int> currentPrayerStreak(DateTime date) async {
+    final counts = await completionCountsByDay();
     var streak = 0;
-    var day = date;
-    while (true) {
-      final completed = await completedPrayersOn(day);
-      if (!trackedPrayers.every(completed.contains)) break;
+    var day = DateTime(date.year, date.month, date.day);
+    while ((counts[day] ?? 0) >= trackedPrayers.length) {
       streak++;
-      day = day.subtract(const Duration(days: 1));
+      day = DateTime(day.year, day.month, day.day - 1);
     }
     return streak;
   }
 
   /// Consecutive fasted days up to and including [date].
   Future<int> currentFastingStreak(DateTime date) async {
+    final fasted = await fastingDates();
     var streak = 0;
-    var day = date;
-    while (true) {
-      if (!await isFastingDay(day)) break;
+    var day = DateTime(date.year, date.month, date.day);
+    while (fasted.contains(day)) {
       streak++;
-      day = day.subtract(const Duration(days: 1));
+      day = DateTime(day.year, day.month, day.day - 1);
     }
     return streak;
+  }
+
+  /// Every day marked as fasted, as date-only values.
+  Future<Set<DateTime>> fastingDates() async {
+    final db = await _dbHelper.database;
+    final rows = await db.query('fasting_days', columns: ['date']);
+    return rows.map((row) => _parseKey(row['date']! as String)).whereType<DateTime>().toSet();
   }
 
   /// One entry per day from [start] to [end] inclusive (both dates
@@ -108,14 +115,18 @@ class PrayerTrackerRepository {
     DateTime start,
     DateTime end,
   ) async {
+    final counts = await completionCountsByDay();
+    final fasted = await fastingDates();
     final results = <({DateTime date, int completedCount, bool fasted})>[];
     var day = DateTime(start.year, start.month, start.day);
     final last = DateTime(end.year, end.month, end.day);
     while (!day.isAfter(last)) {
-      final completed = await completedPrayersOn(day);
-      final fasted = await isFastingDay(day);
-      results.add((date: day, completedCount: completed.length, fasted: fasted));
-      day = day.add(const Duration(days: 1));
+      results.add((
+        date: day,
+        completedCount: counts[day] ?? 0,
+        fasted: fasted.contains(day),
+      ));
+      day = DateTime(day.year, day.month, day.day + 1);
     }
     return results;
   }
@@ -130,12 +141,16 @@ class PrayerTrackerRepository {
     );
     final counts = <DateTime, int>{};
     for (final row in rows) {
-      final parts = (row['date']! as String).split('-');
-      if (parts.length != 3) continue;
-      final day = DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
-      counts[day] = row['n']! as int;
+      final day = _parseKey(row['date']! as String);
+      if (day != null) counts[day] = row['n']! as int;
     }
     return counts;
+  }
+
+  static DateTime? _parseKey(String key) {
+    final parts = key.split('-');
+    if (parts.length != 3) return null;
+    return DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
   }
 
   static String _dateKey(DateTime date) {

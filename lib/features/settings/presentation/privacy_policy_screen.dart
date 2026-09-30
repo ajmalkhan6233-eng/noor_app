@@ -34,8 +34,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionHeader('Summary'),
-                SizedBox(height: 8),
+                const SectionHeader('Summary'),
+                const SizedBox(height: 8),
                 Text(
                   'noor does not collect, store, or transmit any personal '
                   'data to us or to any third party. There are no ads, no '
@@ -50,8 +50,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionHeader('Location'),
-                SizedBox(height: 8),
+                const SectionHeader('Location'),
+                const SizedBox(height: 8),
                 Text(
                   'If you enable location, it is used only to calculate '
                   'prayer times and the Qibla direction for where you are. '
@@ -71,8 +71,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionHeader('What stays on your device'),
-                SizedBox(height: 8),
+                const SectionHeader('What stays on your device'),
+                const SizedBox(height: 8),
                 Text(
                   'Your prayer-tracker history, bookmarks, dhikr counts, '
                   'Zakat entries, and settings are stored in a locally '
@@ -88,8 +88,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionHeader('Permissions'),
-                SizedBox(height: 8),
+                const SectionHeader('Permissions'),
+                const SizedBox(height: 8),
                 Text(
                   '• Location — prayer times and Qibla direction.\n'
                   '• Notifications and exact alarms — adhan and iqamah reminders.\n'
@@ -108,8 +108,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionHeader('Contact'),
-                SizedBox(height: 8),
+                const SectionHeader('Contact'),
+                const SizedBox(height: 8),
                 Text(
                   'Questions about this policy can be sent through the '
                   'Support noor screen.',

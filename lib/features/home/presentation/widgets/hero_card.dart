@@ -33,7 +33,7 @@ class HeroCard extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           // Quiet corner watermark, never overlapping the date text.
-          Positioned(
+          const Positioned(
             top: 0,
             right: 0,
             child: Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 26)),

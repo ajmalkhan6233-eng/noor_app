@@ -11,10 +11,10 @@ import 'package:noor/features/settings/presentation/widgets/battery_optimization
 import 'package:noor/l10n/generated/app_localizations.dart';
 
 Widget _wrap() {
-  return MaterialApp(
+  return const MaterialApp(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    home: const Scaffold(body: BatteryOptimizationSection()),
+    home: Scaffold(body: BatteryOptimizationSection()),
   );
 }
 

@@ -10,7 +10,6 @@
 // and passes now that toggleBookmark serializes concurrent calls.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:noor/features/quran/data/quran_ayah.dart';
 import 'package:noor/features/quran/data/quran_bookmark.dart';
 import 'package:noor/features/quran/data/quran_import_service.dart';
 import 'package:noor/features/quran/data/quran_import_status.dart';

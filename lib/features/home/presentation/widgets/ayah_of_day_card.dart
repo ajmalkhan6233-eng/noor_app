@@ -91,7 +91,7 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
               if (stillLoading)
                 Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: SizedBox(
                       width: 20,
                       height: 20,

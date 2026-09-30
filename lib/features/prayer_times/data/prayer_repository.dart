@@ -12,6 +12,7 @@ import 'package:adhan/adhan.dart' as adhan;
 // this same package, just not part of its stable public surface) is
 // the only way to ask "did the real angle actually occur tonight?"
 // before trusting a computed time as genuine.
+// ignore: implementation_imports
 import 'package:adhan/src/internal/solar_time.dart' show SolarTime;
 
 import '../../../core/location/location_service.dart';
