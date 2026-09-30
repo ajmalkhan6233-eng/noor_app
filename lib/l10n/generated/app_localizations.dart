@@ -2128,6 +2128,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{day}: {count} of 5 prayers'**
   String progressBarSemantics(String day, int count);
+
+  /// No description provided for @themeMushaf.
+  ///
+  /// In en, this message translates to:
+  /// **'Mushaf'**
+  String get themeMushaf;
 }
 
 class _AppLocalizationsDelegate

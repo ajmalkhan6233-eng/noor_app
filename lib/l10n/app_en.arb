@@ -410,5 +410,6 @@
   "progressPercentSemantics": "{percent} percent of prayers kept in the last 7 days",
   "@progressPercentSemantics": {"placeholders": {"percent": {"type": "int"}}},
   "progressBarSemantics": "{day}: {count} of 5 prayers",
-  "@progressBarSemantics": {"placeholders": {"day": {"type": "String"}, "count": {"type": "int"}}}
+  "@progressBarSemantics": {"placeholders": {"day": {"type": "String"}, "count": {"type": "int"}}},
+  "themeMushaf": "Mushaf"
 }

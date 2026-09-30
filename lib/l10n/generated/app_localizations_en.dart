@@ -1168,4 +1168,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String progressBarSemantics(String day, int count) {
     return '$day: $count of 5 prayers';
   }
+
+  @override
+  String get themeMushaf => 'Mushaf';
 }
