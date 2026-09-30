@@ -1,5 +1,6 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/features/prayer_times/data/prayer_adjustments.dart';
 import 'package:noor/features/prayer_times/data/prayer_high_latitude_rule.dart';
@@ -110,11 +111,17 @@ void main() {
   });
 
   group('AppThemeModeOption.flutterThemeMode', () {
-    test('maps every option to a distinct Flutter ThemeMode', () {
+    test('maps every option except mushaf to a distinct Flutter ThemeMode', () {
       final mapped = AppThemeModeOption.values
+          .where((mode) => mode != AppThemeModeOption.mushaf)
           .map((mode) => mode.flutterThemeMode)
           .toSet();
-      expect(mapped.length, AppThemeModeOption.values.length);
+      expect(mapped.length, AppThemeModeOption.values.length - 1);
+    });
+
+    test('mushaf renders through the light slot and is the last option', () {
+      expect(AppThemeModeOption.mushaf.flutterThemeMode, ThemeMode.light);
+      expect(AppThemeModeOption.values.last, AppThemeModeOption.mushaf);
     });
   });
 }
