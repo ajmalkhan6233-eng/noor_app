@@ -30,6 +30,7 @@ class TasbihCubit extends Cubit<TasbihState> {
     final saved = await _repository.loadSession(state.dhikrLabel);
     final prefs = await SharedPreferences.getInstance();
     final hapticsEnabled = prefs.getBool(_hapticsPrefKey) ?? true;
+    if (isClosed) return;
     emit(
       state.copyWith(
         count: saved?.count,
@@ -43,6 +44,7 @@ class TasbihCubit extends Cubit<TasbihState> {
   /// saved under that label (zero if it's never been counted before).
   Future<void> selectDhikr(String dhikrLabel) async {
     final saved = await _repository.loadSession(dhikrLabel);
+    if (isClosed) return;
     emit(
       TasbihState(
         dhikrLabel: dhikrLabel,

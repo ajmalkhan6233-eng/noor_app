@@ -1,5 +1,7 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,19 +33,21 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   final _ayahKeys = <int, GlobalKey>{};
   var _scrolledToLastRead = false;
   final _audioPlayer = SurahAudioPlayer();
+  StreamSubscription<void>? _completeSub;
   var _playing = false;
 
   @override
   void initState() {
     super.initState();
     context.read<QuranCubit>().openSurah(widget.surahId);
-    _audioPlayer.onComplete.listen((_) {
+    _completeSub = _audioPlayer.onComplete.listen((_) {
       if (mounted) setState(() => _playing = false);
     });
   }
 
   @override
   void dispose() {
+    _completeSub?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }

@@ -13,6 +13,8 @@
 // (ReadingPositionTracker + markLastRead), and jumps straight to the
 // page containing it on reopen.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,19 +38,21 @@ class FullQuranScreen extends StatefulWidget {
 class _FullQuranScreenState extends State<FullQuranScreen> {
   final _itemKeys = <int, GlobalKey>{};
   final _audioPlayer = SurahAudioPlayer();
+  StreamSubscription<void>? _completeSub;
   int? _playingSurahId;
 
   @override
   void initState() {
     super.initState();
     context.read<QuranCubit>().loadFullQuran();
-    _audioPlayer.onComplete.listen((_) {
+    _completeSub = _audioPlayer.onComplete.listen((_) {
       if (mounted) setState(() => _playingSurahId = null);
     });
   }
 
   @override
   void dispose() {
+    _completeSub?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -56,6 +60,7 @@ class _FullQuranScreenState extends State<FullQuranScreen> {
   Future<void> _toggleAudio(int surahId) async {
     if (_playingSurahId == surahId) {
       await _audioPlayer.stop();
+      if (!mounted) return;
       setState(() => _playingSurahId = null);
     } else {
       await _audioPlayer.play(surahId);

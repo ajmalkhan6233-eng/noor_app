@@ -6,6 +6,7 @@ import 'core/app_theme_controller.dart';
 import 'core/constants/app_color_tokens.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
+import 'core/utils/text_scale.dart';
 import 'core/constants/app_theme_emerald.dart';
 import 'core/constants/app_theme_mushaf.dart';
 import 'features/settings/data/app_theme_mode.dart';
@@ -136,9 +137,10 @@ class _NoorAppState extends State<NoorApp> {
               // rather than replacing it.
               builder: (context, child) {
                 final mediaQuery = MediaQuery.of(context);
-                final boosted = mediaQuery.textScaler.scale(1.0) * 1.15;
                 return MediaQuery(
-                  data: mediaQuery.copyWith(textScaler: TextScaler.linear(boosted)),
+                  data: mediaQuery.copyWith(
+                    textScaler: boostedTextScaler(mediaQuery.textScaler),
+                  ),
                   child: child!,
                 );
               },
