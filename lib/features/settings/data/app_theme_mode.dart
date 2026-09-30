@@ -30,3 +30,13 @@ extension AppThemeModeOptionLabel on AppThemeModeOption {
     }
   }
 }
+
+/// Reads a persisted theme name, falling back to Nebula for a value this
+/// build doesn't know (e.g. a backup restored from a newer version) so
+/// Settings loading never throws.
+AppThemeModeOption appThemeModeFromName(String? name) {
+  for (final option in AppThemeModeOption.values) {
+    if (option.name == name) return option;
+  }
+  return AppThemeModeOption.dark;
+}
