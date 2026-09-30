@@ -16,7 +16,8 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
 import '../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
-import '../../qibla/presentation/qibla_coming_soon_screen.dart';
+// TEST - do not merge: routing to real QiblaScreen for Impeller A/B test
+import '../../qibla/presentation/qibla_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../../settings/presentation/support_developer_screen.dart';
@@ -50,7 +51,7 @@ class MoreScreen extends StatelessWidget {
         // this MultiBlocProvider, not a descendant, so the screen's
         // own BlocBuilder<PrayerCubit> would otherwise throw
         // ProviderNotFoundException the moment it built.
-        builder: (_) => BlocProvider.value(value: prayerCubit, child: const QiblaComingSoonScreen()),
+        builder: (_) => BlocProvider.value(value: prayerCubit, child: const QiblaScreen()),
       ),
       MoreTile(
         icon: NoorIconType.tasbih,
