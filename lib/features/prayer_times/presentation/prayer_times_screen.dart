@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/collapsing_scaffold.dart';
@@ -37,15 +38,13 @@ class PrayerTimesScreen extends StatelessWidget {
 
   void _openMonthlyTimetable(BuildContext context, PrayerState state) {
     if (!state.hasCoordinates) return;
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => MonthlyTimetableScreen(
-          latitude: state.latitude!,
-          longitude: state.longitude!,
-          settings: state.settings,
-        ),
+    Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) => MonthlyTimetableScreen(
+        latitude: state.latitude!,
+        longitude: state.longitude!,
+        settings: state.settings,
       ),
-    );
+    ));
   }
 
   @override
@@ -77,7 +76,7 @@ class PrayerTimesScreen extends StatelessWidget {
         ],
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
             sliver: SliverToBoxAdapter(
               child: StaggeredFadeIn(
                 children: [
@@ -117,9 +116,7 @@ class PrayerTimesScreen extends StatelessWidget {
     final text = '${settings.method.label} · ${settings.madhab.label} madhab';
     return Center(
       child: Semantics(
-        label: AppLocalizations.of(
-          context,
-        )!.activeCalculationSettingsLabel(text),
+        label: AppLocalizations.of(context)!.activeCalculationSettingsLabel(text),
         child: Text(text, style: AppTypography.caption(context.colors.sage)),
       ),
     );
@@ -141,11 +138,9 @@ class PrayerTimesScreen extends StatelessWidget {
           times: result,
           iqamathOffsets: state.iqamathOffsets,
           notifications: settingsState.settings.notifications,
-          onToggleNotification: (prayer, enabled) => context
-              .read<SettingsCubit>()
-              .setNotifications(
-                settingsState.settings.notifications.withPrayer(prayer, enabled),
-              ),
+          onToggleNotification: (prayer, enabled) => context.read<SettingsCubit>().setNotifications(
+            settingsState.settings.notifications.withPrayer(prayer, enabled),
+          ),
         ),
       ),
     };

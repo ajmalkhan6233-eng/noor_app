@@ -23,6 +23,7 @@ import '../../settings/presentation/support_developer_screen.dart';
 import '../../tasbih/presentation/tasbih_screen.dart';
 import '../../zakat/presentation/zakat_screen.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_spacing.dart';
 import 'widgets/more_tile.dart';
 
 class MoreScreen extends StatelessWidget {
@@ -49,10 +50,7 @@ class MoreScreen extends StatelessWidget {
         // this MultiBlocProvider, not a descendant, so the screen's
         // own BlocBuilder<PrayerCubit> would otherwise throw
         // ProviderNotFoundException the moment it built.
-        builder: (_) => BlocProvider.value(
-          value: prayerCubit,
-          child: const QiblaComingSoonScreen(),
-        ),
+        builder: (_) => BlocProvider.value(value: prayerCubit, child: const QiblaComingSoonScreen()),
       ),
       MoreTile(
         icon: NoorIconType.tasbih,
@@ -88,10 +86,7 @@ class MoreScreen extends StatelessWidget {
         // AdhanSoundSection (inside SettingsScreen) reads
         // AdhanPreviewCubit, which only ever lives in HomeDashboard's
         // tab tree, not on this separately-pushed route.
-        builder: (_) => BlocProvider.value(
-          value: adhanPreviewCubit,
-          child: const SettingsScreen(),
-        ),
+        builder: (_) => BlocProvider.value(value: adhanPreviewCubit, child: const SettingsScreen()),
         onClosed: () => prayerCubit.loadSettings(),
       ),
       MoreTile(
@@ -131,7 +126,7 @@ class MoreScreen extends StatelessWidget {
       // partial — centered regardless of tile count, so this doesn't
       // need revisiting the next time a tile is added or removed.
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
         child: StaggeredFadeIn(
           children: [
             Center(

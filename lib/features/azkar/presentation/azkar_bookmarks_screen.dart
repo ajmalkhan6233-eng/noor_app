@@ -18,6 +18,7 @@ import '../logic/azkar_cubit/azkar_cubit.dart';
 import '../logic/azkar_cubit/azkar_state.dart';
 import 'widgets/azkar_item_tile.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_spacing.dart';
 
 class AzkarBookmarksScreen extends StatefulWidget {
   const AzkarBookmarksScreen({super.key});
@@ -42,7 +43,7 @@ class _AzkarBookmarksScreenState extends State<AzkarBookmarksScreen> {
         backgroundColor: context.colors.paper,
         appBar: AppBar(title: Text(l10n.bookmarksLabel)),
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
           child: BlocBuilder<AzkarCubit, AzkarState>(
             builder: (context, state) {
               if (state.bookmarkedItems.isEmpty) {

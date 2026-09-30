@@ -18,6 +18,7 @@ import '../logic/azkar_cubit/azkar_state.dart';
 import 'widgets/azkar_empty_state.dart';
 import 'widgets/azkar_item_tile.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_spacing.dart';
 
 class AzkarCategoryScreen extends StatefulWidget {
   const AzkarCategoryScreen({super.key, required this.category});
@@ -47,7 +48,7 @@ class _AzkarCategoryScreenState extends State<AzkarCategoryScreen> {
           title: Text(widget.category.label),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
           child: BlocBuilder<AzkarCubit, AzkarState>(
             builder: (context, state) {
               if (state.category != widget.category || state.isLoading) {

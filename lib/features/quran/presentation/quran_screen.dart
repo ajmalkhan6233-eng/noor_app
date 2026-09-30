@@ -12,6 +12,7 @@ import 'widgets/quran_cover_screen.dart';
 import 'widgets/quran_import_notice.dart';
 import 'widgets/surah_index.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_spacing.dart';
 import '../../../core/presentation/motion/motion.dart';
 import '../../../core/presentation/widgets/dhikr_loading_indicator.dart';
 import '../../../core/presentation/widgets/glow_hero_title.dart';
@@ -91,7 +92,7 @@ class _QuranViewState extends State<_QuranView> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

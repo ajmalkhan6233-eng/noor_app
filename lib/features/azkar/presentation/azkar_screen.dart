@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/app_spacing.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
-import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'azkar_category_screen.dart';
 import '../data/azkar_category.dart';
@@ -15,6 +15,7 @@ import '../logic/azkar_cubit/azkar_cubit.dart';
 import 'widgets/azkar_bookmarks_button.dart';
 import 'widgets/azkar_category_selector.dart';
 import 'widgets/azkar_header.dart';
+import 'widgets/azkar_search_results.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 /// Azkar: a search box, then a list of category rows (morning,
@@ -87,7 +88,7 @@ class _AzkarScreenState extends State<AzkarScreen> {
           actions: const [AzkarBookmarksButton()],
         ),
         body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -118,60 +119,16 @@ class _AzkarScreenState extends State<AzkarScreen> {
               Expanded(
                 child: _query.trim().isEmpty
                     ? const AzkarCategorySelector()
-                    : _searchResults(),
+                    : AzkarSearchResults(
+                        results: _results,
+                        controller: _searchScrollController,
+                        onSelectCategory: _openCategory,
+                      ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _searchResults() {
-    if (_results.isEmpty) {
-      return Center(
-        child: Text('No matching duas found.', style: TextStyle(color: context.colors.sage)),
-      );
-    }
-    return ListView.separated(
-      controller: _searchScrollController,
-      itemCount: _results.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        final (category, item) = _results[index];
-        final resultLabel = item.transliteration ?? item.translation ?? '';
-        // Plain AppCard, not wrapped in a scroll-linked parallax effect
-        // (2026-09-05 fix): that wrapper rebuilt this whole subtree on
-        // every ScrollController notification from the very list it
-        // sat inside, which was swallowing taps on these rows entirely
-        // — "not clickable" direct report. No other tappable list row
-        // in the app uses this decorative wrapper; not worth the risk
-        // here either.
-        return AppCard(
-          padding: EdgeInsets.zero,
-          child: SemanticButton(
-            label: '${category.label}: $resultLabel',
-            hint: 'Double tap to open this dua',
-            onTap: () => _openCategory(context, category),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: 11)),
-                  const SizedBox(height: 4),
-                  Text(
-                    resultLabel,
-                    style: TextStyle(color: context.colors.ink),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
