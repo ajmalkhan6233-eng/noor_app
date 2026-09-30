@@ -8,12 +8,14 @@ import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/build_stamp_footer.dart';
 import '../../../core/presentation/widgets/section_header.dart';
-import '../../../core/utils/semantics_helpers.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import 'help_screen.dart';
 import 'licences_screen.dart';
 import 'privacy_policy_screen.dart';
 import 'widgets/about_sources_card.dart';
-import 'widgets/font_credit.dart';
+import 'widgets/about_font_credits_card.dart';
+import 'widgets/about_link_card.dart';
+import 'widgets/about_privacy_card.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 /// About page: app identity, text-source attribution, bundled font
@@ -38,13 +40,30 @@ class AboutScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _religiousContentNoteCard(context, l10n),
               const SizedBox(height: 16),
-              _fontCreditsCard(context),
+              const AboutFontCreditsCard(),
               const SizedBox(height: 16),
-              // Privacy Policy link intentionally hidden for now (not
-              // deleted — _privacyPolicyLink() and PrivacyPolicyScreen
-              // both still exist below) pending the developer's own
-              // review of its content before showing it to users.
-              _licencesLink(context),
+              const AboutPrivacyCard(),
+              const SizedBox(height: 16),
+              AboutLinkCard(
+                icon: Icons.privacy_tip_outlined,
+                label: l10n.privacyPolicyLabel,
+                hint: l10n.privacyPolicyHint,
+                builder: (_) => const PrivacyPolicyScreen(),
+              ),
+              const SizedBox(height: 12),
+              AboutLinkCard(
+                icon: Icons.help_outline,
+                label: l10n.helpFaqLabel,
+                hint: l10n.helpFaqHint,
+                builder: (_) => const HelpScreen(),
+              ),
+              const SizedBox(height: 12),
+              AboutLinkCard(
+                icon: Icons.description_outlined,
+                label: l10n.licencesLabel,
+                hint: l10n.licencesHint,
+                builder: (_) => const LicencesScreen(),
+              ),
               const SizedBox(height: 16),
               const BuildStampFooter(),
             ],
@@ -84,95 +103,6 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(l10n.religiousContentNoteBody, style: AppTypography.caption(context.colors.sage)),
         ],
-      ),
-    );
-  }
-
-  Widget _fontCreditsCard(BuildContext context) {
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionHeader('Typefaces'),
-          const FontCredit(
-            family: 'Inter',
-            role: 'All UI text — titles, body, labels, settings, controls',
-          ),
-          const SizedBox(height: 12),
-          const FontCredit(family: 'Amiri', role: 'Quran and Arabic text'),
-          const SizedBox(height: 12),
-          const FontCredit(
-            family: 'Noto Sans Tamil',
-            role: 'Tamil interface text',
-          ),
-          const SizedBox(height: 12),
-          const FontCredit(
-            family: 'Noto Sans Sinhala',
-            role: 'Sinhala interface text',
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Each is licensed under the SIL Open Font Licence 1.1 and '
-            'bundled with the app for fully offline use.',
-            style: AppTypography.caption(context.colors.sage),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Not called from build() right now — see the "hidden for now" note
-  // above. Kept, not deleted: re-add its call site once the privacy
-  // policy content has been reviewed.
-  // ignore: unused_element
-  Widget _privacyPolicyLink(BuildContext context) {
-    return AppCard(
-      padding: EdgeInsets.zero,
-      child: SemanticButton(
-        label: 'Privacy Policy',
-        hint: 'Double tap to view the privacy policy',
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const PrivacyPolicyScreen()),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Row(
-            children: [
-              Icon(Icons.privacy_tip_outlined, color: context.colors.gold),
-              const SizedBox(width: 12),
-              Text(
-                'Privacy Policy',
-                style: TextStyle(color: context.colors.ink),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _licencesLink(BuildContext context) {
-    return AppCard(
-      padding: EdgeInsets.zero,
-      child: SemanticButton(
-        label: 'Open source licences',
-        hint: 'Double tap to view third-party licences',
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const LicencesScreen()),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Row(
-            children: [
-              Icon(Icons.description_outlined, color: context.colors.gold),
-              const SizedBox(width: 12),
-              Text(
-                'Open source licences',
-                style: TextStyle(color: context.colors.ink),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

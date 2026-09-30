@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../about_screen.dart';
+import '../help_screen.dart';
 import '../backup_restore_screen.dart';
 import '../send_feedback_screen.dart';
 import '../support_developer_screen.dart';
@@ -29,6 +31,18 @@ class AboutDonateSection extends StatelessWidget {
               MaterialPageRoute<void>(builder: (_) => const AboutScreen()),
             ),
             child: const _Row(icon: Icons.info_outline, label: 'About'),
+          ),
+          const SizedBox(height: 4),
+          SemanticButton(
+            label: AppLocalizations.of(context)!.helpFaqLabel,
+            hint: AppLocalizations.of(context)!.helpFaqHint,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const HelpScreen()),
+            ),
+            child: _Row(
+              icon: Icons.help_outline,
+              label: AppLocalizations.of(context)!.helpFaqLabel,
+            ),
           ),
           const SizedBox(height: 4),
           SemanticButton(

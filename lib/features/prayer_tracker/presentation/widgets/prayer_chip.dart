@@ -30,11 +30,12 @@ class PrayerChip extends StatelessWidget {
     return SemanticButton(
       label: label,
       hint: !enabled
-          ? 'Not yet due today'
+          ? l10n.prayerNotYetDueHint
           : done
           ? l10n.unmarkPrayerHint(label)
           : l10n.markPrayerDoneHint(label),
       enabled: enabled,
+      checked: done,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

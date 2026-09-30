@@ -63,7 +63,7 @@ class SendFeedbackScreen extends StatelessWidget {
         title: Text('Send Feedback', style: TextStyle(color: context.colors.ink)),
         iconTheme: IconThemeData(color: context.colors.gold),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,11 +127,14 @@ class _FeedbackButton extends StatelessWidget {
             children: [
               Icon(icon, color: filled ? context.colors.paper : context.colors.gold, size: 18),
               const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: filled ? context.colors.paper : context.colors.gold,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: filled ? context.colors.paper : context.colors.gold,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],

@@ -3,17 +3,22 @@
 // UI never touches PrayerTrackerRepository directly — every read/write
 // goes through here, same as every other feature's cubit.
 
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/prayer_tracker_repository.dart';
 import 'prayer_tracker_state.dart';
+import '../../../../core/haptics/haptic_service.dart';
 
 class PrayerTrackerCubit extends Cubit<PrayerTrackerState> {
-  PrayerTrackerCubit({PrayerTrackerRepository? repository})
+  PrayerTrackerCubit({PrayerTrackerRepository? repository, HapticService? hapticService})
     : _repository = repository ?? PrayerTrackerRepository(),
+      _haptics = hapticService ?? const HapticService(),
       super(const PrayerTrackerState());
 
   final PrayerTrackerRepository _repository;
+  final HapticService _haptics;
 
   /// Catching up on a missed day is reasonable; browsing indefinitely
   /// into the past isn't what this checklist is for (2026-08-24
@@ -59,11 +64,19 @@ class PrayerTrackerCubit extends Cubit<PrayerTrackerState> {
     final nowCompleted = !state.completedPrayers.contains(prayer);
     await _repository.setPrayerCompleted(state.viewedDate, prayer, completed: nowCompleted);
     await load();
+    if (nowCompleted) {
+      _haptics.tap();
+      // All five done: the heavier confirmation pulse, once.
+      if (state.completedPrayers.length >= trackedPrayers.length) {
+        unawaited(_haptics.milestonePulse());
+      }
+    }
   }
 
   Future<void> toggleFasting() async {
     final nowFasting = !state.fastingToday;
     await _repository.setFastingDay(state.viewedDate, fasted: nowFasting);
     await load();
+    _haptics.tap();
   }
 }

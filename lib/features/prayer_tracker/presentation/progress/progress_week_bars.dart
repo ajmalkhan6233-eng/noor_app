@@ -46,10 +46,11 @@ class ProgressWeekBars extends StatelessWidget {
     required String weekday,
     required bool isToday,
   }) {
-    return Semantics(
-      label: l10n.progressBarSemantics(weekday, count),
-      excludeSemantics: true,
-      child: Column(
+    return Expanded(
+      child: Semantics(
+        label: l10n.progressBarSemantics(weekday, count),
+        excludeSemantics: true,
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
@@ -69,8 +70,12 @@ class ProgressWeekBars extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(weekday, style: AppTypography.caption(isToday ? colors.ink : colors.sage)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(weekday, style: AppTypography.caption(isToday ? colors.ink : colors.sage)),
+          ),
         ],
+      ),
       ),
     );
   }

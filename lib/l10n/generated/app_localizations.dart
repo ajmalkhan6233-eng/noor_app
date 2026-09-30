@@ -2332,6 +2332,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 downloaded surah} other{{count} downloaded surahs}} — {size} of storage'**
   String downloadedAudioSummary(int count, String size);
+
+  /// No description provided for @privacyStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads, no tracking. Your data stays on your phone.'**
+  String get privacyStatement;
+
+  /// No description provided for @helpFaqLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & FAQ'**
+  String get helpFaqLabel;
+
+  /// No description provided for @helpFaqHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap for answers to common questions'**
+  String get helpFaqHint;
+
+  /// No description provided for @privacyPolicyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyLabel;
+
+  /// No description provided for @privacyPolicyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to read the privacy policy'**
+  String get privacyPolicyHint;
+
+  /// No description provided for @licencesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open source licences'**
+  String get licencesLabel;
+
+  /// No description provided for @licencesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to view third-party licences'**
+  String get licencesHint;
+
+  /// No description provided for @helpQ1.
+  ///
+  /// In en, this message translates to:
+  /// **'Does noor need the internet?'**
+  String get helpQ1;
+
+  /// No description provided for @helpA1.
+  ///
+  /// In en, this message translates to:
+  /// **'No. Everything works offline. The only exception is optional Quran audio downloads, which start only when you tap a download icon.'**
+  String get helpA1;
+
+  /// No description provided for @helpQ2.
+  ///
+  /// In en, this message translates to:
+  /// **'Where does my data go?'**
+  String get helpQ2;
+
+  /// No description provided for @helpA2.
+  ///
+  /// In en, this message translates to:
+  /// **'Nowhere. Your ticked prayers, bookmarks, settings and location stay on your phone in an encrypted database. There are no ads and no tracking.'**
+  String get helpA2;
+
+  /// No description provided for @helpQ3.
+  ///
+  /// In en, this message translates to:
+  /// **'Why did the adhan not sound?'**
+  String get helpQ3;
+
+  /// No description provided for @helpA3.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that notifications are allowed for noor, that \"Alarms & reminders\" is allowed, that battery optimisation is off for noor, and that the phone is not in Do Not Disturb. Settings has a test button for the adhan.'**
+  String get helpA3;
+
+  /// No description provided for @helpQ4.
+  ///
+  /// In en, this message translates to:
+  /// **'How are prayer times calculated?'**
+  String get helpQ4;
+
+  /// No description provided for @helpA4.
+  ///
+  /// In en, this message translates to:
+  /// **'On your phone, from your location, using the calculation method and madhab chosen in Settings. You can change them there at any time.'**
+  String get helpA4;
+
+  /// No description provided for @helpQ5.
+  ///
+  /// In en, this message translates to:
+  /// **'Why does noor ask for location?'**
+  String get helpQ5;
+
+  /// No description provided for @helpA5.
+  ///
+  /// In en, this message translates to:
+  /// **'Only to work out prayer times for where you are. It is used on your phone and never sent anywhere. If location is off, noor uses a default location and tells you so.'**
+  String get helpA5;
+
+  /// No description provided for @helpQ6.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I back up my data?'**
+  String get helpQ6;
+
+  /// No description provided for @helpA6.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings, then Backup & Restore. It creates an encrypted file that you keep. Only you know the passphrase, so keep it safe.'**
+  String get helpA6;
+
+  /// No description provided for @helpQ7.
+  ///
+  /// In en, this message translates to:
+  /// **'How is the progress percentage worked out?'**
+  String get helpQ7;
+
+  /// No description provided for @helpA7.
+  ///
+  /// In en, this message translates to:
+  /// **'It is the prayers you ticked in the last 7 days divided by the prayers possible (5 per day), counting only days since your first tick. Tap the ? on the progress card for details.'**
+  String get helpA7;
+
+  /// No description provided for @helpQ8.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I change the theme?'**
+  String get helpQ8;
+
+  /// No description provided for @helpA8.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings, then Display, and choose Nebula, Dawn, Mushaf or Emerald Night, or follow the system setting.'**
+  String get helpA8;
+
+  /// No description provided for @helpQ9.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I report a problem?'**
+  String get helpQ9;
+
+  /// No description provided for @helpA9.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings, then Send Feedback. Describe what happened and what you expected.'**
+  String get helpA9;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String aboutVersion(String version);
+
+  /// No description provided for @prayerNotYetDueHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet due today'**
+  String get prayerNotYetDueHint;
 }
 
 class _AppLocalizationsDelegate

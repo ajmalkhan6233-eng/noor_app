@@ -21,6 +21,7 @@ class SemanticButton extends StatefulWidget {
     required this.child,
     this.hint,
     this.enabled = true,
+    this.checked,
   });
 
   /// Screen-reader label, e.g. "Tasbih counter".
@@ -32,6 +33,10 @@ class SemanticButton extends StatefulWidget {
   final VoidCallback onTap;
   final Widget child;
   final bool enabled;
+
+  /// For toggle-like buttons (prayer chips, fasting): announced as
+  /// checked / not checked. Leave null for plain buttons.
+  final bool? checked;
 
   @override
   State<SemanticButton> createState() => _SemanticButtonState();
@@ -49,6 +54,7 @@ class _SemanticButtonState extends State<SemanticButton> {
     return Semantics(
       button: true,
       enabled: widget.enabled,
+      checked: widget.checked,
       label: widget.label,
       hint: widget.hint,
       onTap: widget.enabled ? widget.onTap : null,

@@ -37,11 +37,14 @@ class SupportButton extends StatelessWidget {
             children: [
               Icon(icon, color: filled ? context.colors.paper : context.colors.gold, size: 18),
               const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: filled ? context.colors.paper : context.colors.gold,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: filled ? context.colors.paper : context.colors.gold,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],

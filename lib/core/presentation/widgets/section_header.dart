@@ -17,7 +17,10 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Text(title.toUpperCase(), style: AppTypography.sectionHeader(context.colors.sage)),
+      child: Semantics(
+        header: true,
+        child: Text(title.toUpperCase(), style: AppTypography.sectionHeader(context.colors.sage)),
+      ),
     );
   }
 }

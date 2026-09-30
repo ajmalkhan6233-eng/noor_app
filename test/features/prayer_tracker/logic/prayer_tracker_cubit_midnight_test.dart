@@ -15,6 +15,8 @@ import 'package:noor/features/prayer_tracker/data/prayer_tracker_repository.dart
 import 'package:noor/features/prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import 'package:noor/features/prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 
+import '../../../helpers/silent_haptics.dart';
+
 class _FakeTrackerRepository extends PrayerTrackerRepository {
   final Map<String, Set<String>> completedByDate = {};
 
@@ -61,7 +63,7 @@ void main() {
       PrayerTrackerState.debugNowOverride = () => justBeforeMidnight;
 
       final repo = _FakeTrackerRepository();
-      final cubit = PrayerTrackerCubit(repository: repo);
+      final cubit = PrayerTrackerCubit(repository: repo, hapticService: SilentHaptics());
       await cubit.load();
       expect(cubit.state.isViewingToday, isTrue);
 

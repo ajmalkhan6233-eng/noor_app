@@ -68,7 +68,7 @@ class SupportDeveloperScreen extends StatelessWidget {
         title: Text('Support noor', style: TextStyle(color: context.colors.ink)),
         iconTheme: IconThemeData(color: context.colors.gold),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

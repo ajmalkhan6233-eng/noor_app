@@ -18,6 +18,8 @@ import 'features/settings/data/app_locale.dart';
 import 'features/settings/data/settings_repository.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'splash_decision_placeholder.dart';
+import 'core/utils/system_ui.dart';
+import 'package:flutter/services.dart';
 
 /// Root widget: shows the splash screen, then fades into the main
 /// dashboard — bottom navigation across Prayer Times, Qibla, Quran,
@@ -119,6 +121,8 @@ class _NoorAppState extends State<NoorApp> {
               debugShowCheckedModeBanner: false,
               scrollBehavior: AppScrollBehavior(),
               themeMode: themeMode ?? ThemeMode.dark,
+              themeAnimationDuration: const Duration(milliseconds: 300),
+              themeAnimationCurve: Curves.easeInOut,
               darkTheme: option == AppThemeModeOption.emeraldNight
                   ? buildEmeraldTheme()
                   : buildDarkTheme(),
@@ -137,11 +141,14 @@ class _NoorAppState extends State<NoorApp> {
               // rather than replacing it.
               builder: (context, child) {
                 final mediaQuery = MediaQuery.of(context);
-                return MediaQuery(
-                  data: mediaQuery.copyWith(
-                    textScaler: boostedTextScaler(mediaQuery.textScaler),
+                return AnnotatedRegion<SystemUiOverlayStyle>(
+                  value: overlayStyleFor(Theme.of(context).brightness),
+                  child: MediaQuery(
+                    data: mediaQuery.copyWith(
+                      textScaler: boostedTextScaler(mediaQuery.textScaler),
+                    ),
+                    child: child!,
                   ),
-                  child: child!,
                 );
               },
               home: switch (_showSplash) {

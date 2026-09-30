@@ -111,6 +111,7 @@ class PrayerTrackerCard extends StatelessWidget {
               const SizedBox(height: 16),
               SemanticButton(
                 label: l10n.fastingTodayLabel,
+                checked: state.fastingToday,
                 hint: state.fastingToday ? l10n.unmarkFastingHint : l10n.markFastingHint,
                 onTap: cubit.toggleFasting,
                 child: Row(

@@ -1303,4 +1303,97 @@ class AppLocalizationsSi extends AppLocalizations {
     );
     return '$_temp0 — $size of storage';
   }
+
+  @override
+  String get privacyStatement =>
+      'No ads, no tracking. Your data stays on your phone.';
+
+  @override
+  String get helpFaqLabel => 'Help & FAQ';
+
+  @override
+  String get helpFaqHint => 'Double tap for answers to common questions';
+
+  @override
+  String get privacyPolicyLabel => 'Privacy Policy';
+
+  @override
+  String get privacyPolicyHint => 'Double tap to read the privacy policy';
+
+  @override
+  String get licencesLabel => 'Open source licences';
+
+  @override
+  String get licencesHint => 'Double tap to view third-party licences';
+
+  @override
+  String get helpQ1 => 'Does noor need the internet?';
+
+  @override
+  String get helpA1 =>
+      'No. Everything works offline. The only exception is optional Quran audio downloads, which start only when you tap a download icon.';
+
+  @override
+  String get helpQ2 => 'Where does my data go?';
+
+  @override
+  String get helpA2 =>
+      'Nowhere. Your ticked prayers, bookmarks, settings and location stay on your phone in an encrypted database. There are no ads and no tracking.';
+
+  @override
+  String get helpQ3 => 'Why did the adhan not sound?';
+
+  @override
+  String get helpA3 =>
+      'Check that notifications are allowed for noor, that \"Alarms & reminders\" is allowed, that battery optimisation is off for noor, and that the phone is not in Do Not Disturb. Settings has a test button for the adhan.';
+
+  @override
+  String get helpQ4 => 'How are prayer times calculated?';
+
+  @override
+  String get helpA4 =>
+      'On your phone, from your location, using the calculation method and madhab chosen in Settings. You can change them there at any time.';
+
+  @override
+  String get helpQ5 => 'Why does noor ask for location?';
+
+  @override
+  String get helpA5 =>
+      'Only to work out prayer times for where you are. It is used on your phone and never sent anywhere. If location is off, noor uses a default location and tells you so.';
+
+  @override
+  String get helpQ6 => 'How do I back up my data?';
+
+  @override
+  String get helpA6 =>
+      'Open Settings, then Backup & Restore. It creates an encrypted file that you keep. Only you know the passphrase, so keep it safe.';
+
+  @override
+  String get helpQ7 => 'How is the progress percentage worked out?';
+
+  @override
+  String get helpA7 =>
+      'It is the prayers you ticked in the last 7 days divided by the prayers possible (5 per day), counting only days since your first tick. Tap the ? on the progress card for details.';
+
+  @override
+  String get helpQ8 => 'How do I change the theme?';
+
+  @override
+  String get helpA8 =>
+      'Open Settings, then Display, and choose Nebula, Dawn, Mushaf or Emerald Night, or follow the system setting.';
+
+  @override
+  String get helpQ9 => 'How do I report a problem?';
+
+  @override
+  String get helpA9 =>
+      'Open Settings, then Send Feedback. Describe what happened and what you expected.';
+
+  @override
+  String aboutVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get prayerNotYetDueHint => 'Not yet due today';
 }
