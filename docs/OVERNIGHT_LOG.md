@@ -23,3 +23,8 @@ Work dir: worktree `zealous-merkle-5d5e7c`. Local `main` is checked out (dirty) 
 - NEXT: Phase 5: push polish/overnight, fast-forward main (check origin/main unchanged), run 'Build arm64-only APK' on main, watch, Web Preview, then cleanup (tag+delete branches), then Part E report. (old NEXT list below is obsolete)
 - (obsolete) NEXT (Phase 3 cont.): #19 progress first-run msg, #20-22 empty states, #23-26 plain errors, #44/45 golden path test, #49/#50 README+CLAUDE.md, then Phase 4. a11y tap targets + l10n of hard-coded labels (#4-#19), then #20-22 Mushaf flat, #25/26 lazy lists, #41 file splits, #45 Help/FAQ, #48 contrast test, #49 docs
 - Then Phase 3 IMPROVEMENTS.md (50) + do them, Phase 4 gate + PLAY_STORE_READINESS.md, Phase 5 merge/build/cleanup, Part E report.
+
+## FINAL STATE (2026-10-01)
+- main = f69c6c1 (polish merged). GitHub 'Build arm64-only APK' run #4 (id 36773767073) SUCCESS; APK on apk-releases:dist/noor-arm64.apk (build 4, f69c6c1). Web Preview green.
+- BLOCKED: final branch cleanup (Phase 5 step) was denied by the permission classifier. Still to delete by hand or re-authorise: origin/polish/overnight + local polish/overnight; local claude/android-app-verification-336c38, claude/list-apk-desktop-build-e050d5, claude/multi-window-debugging-0fce92, claude/remote-control-de9128 (checked out in other worktrees); local main is dirty in the repo root. backup/* tags already exist for everything deleted earlier (backup/polish/overnight points at 5da39c4, an earlier tip; main already contains the later commits).
+- No work is pending except that cleanup and the items in docs/NEEDS_DECISION.md.
