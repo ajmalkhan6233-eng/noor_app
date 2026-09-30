@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 /// A simple on/off glass-pill toggle chip — icon + label, no dropdown
 /// (see PreAdhanReminderChip for the one with a popup menu).
@@ -62,7 +63,7 @@ class GlassPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(20);
+    final borderRadius = BorderRadius.circular(context.radiusFor(20));
     return ClipRRect(
       borderRadius: borderRadius,
       child: BackdropFilter(

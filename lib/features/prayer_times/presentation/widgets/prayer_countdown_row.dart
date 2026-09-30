@@ -22,6 +22,7 @@ import '../../../../core/presentation/motion/motion.dart';
 import 'prayer_time_format.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class PrayerCountdownRow extends StatelessWidget {
   const PrayerCountdownRow({
@@ -134,7 +135,7 @@ class _CurrentTimeChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: context.colors.card,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(context.radiusFor(20)),
           border: Border.all(color: context.colors.hairline),
         ),
         child: Row(

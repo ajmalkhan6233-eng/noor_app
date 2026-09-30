@@ -30,6 +30,7 @@ import 'exact_alarm_prompt.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../constants/corner_radius.dart';
 
 class LocationOnboardingScreen extends StatefulWidget {
   const LocationOnboardingScreen({super.key, required this.onFinished});
@@ -134,7 +135,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                     backgroundColor: context.colors.gold,
                     foregroundColor: context.colors.paper,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.radiusFor(12))),
                   ),
                   child: Text(_resolving ? 'Locating…' : 'Enable location'),
                 ),
@@ -158,7 +159,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                       backgroundColor: context.colors.gold,
                       foregroundColor: context.colors.paper,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.radiusFor(12))),
                     ),
                     child: Text(AppLocalizations.of(context)!.onboardingContinue),
                   ),
@@ -173,7 +174,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                     foregroundColor: context.colors.gold,
                     side: BorderSide(color: context.colors.goldBorder),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.radiusFor(12))),
                   ),
                   child: Text(AppLocalizations.of(context)!.onboardingNotNowLocation),
                 ),
@@ -196,7 +197,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: selected ? context.colors.gold : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(context.radiusFor(10)),
           border: Border.all(color: selected ? context.colors.gold : context.colors.hairline),
         ),
         child: Text(

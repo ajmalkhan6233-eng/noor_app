@@ -15,6 +15,7 @@ import '../../../prayer_times/data/adhan_reciter.dart';
 import '../../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class AdhanSoundSection extends StatelessWidget {
   const AdhanSoundSection({super.key});
@@ -51,7 +52,7 @@ class AdhanSoundSection extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           color: reciter == selected ? context.colors.gold : Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(context.radiusFor(20)),
                           border: Border.all(
                             color: reciter == selected ? context.colors.gold : context.colors.hairline,
                           ),

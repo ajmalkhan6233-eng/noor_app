@@ -16,6 +16,7 @@ import '../../logic/time_of_day_gradient_phase.dart';
 import 'iqama_gap_row.dart';
 import 'prayer_countdown_row.dart';
 import 'prayer_hero_gradient.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class PrayerHero extends StatefulWidget {
   const PrayerHero({super.key, required this.times, required this.offsets});
@@ -85,7 +86,7 @@ class _PrayerHeroState extends State<PrayerHero> {
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(context.radiusFor(24)),
       ),
       child: Column(
         children: [

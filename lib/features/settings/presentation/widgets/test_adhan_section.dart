@@ -15,6 +15,7 @@ import '../../../prayer_times/data/notification_service.dart';
 import '../../../prayer_times/data/notification_slots.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class TestAdhanSection extends StatelessWidget {
   const TestAdhanSection({super.key, NotificationService? service})
@@ -46,7 +47,7 @@ class TestAdhanSection extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(context.radiusFor(20)),
                     border: Border.all(color: context.colors.goldBorder),
                   ),
                   child: Text(slotLabel(slot), style: TextStyle(color: context.colors.gold, fontSize: 13)),
@@ -61,7 +62,7 @@ class TestAdhanSection extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(context.radiusFor(20)),
               border: Border.all(color: context.colors.hairline),
             ),
             child: Text(

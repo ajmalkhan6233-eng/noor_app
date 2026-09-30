@@ -10,6 +10,7 @@ import '../../../../core/presentation/icons/noor_icon.dart';
 import '../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class MoreTile extends StatelessWidget {
   const MoreTile({
@@ -60,7 +61,7 @@ class MoreTile extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: tileColor.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(context.radiusFor(16)),
             ),
             child: NoorIcon(icon, color: tileColor, size: 26),
           ),

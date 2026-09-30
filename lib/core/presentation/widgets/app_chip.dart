@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_color_tokens.dart';
 import '../motion/motion.dart';
+import '../../constants/corner_radius.dart';
 
 class AppChip extends StatefulWidget {
   const AppChip({
@@ -50,7 +51,7 @@ class _AppChipState extends State<AppChip> {
         },
         onTapDown: (_) => _setPressed(true),
         onTapCancel: () => _setPressed(false),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(context.radiusFor(20)),
         child: AnimatedScale(
           scale: _pressed ? 0.98 : 1,
           duration: Motion.effective(context, Motion.short),
@@ -61,7 +62,7 @@ class _AppChipState extends State<AppChip> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: widget.selected ? context.colors.card : Colors.transparent,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(context.radiusFor(20)),
               border: Border.all(
                 color: widget.selected ? context.colors.gold : context.colors.hairline,
               ),

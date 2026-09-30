@@ -19,6 +19,7 @@ import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
 import '../../logic/prayer_tick_guard.dart';
 import '../progress_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 // Reads the PrayerTrackerCubit provided by HomeDashboard rather than
 // creating its own — so marking a prayer done here shows up on the
@@ -192,7 +193,7 @@ class _PrayerChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: done ? context.colors.card : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(context.radiusFor(20)),
           border: Border.all(color: enabled ? (done ? context.colors.gold : context.colors.hairline) : context.colors.hairline),
         ),
         child: Row(

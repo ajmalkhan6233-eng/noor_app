@@ -14,6 +14,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import 'support_developer_screen.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/corner_radius.dart';
 
 class SendFeedbackScreen extends StatelessWidget {
   const SendFeedbackScreen({super.key});
@@ -118,7 +119,7 @@ class _FeedbackButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
             color: filled ? context.colors.gold : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(context.radiusFor(12)),
             border: filled ? null : Border.all(color: context.colors.goldBorder),
           ),
           child: Row(

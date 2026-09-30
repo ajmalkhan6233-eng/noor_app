@@ -17,6 +17,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/dhikr_option.dart';
 import '../../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../../logic/tasbih_cubit/tasbih_state.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class DhikrSelector extends StatelessWidget {
   const DhikrSelector({super.key});
@@ -74,7 +75,7 @@ class _DhikrChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: selected ? context.colors.card : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(context.radiusFor(20)),
           border: Border.all(color: selected ? context.colors.gold : context.colors.hairline),
         ),
         child: Text(

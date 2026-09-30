@@ -8,3 +8,4 @@
 6. **SCHEDULE_EXACT_ALARM in the Play Console.** Play requires a declaration for this permission; confirm the adhan use-case answer you want to give.
 7. **Bundled audio (44 MB) and the 1.8 MB Cormorant font** dominate app size. Moving audio to an on-demand download would change the offline-first rule, so it is your call.
 8. **Prayer names in the tracker chips (finding #18)** are the English names from the code. Showing Tamil/Sinhala names is religious wording, so it was left for you.
+9. **Dawn accent contrast.** Dawn's gold (0xFFFFB703) on its paper (0xFFF7F5F1) is only 1.60:1 (needs 4.5:1 when used as text, e.g. links and outlined buttons). Palette is locked, so it was not changed. Suggested Dawn-only text accent: a deep amber such as 0xFF8A5A00 (about 5.6:1). Measured: Nebula 11.55, Emerald Night 8.60, Mushaf 6.98.

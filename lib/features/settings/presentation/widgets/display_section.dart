@@ -10,6 +10,7 @@ import '../../data/app_theme_mode.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 /// Theme, Quran text size (Arabic + translation), and Hijri calendar offset.
 class DisplaySection extends StatelessWidget {
@@ -121,7 +122,7 @@ class DisplaySection extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: mode == selected ? context.colors.gold : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(context.radiusFor(10)),
                     border: Border.all(
                       color: mode == selected ? context.colors.gold : context.colors.hairline,
                     ),

@@ -18,6 +18,7 @@ import '../../../core/backup/backup_repository.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import 'widgets/backup_passphrase_dialog.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/corner_radius.dart';
 
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
@@ -141,7 +142,7 @@ class _ActionButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
             color: context.colors.gold,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(context.radiusFor(12)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -12,5 +12,6 @@ Work dir: worktree `zealous-merkle-5d5e7c`. Local `main` is checked out (dirty) 
 - DONE batch1 (#1,#3,#34,#35,#42): main.dart try/catch, text-scale cap, audio sub cancel, tasbih closed guards
 - DONE batch2 (#23,#24,#38,#39,#40 + analyzer to 0 issues): streak/history single queries, dart fix const/imports
 - DONE batch3 (#4-#16,#19 l10n + 48dp targets for chevrons/hijri/dismiss). #18 -> NEEDS_DECISION.
-- NEXT (batch4+): a11y tap targets + l10n of hard-coded labels (#4-#19), then #20-22 Mushaf flat, #25/26 lazy lists, #41 file splits, #45 Help/FAQ, #48 contrast test, #49 docs
+- DONE batch4: Mushaf flat (radiusFor on 16 files, no glow in flat themes), contrast test all 4 themes (#20-22,#48). SKIPPED #25/#26 lazy lists (StaggeredFadeIn needs eager children; 114 simple tiles). Dawn gold contrast -> NEEDS_DECISION #9.
+- NEXT (batch5+): a11y tap targets + l10n of hard-coded labels (#4-#19), then #20-22 Mushaf flat, #25/26 lazy lists, #41 file splits, #45 Help/FAQ, #48 contrast test, #49 docs
 - Then Phase 3 IMPROVEMENTS.md (50) + do them, Phase 4 gate + PLAY_STORE_READINESS.md, Phase 5 merge/build/cleanup, Part E report.

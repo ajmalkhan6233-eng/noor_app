@@ -14,6 +14,7 @@ import '../../../../core/presentation/widgets/allah_calligraphy.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class HeroCard extends StatelessWidget {
   const HeroCard({super.key, required this.hijriOffsetDays});
@@ -52,7 +53,7 @@ class HeroCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: context.colors.paper,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(context.radiusFor(20)),
                     border: Border.all(color: context.colors.hairline),
                   ),
                   child: Row(

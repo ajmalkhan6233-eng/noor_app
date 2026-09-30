@@ -12,6 +12,7 @@ import '../../../../core/support/support_prompt_service.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../settings/presentation/support_developer_screen.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 class SupportHomeCard extends StatefulWidget {
   const SupportHomeCard({super.key});
@@ -54,7 +55,7 @@ class _SupportHomeCardState extends State<SupportHomeCard> {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: context.colors.card,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(context.radiusFor(14)),
         border: Border.all(color: context.colors.accentSecondary.withValues(alpha: 0.25)),
       ),
       child: Row(

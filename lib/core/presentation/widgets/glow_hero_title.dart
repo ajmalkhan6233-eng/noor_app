@@ -12,6 +12,7 @@
 
 import 'package:flutter/material.dart';
 import '../../constants/app_typography.dart';
+import '../../constants/app_color_tokens.dart';
 
 class GlowHeroTitle extends StatefulWidget {
   const GlowHeroTitle(this.text, {super.key, required this.color, this.style});
@@ -47,6 +48,9 @@ class _GlowHeroTitleState extends State<GlowHeroTitle> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final text = Text(widget.text, style: widget.style ?? AppTypography.heroDisplay(widget.color));
+    // Flat themes (Mushaf) have no shadows, so no glow either.
+    if (context.colors.flatSurfaces) return text;
     return AnimatedBuilder(
       animation: _glowController,
       builder: (context, child) {
@@ -66,7 +70,7 @@ class _GlowHeroTitleState extends State<GlowHeroTitle> with SingleTickerProvider
           child: child,
         );
       },
-      child: Text(widget.text, style: widget.style ?? AppTypography.heroDisplay(widget.color)),
+      child: text,
     );
   }
 }
