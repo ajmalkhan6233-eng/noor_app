@@ -2008,6 +2008,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know.'**
   String get religiousContentQuietNote;
+
+  /// No description provided for @themeMushaf.
+  ///
+  /// In en, this message translates to:
+  /// **'Mushaf'**
+  String get themeMushaf;
+
+  /// No description provided for @themeEmeraldNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Emerald Night'**
+  String get themeEmeraldNight;
 }
 
 class _AppLocalizationsDelegate

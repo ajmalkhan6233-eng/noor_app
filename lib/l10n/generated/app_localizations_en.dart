@@ -1095,4 +1095,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get religiousContentQuietNote =>
       'This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know.';
+
+  @override
+  String get themeMushaf => 'Mushaf';
+
+  @override
+  String get themeEmeraldNight => 'Emerald Night';
 }

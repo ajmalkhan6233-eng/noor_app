@@ -6,13 +6,15 @@ import 'core/app_theme_controller.dart';
 import 'core/constants/app_color_tokens.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
+import 'core/constants/app_theme_emerald.dart';
+import 'core/constants/app_theme_mushaf.dart';
+import 'features/settings/data/app_theme_mode.dart';
 import 'core/presentation/app_scroll_behavior.dart';
 import 'core/presentation/location_onboarding_screen.dart';
 import 'core/presentation/splash/splash_gate.dart';
 import 'core/presentation/splash_screen.dart';
 import 'features/home/presentation/home_dashboard.dart';
 import 'features/settings/data/app_locale.dart';
-import 'features/settings/data/app_theme_mode.dart';
 import 'features/settings/data/settings_repository.dart';
 import 'l10n/generated/app_localizations.dart';
 
@@ -59,8 +61,9 @@ class _NoorAppState extends State<NoorApp> {
     SettingsRepository().load().then((settings) {
       // Only seed the controller if Settings hasn't already changed it
       // (e.g. a fast theme switch while this future was pending).
-      AppThemeController.instance.themeMode.value ??=
-          settings.themeMode.flutterThemeMode;
+      if (AppThemeController.instance.themeMode.value == null) {
+        AppThemeController.instance.apply(settings.themeMode);
+      }
       // Only seed the controller if Settings hasn't already changed it
       // (e.g. a fast language switch while this future was pending).
       AppLocaleController.instance.locale.value ??= settings.locale.locale;
@@ -107,14 +110,20 @@ class _NoorAppState extends State<NoorApp> {
         return ValueListenableBuilder<ThemeMode?>(
           valueListenable: AppThemeController.instance.themeMode,
           builder: (context, themeMode, _) {
-            return MaterialApp(
+            return ValueListenableBuilder<AppThemeModeOption>(
+              valueListenable: AppThemeController.instance.option,
+              builder: (context, option, _) => MaterialApp(
               navigatorKey: _navigatorKey,
               title: AppStrings.appName,
               debugShowCheckedModeBanner: false,
               scrollBehavior: AppScrollBehavior(),
               themeMode: themeMode ?? ThemeMode.dark,
-              darkTheme: buildDarkTheme(),
-              theme: buildLightTheme(),
+              darkTheme: option == AppThemeModeOption.emeraldNight
+                  ? buildEmeraldTheme()
+                  : buildDarkTheme(),
+              theme: option == AppThemeModeOption.mushaf
+                  ? buildMushafTheme()
+                  : buildLightTheme(),
               locale: locale,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
@@ -138,6 +147,7 @@ class _NoorAppState extends State<NoorApp> {
                 true => SplashScreen(onFinished: _onSplashFinished),
                 false => const HomeDashboard(),
               },
+              ),
             );
           },
         );

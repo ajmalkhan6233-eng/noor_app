@@ -10,6 +10,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../features/settings/data/app_theme_mode.dart';
+
 class AppThemeController {
   AppThemeController._();
 
@@ -18,4 +20,15 @@ class AppThemeController {
   /// `null` means "not yet loaded" — `NoorApp` fills this in from the
   /// persisted setting once on startup, then Settings updates it live.
   final ValueNotifier<ThemeMode?> themeMode = ValueNotifier<ThemeMode?>(null);
+
+  /// The chosen option. Mushaf (light) and Emerald Night (dark) are
+  /// swapped into MaterialApp's `theme:` / `darkTheme:` slot by `NoorApp`
+  /// rather than adding more MaterialApp themes.
+  final ValueNotifier<AppThemeModeOption> option =
+      ValueNotifier<AppThemeModeOption>(AppThemeModeOption.dark);
+
+  void apply(AppThemeModeOption option) {
+    this.option.value = option;
+    themeMode.value = option.flutterThemeMode;
+  }
 }

@@ -386,5 +386,7 @@
   "setLocationOnPrayerTabMessage": "Set your location on the Prayer Times tab to see today's schedule here.",
   "religiousContentNoteHeader": "A note on religious content",
   "religiousContentNoteBody": "Qur'an text is sourced from the Tanzil Project, and Azkar text from Hisn al-Muslim. Both are checked against those sources and remain under ongoing scholarly review. If you notice anything that needs correction, please contact us via Support noor.",
-  "religiousContentQuietNote": "This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know."
+  "religiousContentQuietNote": "This content is sourced and checked carefully, and is under continuing scholarly review. Found something that needs correcting? Please let us know.",
+  "themeMushaf": "Mushaf",
+  "themeEmeraldNight": "Emerald Night"
 }

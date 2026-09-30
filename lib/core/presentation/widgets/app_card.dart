@@ -59,10 +59,12 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final flat = context.colors.flatSurfaces;
+    final radius = BorderRadius.circular(context.colors.cornerRadius);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        borderRadius: radius,
+        boxShadow: flat ? const [] : [
           BoxShadow(
             color: context.colors.paper.withValues(alpha: 0.4),
             blurRadius: 16,
@@ -90,17 +92,17 @@ class AppCard extends StatelessWidget {
       // the full suite this pass).
       child: Material(
         color: context.colors.card,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: radius,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: radius,
             border: Border.all(
               color: borderColor ??
                   (SubtleCardBorders.of(context)
                       ? context.colors.ink.withValues(alpha: 0.08)
                       : context.colors.hairline),
             ),
-            gradient: LinearGradient(
+            gradient: flat ? null : LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [

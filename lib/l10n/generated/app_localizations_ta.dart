@@ -1115,4 +1115,10 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get religiousContentQuietNote =>
       'இந்த உள்ளடக்கம் கவனமாக மூலமாக்கப்பட்டு சரிபார்க்கப்பட்டுள்ளது, மேலும் தொடர்ச்சியான அறிஞர் மறுஆய்வின் கீழ் உள்ளது. திருத்தம் தேவைப்படும் ஏதேனும் கண்டீர்களா? தயவுசெய்து எங்களுக்குத் தெரியப்படுத்துங்கள்.';
+
+  @override
+  String get themeMushaf => 'Mushaf';
+
+  @override
+  String get themeEmeraldNight => 'Emerald Night';
 }

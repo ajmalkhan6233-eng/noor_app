@@ -18,8 +18,9 @@ ThemeData buildAppTheme(AppColorTokens tokens) {
   // Light gets fully rounded, pill-shaped controls; Cosmic keeps its
   // existing 20px card radius / 10px segment radius untouched.
   final isLight = tokens.brightness == Brightness.light;
-  final cardRadius = isLight ? 24.0 : 20.0;
-  final pillRadius = isLight ? 999.0 : 10.0;
+  final flat = tokens.flatSurfaces;
+  final cardRadius = flat ? tokens.cornerRadius : (isLight ? 24.0 : 20.0);
+  final pillRadius = flat ? tokens.cornerRadius : (isLight ? 999.0 : 10.0);
 
   return ThemeData(
     useMaterial3: true,
@@ -51,7 +52,7 @@ ThemeData buildAppTheme(AppColorTokens tokens) {
     ),
     cardTheme: CardThemeData(
       color: tokens.card,
-      elevation: isLight ? 2 : 0,
+      elevation: isLight && !flat ? 2 : 0,
       surfaceTintColor: Colors.transparent,
       shadowColor: (isLight ? Colors.black : tokens.ink).withValues(
         alpha: isLight ? 0.10 : 0.08,

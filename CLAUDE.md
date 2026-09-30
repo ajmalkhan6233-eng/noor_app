@@ -239,7 +239,10 @@ above still applies to its untouched source, it's just not wired into
 navigation for this release. See Current Status above.
 
 ## Visual Direction (Cosmic Expansion — reinterpreted for Flutter)
-Locked tokens. Do not use Emerald / #0A1912 / #D4AF37 — retired:
+Locked tokens. Emerald / #0A1912 / #D4AF37 is no longer the default
+palette, but returned on 2026-09-30 as the optional selectable
+"Emerald Night" theme only (app_color_tokens_emerald.dart). Cosmic stays
+the default:
 - Obsidian background: #05070B
 - Card surface: #0D1117
 - Gold accent: #FFB703

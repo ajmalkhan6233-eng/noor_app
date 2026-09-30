@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_theme_controller.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/app_theme_mode.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
@@ -84,19 +85,28 @@ class DisplaySection extends StatelessWidget {
   // AppThemeController live (so the MaterialApp itself repaints
   // immediately) alongside the persisted SettingsCubit value.
   Widget _themeSegments(BuildContext context, AppThemeModeOption selected) {
+    final l10n = AppLocalizations.of(context)!;
+    String labelOf(AppThemeModeOption m) =>
+        switch (m) {
+          AppThemeModeOption.mushaf => l10n.themeMushaf,
+          AppThemeModeOption.emeraldNight => l10n.themeEmeraldNight,
+          _ => m.label,
+        };
     return Semantics(
       label: 'Theme',
-      value: selected.label,
-      child: Row(
+      value: labelOf(selected),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
         children: [
-          for (final mode in AppThemeModeOption.values) ...[
-            if (mode != AppThemeModeOption.values.first) const SizedBox(width: 8),
-            Expanded(
+          for (final mode in AppThemeModeOption.values)
+            SizedBox(
+              width: 104,
               child: SemanticButton(
-                label: mode.label,
+                label: labelOf(mode),
                 onTap: () {
                   context.read<SettingsCubit>().setThemeMode(mode);
-                  AppThemeController.instance.themeMode.value = mode.flutterThemeMode;
+                  AppThemeController.instance.apply(mode);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -109,7 +119,7 @@ class DisplaySection extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    mode.label,
+                    labelOf(mode),
                     style: TextStyle(
                       color: mode == selected ? context.colors.paper : context.colors.ink,
                       fontWeight: mode == selected ? FontWeight.w700 : FontWeight.w400,
@@ -119,7 +129,6 @@ class DisplaySection extends StatelessWidget {
                 ),
               ),
             ),
-          ],
         ],
       ),
     );

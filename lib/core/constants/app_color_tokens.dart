@@ -26,6 +26,8 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     required this.goldMuted,
     required this.accentSecondary,
     required this.brightness,
+    this.cornerRadius = 20,
+    this.flatSurfaces = false,
   });
 
   /// App background.
@@ -62,6 +64,12 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
 
   /// Drives which particle/glass treatment CosmicBackground/GlassCard use.
   final Brightness brightness;
+
+  /// Card/control corner radius. 20 everywhere except Mushaf (square).
+  final double cornerRadius;
+
+  /// True for themes with no shadows/gradients on surfaces (Mushaf).
+  final bool flatSurfaces;
 
   /// Cosmic — locked dark obsidian/gold/cyan palette. Values copied
   /// verbatim from the retired static `AppColors` constants; never
@@ -123,6 +131,8 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     Color? goldMuted,
     Color? accentSecondary,
     Brightness? brightness,
+    double? cornerRadius,
+    bool? flatSurfaces,
   }) {
     return AppColorTokens(
       paper: paper ?? this.paper,
@@ -135,6 +145,8 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
       goldMuted: goldMuted ?? this.goldMuted,
       accentSecondary: accentSecondary ?? this.accentSecondary,
       brightness: brightness ?? this.brightness,
+      cornerRadius: cornerRadius ?? this.cornerRadius,
+      flatSurfaces: flatSurfaces ?? this.flatSurfaces,
     );
   }
 
