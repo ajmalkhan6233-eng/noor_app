@@ -11,6 +11,7 @@ import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/haptics/haptic_service.dart';
 
 /// Theme, Quran text size (Arabic + translation), and Hijri calendar offset.
 class DisplaySection extends StatelessWidget {
@@ -114,6 +115,7 @@ class DisplaySection extends StatelessWidget {
               child: SemanticButton(
                 label: labelOf(mode),
                 onTap: () {
+                  const HapticService().tap();
                   context.read<SettingsCubit>().setThemeMode(mode);
                   AppThemeController.instance.apply(mode);
                 },

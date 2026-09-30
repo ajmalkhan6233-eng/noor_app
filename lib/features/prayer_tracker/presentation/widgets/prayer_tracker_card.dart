@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
-import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../prayer_times/data/prayer_times_result.dart';
@@ -20,6 +19,7 @@ import '../../logic/prayer_tick_guard.dart';
 import '../progress_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import 'prayer_chip.dart';
+import 'tracker_day_header.dart';
 
 // Reads the PrayerTrackerCubit provided by HomeDashboard rather than
 // creating its own — so marking a prayer done here shows up on the
@@ -56,31 +56,7 @@ class PrayerTrackerCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(child: SectionHeader(l10n.todaysPrayersLabel)),
-                  SemanticButton(
-                    label: l10n.trackerPreviousDay,
-                    onTap: cubit.goToPreviousDay,
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Icon(Icons.chevron_left, color: context.colors.gold, size: 20),
-                    ),
-                  ),
-                  SemanticButton(
-                    label: l10n.trackerNextDay,
-                    onTap: cubit.goToNextDay,
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Icon(
-                        Icons.chevron_right,
-                        color: isToday ? context.colors.hairline : context.colors.gold,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              TrackerDayHeader(title: l10n.todaysPrayersLabel, isToday: isToday, cubit: cubit),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,

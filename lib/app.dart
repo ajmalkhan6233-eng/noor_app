@@ -5,7 +5,6 @@ import 'core/app_locale_controller.dart';
 import 'core/app_theme_controller.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
-import 'core/utils/text_scale.dart';
 import 'core/constants/app_theme_emerald.dart';
 import 'core/constants/app_theme_mushaf.dart';
 import 'features/settings/data/app_theme_mode.dart';
@@ -18,8 +17,7 @@ import 'features/settings/data/app_locale.dart';
 import 'features/settings/data/settings_repository.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'splash_decision_placeholder.dart';
-import 'core/utils/system_ui.dart';
-import 'package:flutter/services.dart';
+import 'core/utils/app_builder.dart';
 
 /// Root widget: shows the splash screen, then fades into the main
 /// dashboard — bottom navigation across Prayer Times, Qibla, Quran,
@@ -132,25 +130,7 @@ class _NoorAppState extends State<NoorApp> {
               locale: locale,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              // 2026-08-26: general body/label text read as too small on
-              // a real device. Most of the app sets explicit fontSizes
-              // per-widget rather than through one shared scale, so a
-              // single MediaQuery-level bump here reaches every screen
-              // at once instead of hand-editing dozens of files —
-              // composed on top of the OS accessibility text scale
-              // rather than replacing it.
-              builder: (context, child) {
-                final mediaQuery = MediaQuery.of(context);
-                return AnnotatedRegion<SystemUiOverlayStyle>(
-                  value: overlayStyleFor(Theme.of(context).brightness),
-                  child: MediaQuery(
-                    data: mediaQuery.copyWith(
-                      textScaler: boostedTextScaler(mediaQuery.textScaler),
-                    ),
-                    child: child!,
-                  ),
-                );
-              },
+              builder: noorAppBuilder,
               home: switch (_showSplash) {
                 null => const SplashDecisionPlaceholder(),
                 true => SplashScreen(onFinished: _onSplashFinished),

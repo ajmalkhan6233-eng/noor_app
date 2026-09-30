@@ -7,6 +7,7 @@
 import 'package:sqflite_sqlcipher/sqflite.dart' show ConflictAlgorithm;
 
 import '../../../core/database/database_helper.dart';
+import 'tracker_date_keys.dart';
 
 /// The five daily prayers, in their canonical order.
 const List<String> trackedPrayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
@@ -23,7 +24,7 @@ class PrayerTrackerRepository {
     required bool completed,
   }) async {
     final db = await _dbHelper.database;
-    final key = _dateKey(date);
+    final key = dateKey(date);
     if (completed) {
       await db.insert(
         'prayer_completions',
@@ -44,14 +45,14 @@ class PrayerTrackerRepository {
     final rows = await db.query(
       'prayer_completions',
       where: 'date = ?',
-      whereArgs: [_dateKey(date)],
+      whereArgs: [dateKey(date)],
     );
     return rows.map((row) => row['prayer']! as String).toSet();
   }
 
   Future<void> setFastingDay(DateTime date, {required bool fasted}) async {
     final db = await _dbHelper.database;
-    final key = _dateKey(date);
+    final key = dateKey(date);
     if (fasted) {
       await db.insert(
         'fasting_days',
@@ -68,7 +69,7 @@ class PrayerTrackerRepository {
     final rows = await db.query(
       'fasting_days',
       where: 'date = ?',
-      whereArgs: [_dateKey(date)],
+      whereArgs: [dateKey(date)],
       limit: 1,
     );
     return rows.isNotEmpty;
@@ -104,7 +105,7 @@ class PrayerTrackerRepository {
   Future<Set<DateTime>> fastingDates() async {
     final db = await _dbHelper.database;
     final rows = await db.query('fasting_days', columns: ['date']);
-    return rows.map((row) => _parseKey(row['date']! as String)).whereType<DateTime>().toSet();
+    return rows.map((row) => parseDateKey(row['date']! as String)).whereType<DateTime>().toSet();
   }
 
   /// One entry per day from [start] to [end] inclusive (both dates
@@ -141,22 +142,9 @@ class PrayerTrackerRepository {
     );
     final counts = <DateTime, int>{};
     for (final row in rows) {
-      final day = _parseKey(row['date']! as String);
+      final day = parseDateKey(row['date']! as String);
       if (day != null) counts[day] = row['n']! as int;
     }
     return counts;
-  }
-
-  static DateTime? _parseKey(String key) {
-    final parts = key.split('-');
-    if (parts.length != 3) return null;
-    return DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
-  }
-
-  static String _dateKey(DateTime date) {
-    final y = date.year.toString().padLeft(4, '0');
-    final m = date.month.toString().padLeft(2, '0');
-    final d = date.day.toString().padLeft(2, '0');
-    return '$y-$m-$d';
   }
 }
