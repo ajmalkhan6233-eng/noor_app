@@ -16,6 +16,7 @@ import '../../../prayer_times/data/prayer_times_result.dart';
 import '../../data/prayer_tracker_repository.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
 import '../../logic/prayer_tracker_cubit/prayer_tracker_state.dart';
+import '../../logic/prayer_tick_guard.dart';
 import '../progress_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
@@ -33,14 +34,13 @@ class PrayerTrackerCard extends StatelessWidget {
 
   final PrayerTimesComputed? todayTimes;
 
-  bool _hasOccurred(String prayer) {
+  DateTime? _prayerStart(String prayer) {
     final times = todayTimes;
-    if (times == null) return false;
-    final now = DateTime.now();
+    if (times == null) return null;
     for (final (name, time) in times.prayerEntries) {
-      if (name == prayer) return !time.isAfter(now);
+      if (name == prayer) return time;
     }
-    return true;
+    return null;
   }
 
   @override
@@ -50,6 +50,7 @@ class PrayerTrackerCard extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<PrayerTrackerCubit>();
         final isToday = state.isViewingToday;
+        final now = DateTime.now();
         return AppCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +82,12 @@ class PrayerTrackerCard extends StatelessWidget {
                     _PrayerChip(
                       label: prayer,
                       done: state.completedPrayers.contains(prayer),
-                      enabled: !isToday || _hasOccurred(prayer),
+                      enabled: canTickPrayer(
+                        viewedDate: state.viewedDate,
+                        today: now,
+                        now: now,
+                        prayerStart: isToday ? _prayerStart(prayer) : null,
+                      ),
                       onTap: () => cubit.togglePrayer(prayer),
                     ),
                 ],
