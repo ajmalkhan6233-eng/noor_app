@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 /// User-selectable theme preference. The palette itself is always
 /// the emerald/gold seed (`AppColors.gold`) — this only chooses
 /// which brightness Flutter derives from it, or defers to the OS.
-/// `mushaf` must stay last: the option is persisted by name, and the
+/// `mushaf` and `emeraldNight` must stay last: the option is persisted by name, and the
 /// order only drives the Settings picker.
-enum AppThemeModeOption { dark, light, system, mushaf }
+enum AppThemeModeOption { dark, light, system, mushaf, emeraldNight }
 
 extension AppThemeModeOptionLabel on AppThemeModeOption {
   String get label {
@@ -20,6 +20,8 @@ extension AppThemeModeOptionLabel on AppThemeModeOption {
         return 'Follow system';
       case AppThemeModeOption.mushaf:
         return 'Mushaf';
+      case AppThemeModeOption.emeraldNight:
+        return 'Emerald Night';
     }
   }
 
@@ -34,6 +36,9 @@ extension AppThemeModeOptionLabel on AppThemeModeOption {
       case AppThemeModeOption.mushaf:
         // Rendered through MaterialApp.theme (see AppThemeController.mushaf).
         return ThemeMode.light;
+      case AppThemeModeOption.emeraldNight:
+        // Rendered through MaterialApp.darkTheme (see AppThemeController.option).
+        return ThemeMode.dark;
     }
   }
 }

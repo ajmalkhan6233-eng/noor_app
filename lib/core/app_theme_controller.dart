@@ -21,13 +21,14 @@ class AppThemeController {
   /// persisted setting once on startup, then Settings updates it live.
   final ValueNotifier<ThemeMode?> themeMode = ValueNotifier<ThemeMode?>(null);
 
-  /// True while the Mushaf theme is chosen. It is a light-brightness
-  /// theme, so [themeMode] is `light` and `NoorApp` swaps the `theme:`
-  /// slot instead of adding a third MaterialApp theme.
-  final ValueNotifier<bool> mushaf = ValueNotifier<bool>(false);
+  /// The chosen option. Mushaf (light) and Emerald Night (dark) are
+  /// swapped into MaterialApp's `theme:` / `darkTheme:` slot by `NoorApp`
+  /// rather than adding more MaterialApp themes.
+  final ValueNotifier<AppThemeModeOption> option =
+      ValueNotifier<AppThemeModeOption>(AppThemeModeOption.dark);
 
   void apply(AppThemeModeOption option) {
-    mushaf.value = option == AppThemeModeOption.mushaf;
+    this.option.value = option;
     themeMode.value = option.flutterThemeMode;
   }
 }

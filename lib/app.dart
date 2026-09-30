@@ -6,7 +6,9 @@ import 'core/app_theme_controller.dart';
 import 'core/constants/app_color_tokens.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
+import 'core/constants/app_theme_emerald.dart';
 import 'core/constants/app_theme_mushaf.dart';
+import 'features/settings/data/app_theme_mode.dart';
 import 'core/presentation/app_scroll_behavior.dart';
 import 'core/presentation/location_onboarding_screen.dart';
 import 'core/presentation/splash/splash_gate.dart';
@@ -108,16 +110,20 @@ class _NoorAppState extends State<NoorApp> {
         return ValueListenableBuilder<ThemeMode?>(
           valueListenable: AppThemeController.instance.themeMode,
           builder: (context, themeMode, _) {
-            return ValueListenableBuilder<bool>(
-              valueListenable: AppThemeController.instance.mushaf,
-              builder: (context, mushaf, _) => MaterialApp(
+            return ValueListenableBuilder<AppThemeModeOption>(
+              valueListenable: AppThemeController.instance.option,
+              builder: (context, option, _) => MaterialApp(
               navigatorKey: _navigatorKey,
               title: AppStrings.appName,
               debugShowCheckedModeBanner: false,
               scrollBehavior: AppScrollBehavior(),
               themeMode: themeMode ?? ThemeMode.dark,
-              darkTheme: buildDarkTheme(),
-              theme: mushaf ? buildMushafTheme() : buildLightTheme(),
+              darkTheme: option == AppThemeModeOption.emeraldNight
+                  ? buildEmeraldTheme()
+                  : buildDarkTheme(),
+              theme: option == AppThemeModeOption.mushaf
+                  ? buildMushafTheme()
+                  : buildLightTheme(),
               locale: locale,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,

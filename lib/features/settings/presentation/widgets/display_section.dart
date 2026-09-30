@@ -87,7 +87,11 @@ class DisplaySection extends StatelessWidget {
   Widget _themeSegments(BuildContext context, AppThemeModeOption selected) {
     final l10n = AppLocalizations.of(context)!;
     String labelOf(AppThemeModeOption m) =>
-        m == AppThemeModeOption.mushaf ? l10n.themeMushaf : m.label;
+        switch (m) {
+          AppThemeModeOption.mushaf => l10n.themeMushaf,
+          AppThemeModeOption.emeraldNight => l10n.themeEmeraldNight,
+          _ => m.label,
+        };
     return Semantics(
       label: 'Theme',
       value: labelOf(selected),

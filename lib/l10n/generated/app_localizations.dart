@@ -2014,6 +2014,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mushaf'**
   String get themeMushaf;
+
+  /// No description provided for @themeEmeraldNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Emerald Night'**
+  String get themeEmeraldNight;
 }
 
 class _AppLocalizationsDelegate

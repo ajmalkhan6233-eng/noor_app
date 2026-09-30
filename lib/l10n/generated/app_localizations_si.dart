@@ -1116,4 +1116,7 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get themeMushaf => 'Mushaf';
+
+  @override
+  String get themeEmeraldNight => 'Emerald Night';
 }

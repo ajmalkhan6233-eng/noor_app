@@ -48,6 +48,7 @@ void main() {
 
   test('persists by name so older rows still load', () {
     expect(AppThemeModeOption.values.byName('mushaf'), AppThemeModeOption.mushaf);
+    expect(AppThemeModeOption.values.byName('emeraldNight'), AppThemeModeOption.emeraldNight);
     expect(AppThemeModeOption.values.byName('dark'), AppThemeModeOption.dark);
   });
 }
