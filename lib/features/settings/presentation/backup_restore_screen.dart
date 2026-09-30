@@ -42,7 +42,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
       await _fileService.shareBackup(encrypted);
       _showMessage('Backup ready — choose where to save it.');
     } catch (e) {
-      _showMessage("Couldn't create the backup: $e");
+      _showMessage("Couldn't create the backup. Please try again.");
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -64,7 +64,9 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
     } on BackupDecryptException catch (e) {
       _showMessage(e.message);
     } catch (e) {
-      _showMessage("Couldn't restore that backup: $e");
+      _showMessage(
+        "Couldn't restore that backup. Check that you picked the right file, then try again.",
+      );
     } finally {
       if (mounted) setState(() => _busy = false);
     }

@@ -1163,7 +1163,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get progressMsgStart =>
-      'Every journey begins with one prayer. Start with the next one.';
+      'Tick a prayer on Home to see your progress grow.';
 
   @override
   String get progressMsgKeepGoing => 'Keep going, every prayer counts.';

@@ -383,3 +383,24 @@ Home's greeting instead. Adhan reciters now preview on tap. Tried a
 one-shot `flutter build web` for a non-phone layout/icon preview —
 useful for UI review, confirmed unusable for anything reading the
 encrypted database (no real web backend for sqflite_sqlcipher).
+
+## Update 2026-10-01 (overnight polish)
+
+- Themes: four selectable themes via `AppThemeModeOption` (dark=Nebula, light=Dawn,
+  system, mushaf, emeraldNight — new options are always appended at the END, the value is
+  persisted by name). `AppThemeController.option` drives which ThemeData goes into
+  MaterialApp's `theme:`/`darkTheme:` slots. Tokens: `app_color_tokens*.dart`.
+  Flat themes (Mushaf) use `AppColorTokens.flatSurfaces/cornerRadius`; use
+  `context.radiusFor(n)` for rounded radii instead of a hard-coded number.
+- Progress card: `lib/features/prayer_tracker/presentation/progress/` (pure maths in
+  `progress_stats.dart`). "On-time" is NOT recorded by the app (no timestamps), so the card
+  shows "prayers kept this week".
+- Day rollover: `PrayerCubit.refreshIfDayChanged` + `DayRolloverWatcher` keep prayer times on
+  the real "today" after midnight.
+- Help/FAQ screen and About privacy statement live in `features/settings/presentation/`.
+- Tests: `test/helpers/theme_harness.dart` renders screens in all four themes at 100%/200%
+  text; `SilentHaptics` replaces HapticService in plain `test()` runs.
+- Never run `dart format lib` (200-file reformat). Never build an APK locally: use the GitHub
+  Action "Build arm64-only APK" on `main`.
+- Open decisions: `docs/NEEDS_DECISION.md`. Findings/improvements: `docs/FINDINGS.md`,
+  `docs/IMPROVEMENTS.md`. Release checklist: `docs/PLAY_STORE_READINESS.md`.

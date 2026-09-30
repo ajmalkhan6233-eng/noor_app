@@ -2096,7 +2096,7 @@ abstract class AppLocalizations {
   /// No description provided for @progressMsgStart.
   ///
   /// In en, this message translates to:
-  /// **'Every journey begins with one prayer. Start with the next one.'**
+  /// **'Tick a prayer on Home to see your progress grow.'**
   String get progressMsgStart;
 
   /// No description provided for @progressMsgKeepGoing.
