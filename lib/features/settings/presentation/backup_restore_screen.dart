@@ -15,10 +15,9 @@ import '../../../core/backup/backup_crypto.dart';
 import '../../../core/backup/backup_file_service.dart';
 import '../../../core/backup/backup_payload.dart';
 import '../../../core/backup/backup_repository.dart';
-import '../../../core/utils/semantics_helpers.dart';
 import 'widgets/backup_passphrase_dialog.dart';
 import '../../../core/constants/app_color_tokens.dart';
-import '../../../core/constants/corner_radius.dart';
+import 'backup_action_button.dart';
 
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
@@ -98,14 +97,14 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
               style: TextStyle(color: context.colors.sage, height: 1.4),
             ),
             const SizedBox(height: 24),
-            _ActionButton(
+            ActionButton(
               icon: Icons.upload_outlined,
               label: 'Export a backup',
               busy: _busy,
               onTap: _export,
             ),
             const SizedBox(height: 12),
-            _ActionButton(
+            ActionButton(
               icon: Icons.download_outlined,
               label: 'Restore from a backup',
               busy: _busy,
@@ -118,49 +117,3 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
   }
 }
 
-class _ActionButton extends StatelessWidget {
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.busy,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool busy;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: SemanticButton(
-        label: label,
-        onTap: busy ? () {} : onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: context.colors.gold,
-            borderRadius: BorderRadius.circular(context.radiusFor(12)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (busy)
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: context.colors.paper),
-                )
-              else
-                Icon(icon, color: context.colors.paper, size: 18),
-              const SizedBox(width: 8),
-              Text(label, style: TextStyle(color: context.colors.paper, fontWeight: FontWeight.w600)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

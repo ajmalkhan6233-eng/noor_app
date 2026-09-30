@@ -30,23 +30,11 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'surah_download_failure.dart';
+import 'surah_download_progress.dart';
 
-/// One reported progress step during a download — `receivedBytes` and
-/// `totalBytes` are both known up front (the source always reports
-/// Content-Length), so progress is exact, not estimated.
-class SurahDownloadProgress {
-  const SurahDownloadProgress(this.receivedBytes, this.totalBytes);
-  final int receivedBytes;
-  final int? totalBytes;
-  double? get fraction => totalBytes == null ? null : receivedBytes / totalBytes!;
-}
-
-class SurahDownloadFailure implements Exception {
-  const SurahDownloadFailure(this.message);
-  final String message;
-  @override
-  String toString() => message;
-}
+export 'surah_download_failure.dart';
+export 'surah_download_progress.dart';
 
 /// Expected SHA-256 hashes (lowercase hex) for every downloadable surah.
 /// These were computed from the real files at the archive.org source on

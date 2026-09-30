@@ -12,9 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_typography.dart';
-import '../../../core/utils/semantics_helpers.dart';
 import '../../../core/constants/app_color_tokens.dart';
-import '../../../core/constants/corner_radius.dart';
+import 'support_button.dart';
 
 class SupportDeveloperScreen extends StatelessWidget {
   const SupportDeveloperScreen({super.key});
@@ -85,14 +84,14 @@ class SupportDeveloperScreen extends StatelessWidget {
               style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: 14),
             ),
             const SizedBox(height: 24),
-            _SupportButton(
+            SupportButton(
               icon: Icons.chat_bubble_outline,
               label: 'Message on WhatsApp',
               filled: true,
               onTap: () => _requestViaWhatsApp(context),
             ),
             const SizedBox(height: 12),
-            _SupportButton(
+            SupportButton(
               icon: Icons.mail_outline,
               label: 'Send an Email',
               filled: false,
@@ -105,49 +104,3 @@ class SupportDeveloperScreen extends StatelessWidget {
   }
 }
 
-class _SupportButton extends StatelessWidget {
-  const _SupportButton({
-    required this.icon,
-    required this.label,
-    required this.filled,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool filled;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: SemanticButton(
-        label: label,
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: filled ? context.colors.gold : Colors.transparent,
-            borderRadius: BorderRadius.circular(context.radiusFor(12)),
-            border: filled ? null : Border.all(color: context.colors.goldBorder),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: filled ? context.colors.paper : context.colors.gold, size: 18),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: filled ? context.colors.paper : context.colors.gold,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

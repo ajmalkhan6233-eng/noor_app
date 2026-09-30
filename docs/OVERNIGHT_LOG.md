@@ -13,5 +13,7 @@ Work dir: worktree `zealous-merkle-5d5e7c`. Local `main` is checked out (dirty) 
 - DONE batch2 (#23,#24,#38,#39,#40 + analyzer to 0 issues): streak/history single queries, dart fix const/imports
 - DONE batch3 (#4-#16,#19 l10n + 48dp targets for chevrons/hijri/dismiss). #18 -> NEEDS_DECISION.
 - DONE batch4: Mushaf flat (radiusFor on 16 files, no glow in flat themes), contrast test all 4 themes (#20-22,#48). SKIPPED #25/#26 lazy lists (StaggeredFadeIn needs eager children; 114 simple tiles). Dawn gold contrast -> NEEDS_DECISION #9.
-- NEXT (batch5+): a11y tap targets + l10n of hard-coded labels (#4-#19), then #20-22 Mushaf flat, #25/26 lazy lists, #41 file splits, #45 Help/FAQ, #48 contrast test, #49 docs
+- DONE batch5: file splits (prayer_chip, backup_action_button, current_time_chip, support_button, surah_download_progress/failure, splash_decision_placeholder). Still >150: compass_service, surah_audio_download_service, paginated_full_quran_text, notification_service, location_onboarding, quran_repository, database_migrations, about_screen, app_theme, app_color_tokens, azkar_repository, qibla_cubit, prayer_cubit, tracker repo/card, azkar_category, icon painters a, settings_repository, surah_audio_button, surah_index, draggable_floating, app.dart(160).
+- NOTE: never run `dart format lib` (reformats 200 files). Scripts live in the scratchpad (splitter.py).
+- NEXT (batch6+): a11y tap targets + l10n of hard-coded labels (#4-#19), then #20-22 Mushaf flat, #25/26 lazy lists, #41 file splits, #45 Help/FAQ, #48 contrast test, #49 docs
 - Then Phase 3 IMPROVEMENTS.md (50) + do them, Phase 4 gate + PLAY_STORE_READINESS.md, Phase 5 merge/build/cleanup, Part E report.

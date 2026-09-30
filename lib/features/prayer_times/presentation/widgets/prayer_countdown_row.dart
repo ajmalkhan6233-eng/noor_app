@@ -19,10 +19,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/presentation/motion/motion.dart';
-import 'prayer_time_format.dart';
 import '../../../../core/constants/app_color_tokens.dart';
-import '../../../../l10n/generated/app_localizations.dart';
-import '../../../../core/constants/corner_radius.dart';
+import 'current_time_chip.dart';
 
 class PrayerCountdownRow extends StatelessWidget {
   const PrayerCountdownRow({
@@ -81,7 +79,7 @@ class PrayerCountdownRow extends StatelessWidget {
         const SizedBox(height: 6),
         _countdownText(context, countdown),
         const SizedBox(height: 18),
-        _CurrentTimeChip(now: now),
+        CurrentTimeChip(now: now),
       ],
     );
   }
@@ -119,42 +117,3 @@ class PrayerCountdownRow extends StatelessWidget {
   }
 }
 
-/// A separated pill for the current clock time — deliberately distinct
-/// in shape, size, and position from the countdown above it, so it
-/// can't be mistaken for a second countdown number.
-class _CurrentTimeChip extends StatelessWidget {
-  const _CurrentTimeChip({required this.now});
-
-  final DateTime now;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: AppLocalizations.of(context)!.currentTimeSemantics(formatClock(now)),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: context.colors.card,
-          borderRadius: BorderRadius.circular(context.radiusFor(20)),
-          border: Border.all(color: context.colors.hairline),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.schedule, size: 13, color: context.colors.sage),
-            const SizedBox(width: 6),
-            Text(
-              'CURRENT TIME',
-              style: PrayerCountdownRow.clockChipLabelStyle(context.colors.sage),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              formatClock(now),
-              style: PrayerCountdownRow.clockChipTimeStyle(context.colors.gold),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

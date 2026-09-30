@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'core/app_locale_controller.dart';
 import 'core/app_theme_controller.dart';
-import 'core/constants/app_color_tokens.dart';
 import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
 import 'core/utils/text_scale.dart';
@@ -18,6 +17,7 @@ import 'features/home/presentation/home_dashboard.dart';
 import 'features/settings/data/app_locale.dart';
 import 'features/settings/data/settings_repository.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'splash_decision_placeholder.dart';
 
 /// Root widget: shows the splash screen, then fades into the main
 /// dashboard — bottom navigation across Prayer Times, Qibla, Quran,
@@ -145,7 +145,7 @@ class _NoorAppState extends State<NoorApp> {
                 );
               },
               home: switch (_showSplash) {
-                null => const _SplashDecisionPlaceholder(),
+                null => const SplashDecisionPlaceholder(),
                 true => SplashScreen(onFinished: _onSplashFinished),
                 false => const HomeDashboard(),
               },
@@ -158,14 +158,3 @@ class _NoorAppState extends State<NoorApp> {
   }
 }
 
-/// Shown for the brief gap before [SplashGate] answers whether this
-/// open should replay the intro — a blank obsidian screen rather than
-/// any flash of the wrong choice (splash content, or the dashboard).
-class _SplashDecisionPlaceholder extends StatelessWidget {
-  const _SplashDecisionPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: context.colors.paper);
-  }
-}
