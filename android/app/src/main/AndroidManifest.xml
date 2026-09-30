@@ -77,6 +77,11 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- TEST: Impeller off for Qibla needle A/B - do not merge unless needle renders correctly -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableImpeller"
+            android:value="false" />
+
         <!-- flutter_local_notifications' scheduled-notification receiver.
              AlarmManager fires its PendingIntent at this class; without it
              declared here the broadcast had no target, so every scheduled
