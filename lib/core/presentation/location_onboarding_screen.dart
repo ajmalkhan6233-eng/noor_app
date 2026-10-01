@@ -1,211 +1,138 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Shown exactly once, right after the splash screen, before the main
-// dashboard — a language choice, then location (needed for accurate
-// prayer times). Skipping never blocks anything: the app opens
-// normally either way, and both stay changeable from Settings after.
-//
-// The battery-optimization step was cut (2026-08-25 live-device
-// review: "people will not like that question... this is critical" —
-// a second permission-style prompt during first launch was too much
-// friction). "Allow unrestricted battery usage" is still reachable
-// from Settings for anyone who wants more reliable background adhan.
-//
-// GPS has no network fallback in this app (zero INTERNET permission,
-// locked) — a pure on-device GPS fix can fail indoors or time out.
-// The manual district picker that used to cover that case was removed
-// (2026-09-13, GPS-only going forward): a failed fix here just lets
-// onboarding finish anyway, since PrayerCubit itself now falls back to
-// Colombo's coordinates automatically (see coordinate_bounds.dart) —
-// the app is never left half-configured, just told to check location
-// permission from Settings when it matters.
+// Shown exactly once, right after the splash: ONE friendly welcome
+// screen with ONE button. Tapping it asks, back to back, for location,
+// notifications and (only if the phone needs it) exact alarms, each
+// explained in a plain line above the button. A "no" never blocks
+// anything: prayer times quietly use the last known location (else a
+// default) and Settings keeps a small "Allow location" button. The
+// language choice stays here because it is a choice, not a permission.
 
 import 'package:flutter/material.dart';
 
 import '../app_locale_controller.dart';
 import '../constants/app_color_tokens.dart';
-import '../location/location_service.dart';
-import '../utils/semantics_helpers.dart';
-import 'exact_alarm_prompt.dart';
+import '../constants/app_spacing.dart';
+import '../constants/corner_radius.dart';
+import '../permissions/permission_gateway.dart';
+import '../permissions/permission_onboarding.dart';
 import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
-import '../constants/corner_radius.dart';
+import 'welcome_widgets.dart';
 
 class LocationOnboardingScreen extends StatefulWidget {
-  const LocationOnboardingScreen({super.key, required this.onFinished});
+  const LocationOnboardingScreen({
+    super.key,
+    required this.onFinished,
+    this.gateway,
+    this.settingsRepository,
+  });
 
   final VoidCallback onFinished;
+
+  /// Injected by tests; the app uses the real device permissions.
+  final PermissionGateway? gateway;
+  final SettingsRepository? settingsRepository;
 
   @override
   State<LocationOnboardingScreen> createState() => _LocationOnboardingScreenState();
 }
 
 class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
-  final _locationService = const LocationService();
-  bool _resolving = false;
-  bool _locationStepDone = false;
-  bool _gpsSucceeded = false;
-  bool _exactAlarmPrompted = false;
+  bool _working = false;
   AppLocaleOption _selectedLocale = AppLocaleOption.english;
 
-  // Once per setup, right after the location step (or on finish if
-  // location was skipped) — see exact_alarm_prompt.dart.
-  Future<void> _promptExactAlarmOnce() async {
-    if (_exactAlarmPrompted || !mounted) return;
-    _exactAlarmPrompted = true;
-    await maybePromptExactAlarm(context);
-  }
-
-  Future<void> _finish() async {
-    await _promptExactAlarmOnce();
-    final repository = SettingsRepository();
+  Future<void> _start() async {
+    if (_working) return;
+    setState(() => _working = true);
+    await PermissionOnboarding(gateway: widget.gateway).run();
+    final repository = widget.settingsRepository ?? SettingsRepository();
     final settings = await repository.load();
-    await repository.save(settings.copyWith(hasSeenLocationOnboarding: true, locale: _selectedLocale));
+    await repository.save(
+      settings.copyWith(hasSeenLocationOnboarding: true, locale: _selectedLocale),
+    );
     AppLocaleController.instance.locale.value = _selectedLocale.locale;
     if (mounted) widget.onFinished();
   }
 
-  Future<void> _enableLocation() async {
-    setState(() => _resolving = true);
-    final coordinates = await _locationService.getCurrentCoordinates();
-    if (!mounted) return;
-    setState(() {
-      _resolving = false;
-      _locationStepDone = true;
-      _gpsSucceeded = coordinates != null;
-    });
-    await _promptExactAlarmOnce();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: context.colors.paper,
+      backgroundColor: colors.paper,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Choose your language',
-                style: TextStyle(color: context.colors.ink, fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  for (final option in AppLocaleOption.values) ...[
-                    if (option != AppLocaleOption.values.first) const SizedBox(width: 8),
-                    Expanded(child: _localeButton(option)),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenHorizontal,
+                  AppSpacing.screenHorizontal,
+                  AppSpacing.screenHorizontal,
+                  8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.welcomeLanguageLabel, style: TextStyle(color: colors.sage)),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        for (final option in AppLocaleOption.values) ...[
+                          if (option != AppLocaleOption.values.first) const SizedBox(width: 8),
+                          Expanded(
+                            child: LocaleChoiceButton(
+                              option: option,
+                              selected: option == _selectedLocale,
+                              hint: l10n.welcomeLanguageHint,
+                              onTap: () => setState(() => _selectedLocale = option),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    Center(child: Icon(Icons.nights_stay_outlined, color: colors.gold, size: 56)),
+                    const SizedBox(height: 16),
+                    Semantics(
+                      header: true,
+                      child: Text(
+                        l10n.welcomeTitle,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: colors.ink),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(l10n.welcomeIntro, style: TextStyle(color: colors.sage, height: 1.4)),
+                    const SizedBox(height: 20),
+                    WelcomeReason(icon: Icons.location_on_outlined, text: l10n.welcomeReasonLocation),
+                    WelcomeReason(icon: Icons.notifications_outlined, text: l10n.welcomeReasonNotifications),
+                    WelcomeReason(icon: Icons.alarm, text: l10n.welcomeReasonAlarms),
                   ],
-                ],
-              ),
-              const SizedBox(height: 28),
-              Icon(Icons.location_on_outlined, color: context.colors.gold, size: 48),
-              const SizedBox(height: 20),
-              Text(
-                'Find your prayer times',
-                style: TextStyle(
-                  color: context.colors.ink,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                'noor uses your location once, on-device only, to calculate '
-                'accurate prayer times for where you are. It is never sent '
-                'anywhere and you can change or clear it any time from '
-                'Settings.',
-                style: TextStyle(color: context.colors.sage, height: 1.4),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                "If a calculated time doesn't match your local masjid, "
-                'you can nudge each prayer by a few minutes in Settings too.',
-                style: TextStyle(color: context.colors.sage, height: 1.4),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
+            ),
+            // The one button stays pinned at the bottom, never below the fold.
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
+              child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _resolving ? null : _enableLocation,
+                  onPressed: _working ? null : _start,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: context.colors.gold,
-                    foregroundColor: context.colors.paper,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.radiusFor(12))),
-                  ),
-                  child: Text(_resolving ? 'Locating…' : 'Enable location'),
-                ),
-              ),
-              if (_locationStepDone) ...[
-                const SizedBox(height: 16),
-                Text(
-                  _gpsSucceeded
-                      ? 'Your prayer times are set from GPS.'
-                      : "Couldn't get a GPS fix — noor will show prayer times "
-                            'for Colombo until location works. You can retry any '
-                            'time from Settings.',
-                  style: TextStyle(color: context.colors.sage, height: 1.4),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _finish,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.colors.gold,
-                      foregroundColor: context.colors.paper,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.radiusFor(12))),
+                    backgroundColor: colors.gold,
+                    foregroundColor: colors.paper,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(context.radiusFor(12)),
                     ),
-                    child: Text(AppLocalizations.of(context)!.onboardingContinue),
                   ),
-                ),
-              ],
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: _resolving ? null : _finish,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: context.colors.gold,
-                    side: BorderSide(color: context.colors.goldBorder),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.radiusFor(12))),
-                  ),
-                  child: Text(AppLocalizations.of(context)!.onboardingNotNowLocation),
+                  child: Text(_working ? l10n.welcomeWorking : l10n.welcomeButton),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _localeButton(AppLocaleOption option) {
-    final selected = option == _selectedLocale;
-    return SemanticButton(
-      label: option.nativeName,
-      hint: 'Double tap to set app language',
-      onTap: () => setState(() => _selectedLocale = option),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? context.colors.gold : Colors.transparent,
-          borderRadius: BorderRadius.circular(context.radiusFor(10)),
-          border: Border.all(color: selected ? context.colors.gold : context.colors.hairline),
-        ),
-        child: Text(
-          option.nativeName,
-          style: TextStyle(
-            color: selected ? context.colors.paper : context.colors.ink,
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-          ),
+            ),
+          ],
         ),
       ),
     );

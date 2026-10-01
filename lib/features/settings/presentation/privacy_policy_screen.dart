@@ -59,8 +59,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'never sent anywhere — this has nothing to do with the '
                   'optional audio-download feature described below, and '
                   'no code path ever connects the two. '
-                  'You can clear or change it at any time in Settings, or '
-                  'pick a district manually instead.',
+                  'If location is off, noor uses the last place it knew, or '
+                  'a default, and you can allow location at any time in '
+                  'Settings.',
                   style: TextStyle(color: context.colors.ink, height: 1.5),
                 ),
               ],

@@ -15,6 +15,7 @@ import '../../data/prayer_notification_coordinator.dart';
 import '../../data/prayer_repository.dart';
 import 'notification_horizon_scheduler.dart';
 import 'prayer_state.dart';
+import '../../../../core/location/last_known_location.dart';
 
 class PrayerCubit extends Cubit<PrayerState> {
   PrayerCubit({
@@ -23,7 +24,9 @@ class PrayerCubit extends Cubit<PrayerState> {
     SettingsRepository? settingsRepository,
     PrayerNotificationCoordinator? notificationCoordinator,
     DateTime Function()? clock,
-  }) : _clock = clock ?? DateTime.now,
+    LastKnownLocationStore? lastKnownLocation,
+  }) : _lastKnown = lastKnownLocation ?? const LastKnownLocationStore(),
+        _clock = clock ?? DateTime.now,
        _repository = repository ?? const PrayerRepository(),
        _locationService = locationService ?? const LocationService(),
        _settingsRepository = settingsRepository ?? SettingsRepository(),
@@ -35,6 +38,7 @@ class PrayerCubit extends Cubit<PrayerState> {
   final SettingsRepository _settingsRepository;
   final PrayerNotificationCoordinator _notificationCoordinator;
   final DateTime Function() _clock;
+  final LastKnownLocationStore _lastKnown;
 
   /// `state.date` is set once at construction; without this the cubit
   /// keeps showing (and scheduling from) the launch day after midnight.
@@ -75,6 +79,14 @@ class PrayerCubit extends Cubit<PrayerState> {
     await _autoFetchLocation();
   }
 
+  /// Called when the app returns to the foreground: if prayer times are
+  /// running on a fallback location, try again, so enabling location in
+  /// the phone's settings is picked up without any button.
+  Future<void> retryLocationIfFallback() async {
+    if (state.usingGps || state.isResolvingLocation) return;
+    await _resolveLocation(forceFresh: false);
+  }
+
   /// Explicit tap — forces a fresh reading, bypassing the auto cache.
   Future<void> useGps() => _resolveLocation(forceFresh: true);
 
@@ -92,13 +104,17 @@ class PrayerCubit extends Cubit<PrayerState> {
         ? await _locationService.getCurrentCoordinates()
         : await _locationService.autoFetchCoordinates();
     if (coordinates == null) {
+      // Quiet fallback, no error text: the last real fix if there ever
+      // was one, otherwise Colombo. Settings keeps an "Allow location"
+      // button, and resuming the app retries (retryLocationIfFallback).
+      final last = await _lastKnown.load();
       emit(
         state.copyWith(
-          latitude: colomboFallbackLatitude,
-          longitude: colomboFallbackLongitude,
+          latitude: last?.latitude ?? colomboFallbackLatitude,
+          longitude: last?.longitude ?? colomboFallbackLongitude,
           usingGps: false,
           isResolvingLocation: false,
-          locationError: gpsFailedFallbackMessage,
+          locationError: null,
         ),
       );
       _recalculate();

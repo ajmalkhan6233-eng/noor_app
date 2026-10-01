@@ -5,6 +5,7 @@
 // package to do offline prayer-time math against.
 
 import 'package:geolocator/geolocator.dart';
+import 'last_known_location.dart';
 
 /// Simple coordinate pair, decoupled from the `geolocator` package type
 /// so `logic/` layers don't need to depend on it directly.
@@ -61,12 +62,40 @@ class LocationService {
         longitude: position.longitude,
       );
       _cachedCoordinates = coordinates;
+      await const LastKnownLocationStore().save(coordinates);
       return coordinates;
     } catch (_) {
       // Timeout, permission race, service disabled mid-call, or any
       // other platform failure — all fall back the same way: null.
       return null;
     }
+  }
+
+  /// True when the app currently holds location permission.
+  Future<bool> hasPermission() async {
+    try {
+      final permission = await Geolocator.checkPermission();
+      return permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// True when Android will no longer show the permission prompt, so the
+  /// only way to grant it is the phone's app settings.
+  Future<bool> isPermanentlyDenied() async {
+    try {
+      return await Geolocator.checkPermission() == LocationPermission.deniedForever;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> openAppSettings() async {
+    try {
+      await Geolocator.openAppSettings();
+    } catch (_) {}
   }
 
   /// For automatic (not user-initiated) fetches, e.g. on screen open:

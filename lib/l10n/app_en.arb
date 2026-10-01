@@ -484,5 +484,18 @@
   "qiblaDegreesFromNorth": "{degrees}° from north",
   "@qiblaDegreesFromNorth": {"placeholders": {"degrees": {"type": "int"}}},
   "qiblaNeedleSemantics": "Qibla arrow pointing {degrees} degrees from the top of the phone",
-  "@qiblaNeedleSemantics": {"placeholders": {"degrees": {"type": "int"}}}
+  "@qiblaNeedleSemantics": {"placeholders": {"degrees": {"type": "int"}}},
+  "welcomeLanguageLabel": "Choose your language",
+  "welcomeLanguageHint": "Double tap to set the app language",
+  "welcomeTitle": "Welcome to noor",
+  "welcomeIntro": "One tap sets everything up. You will only be asked once.",
+  "welcomeReasonLocation": "Location: to work out prayer times for where you are. It never leaves your phone.",
+  "welcomeReasonNotifications": "Notifications: so the adhan and reminders can alert you.",
+  "welcomeReasonAlarms": "Alarms & reminders: so the adhan sounds on the exact minute (only if your phone asks).",
+  "welcomeButton": "Get started",
+  "welcomeWorking": "Setting things up...",
+  "settingsAllowLocation": "Allow location",
+  "settingsAllowLocationHint": "Double tap to allow location for exact prayer times",
+  "settingsLocationAllowedCaption": "Location is on. Prayer times use your current position.",
+  "settingsLocationOffCaption": "Location is off, so prayer times use your last known place. Allow it for exact times."
 }

@@ -40,7 +40,10 @@ class _DayRolloverWatcherState extends State<DayRolloverWatcher> with WidgetsBin
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _check();
+    if (state != AppLifecycleState.resumed) return;
+    _check();
+    // Location enabled in the phone's settings is picked up here.
+    if (mounted) context.read<PrayerCubit>().retryLocationIfFallback();
   }
 
   @override

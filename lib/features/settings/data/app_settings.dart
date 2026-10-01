@@ -46,8 +46,8 @@ class AppSettings {
   /// kept silent after iqamath.
   final SilentModeSettings silentMode;
 
-  /// Name of the selected Sri Lankan district (see [sriLankaDistricts]),
-  /// or `null` when the user is using GPS or manual coordinates.
+  /// Legacy: the manual district picker was removed. The column stays so
+  /// existing databases and backups keep loading; nothing reads it.
   final String? selectedDistrict;
 
   /// Scale factor applied to Arabic text throughout the app (Quran,

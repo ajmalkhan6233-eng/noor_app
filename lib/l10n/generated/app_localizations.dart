@@ -2536,6 +2536,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Qibla arrow pointing {degrees} degrees from the top of the phone'**
   String qiblaNeedleSemantics(int degrees);
+
+  /// No description provided for @welcomeLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your language'**
+  String get welcomeLanguageLabel;
+
+  /// No description provided for @welcomeLanguageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to set the app language'**
+  String get welcomeLanguageHint;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to noor'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'One tap sets everything up. You will only be asked once.'**
+  String get welcomeIntro;
+
+  /// No description provided for @welcomeReasonLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location: to work out prayer times for where you are. It never leaves your phone.'**
+  String get welcomeReasonLocation;
+
+  /// No description provided for @welcomeReasonNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications: so the adhan and reminders can alert you.'**
+  String get welcomeReasonNotifications;
+
+  /// No description provided for @welcomeReasonAlarms.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarms & reminders: so the adhan sounds on the exact minute (only if your phone asks).'**
+  String get welcomeReasonAlarms;
+
+  /// No description provided for @welcomeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get welcomeButton;
+
+  /// No description provided for @welcomeWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting things up...'**
+  String get welcomeWorking;
+
+  /// No description provided for @settingsAllowLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location'**
+  String get settingsAllowLocation;
+
+  /// No description provided for @settingsAllowLocationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to allow location for exact prayer times'**
+  String get settingsAllowLocationHint;
+
+  /// No description provided for @settingsLocationAllowedCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is on. Prayer times use your current position.'**
+  String get settingsLocationAllowedCaption;
+
+  /// No description provided for @settingsLocationOffCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is off, so prayer times use your last known place. Allow it for exact times.'**
+  String get settingsLocationOffCaption;
 }
 
 class _AppLocalizationsDelegate

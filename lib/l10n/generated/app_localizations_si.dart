@@ -1426,4 +1426,50 @@ class AppLocalizationsSi extends AppLocalizations {
   String qiblaNeedleSemantics(int degrees) {
     return 'Qibla arrow pointing $degrees degrees from the top of the phone';
   }
+
+  @override
+  String get welcomeLanguageLabel => 'Choose your language';
+
+  @override
+  String get welcomeLanguageHint => 'Double tap to set the app language';
+
+  @override
+  String get welcomeTitle => 'Welcome to noor';
+
+  @override
+  String get welcomeIntro =>
+      'One tap sets everything up. You will only be asked once.';
+
+  @override
+  String get welcomeReasonLocation =>
+      'Location: to work out prayer times for where you are. It never leaves your phone.';
+
+  @override
+  String get welcomeReasonNotifications =>
+      'Notifications: so the adhan and reminders can alert you.';
+
+  @override
+  String get welcomeReasonAlarms =>
+      'Alarms & reminders: so the adhan sounds on the exact minute (only if your phone asks).';
+
+  @override
+  String get welcomeButton => 'Get started';
+
+  @override
+  String get welcomeWorking => 'Setting things up...';
+
+  @override
+  String get settingsAllowLocation => 'Allow location';
+
+  @override
+  String get settingsAllowLocationHint =>
+      'Double tap to allow location for exact prayer times';
+
+  @override
+  String get settingsLocationAllowedCaption =>
+      'Location is on. Prayer times use your current position.';
+
+  @override
+  String get settingsLocationOffCaption =>
+      'Location is off, so prayer times use your last known place. Allow it for exact times.';
 }

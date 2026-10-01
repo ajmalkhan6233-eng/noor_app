@@ -9,12 +9,6 @@ bool isValidCoordinate(double latitude, double longitude) =>
 const String invalidCoordinateMessage =
     'Enter a latitude between -90 and 90, and a longitude between -180 and 180.';
 
-/// Shown when GPS fails or permission is denied and prayer times fall
-/// back to [colomboFallbackLatitude]/[colomboFallbackLongitude] so the
-/// app never shows a blank screen — see PrayerCubit._resolveLocation.
-const String gpsFailedFallbackMessage =
-    "Couldn't get your location, so prayer times below are for Colombo. "
-    'Check location permission in your phone settings, then try again.';
-
+/// Silent default when there is neither a fix nor a last known location.
 const double colomboFallbackLatitude = 6.9271;
 const double colomboFallbackLongitude = 79.8612;
