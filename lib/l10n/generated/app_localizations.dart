@@ -2614,6 +2614,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location is off, so prayer times use your last known place. Allow it for exact times.'**
   String get settingsLocationOffCaption;
+
+  /// No description provided for @progressWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get progressWeek;
+
+  /// No description provided for @progressMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get progressMonth;
+
+  /// No description provided for @progressPrevMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get progressPrevMonth;
+
+  /// No description provided for @progressNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get progressNextMonth;
+
+  /// No description provided for @progressTapForDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to see this day\'s prayers'**
+  String get progressTapForDay;
+
+  /// No description provided for @progressTapRingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to see today\'s prayers'**
+  String get progressTapRingHint;
+
+  /// No description provided for @progressDayEditHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayers can be ticked on Home for today and the last two days.'**
+  String get progressDayEditHint;
+
+  /// No description provided for @progressDayDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get progressDayDone;
+
+  /// No description provided for @progressDayNotDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not ticked'**
+  String get progressDayNotDone;
+
+  /// No description provided for @progressGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly goal'**
+  String get progressGoalTitle;
+
+  /// No description provided for @progressGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached. Well done.'**
+  String get progressGoalReached;
+
+  /// No description provided for @progressGoalEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change weekly goal'**
+  String get progressGoalEdit;
+
+  /// No description provided for @progressGoalSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly goal'**
+  String get progressGoalSheetTitle;
+
+  /// No description provided for @progressGoalSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how many of the 35 prayers in a week you are aiming for.'**
+  String get progressGoalSheetBody;
+
+  /// No description provided for @progressGoalSheetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get progressGoalSheetDone;
+
+  /// No description provided for @progressGoalDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower the goal'**
+  String get progressGoalDecrease;
+
+  /// No description provided for @progressGoalIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Raise the goal'**
+  String get progressGoalIncrease;
+
+  /// No description provided for @progressBadgesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Badges'**
+  String get progressBadgesTitle;
+
+  /// No description provided for @progressMilestone3.
+  ///
+  /// In en, this message translates to:
+  /// **'3 days in a row. A good start, keep going.'**
+  String get progressMilestone3;
+
+  /// No description provided for @progressMilestone7.
+  ///
+  /// In en, this message translates to:
+  /// **'A whole week with all five prayers. Well done.'**
+  String get progressMilestone7;
+
+  /// No description provided for @progressMilestone30.
+  ///
+  /// In en, this message translates to:
+  /// **'30 days in a row. This is a real habit now.'**
+  String get progressMilestone30;
+
+  /// No description provided for @progressMilestone100.
+  ///
+  /// In en, this message translates to:
+  /// **'100 days in a row. What a journey.'**
+  String get progressMilestone100;
+
+  /// No description provided for @settingsYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get settingsYourName;
+
+  /// No description provided for @settingsAddName.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your name'**
+  String get settingsAddName;
+
+  /// No description provided for @settingsNameExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown in your greeting on Home. Kept on this device only.'**
+  String get settingsNameExplain;
+
+  /// No description provided for @settingsNameFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get settingsNameFieldHint;
+
+  /// No description provided for @settingsRemoveName.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove name'**
+  String get settingsRemoveName;
+
+  /// No description provided for @commonSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// No description provided for @progressDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}'**
+  String progressDayTitle(String date);
+
+  /// No description provided for @progressDaySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 5 prayers'**
+  String progressDaySummary(int count);
+
+  /// No description provided for @progressBarTapSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}: {count} of 5 prayers'**
+  String progressBarTapSemantics(String day, int count);
+
+  /// No description provided for @progressGoalLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {goal} prayers this week'**
+  String progressGoalLine(int done, int goal);
+
+  /// No description provided for @progressGoalValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{goal} prayers a week'**
+  String progressGoalValue(int goal);
+
+  /// No description provided for @progressBadgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String progressBadgeLabel(int days);
+
+  /// No description provided for @progressBadgeEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} day streak badge, earned'**
+  String progressBadgeEarned(int days);
+
+  /// No description provided for @progressBadgeLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} day streak badge, not earned yet'**
+  String progressBadgeLocked(int days);
+
+  /// No description provided for @progressStreakSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Current streak {days} days'**
+  String progressStreakSemantics(int days);
+
+  /// No description provided for @progressNextBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Next badge at {days} days'**
+  String progressNextBadge(int days);
 }
 
 class _AppLocalizationsDelegate

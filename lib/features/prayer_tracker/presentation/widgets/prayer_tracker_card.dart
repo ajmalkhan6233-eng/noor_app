@@ -20,6 +20,8 @@ import '../progress_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import 'prayer_chip.dart';
 import 'tracker_day_header.dart';
+import '../progress/progress_ring.dart';
+import '../progress/streak_flame.dart';
 
 // Reads the PrayerTrackerCubit provided by HomeDashboard rather than
 // creating its own — so marking a prayer done here shows up on the
@@ -57,6 +59,35 @@ class PrayerTrackerCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TrackerDayHeader(title: l10n.todaysPrayersLabel, isToday: isToday, cubit: cubit),
+              // The ring fills as prayers are ticked and celebrates 5/5; beside it
+              // the streak with its flame.
+              Row(
+                children: [
+                  ProgressRing(
+                    done: state.completedPrayers.length,
+                    size: 64,
+                    semanticLabel: l10n.progressTodaySemantics(state.completedPrayers.length),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        StreakFlame(streak: state.prayerStreak),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            state.prayerStreak == 0
+                                ? l10n.noPrayerStreakMessage
+                                : l10n.prayerStreakLabel(state.prayerStreak),
+                            style: AppTypography.caption(context.colors.sage),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -74,13 +105,6 @@ class PrayerTrackerCard extends StatelessWidget {
                       onTap: () => cubit.togglePrayer(prayer),
                     ),
                 ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                state.prayerStreak == 0
-                    ? l10n.noPrayerStreakMessage
-                    : l10n.prayerStreakLabel(state.prayerStreak),
-                style: AppTypography.caption(context.colors.sage),
               ),
               const SizedBox(height: 16),
               Divider(color: context.colors.hairline, height: 1),

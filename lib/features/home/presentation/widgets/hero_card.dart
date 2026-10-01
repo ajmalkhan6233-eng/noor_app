@@ -15,11 +15,15 @@ import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/hijri_date.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class HeroCard extends StatelessWidget {
-  const HeroCard({super.key, required this.hijriOffsetDays});
+  const HeroCard({super.key, required this.hijriOffsetDays, this.profileName});
 
   final int hijriOffsetDays;
+
+  /// When set, the card opens with "Assalamu Alaikum, <name>".
+  final String? profileName;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +49,16 @@ class HeroCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (profileName != null && profileName!.trim().isNotEmpty) ...[
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      '${AppLocalizations.of(context)!.assalamuAlaikumGreeting}, ${profileName!.trim()}',
+                      style: AppTypography.bodyStrong(context.colors.ink),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                ],
                 // Stacked, not side-by-side, so neither date ever
                 // truncates the other (2026-08-25 live-device review).
                 Text(dateSubtitle, style: AppTypography.caption(context.colors.sage)),

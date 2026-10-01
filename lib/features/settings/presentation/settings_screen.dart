@@ -22,6 +22,7 @@ import 'widgets/location_section.dart';
 import 'widgets/method_madhab_section.dart';
 import 'widgets/test_adhan_section.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import 'widgets/profile_name_section.dart';
 
 /// Settings: calculation preferences and display. Notification
 /// toggles live on the Home dashboard, not buried here.
@@ -58,6 +59,9 @@ class _SettingsView extends StatelessWidget {
             children: [
               StaggeredFadeIn(
                 children: [
+                  SectionHeader(l10n.settingsYourName),
+                  const AppCard(child: ProfileNameSection()),
+                  const SizedBox(height: 16),
                   SectionHeader(l10n.locationSectionHeader),
                   const AppCard(child: LocationSection()),
                   const SizedBox(height: 16),

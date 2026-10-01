@@ -1474,4 +1474,146 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get settingsLocationOffCaption =>
       'Location is off, so prayer times use your last known place. Allow it for exact times.';
+
+  @override
+  String get progressWeek => 'Week';
+
+  @override
+  String get progressMonth => 'Month';
+
+  @override
+  String get progressPrevMonth => 'Previous month';
+
+  @override
+  String get progressNextMonth => 'Next month';
+
+  @override
+  String get progressTapForDay => 'Double tap to see this day\'s prayers';
+
+  @override
+  String get progressTapRingHint => 'Double tap to see today\'s prayers';
+
+  @override
+  String get progressDayEditHint =>
+      'Prayers can be ticked on Home for today and the last two days.';
+
+  @override
+  String get progressDayDone => 'Done';
+
+  @override
+  String get progressDayNotDone => 'Not ticked';
+
+  @override
+  String get progressGoalTitle => 'Weekly goal';
+
+  @override
+  String get progressGoalReached => 'Goal reached. Well done.';
+
+  @override
+  String get progressGoalEdit => 'Change weekly goal';
+
+  @override
+  String get progressGoalSheetTitle => 'Weekly goal';
+
+  @override
+  String get progressGoalSheetBody =>
+      'Choose how many of the 35 prayers in a week you are aiming for.';
+
+  @override
+  String get progressGoalSheetDone => 'Done';
+
+  @override
+  String get progressGoalDecrease => 'Lower the goal';
+
+  @override
+  String get progressGoalIncrease => 'Raise the goal';
+
+  @override
+  String get progressBadgesTitle => 'Badges';
+
+  @override
+  String get progressMilestone3 => '3 days in a row. A good start, keep going.';
+
+  @override
+  String get progressMilestone7 =>
+      'A whole week with all five prayers. Well done.';
+
+  @override
+  String get progressMilestone30 =>
+      '30 days in a row. This is a real habit now.';
+
+  @override
+  String get progressMilestone100 => '100 days in a row. What a journey.';
+
+  @override
+  String get settingsYourName => 'Your name';
+
+  @override
+  String get settingsAddName => 'Add your name';
+
+  @override
+  String get settingsNameExplain =>
+      'Shown in your greeting on Home. Kept on this device only.';
+
+  @override
+  String get settingsNameFieldHint => 'Your name';
+
+  @override
+  String get settingsRemoveName => 'Remove name';
+
+  @override
+  String get commonSave => 'Save';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String progressDayTitle(String date) {
+    return '$date';
+  }
+
+  @override
+  String progressDaySummary(int count) {
+    return '$count of 5 prayers';
+  }
+
+  @override
+  String progressBarTapSemantics(String day, int count) {
+    return '$day: $count of 5 prayers';
+  }
+
+  @override
+  String progressGoalLine(int done, int goal) {
+    return '$done of $goal prayers this week';
+  }
+
+  @override
+  String progressGoalValue(int goal) {
+    return '$goal prayers a week';
+  }
+
+  @override
+  String progressBadgeLabel(int days) {
+    return '$days days';
+  }
+
+  @override
+  String progressBadgeEarned(int days) {
+    return '$days day streak badge, earned';
+  }
+
+  @override
+  String progressBadgeLocked(int days) {
+    return '$days day streak badge, not earned yet';
+  }
+
+  @override
+  String progressStreakSemantics(int days) {
+    return 'Current streak $days days';
+  }
+
+  @override
+  String progressNextBadge(int days) {
+    return 'Next badge at $days days';
+  }
 }

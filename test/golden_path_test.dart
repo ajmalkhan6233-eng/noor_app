@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:noor/features/prayer_times/data/prayer_times_result.dart';
 import 'package:noor/features/prayer_tracker/data/prayer_tracker_repository.dart';
 import 'package:noor/features/prayer_tracker/logic/prayer_tracker_cubit/prayer_tracker_cubit.dart';
@@ -44,6 +45,8 @@ class _OneDayRepository extends PrayerTrackerRepository {
 }
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   testWidgets('tick a started prayer, not a future one, then see it on Progress', (tester) async {
     tester.view.physicalSize = const Size(360 * 3, 1400 * 3);
     tester.view.devicePixelRatio = 3;

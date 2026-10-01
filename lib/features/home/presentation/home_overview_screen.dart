@@ -68,6 +68,7 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                         controller: _scrollController,
                         child: HeroCard(
                           hijriOffsetDays: settingsState.settings.hijriOffsetDays,
+                          profileName: settingsState.settings.profileName,
                         ),
                       ),
                       const SizedBox(height: 8),

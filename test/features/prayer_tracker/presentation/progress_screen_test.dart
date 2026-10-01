@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:noor/features/prayer_tracker/data/prayer_tracker_repository.dart';
 import 'package:noor/features/prayer_tracker/presentation/progress_screen.dart';
 import 'package:noor/features/prayer_tracker/presentation/widgets/profile_name_header.dart';
@@ -48,6 +49,8 @@ Widget _wrap({required SettingsRepository settingsRepository}) {
 }
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   testWidgets('first-time (no name saved) shows the entry card', (tester) async {
     await tester.pumpWidget(
       _wrap(settingsRepository: _FakeSettingsRepository(const AppSettings())),
