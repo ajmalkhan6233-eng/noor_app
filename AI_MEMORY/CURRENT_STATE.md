@@ -1,6 +1,6 @@
 # CURRENT_STATE (2026-10-01)
 
-- Branch: octopus-memory (memory files only), cut from main 9a938d3. main is in sync with origin after pull.
+- Branch: main at 6316681 (octopus-memory merged and pushed; local branch deleted). CI for that push: APK build + Web Preview green.
 - Version: 1.1.0+2. Play Store status: unknown for now
 
 ## What works (VERIFIED today)
@@ -22,4 +22,4 @@
 - .clinerules outdated (CLAUDE.md wins)
 
 ## Next physical action
-- Aj: pick one item from OPEN_ITEMS.md and say GO, or say "merge octopus-memory" to bring these notes into main.
+- Aj: pick one item from OPEN_ITEMS.md and say GO.
