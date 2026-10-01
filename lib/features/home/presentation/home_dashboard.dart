@@ -13,6 +13,8 @@
 // control that already existed one tap away. Settings is reached from
 // More only now.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +32,7 @@ import '../../settings/logic/settings_cubit/settings_cubit.dart';
 import 'home_overview_screen.dart';
 import 'widgets/bottom_nav/noor_bottom_nav.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../quran/data/quran_prewarm.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -53,6 +56,22 @@ class _HomeDashboardState extends State<HomeDashboard> {
   // as before; nothing about the "tabs never reset" guarantee changes
   // for a tab once it's actually been opened.
   final Set<int> _visitedIndices = {0};
+
+  // Two seconds after Home appears, quietly get the Quran ready (the
+  // one-time import for new installs), so opening it is instant.
+  Timer? _prewarmTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _prewarmTimer = Timer(const Duration(seconds: 2), prewarmQuran);
+  }
+
+  @override
+  void dispose() {
+    _prewarmTimer?.cancel();
+    super.dispose();
+  }
 
   static const _screenBuilders = <Widget Function()>[
     _buildHome,

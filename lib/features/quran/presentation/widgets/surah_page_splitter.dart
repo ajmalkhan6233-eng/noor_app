@@ -17,8 +17,28 @@
 
 import 'package:flutter/material.dart';
 
+import '../../data/page_packer.dart';
 import '../../data/quran_ayah.dart';
 
+/// Measures the height of a group of ayahs laid out as one justified
+/// paragraph of width [maxWidth] (the same text the reader renders).
+AyahGroupHeight ayahGroupHeightFor(TextStyle style, double maxWidth) {
+  return (group) {
+    final text = group.map((a) => '${a.arabicText} (${a.ayahNumber})  ').join();
+    final painter = TextPainter(
+      text: TextSpan(style: style, text: text),
+      textDirection: TextDirection.rtl,
+      textAlign: TextAlign.justify,
+    )..layout(maxWidth: maxWidth);
+    final height = painter.height;
+    painter.dispose();
+    return height;
+  };
+}
+
+/// Synchronous split (used by tests and small inputs). Uses the
+/// guess-and-verify packer, so it is much cheaper than measuring once
+/// per ayah, with identical results.
 List<List<QuranAyah>> splitIntoPages({
   required List<QuranAyah> ayahs,
   required TextStyle style,
@@ -26,28 +46,26 @@ List<List<QuranAyah>> splitIntoPages({
   required double maxHeight,
 }) {
   if (ayahs.isEmpty) return [];
-  final pages = <List<QuranAyah>>[];
-  var current = <QuranAyah>[];
+  return packPages(
+    ayahs: ayahs,
+    heightOf: ayahGroupHeightFor(style, maxWidth),
+    maxHeight: maxHeight,
+  );
+}
 
-  double heightOf(List<QuranAyah> group) {
-    final text = group.map((a) => '${a.arabicText} (${a.ayahNumber})  ').join();
-    final painter = TextPainter(
-      text: TextSpan(style: style, text: text),
-      textDirection: TextDirection.rtl,
-      textAlign: TextAlign.justify,
-    )..layout(maxWidth: maxWidth);
-    return painter.height;
-  }
-
-  for (final ayah in ayahs) {
-    final candidate = [...current, ayah];
-    if (current.isNotEmpty && heightOf(candidate) > maxHeight) {
-      pages.add(current);
-      current = [ayah];
-    } else {
-      current = candidate;
-    }
-  }
-  if (current.isNotEmpty) pages.add(current);
-  return pages;
+/// Progressive split: delivers pages in chunks and yields between
+/// chunks, so the first page appears at once and the UI never freezes.
+Future<void> splitIntoPagesProgressive({
+  required List<QuranAyah> ayahs,
+  required TextStyle style,
+  required double maxWidth,
+  required double maxHeight,
+  required bool Function(List<List<QuranAyah>> pages) onChunk,
+}) {
+  return packPagesProgressive(
+    ayahs: ayahs,
+    heightOf: ayahGroupHeightFor(style, maxWidth),
+    maxHeight: maxHeight,
+    onChunk: onChunk,
+  );
 }

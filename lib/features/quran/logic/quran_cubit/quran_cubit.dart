@@ -13,6 +13,7 @@ class QuranCubit extends Cubit<QuranState> {
     QuranRepository? repository,
     QuranImportService? importService,
     SettingsRepository? settingsRepository,
+    this.searchDebounce = const Duration(milliseconds: 200),
   }) : _repository = repository ?? QuranRepository(),
        _importService = importService ?? QuranImportService(),
        _settingsRepository = settingsRepository ?? SettingsRepository(),
@@ -21,6 +22,14 @@ class QuranCubit extends Cubit<QuranState> {
   final QuranRepository _repository;
   final QuranImportService _importService;
   final SettingsRepository _settingsRepository;
+
+  /// Pause after the last keystroke before the database is searched.
+  final Duration searchDebounce;
+
+  // Each keystroke bumps this; a search only publishes its results if
+  // no newer keystroke arrived meanwhile, so a slow older query can
+  // never overwrite (or blank) the results of the current text.
+  int _searchSeq = 0;
 
   // Serializes toggleBookmark calls: quran_bookmarks has no unique
   // constraint on (surah_id, ayah_number), so two taps landing before
@@ -79,8 +88,18 @@ class QuranCubit extends Cubit<QuranState> {
   }
 
   Future<void> search(String query) async {
+    final seq = ++_searchSeq;
     emit(state.copyWith(searchQuery: query));
+    if (query.trim().isEmpty) {
+      emit(state.copyWith(searchResults: const []));
+      return;
+    }
+    if (searchDebounce > Duration.zero) {
+      await Future<void>.delayed(searchDebounce);
+      if (seq != _searchSeq || isClosed) return;
+    }
     final results = await _repository.search(query);
+    if (seq != _searchSeq || isClosed) return;
     emit(state.copyWith(searchResults: results));
   }
 

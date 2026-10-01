@@ -43,6 +43,20 @@ class QuranImportService {
   /// as it goes, and returns the outcome.
   Future<QuranImportStatus> ensureImported({
     void Function(double progress)? onProgress,
+  }) {
+    // Single flight: the background pre-warm (after Home appears) and
+    // the Quran screen share one import instead of racing two.
+    final running = _inFlight[_dbHelper];
+    if (running != null) return running;
+    final future = _ensureImported(onProgress: onProgress);
+    _inFlight[_dbHelper] = future;
+    return future.whenComplete(() => _inFlight.remove(_dbHelper));
+  }
+
+  static final Map<DatabaseHelper, Future<QuranImportStatus>> _inFlight = {};
+
+  Future<QuranImportStatus> _ensureImported({
+    void Function(double progress)? onProgress,
   }) async {
     final db = await _dbHelper.database;
     final existing = await db.query('quran_import_meta', where: 'id = 1');
@@ -100,14 +114,18 @@ class QuranImportService {
     List<Map<String, Object?>> rows, {
     void Function(double fraction)? onProgress,
   }) async {
-    for (var start = 0; start < rows.length; start += _batchSize) {
-      final end = (start + _batchSize).clamp(0, rows.length);
-      final batch = db.batch();
-      for (final row in rows.sublist(start, end)) {
-        batch.insert(table, row);
+    // One transaction for the whole table: a single commit (and a single
+    // encrypted write) instead of one per 500 rows.
+    await db.transaction((txn) async {
+      for (var start = 0; start < rows.length; start += _batchSize) {
+        final end = (start + _batchSize).clamp(0, rows.length);
+        final batch = txn.batch();
+        for (final row in rows.sublist(start, end)) {
+          batch.insert(table, row);
+        }
+        await batch.commit(noResult: true);
+        onProgress?.call(end / rows.length);
       }
-      await batch.commit(noResult: true);
-      onProgress?.call(end / rows.length);
-    }
+    });
   }
 }

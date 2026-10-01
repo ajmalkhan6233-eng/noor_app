@@ -30,6 +30,8 @@ void main() {
         ),
       ),
     );
+    // Frame 1 starts the progressive pagination, frame 2 shows page 1.
+    await tester.pump();
     await tester.pump();
 
     expect(find.byType(PageView), findsOneWidget);
@@ -51,6 +53,7 @@ void main() {
       ),
     );
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
 
     await tester.drag(find.byType(PageView), const Offset(-400, 0));
     await tester.pumpAndSettle();

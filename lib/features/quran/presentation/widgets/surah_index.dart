@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/presentation/motion/staggered_fade_in.dart';
-import '../../../../core/presentation/widgets/parallax_layer.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../logic/quran_cubit/quran_cubit.dart';
 import '../../logic/quran_cubit/quran_state.dart';
@@ -130,23 +128,19 @@ class _SurahIndexState extends State<SurahIndex> {
                         );
                       },
                     ))
-              : ListView(
+              // Lazy builder: only the tiles on screen are built, so the
+              // list is ready at once (no staggered fades, no parallax,
+              // both of which forced all 114 tiles to build up front).
+              : ListView.builder(
                   controller: _scrollController,
-                  children: [
-                    ParallaxItem(
-                      controller: _scrollController,
-                      depth: 0.04,
-                      child: StaggeredFadeIn(
-                        children: [
-                          for (final surah in state.surahs)
-                            SurahListTile(
-                              surah: surah,
-                              onTap: () => _open(context, surah.id),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  itemCount: state.surahs.length,
+                  itemBuilder: (context, index) {
+                    final surah = state.surahs[index];
+                    return SurahListTile(
+                      surah: surah,
+                      onTap: () => _open(context, surah.id),
+                    );
+                  },
                 ),
         ),
       ],

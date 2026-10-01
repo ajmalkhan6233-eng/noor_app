@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/quran_ayah.dart';
 import '../../data/quran_surah.dart';
+import '../../data/page_packer.dart';
 import 'surah_page_splitter.dart';
 
 class BookPage {
@@ -36,25 +37,19 @@ class BookPage {
 /// surah_page_splitter.dart's own (n)-suffix approximation.
 const double surahHeaderReservedHeight = 64;
 
-/// Async and chunked, not a plain loop (2026-09-05 fix): measuring all
-/// ~6,236 ayahs' text via [TextPainter] in one uninterrupted pass takes
-/// roughly 30 seconds on a real device — the earlier memoization fix
-/// (2026-09-04) only stopped this from re-running on every rebuild, it
-/// didn't make the one unavoidable first pass any faster, so opening
-/// "Read the full Quran" still froze the whole UI thread for that long
-/// with no way to tell it wasn't actually hung. Yielding after every
-/// surah lets the engine pump frames between chunks, so the screen's
-/// loading spinner keeps animating and the app stays responsive while
-/// this runs, instead of looking stuck.
-Future<List<BookPage>> splitBookIntoPages({
+/// Progressive, per-surah split: [onPages] receives each surah's pages
+/// as soon as they are measured (the first surah is ready almost at
+/// once), and the UI thread is never blocked for long. [onPages]
+/// returns false to cancel.
+Future<void> splitBookProgressive({
   required List<QuranAyah> ayahs,
   required List<QuranSurah> surahs,
   required TextStyle style,
   required double maxWidth,
   required double maxHeight,
+  required bool Function(List<BookPage> pages) onPages,
 }) async {
   final surahsById = {for (final s in surahs) s.id: s};
-  final pages = <BookPage>[];
   var i = 0;
   while (i < ayahs.length) {
     final surahId = ayahs[i].surahId;
@@ -65,32 +60,57 @@ Future<List<BookPage>> splitBookIntoPages({
       i++;
     }
 
-    final firstPagePortion = splitIntoPages(
+    // The first page leaves room for the surah header.
+    final firstCount = fitCount(
       ayahs: surahAyahs,
-      style: style,
-      maxWidth: maxWidth,
+      start: 0,
+      heightOf: ayahGroupHeightFor(style, maxWidth),
       maxHeight: maxHeight - surahHeaderReservedHeight,
     );
-    if (firstPagePortion.isEmpty) {
-      await Future<void>.delayed(Duration.zero);
-      continue;
-    }
-    pages.add(BookPage(surah: surah, ayahs: firstPagePortion.first, isFirstPageOfSurah: true));
+    var cancelled = !onPages([
+      BookPage(surah: surah, ayahs: surahAyahs.sublist(0, firstCount), isFirstPageOfSurah: true),
+    ]);
+    if (cancelled) return;
 
-    final rest = surahAyahs.sublist(firstPagePortion.first.length);
-    final restPages = splitIntoPages(
-      ayahs: rest,
+    await splitIntoPagesProgressive(
+      ayahs: surahAyahs.sublist(firstCount),
       style: style,
       maxWidth: maxWidth,
       maxHeight: maxHeight,
+      onChunk: (chunk) {
+        cancelled = !onPages([
+          for (final page in chunk) BookPage(surah: surah, ayahs: page, isFirstPageOfSurah: false),
+        ]);
+        return !cancelled;
+      },
     );
-    for (final page in restPages) {
-      pages.add(BookPage(surah: surah, ayahs: page, isFirstPageOfSurah: false));
-    }
-
+    if (cancelled) return;
     await Future<void>.delayed(Duration.zero);
   }
-  return pages;
+}
+
+/// Whole-book split in one go (kept for tests and callers that need
+/// every page); prefer [splitBookProgressive] in UI code.
+Future<List<BookPage>> splitBookIntoPages({
+  required List<QuranAyah> ayahs,
+  required List<QuranSurah> surahs,
+  required TextStyle style,
+  required double maxWidth,
+  required double maxHeight,
+}) async {
+  final all = <BookPage>[];
+  await splitBookProgressive(
+    ayahs: ayahs,
+    surahs: surahs,
+    style: style,
+    maxWidth: maxWidth,
+    maxHeight: maxHeight,
+    onPages: (pages) {
+      all.addAll(pages);
+      return true;
+    },
+  );
+  return all;
 }
 
 /// Index of the page containing [surahId]/[ayahNumber], or -1 if not

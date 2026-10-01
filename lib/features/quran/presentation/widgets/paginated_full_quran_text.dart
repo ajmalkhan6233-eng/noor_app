@@ -1,25 +1,22 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Page-turn reader for "Read the full Quran" (2026-09-04, direct
-// request extending the per-surah reader's page-turn treatment here
-// too — see paginated_surah_text.dart for the original). Pages are
-// computed book-wide via full_quran_page_splitter.dart; a surah's
-// name/audio header renders only on that surah's first page, and a
-// page never spans two surahs.
-
-import 'dart:async';
+// Page-turn reader for "Read the full Quran". Pages come from
+// FullQuranPaginator, which builds them progressively (and caches
+// them), so the first page shows almost at once instead of after a
+// whole-book measurement pass. A surah's name/audio header renders only
+// on that surah's first page, and a page never spans two surahs.
 
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
-import '../../data/full_quran_pagination_cache.dart';
 import '../../data/quran_ayah.dart';
 import '../../data/quran_surah.dart';
+import '../../logic/full_quran_paginator.dart';
 import 'continuous_surah_text.dart';
 import 'full_quran_page_header.dart';
 import 'full_quran_page_splitter.dart';
 import 'page_turn_transition.dart';
-import '../../../../core/constants/app_color_tokens.dart';
 
 class PaginatedFullQuranText extends StatefulWidget {
   const PaginatedFullQuranText({
@@ -55,31 +52,8 @@ class PaginatedFullQuranText extends StatefulWidget {
 
 class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   late final _controller = PageController(initialPage: 0);
-  List<BookPage> _pages = const [];
-  bool _initialPageSet = false;
-  bool _isPaginating = false;
-
-  // Memoized: repaginating the whole Quran on every rebuild (even a
-  // routine ReadingPositionTracker update) froze the UI thread for
-  // tens of seconds — the "gets stuck" bug found live 2026-09-04.
-  double? _paginatedWidth;
-  double? _paginatedHeight;
-  double? _paginatedFontScale;
-  int? _paginatedAyahCount;
-
-  // Cached at the class level, not per State instance (2026-09-05 fix):
-  // Navigator always creates a fresh State when this screen is pushed,
-  // so the instance-level memoization above only ever helped within one
-  // visit — leaving and reopening "Read the full Quran" re-ran the same
-  // ~30s whole-book measurement pass every time ("took the same amount
-  // of time to load back", direct report). Reused as long as the
-  // layout size, font scale, and ayah count haven't actually changed;
-  // invalidated automatically otherwise.
-  static List<BookPage>? _cachedPages;
-  static double? _cachedWidth;
-  static double? _cachedHeight;
-  static double? _cachedFontScale;
-  static int? _cachedAyahCount;
+  final _paginator = FullQuranPaginator();
+  bool _jumped = false;
 
   TextStyle _textStyle(BuildContext context) => TextStyle(
         fontFamily: AppTypography.arabicFamily,
@@ -91,114 +65,36 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   @override
   void initState() {
     super.initState();
-    if (_cachedPages != null &&
-        _cachedFontScale == widget.fontScale &&
-        _cachedAyahCount == widget.ayahs.length) {
-      _pages = _cachedPages!;
-      _paginatedWidth = _cachedWidth;
-      _paginatedHeight = _cachedHeight;
-      _paginatedFontScale = _cachedFontScale;
-      _paginatedAyahCount = _cachedAyahCount;
-      _initialPageSet = true;
-      final pageIndex = findInitialPageIndex(_pages, widget.initialSurahId, widget.initialAyahNumber);
-      if (pageIndex > 0) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_controller.hasClients) _controller.jumpToPage(pageIndex);
-        });
-      }
-    }
+    _paginator.addListener(_onPagesChanged);
   }
 
   @override
   void dispose() {
+    _paginator
+      ..removeListener(_onPagesChanged)
+      ..dispose();
     _controller.dispose();
     super.dispose();
   }
 
-  // Rounded to the nearest logical pixel (2026-09-05 fix): comparing
-  // raw constraints with exact `==` meant a sub-pixel jitter in the
-  // available height — e.g. MIUI's status bar clock/battery redrawing
-  // and shifting MediaQuery's top inset by a fraction of a pixel —
-  // read as "the size changed" and re-triggered the whole ~30s
-  // measurement pass, repeatedly, minutes apart, with no real layout
-  // change ("still loading every couple of minutes", direct report).
-  double _rounded(double value) => value.roundToDouble();
-
-  bool _needsRepaginate(BoxConstraints constraints) {
-    return _paginatedWidth != _rounded(constraints.maxWidth) ||
-        _paginatedHeight != _rounded(constraints.maxHeight) ||
-        _paginatedFontScale != widget.fontScale ||
-        _paginatedAyahCount != widget.ayahs.length;
-  }
-
-  // Runs the whole-book measurement pass asynchronously instead of
-  // inline during build (2026-09-05 fix — see full_quran_page_splitter's
-  // own doc comment): a single first pass over ~6,236 ayahs still takes
-  // real time even after the 2026-09-04 memoization fix stopped it from
-  // repeating on every rebuild, and running that synchronously inside
-  // LayoutBuilder's builder blocked the entire UI thread for it, which
-  // read as "still gets stuck" even though it would eventually finish.
-  Future<void> _startPaginating(BoxConstraints constraints, TextStyle style) async {
-    if (_isPaginating) return;
-    _isPaginating = true;
-    final width = _rounded(constraints.maxWidth);
-    final height = _rounded(constraints.maxHeight);
-    final fontScale = widget.fontScale;
-    final ayahCount = widget.ayahs.length;
-
-    // Disk cache checked first (2026-09-05): survives the app being
-    // fully killed and reopened, unlike the in-memory static cache
-    // below, which only helps within one running process — this is
-    // what makes the ~30s first-ever pass a true one-time cost instead
-    // of "first time after every cold start".
-    final cached = await loadFullQuranPaginationCache(
-      ayahs: widget.ayahs,
-      surahs: widget.surahs,
-      width: width,
-      height: height,
-      fontScale: fontScale,
-      ayahCount: ayahCount,
-    );
-    final pages = cached ??
-        await splitBookIntoPages(
-          ayahs: widget.ayahs,
-          surahs: widget.surahs,
-          style: style,
-          maxWidth: width,
-          maxHeight: height,
-        );
+  // Shows pages as soon as they exist. When resuming at a saved
+  // position, waits only until that page has been built.
+  void _onPagesChanged() {
     if (!mounted) return;
-
-    setState(() {
-      _pages = pages;
-      _paginatedWidth = width;
-      _paginatedHeight = height;
-      _paginatedFontScale = fontScale;
-      _paginatedAyahCount = ayahCount;
-      _isPaginating = false;
-    });
-    _cachedPages = pages;
-    _cachedWidth = width;
-    _cachedHeight = height;
-    _cachedFontScale = fontScale;
-    _cachedAyahCount = ayahCount;
-    if (cached == null) {
-      unawaited(saveFullQuranPaginationCache(
-        pages: pages,
-        width: width,
-        height: height,
-        fontScale: fontScale,
-        ayahCount: ayahCount,
-      ));
-    }
-
-    if (_initialPageSet) return;
-    _initialPageSet = true;
-    final pageIndex = findInitialPageIndex(_pages, widget.initialSurahId, widget.initialAyahNumber);
-    if (pageIndex > 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_controller.hasClients) _controller.jumpToPage(pageIndex);
-      });
+    setState(() {});
+    if (_jumped) return;
+    final index = findInitialPageIndex(
+      _paginator.pages,
+      widget.initialSurahId,
+      widget.initialAyahNumber,
+    );
+    if (widget.initialAyahNumber == null || index >= 0 || _paginator.done) {
+      _jumped = true;
+      if (index > 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_controller.hasClients) _controller.jumpToPage(index);
+        });
+      }
     }
   }
 
@@ -206,49 +102,58 @@ class _PaginatedFullQuranTextState extends State<PaginatedFullQuranText> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (_needsRepaginate(constraints) && !_isPaginating) {
-          final style = _textStyle(context);
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) _startPaginating(constraints, style);
-          });
-        }
-        if (_pages.isEmpty) {
+        final style = _textStyle(context);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          _paginator.ensure(
+            ayahs: widget.ayahs,
+            surahs: widget.surahs,
+            style: style,
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            fontScale: widget.fontScale,
+          );
+        });
+        final pages = _paginator.pages;
+        final waitingForResume = widget.initialAyahNumber != null && !_jumped;
+        if (pages.isEmpty || waitingForResume) {
           return Center(child: CircularProgressIndicator(color: context.colors.gold));
         }
         return PageView.builder(
           controller: _controller,
-          itemCount: _pages.length,
-          itemBuilder: (context, index) {
-            final page = _pages[index];
-            return PageTurnTransition(
-              controller: _controller,
-              index: index,
-              child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (page.isFirstPageOfSurah)
-                      FullQuranPageHeader(
-                        page: page,
-                        isPlaying: widget.playingSurahId == page.surah.id,
-                        onToggleAudio: () => widget.onToggleAudio(page.surah.id),
-                      ),
-                    ContinuousSurahText(
-                      ayahs: page.ayahs,
-                      fontScale: widget.fontScale,
-                      bookmarkedAyahNumbers: widget.bookmarkedAyahNumbers(page.surah.id),
-                      onToggleBookmark: (ayahNumber) => widget.onToggleBookmark(page.surah.id, ayahNumber),
-                      ayahKeyFor: (ayahNumber) => widget.ayahKeyFor(page.surah.id, ayahNumber),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+          itemCount: pages.length,
+          itemBuilder: (context, index) => _buildPage(pages[index], index),
         );
       },
+    );
+  }
+
+  Widget _buildPage(BookPage page, int index) {
+    return PageTurnTransition(
+      controller: _controller,
+      index: index,
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (page.isFirstPageOfSurah)
+              FullQuranPageHeader(
+                page: page,
+                isPlaying: widget.playingSurahId == page.surah.id,
+                onToggleAudio: () => widget.onToggleAudio(page.surah.id),
+              ),
+            ContinuousSurahText(
+              ayahs: page.ayahs,
+              fontScale: widget.fontScale,
+              bookmarkedAyahNumbers: widget.bookmarkedAyahNumbers(page.surah.id),
+              onToggleBookmark: (ayahNumber) => widget.onToggleBookmark(page.surah.id, ayahNumber),
+              ayahKeyFor: (ayahNumber) => widget.ayahKeyFor(page.surah.id, ayahNumber),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

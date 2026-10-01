@@ -49,19 +49,22 @@ Future<void> ensureQuranTranslationImported(Database db) async {
   if (translationDigest != quranTranslationExpectedSha256) return;
 
   final rows = await compute(parseQuranTranslation, translationBytes);
-  for (var start = 0; start < rows.length; start += _batchSize) {
-    final end = (start + _batchSize).clamp(0, rows.length);
-    final batch = db.batch();
-    for (final row in rows.sublist(start, end)) {
-      batch.update(
-        'quran_ayahs',
-        {'translation': row.text},
-        where: 'surah_id = ? AND ayah_number = ?',
-        whereArgs: [row.surahId, row.ayahNumber],
-      );
+  // One transaction (one commit) instead of one per 500 rows.
+  await db.transaction((txn) async {
+    for (var start = 0; start < rows.length; start += _batchSize) {
+      final end = (start + _batchSize).clamp(0, rows.length);
+      final batch = txn.batch();
+      for (final row in rows.sublist(start, end)) {
+        batch.update(
+          'quran_ayahs',
+          {'translation': row.text},
+          where: 'surah_id = ? AND ayah_number = ?',
+          whereArgs: [row.surahId, row.ayahNumber],
+        );
+      }
+      await batch.commit(noResult: true);
     }
-    await batch.commit(noResult: true);
-  }
+  });
 
   await db.insert('quran_translation_import_meta', {
     'id': 1,

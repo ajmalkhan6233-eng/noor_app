@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
 import '../../data/quran_ayah.dart';
+import '../../logic/surah_paginator.dart';
 import 'continuous_surah_text.dart';
 import 'page_turn_transition.dart';
-import 'surah_page_splitter.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 
 class PaginatedSurahText extends StatefulWidget {
@@ -44,20 +44,8 @@ class PaginatedSurahText extends StatefulWidget {
 
 class _PaginatedSurahTextState extends State<PaginatedSurahText> {
   late final _controller = PageController(initialPage: 0);
-  List<List<QuranAyah>> _pages = const [];
-  bool _initialPageSet = false;
-
-  // Memoized the same way paginated_full_quran_text.dart's sibling
-  // fix is — see that file's header for the real bug this class of
-  // recompute-on-every-rebuild caused there. One surah's worth of
-  // measurement is cheap enough that it was never visibly a problem
-  // here, but re-measuring on every unrelated rebuild is still wasted
-  // work, and keeping both readers consistent avoids the same trap
-  // resurfacing if this surah reader is ever pointed at more text.
-  double? _paginatedWidth;
-  double? _paginatedHeight;
-  double? _paginatedFontScale;
-  int? _paginatedAyahCount;
+  final _paginator = SurahPaginator();
+  bool _jumped = false;
 
   TextStyle _textStyle(BuildContext context) => TextStyle(
         fontFamily: AppTypography.arabicFamily,
@@ -67,47 +55,36 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
       );
 
   @override
+  void initState() {
+    super.initState();
+    _paginator.addListener(_onPagesChanged);
+  }
+
+  @override
   void dispose() {
+    _paginator
+      ..removeListener(_onPagesChanged)
+      ..dispose();
     _controller.dispose();
     super.dispose();
   }
 
-  // Rounded to the nearest logical pixel (2026-09-05 fix, matching
-  // paginated_full_quran_text.dart's sibling fix): exact `==` on raw
-  // constraints re-triggers on sub-pixel system-UI jitter alone, with
-  // no real layout change.
-  double _rounded(double value) => value.roundToDouble();
-
-  void _paginate(BoxConstraints constraints, BuildContext context) {
-    final width = _rounded(constraints.maxWidth);
-    final height = _rounded(constraints.maxHeight);
-    final unchanged = _paginatedWidth == width &&
-        _paginatedHeight == height &&
-        _paginatedFontScale == widget.fontScale &&
-        _paginatedAyahCount == widget.ayahs.length;
-    if (unchanged) return;
-
-    _pages = splitIntoPages(
-      ayahs: widget.ayahs,
-      style: _textStyle(context),
-      maxWidth: width,
-      maxHeight: height,
-    );
-    _paginatedWidth = width;
-    _paginatedHeight = height;
-    _paginatedFontScale = widget.fontScale;
-    _paginatedAyahCount = widget.ayahs.length;
-
-    if (!_initialPageSet) {
-      _initialPageSet = true;
-      final target = widget.initialAyahNumber;
-      if (target != null) {
-        final pageIndex = _pages.indexWhere((p) => p.any((a) => a.ayahNumber == target));
-        if (pageIndex > 0) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_controller.hasClients) _controller.jumpToPage(pageIndex);
-          });
-        }
+  void _onPagesChanged() {
+    if (!mounted) return;
+    setState(() {});
+    if (_jumped) return;
+    final target = widget.initialAyahNumber;
+    if (target == null) {
+      _jumped = true;
+      return;
+    }
+    final index = _paginator.pageIndexOf(target);
+    if (index >= 0 || _paginator.done) {
+      _jumped = true;
+      if (index > 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_controller.hasClients) _controller.jumpToPage(index);
+        });
       }
     }
   }
@@ -116,11 +93,28 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        _paginate(constraints, context);
-        if (_pages.isEmpty) return const SizedBox.shrink();
+        final style = _textStyle(context);
+        // Pagination starts after this frame: it notifies listeners.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          _paginator.ensure(
+            ayahs: widget.ayahs,
+            style: style,
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            fontScale: widget.fontScale,
+          );
+        });
+        final pages = _paginator.pages;
+        // Resuming mid-surah: wait (briefly) until the saved page exists
+        // so the reader does not flash page 1 first.
+        final waitingForResume = widget.initialAyahNumber != null && !_jumped;
+        if (pages.isEmpty || waitingForResume) {
+          return Center(child: CircularProgressIndicator(color: context.colors.gold));
+        }
         return PageView.builder(
           controller: _controller,
-          itemCount: _pages.length,
+          itemCount: pages.length,
           itemBuilder: (context, index) => PageTurnTransition(
             controller: _controller,
             index: index,
@@ -128,7 +122,7 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: ContinuousSurahText(
-                ayahs: _pages[index],
+                ayahs: pages[index],
                 fontScale: widget.fontScale,
                 bookmarkedAyahNumbers: widget.bookmarkedAyahNumbers,
                 onToggleBookmark: widget.onToggleBookmark,
