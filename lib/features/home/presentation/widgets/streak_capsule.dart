@@ -49,7 +49,7 @@ class StreakCapsule extends StatelessWidget {
                     color: context.colors.gold,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
-                    fontSize: 13,
+                    fontSize: AppTypography.captionSize,
                   ),
                 ),
                 const SizedBox(height: 2),

@@ -19,7 +19,13 @@ class SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Semantics(
         header: true,
-        child: Text(title.toUpperCase(), style: AppTypography.sectionHeader(context.colors.sage)),
+        child: Text(
+          title.toUpperCase(),
+          style: AppTypography.section(
+            context.colors.sage,
+            family: context.colors.headingFontFamily,
+          ),
+        ),
       ),
     );
   }

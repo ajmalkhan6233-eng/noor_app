@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// Plain-language explanation of how the percentage is worked out.
 Future<void> showProgressHelpSheet(BuildContext context) {
@@ -25,7 +26,7 @@ Future<void> showProgressHelpSheet(BuildContext context) {
                 header: true,
                 child: Text(
                   l10n.progressHelpTitle,
-                  style: TextStyle(color: colors.ink, fontSize: 18, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: colors.ink, fontSize: AppTypography.timeLargeSize, fontWeight: FontWeight.w600),
                 ),
               ),
               const SizedBox(height: 12),
@@ -39,7 +40,7 @@ Future<void> showProgressHelpSheet(BuildContext context) {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => Navigator.of(sheetContext).pop(),
-                  child: Text(l10n.progressHelpClose, style: TextStyle(color: colors.gold)),
+                  child: Text(l10n.progressHelpClose, style: AppTypography.body(colors.gold)),
                 ),
               ),
             ],

@@ -13,7 +13,7 @@ import '../../constants/app_typography.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
 class NoorSplashWordmark extends StatelessWidget {
-  const NoorSplashWordmark({super.key, this.fontSize = 40, this.glow = false});
+  const NoorSplashWordmark({super.key, this.fontSize = AppTypography.brandLargeSize, this.glow = false});
 
   final double fontSize;
 

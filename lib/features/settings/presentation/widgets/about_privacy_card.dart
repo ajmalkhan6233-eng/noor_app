@@ -27,7 +27,7 @@ class AboutPrivacyCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   l10n.privacyStatement,
-                  style: TextStyle(color: colors.ink, fontWeight: FontWeight.w600),
+                  style: AppTypography.bodyStrong(colors.ink),
                 ),
               ),
             ],

@@ -104,9 +104,9 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          Expanded(
+            child: Row(
             children: [
               PrayerRowLeadingControls(
                 name: name,
@@ -116,24 +116,40 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
                     ? () => widget.onToggleNotification!(name, !bellOn)
                     : null,
               ),
-              Semantics(
-                label: label,
-                child: ExcludeSemantics(
-                  child: Text(name, style: TextStyle(color: context.colors.ink)),
+              Flexible(
+                child: Semantics(
+                  label: label,
+                  child: ExcludeSemantics(
+                    child: Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.body(context.colors.ink),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          ExcludeSemantics(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(formatClock(time), style: AppTypography.time(context.colors.ink)),
-                if (iqamathTime != null) ...[
-                  const SizedBox(width: 10),
-                  Text(formatClock(iqamathTime), style: AppTypography.caption(context.colors.sage)),
-                ],
-              ],
+          ),
+          const SizedBox(width: 8),
+          // Times shrink to fit instead of overflowing at large text sizes.
+          Flexible(
+            child: ExcludeSemantics(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(formatClock(time), style: AppTypography.time(context.colors.ink)),
+                    if (iqamathTime != null) ...[
+                      const SizedBox(width: 10),
+                      Text(formatClock(iqamathTime), style: AppTypography.caption(context.colors.sage)),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ],

@@ -98,7 +98,7 @@ class _Body extends StatelessWidget {
                   children: [
                     Text(
                       '${stats.percent}%',
-                      style: AppTypography.counter(colors.gold).copyWith(fontSize: 40),
+                      style: AppTypography.counter(colors.gold).copyWith(fontSize: AppTypography.displaySize),
                     ),
                     Text(l10n.progressPercentCaption, style: AppTypography.caption(colors.sage)),
                   ],
@@ -112,7 +112,7 @@ class _Body extends StatelessWidget {
         const SizedBox(height: 20),
         ProgressWeekBars(counts: stats.last7, today: DateTime.now()),
         const SizedBox(height: 16),
-        Text(_line(l10n), style: TextStyle(color: colors.ink, fontSize: 14)),
+        Text(_line(l10n), style: TextStyle(color: colors.ink, fontSize: AppTypography.bodySize)),
       ],
     );
   }

@@ -26,7 +26,9 @@ class CurrentTimeChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(context.radiusFor(20)),
           border: Border.all(color: context.colors.hairline),
         ),
-        child: Row(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.schedule, size: 13, color: context.colors.sage),
@@ -41,6 +43,7 @@ class CurrentTimeChip extends StatelessWidget {
               style: PrayerCountdownRow.clockChipTimeStyle(context.colors.gold),
             ),
           ],
+          ),
         ),
       ),
     );

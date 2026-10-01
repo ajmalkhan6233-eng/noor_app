@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../constants/app_color_tokens.dart';
+import '../../constants/app_typography.dart';
 
 class WebPreviewBadge extends StatelessWidget {
   const WebPreviewBadge({super.key});
@@ -29,7 +30,7 @@ class WebPreviewBadge extends StatelessWidget {
       child: Text(
         'WEB PREVIEW — not final build',
         style: TextStyle(
-          fontSize: 10,
+          fontSize: AppTypography.captionSize,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: context.colors.gold,

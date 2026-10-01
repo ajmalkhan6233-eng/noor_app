@@ -16,6 +16,7 @@ import '../../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class AdhanSoundSection extends StatelessWidget {
   const AdhanSoundSection({super.key});
@@ -61,7 +62,7 @@ class AdhanSoundSection extends StatelessWidget {
                           reciter.label,
                           style: TextStyle(
                             color: reciter == selected ? context.colors.paper : context.colors.ink,
-                            fontSize: 13,
+                            fontSize: AppTypography.captionSize,
                             fontWeight: reciter == selected ? FontWeight.w700 : FontWeight.w400,
                           ),
                         ),
@@ -74,7 +75,7 @@ class AdhanSoundSection extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 selected.attribution!,
-                style: TextStyle(color: context.colors.sage, fontSize: 11),
+                style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize),
               ),
             ],
           ],

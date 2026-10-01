@@ -47,7 +47,7 @@ class _LicencePackageTileState extends State<LicencePackageTile> {
                   Expanded(
                     child: Text(
                       widget.packageName,
-                      style: TextStyle(color: context.colors.ink),
+                      style: AppTypography.body(context.colors.ink),
                     ),
                   ),
                   AnimatedRotation(

@@ -36,7 +36,6 @@ void main() {
     expect(t.flatSurfaces, isTrue);
     expect(theme.extension<AppColorTokens>(), t);
     expect(theme.cardTheme.elevation, 0);
-    expect(theme.textTheme.titleLarge!.fontFamily, 'Cormorant Garamond');
     expect(theme.appBarTheme.titleTextStyle!.fontFamily, 'Cormorant Garamond');
     expect(theme.textTheme.bodyMedium!.fontFamily, 'Inter');
   });

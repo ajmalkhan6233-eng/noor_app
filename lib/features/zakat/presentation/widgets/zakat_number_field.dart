@@ -66,7 +66,7 @@ class _ZakatNumberFieldState extends State<ZakatNumberField> {
         child: TextField(
           controller: _controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          style: TextStyle(color: context.colors.ink),
+          style: AppTypography.body(context.colors.ink),
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle: AppTypography.caption(context.colors.sage),

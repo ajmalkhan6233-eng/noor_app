@@ -64,7 +64,7 @@ class AzkarItemTile extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.right,
                   style: AppTypography.arabic(context.colors.ink).copyWith(
-                    fontSize: 26 * fontScale,
+                    fontSize: AppTypography.arabicLargeSize * fontScale,
                     height: 1.7,
                   ),
                 ),
@@ -75,7 +75,7 @@ class AzkarItemTile extends StatelessWidget {
                     style: TextStyle(
                       color: context.colors.sage,
                       fontStyle: FontStyle.italic,
-                      fontSize: 13 * fontScale,
+                      fontSize: AppTypography.captionSize * fontScale,
                     ),
                   ),
                 ],
@@ -83,7 +83,7 @@ class AzkarItemTile extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     item.translation!,
-                    style: TextStyle(color: context.colors.sage, fontSize: 12 * fontScale),
+                    style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize * fontScale),
                   ),
                 ],
                 const SizedBox(height: 12),

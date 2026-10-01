@@ -95,7 +95,7 @@ class _LocationSectionState extends State<LocationSection> with WidgetsBindingOb
                   ? l10n.locatingLabel
                   : (allowed ? l10n.useMyLocationLabel : l10n.settingsAllowLocation),
               textAlign: TextAlign.center,
-              style: TextStyle(color: colors.gold, fontWeight: FontWeight.w600),
+              style: AppTypography.bodyStrong(colors.gold),
             ),
           ),
         ),

@@ -6,6 +6,7 @@ import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/calendar_reminder.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class CalendarReminderTile extends StatelessWidget {
   const CalendarReminderTile({super.key, required this.reminder, required this.onDelete});
@@ -26,11 +27,11 @@ class CalendarReminderTile extends StatelessWidget {
         children: [
           Text(
             '$hour:$minute $period',
-            style: TextStyle(color: context.colors.gold, fontSize: 13, fontWeight: FontWeight.w600),
+            style: TextStyle(color: context.colors.gold, fontSize: AppTypography.captionSize, fontWeight: FontWeight.w600),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(reminder.note, style: TextStyle(color: context.colors.ink)),
+            child: Text(reminder.note, style: AppTypography.body(context.colors.ink)),
           ),
           SemanticButton(
             label: reminder.note,

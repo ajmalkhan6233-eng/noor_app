@@ -9,6 +9,7 @@ import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../core/constants/app_typography.dart';
 
 class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});
@@ -44,7 +45,7 @@ class HelpScreen extends StatelessWidget {
                 header: true,
                 child: Text(
                   items[i].$1,
-                  style: TextStyle(color: colors.ink, fontWeight: FontWeight.w600, fontSize: 15),
+                  style: TextStyle(color: colors.ink, fontWeight: FontWeight.w600, fontSize: AppTypography.bodySize),
                 ),
               ),
               const SizedBox(height: 8),

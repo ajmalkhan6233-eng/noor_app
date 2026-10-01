@@ -91,7 +91,7 @@ class _ExactAlarmSectionState extends State<ExactAlarmSection>
                   child: Text(
                     'Allow exact alarms',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: context.colors.gold),
+                    style: AppTypography.body(context.colors.gold),
                   ),
                 ),
               ),

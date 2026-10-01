@@ -10,31 +10,15 @@ import 'package:flutter/material.dart';
 import 'app_color_tokens_mushaf.dart';
 import 'app_theme.dart';
 
-const String _headingFamily = 'Cormorant Garamond';
-
+/// Mushaf = the shared theme with square, flat surfaces (tokens) and
+/// Cormorant Garamond for screen titles and section headings only, at
+/// the same sizes as every other theme (tokens.headingFontFamily). Body
+/// stays Inter; Arabic stays Amiri.
 ThemeData buildMushafTheme() {
   final base = buildAppTheme(appColorTokensMushaf);
-  final ink = appColorTokensMushaf.ink;
-  TextStyle heading(double size) => TextStyle(
-    fontFamily: _headingFamily,
-    fontWeight: FontWeight.w700,
-    fontSize: size,
-    color: ink,
-  );
   return base.copyWith(
     appBarTheme: base.appBarTheme.copyWith(
-      titleTextStyle: heading(24),
       shape: Border(bottom: BorderSide(color: appColorTokensMushaf.hairline)),
-    ),
-    textTheme: base.textTheme.copyWith(
-      displayLarge: heading(40),
-      displayMedium: heading(34),
-      displaySmall: heading(30),
-      headlineLarge: heading(28),
-      headlineMedium: heading(26),
-      headlineSmall: heading(24),
-      titleLarge: heading(22),
-      titleMedium: heading(18),
     ),
   );
 }

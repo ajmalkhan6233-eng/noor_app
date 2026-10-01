@@ -20,6 +20,7 @@ import 'azkar_category_icon_painters_b.dart';
 import 'azkar_category_icon_painters_c.dart';
 import 'azkar_category_icon_painters_d.dart';
 import 'azkar_category_icon_painters_e.dart';
+import '../../../../core/constants/app_typography.dart';
 
 extension _AzkarCategoryIcon on AzkarCategory {
   CustomPainter painter(Color color) {
@@ -103,7 +104,7 @@ class AzkarCategorySelector extends StatelessWidget {
             _iconBadge(accent, category),
             const SizedBox(width: 16),
             Expanded(
-              child: Text(category.label, style: TextStyle(color: context.colors.ink)),
+              child: Text(category.label, style: AppTypography.body(context.colors.ink)),
             ),
             Icon(Icons.chevron_right, color: context.colors.sage, size: 20),
           ],

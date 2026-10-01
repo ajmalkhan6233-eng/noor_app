@@ -91,7 +91,7 @@ class _PrayerTimesStripState extends State<PrayerTimesStrip> {
                   maxLines: 1,
                   style: TextStyle(
                     color: upcoming ? context.colors.gold : context.colors.sage,
-                    fontSize: 12,
+                    fontSize: AppTypography.captionSize,
                     fontWeight: upcoming ? FontWeight.w700 : FontWeight.w400,
                   ),
                 ),

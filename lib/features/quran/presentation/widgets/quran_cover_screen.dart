@@ -57,7 +57,7 @@ class QuranCoverScreen extends StatelessWidget {
                   Text(
                     AppStrings.splashGreeting,
                     textAlign: TextAlign.center,
-                    style: AppTypography.arabic(colors.gold).copyWith(fontSize: 26),
+                    style: AppTypography.arabic(colors.gold).copyWith(fontSize: AppTypography.arabicLargeSize),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 24),

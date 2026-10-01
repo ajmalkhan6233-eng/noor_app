@@ -30,7 +30,7 @@ class ProfileNameHeader extends StatelessWidget {
             child: Text(
               name,
               overflow: TextOverflow.ellipsis,
-              style: AppTypography.heroDisplay(context.colors.ink).copyWith(fontSize: 28),
+              style: AppTypography.heroDisplay(context.colors.ink).copyWith(fontSize: AppTypography.titleSize),
             ),
           ),
           const SizedBox(width: 8),

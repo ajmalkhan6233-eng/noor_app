@@ -87,7 +87,7 @@ class AboutScreen extends StatelessWidget {
             'app was created to fill that gap, with a sincere and humble '
             'intention. Whoever can benefit from it, that is all we hope '
             'for.',
-            style: TextStyle(color: context.colors.sage),
+            style: AppTypography.body(context.colors.sage),
           ),
         ],
       ),

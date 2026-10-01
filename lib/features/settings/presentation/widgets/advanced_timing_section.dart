@@ -15,6 +15,7 @@ import '../../../../core/utils/semantics_helpers.dart';
 import 'iqamath_offset_section.dart';
 import 'prayer_adjustments_section.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class AdvancedTimingSection extends StatefulWidget {
   const AdvancedTimingSection({super.key});
@@ -41,7 +42,7 @@ class _AdvancedTimingSectionState extends State<AdvancedTimingSection> {
           onTap: () => setState(() => _expanded = !_expanded),
           child: Row(
             children: [
-              Expanded(child: Text('Advanced timing', style: TextStyle(color: context.colors.ink))),
+              Expanded(child: Text('Advanced timing', style: AppTypography.body(context.colors.ink))),
               Icon(
                 _expanded ? Icons.expand_less : Icons.expand_more,
                 color: context.colors.sage,

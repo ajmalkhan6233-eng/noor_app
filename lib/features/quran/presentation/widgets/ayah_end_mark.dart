@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class AyahEndMark extends StatelessWidget {
   const AyahEndMark({
@@ -45,7 +46,7 @@ class AyahEndMark extends StatelessWidget {
           '$ayahNumber',
           style: TextStyle(
             color: isBookmarked ? colors.paper : colors.gold,
-            fontSize: 11,
+            fontSize: AppTypography.captionSize,
             fontWeight: FontWeight.w600,
           ),
         ),

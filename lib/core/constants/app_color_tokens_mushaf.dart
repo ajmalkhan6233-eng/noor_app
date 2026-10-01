@@ -30,4 +30,5 @@ const AppColorTokens appColorTokensMushaf = AppColorTokens(
   brightness: Brightness.light,
   cornerRadius: 2,
   flatSurfaces: true,
+  headingFontFamily: 'Cormorant Garamond',
 );

@@ -17,6 +17,7 @@
 // collapsed into the ~64dp pinned bar, clipping instead of shrinking.
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../constants/app_typography.dart';
 
 class CollapsingScaffold extends StatefulWidget {
   const CollapsingScaffold({
@@ -122,7 +123,7 @@ class _CollapsingScaffoldState extends State<CollapsingScaffold> {
               opacity: _collapseFraction,
               child: Text(
                 widget.title,
-                style: TextStyle(color: context.colors.gold, fontWeight: FontWeight.w600),
+                style: AppTypography.bodyStrong(context.colors.gold),
               ),
             ),
             expandedHeight: kToolbarHeight + _expandedExtra,

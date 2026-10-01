@@ -13,6 +13,7 @@ import '../../../prayer_times/data/silent_mode_settings.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class SilentModeSection extends StatefulWidget {
   const SilentModeSection({super.key, SilentModeChannel? channel})
@@ -77,7 +78,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
       child: SwitchListTile(
         contentPadding: EdgeInsets.zero,
         activeThumbColor: context.colors.gold,
-        title: Text(label, style: TextStyle(color: context.colors.ink)),
+        title: Text(label, style: AppTypography.body(context.colors.ink)),
         value: value,
         onChanged: (v) => context.read<SettingsCubit>().setSilentMode(apply(v)),
       ),
@@ -97,7 +98,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
       children: [
         Text(
           'Extra minutes after iqamath',
-          style: TextStyle(color: context.colors.ink),
+          style: AppTypography.body(context.colors.ink),
         ),
         Row(
           children: [
@@ -111,7 +112,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
               child: Text(
                 '${s.extraMinutesAfterIqamath} min',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: context.colors.sage),
+                style: AppTypography.body(context.colors.sage),
               ),
             ),
             SemanticButton(
@@ -137,7 +138,7 @@ class _SilentModeSectionState extends State<SilentModeSection> {
         child: Text(
           'Grant Do Not Disturb access',
           textAlign: TextAlign.center,
-          style: TextStyle(color: context.colors.gold),
+          style: AppTypography.body(context.colors.gold),
         ),
       ),
     );

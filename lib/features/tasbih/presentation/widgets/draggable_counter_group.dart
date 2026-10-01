@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import 'haptic_counter_device.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class DraggableCounterGroup extends StatelessWidget {
   const DraggableCounterGroup({
@@ -40,7 +41,7 @@ class DraggableCounterGroup extends StatelessWidget {
               child: Text(
                 dhikrLabel,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: context.colors.sage, fontSize: 18),
+                style: TextStyle(color: context.colors.sage, fontSize: AppTypography.timeLargeSize),
               ),
             ),
             const SizedBox(height: 16),

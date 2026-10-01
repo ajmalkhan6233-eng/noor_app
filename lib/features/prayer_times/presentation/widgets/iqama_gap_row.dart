@@ -27,7 +27,7 @@ class IqamaGapRow extends StatelessWidget {
         color: color,
         fontFeatures: const [FontFeature.tabularFigures()],
         letterSpacing: 1,
-        fontSize: 40,
+        fontSize: AppTypography.displaySize,
         fontWeight: FontWeight.w700,
       );
 
@@ -40,13 +40,13 @@ class IqamaGapRow extends StatelessWidget {
           'Head to the masjid',
           style: AppTypography.heroDisplay(context.colors.ink).copyWith(
             fontWeight: FontWeight.w600,
-            fontSize: 32,
+            fontSize: AppTypography.titleSize,
           ),
         ),
         const SizedBox(height: 2),
         Text(
           '$prayerName iqamah is next',
-          style: TextStyle(color: context.colors.sage, fontSize: 13),
+          style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize),
         ),
         const SizedBox(height: 6),
         _countdownText(context, countdown),

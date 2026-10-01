@@ -29,7 +29,7 @@ class ProgressRing extends StatelessWidget {
         child: Center(
           child: Text(
             '$done/5',
-            style: AppTypography.counter(colors.ink).copyWith(fontSize: 24),
+            style: AppTypography.counter(colors.ink).copyWith(fontSize: AppTypography.timeLargeSize),
           ),
         ),
       ),

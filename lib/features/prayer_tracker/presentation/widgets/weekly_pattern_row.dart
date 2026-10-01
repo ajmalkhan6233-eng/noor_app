@@ -88,7 +88,7 @@ class _DayRing extends StatelessWidget {
                 else if (!missed)
                   Text(
                     '${day.completedCount}',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: context.colors.ink),
+                    style: TextStyle(fontSize: AppTypography.captionSize, fontWeight: FontWeight.w600, color: context.colors.ink),
                   ),
               ],
             ),

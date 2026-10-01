@@ -102,7 +102,7 @@ class PrayerTrackerCard extends StatelessWidget {
                       size: 20,
                     ),
                     const SizedBox(width: 12),
-                    Text(l10n.fastingTodayLabel, style: TextStyle(color: context.colors.ink)),
+                    Text(l10n.fastingTodayLabel, style: AppTypography.body(context.colors.ink)),
                   ],
                 ),
               ),
@@ -124,7 +124,7 @@ class PrayerTrackerCard extends StatelessWidget {
                   children: [
                     Icon(Icons.bar_chart, color: context.colors.gold, size: 16),
                     const SizedBox(width: 6),
-                    Text(l10n.trackerViewProgress, style: TextStyle(color: context.colors.gold)),
+                    Text(l10n.trackerViewProgress, style: AppTypography.body(context.colors.gold)),
                   ],
                 ),
               ),

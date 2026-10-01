@@ -16,6 +16,7 @@ import '../../../prayer_times/data/notification_slots.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class TestAdhanSection extends StatelessWidget {
   const TestAdhanSection({super.key, NotificationService? service})
@@ -33,7 +34,7 @@ class TestAdhanSection extends StatelessWidget {
         Text(
           'Play a prayer\'s real adhan notification right now, to '
           'confirm it actually sounds — not just that a preview plays.',
-          style: TextStyle(color: context.colors.sage, fontSize: 12, height: 1.4),
+          style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize, height: 1.4),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -50,7 +51,7 @@ class TestAdhanSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(context.radiusFor(20)),
                     border: Border.all(color: context.colors.goldBorder),
                   ),
-                  child: Text(slotLabel(slot), style: TextStyle(color: context.colors.gold, fontSize: 13)),
+                  child: Text(slotLabel(slot), style: TextStyle(color: context.colors.gold, fontSize: AppTypography.captionSize)),
                 ),
               ),
           ],
@@ -67,7 +68,7 @@ class TestAdhanSection extends StatelessWidget {
             ),
             child: Text(
               'Schedule test notification in 3 min (close app after)',
-              style: TextStyle(color: context.colors.sage, fontSize: 12),
+              style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize),
             ),
           ),
         ),

@@ -96,7 +96,7 @@ class _BatteryOptimizationSectionState extends State<BatteryOptimizationSection>
                   child: Text(
                     l10n.grantBatteryOptimizationExemptionLabel,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: context.colors.gold),
+                    style: AppTypography.body(context.colors.gold),
                   ),
                 ),
               ),

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/effects/particle_burst.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class AzkarCounterButton extends StatefulWidget {
   const AzkarCounterButton({
@@ -63,7 +64,7 @@ class _AzkarCounterButtonState extends State<AzkarCounterButton> {
           style: TextStyle(
             color: widget.done ? context.colors.gold : context.colors.ink,
             fontWeight: FontWeight.w600,
-            fontSize: 13,
+            fontSize: AppTypography.captionSize,
           ),
         ),
       ),

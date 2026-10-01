@@ -5,6 +5,7 @@ import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class PrayerChip extends StatelessWidget {
   const PrayerChip({super.key, 
@@ -55,7 +56,7 @@ class PrayerChip extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: TextStyle(color: color, fontSize: 13),
+              style: TextStyle(color: color, fontSize: AppTypography.captionSize),
             ),
           ],
         ),

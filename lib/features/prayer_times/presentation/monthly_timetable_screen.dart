@@ -14,6 +14,7 @@ import '../data/prayer_settings.dart';
 import '../logic/monthly_timetable_cubit/monthly_timetable_cubit.dart';
 import '../logic/monthly_timetable_cubit/monthly_timetable_state.dart';
 import 'widgets/monthly_timetable_row.dart';
+import '../../../core/constants/app_typography.dart';
 
 /// Scrollable list of every day in the current month's prayer
 /// schedule, for the coordinates/settings already active elsewhere.
@@ -107,11 +108,11 @@ class _MonthlyTimetableView extends StatelessWidget {
         children: [
           SizedBox(
             width: 36,
-            child: Text(labels.first, style: TextStyle(color: context.colors.sage, fontSize: 12)),
+            child: Text(labels.first, style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize)),
           ),
           for (final label in labels.skip(1))
             Expanded(
-              child: Text(label, style: TextStyle(color: context.colors.sage, fontSize: 12)),
+              child: Text(label, style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize)),
             ),
         ],
       ),

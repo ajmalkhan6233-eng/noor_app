@@ -15,6 +15,7 @@ import '../backup_restore_screen.dart';
 import '../send_feedback_screen.dart';
 import '../support_developer_screen.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class AboutDonateSection extends StatelessWidget {
   const AboutDonateSection({super.key});
@@ -97,7 +98,7 @@ class _Row extends StatelessWidget {
         children: [
           Icon(icon, color: color),
           const SizedBox(width: 12),
-          Text(label, style: TextStyle(color: color)),
+          Text(label, style: AppTypography.body(color)),
         ],
       ),
     );

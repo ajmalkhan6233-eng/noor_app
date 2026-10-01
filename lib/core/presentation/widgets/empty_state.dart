@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/app_color_tokens.dart';
+import '../../constants/app_typography.dart';
 
 class EmptyState extends StatelessWidget {
   const EmptyState({super.key, required this.icon, required this.message});
@@ -30,7 +31,7 @@ class EmptyState extends StatelessWidget {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: context.colors.sage, fontSize: 13),
+                style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize),
               ),
             ],
           ),

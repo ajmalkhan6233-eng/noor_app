@@ -8,6 +8,7 @@ import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_category.dart';
 import '../../data/azkar_item.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class AzkarSearchResults extends StatelessWidget {
   const AzkarSearchResults({
@@ -25,7 +26,7 @@ class AzkarSearchResults extends StatelessWidget {
   Widget build(BuildContext context) {
     if (results.isEmpty) {
       return Center(
-        child: Text(AppLocalizations.of(context)!.azkarNoMatches, style: TextStyle(color: context.colors.sage)),
+        child: Text(AppLocalizations.of(context)!.azkarNoMatches, style: AppTypography.body(context.colors.sage)),
       );
     }
     return ListView.separated(
@@ -46,11 +47,11 @@ class AzkarSearchResults extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: 11)),
+                  Text(category.label, style: TextStyle(color: context.colors.gold, fontSize: AppTypography.captionSize)),
                   const SizedBox(height: 4),
                   Text(
                     resultLabel,
-                    style: TextStyle(color: context.colors.ink),
+                    style: AppTypography.body(context.colors.ink),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

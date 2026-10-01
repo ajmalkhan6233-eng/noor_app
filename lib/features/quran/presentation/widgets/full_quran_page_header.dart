@@ -32,7 +32,7 @@ class FullQuranPageHeader extends StatelessWidget {
           Expanded(
             child: Text(
               '${page.surah.id}. ${page.surah.displayName}',
-              style: AppTypography.sectionHeader(context.colors.sage).copyWith(color: context.colors.gold, fontSize: 20),
+              style: AppTypography.sectionHeader(context.colors.sage).copyWith(color: context.colors.gold, fontSize: AppTypography.timeLargeSize),
             ),
           ),
           SurahAudioButton(

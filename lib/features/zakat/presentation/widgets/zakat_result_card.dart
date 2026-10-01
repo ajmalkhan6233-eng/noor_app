@@ -37,7 +37,7 @@ class ZakatResultCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               result.netWealth.toStringAsFixed(2),
-              style: TextStyle(color: context.colors.ink, fontSize: 20),
+              style: TextStyle(color: context.colors.ink, fontSize: AppTypography.timeLargeSize),
             ),
             const SizedBox(height: 12),
             Text(nisabLabel, style: AppTypography.caption(context.colors.sage)),
@@ -49,7 +49,7 @@ class ZakatResultCard extends StatelessWidget {
             Text(
               result.zakatDue.toStringAsFixed(2),
               style: AppTypography.heroDisplay(context.colors.ink).copyWith(
-                fontSize: 36,
+                fontSize: AppTypography.titleSize,
                 color: result.nisabMet ? context.colors.gold : context.colors.sage,
               ),
             ),

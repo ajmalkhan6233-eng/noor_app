@@ -7,6 +7,7 @@ import '../../../../core/constants/app_color_tokens.dart';
 import '../../../prayer_times/data/prayer_settings.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// Calculation method and Asr madhab — always explicit, never assumed.
 class MethodMadhabSection extends StatelessWidget {
@@ -27,7 +28,7 @@ class MethodMadhabSection extends StatelessWidget {
                 isExpanded: true,
                 value: prayer.method,
                 dropdownColor: context.colors.card,
-                style: TextStyle(color: context.colors.ink),
+                style: AppTypography.body(context.colors.ink),
                 items: [
                   for (final method in PrayerCalculationMethod.values)
                     DropdownMenuItem(value: method, child: Text(method.label)),
@@ -45,7 +46,7 @@ class MethodMadhabSection extends StatelessWidget {
                 isExpanded: true,
                 value: prayer.madhab,
                 dropdownColor: context.colors.card,
-                style: TextStyle(color: context.colors.ink),
+                style: AppTypography.body(context.colors.ink),
                 items: [
                   for (final madhab in PrayerMadhab.values)
                     DropdownMenuItem(value: madhab, child: Text(madhab.label)),

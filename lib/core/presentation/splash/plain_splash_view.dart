@@ -9,6 +9,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../constants/app_typography.dart';
 import '../widgets/noor_splash_wordmark.dart';
 
 class PlainSplashView extends StatelessWidget {
@@ -16,6 +17,6 @@ class PlainSplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: NoorSplashWordmark(fontSize: 32));
+    return const Center(child: NoorSplashWordmark(fontSize: AppTypography.brandSize));
   }
 }

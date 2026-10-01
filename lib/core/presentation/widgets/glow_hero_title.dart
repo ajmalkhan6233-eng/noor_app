@@ -48,7 +48,8 @@ class _GlowHeroTitleState extends State<GlowHeroTitle> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final text = Text(widget.text, style: widget.style ?? AppTypography.heroDisplay(widget.color));
+    final text = Text(widget.text, style: widget.style ??
+          AppTypography.title(widget.color, family: context.colors.headingFontFamily));
     // Flat themes (Mushaf) have no shadows, so no glow either.
     if (context.colors.flatSurfaces) return text;
     return AnimatedBuilder(

@@ -11,6 +11,7 @@ import '../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class MoreTile extends StatelessWidget {
   const MoreTile({
@@ -71,7 +72,7 @@ class MoreTile extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: comingSoon ? context.colors.sage : context.colors.ink, fontSize: 11),
+            style: TextStyle(color: comingSoon ? context.colors.sage : context.colors.ink, fontSize: AppTypography.captionSize),
           ),
         ],
       ),

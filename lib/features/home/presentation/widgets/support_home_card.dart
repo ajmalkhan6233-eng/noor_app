@@ -13,6 +13,7 @@ import '../../../../core/utils/semantics_helpers.dart';
 import '../../../settings/presentation/support_developer_screen.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class SupportHomeCard extends StatefulWidget {
   const SupportHomeCard({super.key});
@@ -66,7 +67,7 @@ class _SupportHomeCardState extends State<SupportHomeCard> {
               onTap: _openSupportScreen,
               child: Text(
                 AppLocalizations.of(context)!.supportHomeMessage,
-                style: TextStyle(color: context.colors.sage, fontSize: 13),
+                style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize),
               ),
             ),
           ),

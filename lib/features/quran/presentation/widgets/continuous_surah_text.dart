@@ -44,8 +44,8 @@ class ContinuousSurahText extends StatelessWidget {
     final textStyle = TextStyle(
       fontFamily: AppTypography.arabicFamily,
       color: colors.ink,
-      fontSize: 22 * fontScale,
-      height: 2.1,
+      fontSize: AppTypography.quranSize * fontScale,
+      height: AppTypography.quranHeight,
     );
     return RichText(
       textDirection: TextDirection.rtl,

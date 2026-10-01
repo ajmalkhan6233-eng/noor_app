@@ -41,7 +41,7 @@ class _Tile extends StatelessWidget {
         excludeSemantics: true,
         child: Column(
           children: [
-            Text(value, style: AppTypography.counter(colors.gold).copyWith(fontSize: 22)),
+            Text(value, style: AppTypography.counter(colors.gold).copyWith(fontSize: AppTypography.timeLargeSize)),
             const SizedBox(height: 2),
             Text(label, textAlign: TextAlign.center, style: AppTypography.caption(colors.sage)),
           ],

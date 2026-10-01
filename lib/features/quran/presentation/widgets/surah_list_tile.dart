@@ -43,7 +43,7 @@ class SurahListTile extends StatelessWidget {
               width: 28,
               child: Text(
                 '${surah.id}',
-                style: TextStyle(color: context.colors.sage),
+                style: AppTypography.body(context.colors.sage),
               ),
             ),
             const SizedBox(width: 12),
@@ -53,7 +53,7 @@ class SurahListTile extends StatelessWidget {
                 children: [
                   Text(
                     surah.displayName,
-                    style: TextStyle(color: context.colors.ink),
+                    style: AppTypography.body(context.colors.ink),
                   ),
                   if (subtitle.isNotEmpty) ...[
                     const SizedBox(height: 2),
@@ -67,13 +67,13 @@ class SurahListTile extends StatelessWidget {
               Text(
                 surah.nameArabic!,
                 textDirection: TextDirection.rtl,
-                style: AppTypography.arabic(context.colors.ink).copyWith(fontSize: 18, height: 1.2),
+                style: AppTypography.arabic(context.colors.ink).copyWith(fontSize: AppTypography.arabicSmallSize, height: 1.2),
               ),
             ],
             const SizedBox(width: 12),
             Text(
               '${surah.ayahCount}',
-              style: TextStyle(color: context.colors.sage),
+              style: AppTypography.body(context.colors.sage),
             ),
           ],
         ),

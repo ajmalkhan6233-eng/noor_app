@@ -65,7 +65,7 @@ class SupportDeveloperScreen extends StatelessWidget {
       backgroundColor: context.colors.paper,
       appBar: AppBar(
         backgroundColor: context.colors.paper,
-        title: Text('Support noor', style: TextStyle(color: context.colors.ink)),
+        title: Text('Support noor', style: AppTypography.body(context.colors.ink)),
         iconTheme: IconThemeData(color: context.colors.gold),
       ),
       body: SingleChildScrollView(
@@ -81,7 +81,7 @@ class SupportDeveloperScreen extends StatelessWidget {
               "payment details with you. This goes directly to the "
               "developer as an individual — it isn't a registered charity "
               "or organisation.",
-              style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: 14),
+              style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: AppTypography.bodySize),
             ),
             const SizedBox(height: 24),
             SupportButton(

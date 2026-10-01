@@ -11,6 +11,7 @@ import '../../../core/presentation/motion/staggered_fade_in.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import 'widgets/licence_package_tile.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_typography.dart';
 
 class _PackageLicence {
   const _PackageLicence({required this.name, required this.text});
@@ -63,7 +64,7 @@ class _LicencesScreenState extends State<LicencesScreen> {
             return Center(
               child: Text(
                 l10n.noLicencesMessage,
-                style: TextStyle(color: context.colors.sage),
+                style: AppTypography.body(context.colors.sage),
               ),
             );
           }

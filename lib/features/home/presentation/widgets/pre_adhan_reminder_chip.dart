@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../settings/logic/settings_cubit/settings_cubit.dart';
 import 'home_quick_toggle_pill.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class PreAdhanReminderChip extends StatelessWidget {
   const PreAdhanReminderChip({super.key, required this.on, required this.minutes});
@@ -40,11 +41,11 @@ class PreAdhanReminderChip extends StatelessWidget {
         for (final m in _minuteOptions)
           PopupMenuItem(
             value: m,
-            child: Text('$m minutes before', style: TextStyle(color: context.colors.ink)),
+            child: Text('$m minutes before', style: AppTypography.body(context.colors.ink)),
           ),
         PopupMenuItem(
           value: -1,
-          child: Text('Off', style: TextStyle(color: context.colors.sage)),
+          child: Text('Off', style: AppTypography.body(context.colors.sage)),
         ),
       ],
       child: Semantics(
@@ -62,7 +63,7 @@ class PreAdhanReminderChip extends StatelessWidget {
                   on: on,
                 ),
                 const SizedBox(width: 6),
-                Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: 12)),
+                Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: AppTypography.captionSize)),
                 Icon(Icons.arrow_drop_down, size: 16, color: context.colors.sage),
               ],
             ),

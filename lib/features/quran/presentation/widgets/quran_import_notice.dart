@@ -10,6 +10,7 @@ import '../../../../core/presentation/widgets/empty_state.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/quran_import_status.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class QuranImportNotice extends StatelessWidget {
   const QuranImportNotice({super.key, required this.status});
@@ -54,7 +55,7 @@ class _ImportingProgress extends StatelessWidget {
             children: [
               Text(
                 l10n.importingQuranLabel,
-                style: TextStyle(color: context.colors.sage),
+                style: AppTypography.body(context.colors.sage),
               ),
               const SizedBox(height: 16),
               ClipRRect(
@@ -67,7 +68,7 @@ class _ImportingProgress extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text('$percent%', style: TextStyle(color: context.colors.sage)),
+              Text('$percent%', style: AppTypography.body(context.colors.sage)),
             ],
           ),
         ),

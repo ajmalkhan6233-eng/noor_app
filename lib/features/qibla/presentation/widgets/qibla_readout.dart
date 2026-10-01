@@ -51,7 +51,7 @@ class QiblaReadout extends StatelessWidget {
             child: Text(
               l10n.qiblaAlignedMessage,
               textAlign: TextAlign.center,
-              style: TextStyle(color: colors.accentSecondary, fontWeight: FontWeight.w600),
+              style: AppTypography.bodyStrong(colors.accentSecondary),
             ),
           ),
         ],
@@ -61,7 +61,7 @@ class QiblaReadout extends StatelessWidget {
           _notice(context, l10n.qiblaApproxLocationMessage),
           TextButton(
             onPressed: onAllowLocation,
-            child: Text(l10n.qiblaAllowLocation, style: TextStyle(color: colors.gold)),
+            child: Text(l10n.qiblaAllowLocation, style: AppTypography.body(colors.gold)),
           ),
         ],
         if (state.hasHeading && !state.needsCalibration)

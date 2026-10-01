@@ -47,6 +47,10 @@ ThemeData buildAppTheme(AppColorTokens tokens) {
     appBarTheme: AppBarTheme(
       backgroundColor: tokens.paper,
       foregroundColor: tokens.ink,
+      titleTextStyle: AppTypography.title(
+        tokens.ink,
+        family: tokens.headingFontFamily,
+      ),
       elevation: 0,
       surfaceTintColor: Colors.transparent,
     ),

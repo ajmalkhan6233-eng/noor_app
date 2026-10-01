@@ -16,7 +16,7 @@ class FontCredit extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(family, style: TextStyle(color: context.colors.ink)),
+        Text(family, style: AppTypography.body(context.colors.ink)),
         Text(role, style: AppTypography.caption(context.colors.sage)),
       ],
     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/utils/semantics_helpers.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// One tappable row card on the About screen (privacy policy, help,
 /// licences) — the same shape everywhere.
@@ -36,7 +37,7 @@ class AboutLinkCard extends StatelessWidget {
             children: [
               ExcludeSemantics(child: Icon(icon, color: context.colors.gold)),
               const SizedBox(width: 12),
-              Expanded(child: Text(label, style: TextStyle(color: context.colors.ink))),
+              Expanded(child: Text(label, style: AppTypography.body(context.colors.ink))),
             ],
           ),
         ),

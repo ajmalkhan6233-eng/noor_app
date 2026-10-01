@@ -14,6 +14,7 @@ import '../../../../core/utils/semantics_helpers.dart';
 import '../../../quran/data/surah_audio_download_service.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class DownloadedAudioSection extends StatefulWidget {
   const DownloadedAudioSection({
@@ -74,7 +75,7 @@ class _DownloadedAudioSectionState extends State<DownloadedAudioSection> {
                         _count!,
                         _formatSize(_bytesUsed ?? 0),
                       ),
-                style: TextStyle(color: context.colors.sage),
+                style: AppTypography.body(context.colors.sage),
               ),
               const SizedBox(height: 8),
               if (_count != null && _count! > 0)
@@ -95,7 +96,7 @@ class _DownloadedAudioSectionState extends State<DownloadedAudioSection> {
                           ? AppLocalizations.of(context)!.downloadedAudioDeleting
                           : AppLocalizations.of(context)!.downloadedAudioDelete,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: context.colors.gold),
+                      style: AppTypography.body(context.colors.gold),
                     ),
                   ),
                 ),

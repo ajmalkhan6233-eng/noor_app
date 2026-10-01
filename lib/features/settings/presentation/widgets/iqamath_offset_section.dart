@@ -11,6 +11,7 @@ import '../../../prayer_times/data/iqamath_offsets.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// Five number fields controlling how many minutes after each adhan
 /// the congregation (iqamath) starts.
@@ -66,7 +67,7 @@ class IqamathOffsetSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: context.colors.ink)),
+          Text(label, style: AppTypography.body(context.colors.ink)),
           Row(
             children: [
               SemanticButton(
@@ -79,7 +80,7 @@ class IqamathOffsetSection extends StatelessWidget {
                 child: Text(
                   '$minutes min',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: context.colors.sage),
+                  style: AppTypography.body(context.colors.sage),
                 ),
               ),
               SemanticButton(

@@ -60,7 +60,7 @@ class SendFeedbackScreen extends StatelessWidget {
       backgroundColor: context.colors.paper,
       appBar: AppBar(
         backgroundColor: context.colors.paper,
-        title: Text('Send Feedback', style: TextStyle(color: context.colors.ink)),
+        title: Text('Send Feedback', style: AppTypography.body(context.colors.ink)),
         iconTheme: IconThemeData(color: context.colors.gold),
       ),
       body: SingleChildScrollView(
@@ -72,7 +72,7 @@ class SendFeedbackScreen extends StatelessWidget {
               "Welcome — feel free to message and discuss any thoughts or "
               "feedback about noor, big or small. It goes straight to the "
               "developer, no ticket system, no account needed.",
-              style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: 14),
+              style: AppTypography.caption(context.colors.sage).copyWith(color: context.colors.ink, fontSize: AppTypography.bodySize),
             ),
             const SizedBox(height: 24),
             _FeedbackButton(

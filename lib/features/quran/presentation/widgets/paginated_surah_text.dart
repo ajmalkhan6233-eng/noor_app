@@ -50,8 +50,8 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
   TextStyle _textStyle(BuildContext context) => TextStyle(
         fontFamily: AppTypography.arabicFamily,
         color: context.colors.ink,
-        fontSize: 22 * widget.fontScale,
-        height: 2.1,
+        fontSize: AppTypography.quranSize * widget.fontScale,
+        height: AppTypography.quranHeight,
       );
 
   @override

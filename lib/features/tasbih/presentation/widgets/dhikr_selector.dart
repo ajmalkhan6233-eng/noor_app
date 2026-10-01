@@ -18,6 +18,7 @@ import '../../data/dhikr_option.dart';
 import '../../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../../logic/tasbih_cubit/tasbih_state.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class DhikrSelector extends StatelessWidget {
   const DhikrSelector({super.key});
@@ -82,7 +83,7 @@ class _DhikrChip extends StatelessWidget {
           label,
           style: TextStyle(
             color: selected ? context.colors.gold : context.colors.ink,
-            fontSize: 13,
+            fontSize: AppTypography.captionSize,
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

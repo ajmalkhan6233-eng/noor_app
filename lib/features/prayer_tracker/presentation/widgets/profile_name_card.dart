@@ -86,11 +86,11 @@ class _ProfileNameCardState extends State<ProfileNameCard> {
               TextField(
                 controller: _nameController,
                 focusNode: _nameFocusNode,
-                style: TextStyle(color: context.colors.ink),
+                style: AppTypography.body(context.colors.ink),
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: 'Add a name',
-                  hintStyle: TextStyle(color: context.colors.sage),
+                  hintStyle: AppTypography.body(context.colors.sage),
                   border: InputBorder.none,
                   suffixIcon: IconButton(
                     icon: Icon(Icons.check, color: context.colors.gold),

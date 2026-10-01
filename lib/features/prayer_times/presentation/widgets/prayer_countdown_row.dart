@@ -41,26 +41,26 @@ class PrayerCountdownRow extends StatelessWidget {
         color: color,
         fontFeatures: const [FontFeature.tabularFigures()],
         letterSpacing: 1,
-        fontSize: 40,
+        fontSize: AppTypography.displaySize,
         fontWeight: FontWeight.w700,
       );
 
   static TextStyle _labelStyle(Color color) => TextStyle(
         color: color,
-        fontSize: 13,
+        fontSize: AppTypography.captionSize,
         letterSpacing: 0.5,
       );
 
   static TextStyle clockChipLabelStyle(Color color) => TextStyle(
         color: color,
-        fontSize: 11,
+        fontSize: AppTypography.captionSize,
         letterSpacing: 0.8,
         fontWeight: FontWeight.w600,
       );
 
   static TextStyle clockChipTimeStyle(Color color) => TextStyle(
         color: color,
-        fontSize: 15,
+        fontSize: AppTypography.bodySize,
         fontWeight: FontWeight.w700,
         fontFeatures: const [FontFeature.tabularFigures()],
       );
@@ -93,19 +93,23 @@ class PrayerCountdownRow extends StatelessWidget {
     }
     final prefix = countdown.substring(0, countdown.length - 2);
     final seconds = countdown.substring(countdown.length - 2);
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(prefix, style: style),
-        AnimatedSwitcher(
-          duration: Motion.effective(context, Motion.short),
-          child: Text(
-            seconds,
-            key: ValueKey(seconds),
-            style: style,
+    // FittedBox: the 44px countdown shrinks to fit at large text sizes.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(prefix, style: style),
+          AnimatedSwitcher(
+            duration: Motion.effective(context, Motion.short),
+            child: Text(
+              seconds,
+              key: ValueKey(seconds),
+              style: style,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -117,7 +117,7 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
                     // DefaultTextStyle. Multiplying that same base by
                     // fontScale keeps the fontScale==1.0 appearance
                     // identical to before this change.
-                    fontSize: 14 * fontScale,
+                    fontSize: AppTypography.arabicSmallSize * fontScale,
                   ),
                 ),
                 if (ayah.translation != null && ayah.translation!.isNotEmpty) ...[
@@ -125,7 +125,7 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
                   Text(
                     ayah.translation!,
                     style: AppTypography.caption(context.colors.sage).copyWith(
-                      fontSize: (AppTypography.caption(context.colors.sage).fontSize ?? 12) * fontScale,
+                      fontSize: AppTypography.captionSize * fontScale,
                     ),
                   ),
                 ],
@@ -143,7 +143,7 @@ class _AyahOfDayCardState extends State<AyahOfDayCard> {
     final name = surah?.nameEnglish ?? surah?.nameTranslit ?? 'Surah ${ayah.surahId}';
     return Text(
       '$name ${ayah.surahId}:${ayah.ayahNumber}',
-      style: TextStyle(color: context.colors.sage, fontSize: 12, letterSpacing: 0.4),
+      style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize, letterSpacing: 0.4),
     );
   }
 }

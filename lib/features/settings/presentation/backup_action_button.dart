@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/utils/semantics_helpers.dart';
 import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/constants/corner_radius.dart';
+import '../../../core/constants/app_typography.dart';
 
 class ActionButton extends StatelessWidget {
   const ActionButton({super.key, 
@@ -43,7 +44,7 @@ class ActionButton extends StatelessWidget {
               else
                 Icon(icon, color: context.colors.paper, size: 18),
               const SizedBox(width: 8),
-              Text(label, style: TextStyle(color: context.colors.paper, fontWeight: FontWeight.w600)),
+              Text(label, style: AppTypography.bodyStrong(context.colors.paper)),
             ],
           ),
         ),

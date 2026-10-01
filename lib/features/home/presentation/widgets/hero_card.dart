@@ -37,7 +37,7 @@ class HeroCard extends StatelessWidget {
           const Positioned(
             top: 0,
             right: 0,
-            child: Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: 26)),
+            child: Opacity(opacity: 0.55, child: AllahCalligraphy(fontSize: AppTypography.brandSize)),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 40),
@@ -63,7 +63,7 @@ class HeroCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         hijri.formatted,
-                        style: AppTypography.caption(context.colors.sage).copyWith(fontSize: 11),
+                        style: AppTypography.caption(context.colors.sage),
                       ),
                     ],
                   ),

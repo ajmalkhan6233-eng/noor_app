@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import '../../constants/app_color_tokens.dart';
 import '../motion/motion.dart';
 import '../../constants/corner_radius.dart';
+import '../../constants/app_typography.dart';
 
 class AppChip extends StatefulWidget {
   const AppChip({
@@ -71,7 +72,7 @@ class _AppChipState extends State<AppChip> {
               widget.label,
               style: TextStyle(
                 color: widget.selected ? context.colors.gold : context.colors.sage,
-                fontSize: 13,
+                fontSize: AppTypography.captionSize,
               ),
             ),
           ),

@@ -12,6 +12,7 @@ import 'quran_search_bar.dart';
 import 'quran_search_result_tile.dart';
 import 'surah_list_tile.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class SurahIndex extends StatefulWidget {
   const SurahIndex({super.key, required this.state});
@@ -76,7 +77,7 @@ class _SurahIndexState extends State<SurahIndex> {
                   icon: Icon(Icons.menu_book_outlined, color: context.colors.gold, size: 18),
                   label: Text(
                     'Read the full Quran',
-                    style: TextStyle(color: context.colors.gold),
+                    style: AppTypography.body(context.colors.gold),
                   ),
                 ),
               ),
@@ -92,7 +93,7 @@ class _SurahIndexState extends State<SurahIndex> {
                     child: Text(
                       'Continue: Surah ${state.lastRead!.surahId}, '
                       'Ayah ${state.lastRead!.ayahNumber}',
-                      style: TextStyle(color: context.colors.gold),
+                      style: AppTypography.body(context.colors.gold),
                     ),
                   ),
                 ),
@@ -114,7 +115,7 @@ class _SurahIndexState extends State<SurahIndex> {
                   ? Center(
                       child: Text(
                         'No results found.',
-                        style: TextStyle(color: context.colors.sage),
+                        style: AppTypography.body(context.colors.sage),
                       ),
                     )
                   : ListView.builder(

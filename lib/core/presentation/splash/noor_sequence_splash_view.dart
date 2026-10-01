@@ -112,7 +112,7 @@ class _NoorSequenceSplashViewState extends State<NoorSequenceSplashView>
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: AppTypography.arabicFamily,
-                    fontSize: 30,
+                    fontSize: AppTypography.brandSize,
                     height: 1.6,
                     color: colors.gold,
                     shadows: _glow(colors.gold, 22),
@@ -127,7 +127,7 @@ class _NoorSequenceSplashViewState extends State<NoorSequenceSplashView>
                   style: TextStyle(
                     fontFamily: AppTypography.displayFamily,
                     fontWeight: FontWeight.w500,
-                    fontSize: 28,
+                    fontSize: AppTypography.titleSize,
                     color: colors.ink,
                     shadows: _glow(colors.gold, 26),
                   ),

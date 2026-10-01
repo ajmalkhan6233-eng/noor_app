@@ -7,6 +7,7 @@ import '../../../../core/constants/app_color_tokens.dart';
 import '../../../prayer_times/data/prayer_high_latitude_rule.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// How Fajr/Isha are bounded at high latitudes.
 class HighLatitudeRuleSection extends StatelessWidget {
@@ -24,7 +25,7 @@ class HighLatitudeRuleSection extends StatelessWidget {
             isExpanded: true,
             value: rule,
             dropdownColor: context.colors.card,
-            style: TextStyle(color: context.colors.ink),
+            style: AppTypography.body(context.colors.ink),
             items: [
               for (final option in PrayerHighLatitudeRule.values)
                 DropdownMenuItem(value: option, child: Text(option.label)),

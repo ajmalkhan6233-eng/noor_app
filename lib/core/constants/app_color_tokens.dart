@@ -28,6 +28,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     required this.brightness,
     this.cornerRadius = 20,
     this.flatSurfaces = false,
+    this.headingFontFamily,
   });
 
   /// App background.
@@ -70,6 +71,11 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
 
   /// True for themes with no shadows/gradients on surfaces (Mushaf).
   final bool flatSurfaces;
+
+  /// Typeface for screen titles and section headings only (Mushaf:
+  /// Cormorant Garamond). Null means the normal UI typeface. Sizes never
+  /// change with the theme.
+  final String? headingFontFamily;
 
   /// Cosmic — locked dark obsidian/gold/cyan palette. Values copied
   /// verbatim from the retired static `AppColors` constants; never
@@ -133,6 +139,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     Brightness? brightness,
     double? cornerRadius,
     bool? flatSurfaces,
+    String? headingFontFamily,
   }) {
     return AppColorTokens(
       paper: paper ?? this.paper,
@@ -147,6 +154,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
       brightness: brightness ?? this.brightness,
       cornerRadius: cornerRadius ?? this.cornerRadius,
       flatSurfaces: flatSurfaces ?? this.flatSurfaces,
+      headingFontFamily: headingFontFamily ?? this.headingFontFamily,
     );
   }
 

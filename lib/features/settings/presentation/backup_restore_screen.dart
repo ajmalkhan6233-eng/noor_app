@@ -18,6 +18,7 @@ import '../../../core/backup/backup_repository.dart';
 import 'widgets/backup_passphrase_dialog.dart';
 import '../../../core/constants/app_color_tokens.dart';
 import 'backup_action_button.dart';
+import '../../../core/constants/app_typography.dart';
 
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
@@ -82,7 +83,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
       backgroundColor: context.colors.paper,
       appBar: AppBar(
         backgroundColor: context.colors.paper,
-        title: Text('Backup & Restore', style: TextStyle(color: context.colors.ink)),
+        title: Text('Backup & Restore', style: AppTypography.body(context.colors.ink)),
         iconTheme: IconThemeData(color: context.colors.gold),
       ),
       body: Padding(

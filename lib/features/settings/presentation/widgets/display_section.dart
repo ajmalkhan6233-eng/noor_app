@@ -12,6 +12,7 @@ import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/corner_radius.dart';
 import '../../../../core/haptics/haptic_service.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// Theme, Quran text size (Arabic + translation), and Hijri calendar offset.
 class DisplaySection extends StatelessWidget {
@@ -48,7 +49,7 @@ class DisplaySection extends StatelessWidget {
               children: [
                 Text(
                   l10n.settingsHijriOffset,
-                  style: TextStyle(color: context.colors.ink),
+                  style: AppTypography.body(context.colors.ink),
                 ),
                 Row(
                   children: [
@@ -67,7 +68,7 @@ class DisplaySection extends StatelessWidget {
                       child: Text(
                         '${settings.hijriOffsetDays}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: context.colors.sage),
+                        style: AppTypography.body(context.colors.sage),
                       ),
                     ),
                     SemanticButton(
@@ -134,7 +135,7 @@ class DisplaySection extends StatelessWidget {
                     style: TextStyle(
                       color: mode == selected ? context.colors.paper : context.colors.ink,
                       fontWeight: mode == selected ? FontWeight.w700 : FontWeight.w400,
-                      fontSize: 13,
+                      fontSize: AppTypography.captionSize,
                     ),
                   ),
                 ),

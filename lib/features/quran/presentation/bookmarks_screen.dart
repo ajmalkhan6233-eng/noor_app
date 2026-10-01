@@ -17,6 +17,7 @@ import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
 import 'surah_reader_screen.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_typography.dart';
 
 class BookmarksScreen extends StatelessWidget {
   const BookmarksScreen({super.key});
@@ -82,7 +83,7 @@ class BookmarksScreen extends StatelessWidget {
               Icon(Icons.bookmark, color: context.colors.gold, size: 20),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(label, style: TextStyle(color: context.colors.ink)),
+                child: Text(label, style: AppTypography.body(context.colors.ink)),
               ),
             ],
           ),

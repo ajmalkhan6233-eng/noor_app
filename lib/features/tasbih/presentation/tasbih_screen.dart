@@ -10,6 +10,7 @@ import '../logic/tasbih_cubit/tasbih_cubit.dart';
 import '../logic/tasbih_cubit/tasbih_state.dart';
 import 'widgets/dhikr_selector.dart';
 import 'widgets/draggable_counter_group.dart';
+import '../../../core/constants/app_typography.dart';
 
 /// Screen-free-friendly tasbih (dhikr counter) screen.
 ///
@@ -52,7 +53,7 @@ class _TasbihView extends StatelessWidget {
                 children: [
                   Icon(Icons.vibration, size: 18, color: context.colors.sage),
                   const SizedBox(width: 8),
-                  Text(l10n.tasbihVibrationLabel, style: TextStyle(color: context.colors.sage, fontSize: 13)),
+                  Text(l10n.tasbihVibrationLabel, style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize)),
                   Switch(
                     value: state.hapticsEnabled,
                     onChanged: (_) => context.read<TasbihCubit>().toggleHaptics(),
@@ -100,7 +101,7 @@ class _TasbihView extends StatelessWidget {
                             l10n.resetLabel,
                             style: TextStyle(
                               color: context.colors.gold,
-                              fontSize: 16,
+                              fontSize: AppTypography.bodySize,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

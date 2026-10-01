@@ -20,6 +20,7 @@ import '../../features/settings/data/app_locale.dart';
 import '../../features/settings/data/settings_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
 import 'welcome_widgets.dart';
+import '../constants/app_typography.dart';
 
 class LocationOnboardingScreen extends StatefulWidget {
   const LocationOnboardingScreen({
@@ -76,7 +77,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.welcomeLanguageLabel, style: TextStyle(color: colors.sage)),
+                    Text(l10n.welcomeLanguageLabel, style: AppTypography.body(colors.sage)),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -100,7 +101,7 @@ class _LocationOnboardingScreenState extends State<LocationOnboardingScreen> {
                       header: true,
                       child: Text(
                         l10n.welcomeTitle,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: colors.ink),
+                        style: AppTypography.title(colors.ink, family: colors.headingFontFamily),
                       ),
                     ),
                     const SizedBox(height: 8),

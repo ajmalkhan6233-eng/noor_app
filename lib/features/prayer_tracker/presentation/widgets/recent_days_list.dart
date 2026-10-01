@@ -47,7 +47,7 @@ class RecentDaysList extends StatelessWidget {
                   Expanded(
                     child: Text(
                       DateFormat.MMMEd().format(day.date),
-                      style: TextStyle(color: context.colors.ink),
+                      style: AppTypography.body(context.colors.ink),
                     ),
                   ),
                   Text(

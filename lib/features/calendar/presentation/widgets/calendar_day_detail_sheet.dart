@@ -62,7 +62,7 @@ class _CalendarDayDetailContent extends StatelessWidget {
         children: [
           Text(
             '$monthName ${date.day}, ${date.year}',
-            style: TextStyle(color: context.colors.ink, fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(color: context.colors.ink, fontSize: AppTypography.timeLargeSize, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
           Text(hijri.formatted, style: AppTypography.caption(context.colors.sage)),
@@ -110,7 +110,7 @@ class _CalendarDayDetailContent extends StatelessWidget {
           TextButton.icon(
             onPressed: () => showAddReminderDialog(context, cubit),
             icon: Icon(Icons.add, size: 18, color: context.colors.gold),
-            label: Text(l10n.calendarReminderAddButton, style: TextStyle(color: context.colors.gold)),
+            label: Text(l10n.calendarReminderAddButton, style: AppTypography.body(context.colors.gold)),
           ),
         ],
       ),
@@ -128,7 +128,7 @@ class _CalendarDayDetailContent extends StatelessWidget {
             decoration: BoxDecoration(shape: BoxShape.circle, color: dotColor),
           ),
           const SizedBox(width: 10),
-          Text(label, style: TextStyle(color: context.colors.ink)),
+          Text(label, style: AppTypography.body(context.colors.ink)),
         ],
       ),
     );

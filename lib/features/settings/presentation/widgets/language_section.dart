@@ -12,6 +12,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/app_locale.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// Dropdown to switch the app's interface language — applied
 /// immediately via [AppLocaleController], and persisted through
@@ -32,7 +33,7 @@ class LanguageSection extends StatelessWidget {
             isExpanded: true,
             value: selected,
             dropdownColor: context.colors.card,
-            style: TextStyle(color: context.colors.ink),
+            style: AppTypography.body(context.colors.ink),
             items: [
               for (final option in AppLocaleOption.values)
                 DropdownMenuItem(

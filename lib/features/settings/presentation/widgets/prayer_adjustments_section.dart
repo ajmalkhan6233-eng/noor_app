@@ -8,6 +8,7 @@ import '../../../prayer_times/data/prayer_adjustments.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// Per-prayer manual minute offsets, applied on top of the chosen
 /// calculation method.
@@ -54,7 +55,7 @@ class PrayerAdjustmentsSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: context.colors.ink)),
+          Text(label, style: AppTypography.body(context.colors.ink)),
           Row(
             children: [
               SemanticButton(
@@ -67,7 +68,7 @@ class PrayerAdjustmentsSection extends StatelessWidget {
                 child: Text(
                   '$minutes min',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: context.colors.sage),
+                  style: AppTypography.body(context.colors.sage),
                 ),
               ),
               SemanticButton(

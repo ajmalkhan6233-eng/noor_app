@@ -13,6 +13,7 @@ import '../../../../../core/presentation/icons/noor_icon_type.dart';
 import '../../../../../core/presentation/motion/motion.dart';
 import '../../../../../core/utils/semantics_helpers.dart';
 import '../../../../../core/constants/app_color_tokens.dart';
+import '../../../../../core/constants/app_typography.dart';
 
 class NavTabItem extends StatelessWidget {
   const NavTabItem({
@@ -59,7 +60,7 @@ class NavTabItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: AppTypography.captionSize,
                   fontWeight: active ? FontWeight.w700 : FontWeight.w400,
                   color: active ? context.colors.gold : context.colors.sage,
                 ),

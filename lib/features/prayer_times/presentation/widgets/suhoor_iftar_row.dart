@@ -61,7 +61,7 @@ class SuhoorIftarRow extends StatelessWidget {
               color: context.colors.ink,
               fontWeight: FontWeight.w700,
               fontFeatures: const [FontFeature.tabularFigures()],
-              fontSize: 18,
+              fontSize: AppTypography.timeLargeSize,
             ),
           ),
         ],

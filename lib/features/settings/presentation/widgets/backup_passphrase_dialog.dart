@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/app_typography.dart';
 
 
 /// Returns the entered passphrase, or `null` if cancelled.
@@ -49,7 +50,7 @@ class _PassphraseDialogState extends State<_PassphraseDialog> {
       backgroundColor: context.colors.card,
       title: Text(
         widget.confirmationRequired ? 'Choose a backup passphrase' : 'Enter the backup passphrase',
-        style: TextStyle(color: context.colors.ink),
+        style: AppTypography.body(context.colors.ink),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -59,14 +60,14 @@ class _PassphraseDialogState extends State<_PassphraseDialog> {
               "You'll need this to restore the backup later — noor doesn't "
               "store it anywhere, so if it's lost, the backup can't be "
               "recovered.",
-              style: TextStyle(color: context.colors.sage, fontSize: 13),
+              style: TextStyle(color: context.colors.sage, fontSize: AppTypography.captionSize),
             ),
           const SizedBox(height: 12),
           TextField(
             controller: _passphrase,
             obscureText: true,
             autofocus: true,
-            style: TextStyle(color: context.colors.ink),
+            style: AppTypography.body(context.colors.ink),
             decoration: const InputDecoration(labelText: 'Passphrase'),
           ),
           if (widget.confirmationRequired) ...[
@@ -74,13 +75,13 @@ class _PassphraseDialogState extends State<_PassphraseDialog> {
             TextField(
               controller: _confirm,
               obscureText: true,
-              style: TextStyle(color: context.colors.ink),
+              style: AppTypography.body(context.colors.ink),
               decoration: const InputDecoration(labelText: 'Confirm passphrase'),
             ),
           ],
           if (_error != null) ...[
             const SizedBox(height: 8),
-            Text(_error!, style: const TextStyle(color: Colors.redAccent, fontSize: 12)),
+            Text(_error!, style: const TextStyle(color: Colors.redAccent, fontSize: AppTypography.captionSize)),
           ],
         ],
       ),

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/corner_radius.dart';
+import '../../../../core/constants/app_typography.dart';
 
 /// A simple on/off glass-pill toggle chip — icon + label, no dropdown
 /// (see PreAdhanReminderChip for the one with a popup menu).
@@ -43,7 +44,7 @@ class QuickToggleChip extends StatelessWidget {
           children: [
             GlowIcon(icon, on: on),
             const SizedBox(width: 6),
-            Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: 12)),
+            Text(label, style: TextStyle(color: on ? context.colors.gold : context.colors.sage, fontSize: AppTypography.captionSize)),
           ],
         ),
       ),

@@ -17,6 +17,7 @@ import 'widgets/azkar_category_selector.dart';
 import 'widgets/azkar_header.dart';
 import 'widgets/azkar_search_results.dart';
 import '../../../core/constants/app_color_tokens.dart';
+import '../../../core/constants/app_typography.dart';
 
 /// Azkar: a search box, then a list of category rows (morning,
 /// evening, after prayer, sleep, travel) — tap one to open its dhikr
@@ -97,14 +98,14 @@ class _AzkarScreenState extends State<AzkarScreen> {
                   AzkarHeader(title: AppLocalizations.of(context)!.azkarScreenTitle),
                   AppCard(
                     child: TextField(
-                      style: TextStyle(color: context.colors.ink),
+                      style: AppTypography.body(context.colors.ink),
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: context.colors.sage),
                         hintText: 'Search duas, e.g. "sleep"',
                         hintMaxLines: 1,
                         hintStyle: TextStyle(
                           color: context.colors.ink.withValues(alpha: 0.6),
-                          fontSize: 13,
+                          fontSize: AppTypography.captionSize,
                           fontWeight: FontWeight.w500,
                         ),
                         border: InputBorder.none,

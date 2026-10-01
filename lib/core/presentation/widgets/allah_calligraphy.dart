@@ -13,7 +13,7 @@ import '../../constants/app_color_tokens.dart';
 import '../../constants/app_typography.dart';
 
 class AllahCalligraphy extends StatelessWidget {
-  const AllahCalligraphy({super.key, this.fontSize = 32});
+  const AllahCalligraphy({super.key, this.fontSize = AppTypography.brandSize});
 
   final double fontSize;
 

@@ -92,7 +92,7 @@ class MonthlyTimetableRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_prayerAbbreviations[name] ?? name, style: AppTypography.caption(context.colors.sage)),
-                Text(formatClock(time), style: AppTypography.time(context.colors.ink).copyWith(fontSize: 12)),
+                Text(formatClock(time), style: AppTypography.time(context.colors.ink).copyWith(fontSize: AppTypography.captionSize)),
               ],
             ),
           ),

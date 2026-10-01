@@ -39,7 +39,7 @@ class QuranSearchResultTile extends StatelessWidget {
             Text(
               ayah.arabicText,
               textDirection: TextDirection.rtl,
-              style: AppTypography.arabic(context.colors.ink),
+              style: AppTypography.arabic(context.colors.ink, size: AppTypography.arabicSmallSize),
             ),
             const SizedBox(height: 4),
             Text(

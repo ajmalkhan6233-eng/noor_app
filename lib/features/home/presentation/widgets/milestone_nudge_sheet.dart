@@ -12,6 +12,7 @@ import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/support/support_prompt_service.dart';
 import '../../../settings/presentation/support_developer_screen.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/constants/app_typography.dart';
 
 Future<void> maybeShowMilestoneNudge({
   required BuildContext context,
@@ -39,7 +40,7 @@ Future<void> maybeShowMilestoneNudge({
           Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(color: sheetContext.colors.ink),
+            style: AppTypography.body(sheetContext.colors.ink),
           ),
           const SizedBox(height: 16),
           TextButton(
@@ -49,11 +50,11 @@ Future<void> maybeShowMilestoneNudge({
                 MaterialPageRoute<void>(builder: (_) => const SupportDeveloperScreen()),
               );
             },
-            child: Text(AppLocalizations.of(sheetContext)!.nudgeSupportNoor, style: TextStyle(color: sheetContext.colors.gold)),
+            child: Text(AppLocalizations.of(sheetContext)!.nudgeSupportNoor, style: AppTypography.body(sheetContext.colors.gold)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(sheetContext),
-            child: Text(AppLocalizations.of(sheetContext)!.commonNotNow, style: TextStyle(color: sheetContext.colors.sage)),
+            child: Text(AppLocalizations.of(sheetContext)!.commonNotNow, style: AppTypography.body(sheetContext.colors.sage)),
           ),
         ],
       ),
