@@ -1,5 +1,9 @@
 # noor — Claude Code Project Directive
 
+> **Octopus memory:** at session start read `AI_MEMORY/HANDOFF.md` and `AI_MEMORY/OPEN_ITEMS.md`.
+> Universal rules come from the global `~/.claude/CLAUDE.md` (if not loaded, tell Aj).
+> No code changes until Aj says GO. Stricter rule wins if this file conflicts.
+
 Full day-by-day session diary (everything before 2026-09-05) has moved
 to [CLAUDE_HISTORY.md](CLAUDE_HISTORY.md) — nothing was deleted, just
 moved out of this file so it stays quick to read. This file is the
