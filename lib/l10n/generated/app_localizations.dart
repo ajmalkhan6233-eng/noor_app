@@ -2494,6 +2494,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not yet due today'**
   String get prayerNotYetDueHint;
+
+  /// No description provided for @qiblaFigure8Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Move your phone in a figure 8 to calibrate the compass.'**
+  String get qiblaFigure8Hint;
+
+  /// No description provided for @qiblaStaticArrowMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No compass sensor was found on this phone. The arrow shows the Qibla direction measured from north: face north, then turn toward the arrow.'**
+  String get qiblaStaticArrowMessage;
+
+  /// No description provided for @qiblaApproxLocationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Using an approximate location. Allow location for an exact direction.'**
+  String get qiblaApproxLocationMessage;
+
+  /// No description provided for @qiblaAllowLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location'**
+  String get qiblaAllowLocation;
+
+  /// No description provided for @qiblaDistanceToKaaba.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km to the Kaaba'**
+  String qiblaDistanceToKaaba(int km);
+
+  /// No description provided for @qiblaDegreesFromNorth.
+  ///
+  /// In en, this message translates to:
+  /// **'{degrees}° from north'**
+  String qiblaDegreesFromNorth(int degrees);
+
+  /// No description provided for @qiblaNeedleSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla arrow pointing {degrees} degrees from the top of the phone'**
+  String qiblaNeedleSemantics(int degrees);
 }
 
 class _AppLocalizationsDelegate

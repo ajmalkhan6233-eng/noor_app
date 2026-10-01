@@ -474,5 +474,15 @@
   "helpA9": "Open Settings, then Send Feedback. Describe what happened and what you expected.",
   "aboutVersion": "Version {version}",
   "@aboutVersion": {"placeholders": {"version": {"type": "String"}}},
-  "prayerNotYetDueHint": "Not yet due today"
+  "prayerNotYetDueHint": "Not yet due today",
+  "qiblaFigure8Hint": "Move your phone in a figure 8 to calibrate the compass.",
+  "qiblaStaticArrowMessage": "No compass sensor was found on this phone. The arrow shows the Qibla direction measured from north: face north, then turn toward the arrow.",
+  "qiblaApproxLocationMessage": "Using an approximate location. Allow location for an exact direction.",
+  "qiblaAllowLocation": "Allow location",
+  "qiblaDistanceToKaaba": "{km} km to the Kaaba",
+  "@qiblaDistanceToKaaba": {"placeholders": {"km": {"type": "int"}}},
+  "qiblaDegreesFromNorth": "{degrees}° from north",
+  "@qiblaDegreesFromNorth": {"placeholders": {"degrees": {"type": "int"}}},
+  "qiblaNeedleSemantics": "Qibla arrow pointing {degrees} degrees from the top of the phone",
+  "@qiblaNeedleSemantics": {"placeholders": {"degrees": {"type": "int"}}}
 }

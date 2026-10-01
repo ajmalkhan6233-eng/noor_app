@@ -1396,4 +1396,34 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get prayerNotYetDueHint => 'Not yet due today';
+
+  @override
+  String get qiblaFigure8Hint =>
+      'Move your phone in a figure 8 to calibrate the compass.';
+
+  @override
+  String get qiblaStaticArrowMessage =>
+      'No compass sensor was found on this phone. The arrow shows the Qibla direction measured from north: face north, then turn toward the arrow.';
+
+  @override
+  String get qiblaApproxLocationMessage =>
+      'Using an approximate location. Allow location for an exact direction.';
+
+  @override
+  String get qiblaAllowLocation => 'Allow location';
+
+  @override
+  String qiblaDistanceToKaaba(int km) {
+    return '$km km to the Kaaba';
+  }
+
+  @override
+  String qiblaDegreesFromNorth(int degrees) {
+    return '$degrees° from north';
+  }
+
+  @override
+  String qiblaNeedleSemantics(int degrees) {
+    return 'Qibla arrow pointing $degrees degrees from the top of the phone';
+  }
 }

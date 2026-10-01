@@ -16,7 +16,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../calendar/presentation/calendar_screen.dart';
 import '../../prayer_times/logic/adhan_preview_cubit.dart';
 import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
-import '../../qibla/presentation/qibla_coming_soon_screen.dart';
+import '../../qibla/presentation/qibla_compass_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../../settings/presentation/support_developer_screen.dart';
@@ -35,22 +35,11 @@ class MoreScreen extends StatelessWidget {
     final prayerCubit = context.read<PrayerCubit>();
     final adhanPreviewCubit = context.read<AdhanPreviewCubit>();
     final tiles = <MoreTile>[
-      // Routed to the "coming soon" placeholder for this release
-      // (2026-09-04, direct request) — the compass dial has a real,
-      // unresolved GPU/compositor rendering glitch (see CLAUDE.md).
-      // QiblaScreen and all its sensor/rendering code are untouched;
-      // swap the builder back to `const QiblaScreen()` once it's
-      // actually fixed.
       MoreTile(
         icon: NoorIconType.qibla,
         color: context.colors.accentSecondary,
         label: l10n.qiblaScreenTitle,
-        // BlocProvider.value, not const QiblaComingSoonScreen(): a
-        // pushed route lands on the root Navigator as a sibling of
-        // this MultiBlocProvider, not a descendant, so the screen's
-        // own BlocBuilder<PrayerCubit> would otherwise throw
-        // ProviderNotFoundException the moment it built.
-        builder: (_) => BlocProvider.value(value: prayerCubit, child: const QiblaComingSoonScreen()),
+        builder: (_) => const QiblaCompassScreen(),
       ),
       MoreTile(
         icon: NoorIconType.tasbih,
