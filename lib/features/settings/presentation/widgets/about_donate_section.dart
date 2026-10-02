@@ -14,6 +14,7 @@ import '../help_screen.dart';
 import '../backup_restore_screen.dart';
 import '../send_feedback_screen.dart';
 import '../support_developer_screen.dart';
+import 'check_update_row.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
 
@@ -63,6 +64,8 @@ class AboutDonateSection extends StatelessWidget {
             ),
             child: const _Row(icon: Icons.security_outlined, label: 'Backup & Restore'),
           ),
+          const SizedBox(height: 4),
+          const CheckUpdateRow(),
           const SizedBox(height: 4),
           SemanticButton(
             label: 'Donate',
