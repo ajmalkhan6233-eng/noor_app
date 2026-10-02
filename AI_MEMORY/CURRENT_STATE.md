@@ -1,9 +1,9 @@
-# CURRENT_STATE (2026-10-01)
+# CURRENT_STATE (updated 2026-10-02)
 
-- Branch: main at 6316681 (octopus-memory merged and pushed; local branch deleted). CI for that push: APK build + Web Preview green.
-- Version: 1.1.0+2. Play Store status: unknown for now
+- Branch: main at 004322f (matches remote on 2026-10-02). CI status for 004322f: not checked. Earlier push 6316681 had APK build + Web Preview green.
+- Version: 1.1.1+3 (adds Settings "Check for update" row). Play Store status: unknown for now
 
-## What works (VERIFIED today)
+## What works (VERIFIED 2026-10-01, NOT re-verified since 1.1.1+3)
 - flutter analyze: No issues found
 - flutter test: 607 passed, 0 failed
 - GitHub: arm64 APK run #5 (36836555627) success; Web Preview success; signing workflow green but debug-signed

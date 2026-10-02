@@ -10,7 +10,7 @@
 - Tamil/Sinhala + prayer names: need Aj/translator approval (religious wording)
 - Azkar still 74 vs ~150: each entry needs a Hisn al-Muslim source fetch
 - Adhan reciters beyond 5: need a clearly licensed named reciter
-- Pull 4 remote commits on main: Aj says "pull"
+- (Done 2026-10-02: local main 004322f matches remote)
 - adhan internal import risk (prayer_repository.dart:10): decision needed before upgrading adhan
 - Stale .clinerules contradicts CLAUDE.md (INTERNET rule, palette file): Aj to say "update .clinerules" or ignore
 - 17 lib files over 150 lines: split only with device verification

@@ -1,7 +1,7 @@
 # PROJECT_PROFILE (written 2026-10-01; from CLAUDE.md, README, pubspec, docs)
 
 ## Identity
-- Name: noor (pubspec version 1.1.0+2)
+- Name: noor (pubspec version 1.1.1+3)
 - Purpose: offline-first, ad-free Islamic utility app for Android (prayer times, adhan, Quran, Azkar, Tasbih, tracker, calendar, zakat)
 - Stack: Flutter/Dart, native Android. State: flutter_bloc/Cubit. DB: sqflite_sqlcipher. Prayer math: adhan pkg
 - Owner on GitHub: ajmalkhan6233-eng/noor_app
