@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/presentation/motion/staggered_fade_in.dart';
+import '../../../core/presentation/widgets/breathing_glow.dart';
 import '../../../core/presentation/widgets/app_card.dart';
 import '../../../core/presentation/widgets/parallax_layer.dart';
 import '../../prayer_times/data/prayer_times_result.dart';
@@ -66,9 +67,11 @@ class _HomeOverviewScreenState extends State<HomeOverviewScreen> {
                     children: [
                       ParallaxLayer(
                         controller: _scrollController,
-                        child: HeroCard(
-                          hijriOffsetDays: settingsState.settings.hijriOffsetDays,
-                          profileName: settingsState.settings.profileName,
+                        child: BreathingGlow(
+                          child: HeroCard(
+                            hijriOffsetDays: settingsState.settings.hijriOffsetDays,
+                            profileName: settingsState.settings.profileName,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
