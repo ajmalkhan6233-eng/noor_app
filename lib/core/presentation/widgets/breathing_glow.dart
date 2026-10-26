@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/app_color_tokens.dart';
-import '../../constants/corner_radius.dart';
 import '../motion/motion.dart';
 
 class BreathingGlow extends StatefulWidget {
@@ -16,7 +15,7 @@ class BreathingGlow extends StatefulWidget {
 
   final Widget child;
 
-  /// Base corner radius; scaled per theme through `radiusFor`.
+  /// Corner radius of the card being lit (matches the child).
   final double radius;
 
   @override
@@ -35,7 +34,9 @@ class _BreathingGlowState extends State<BreathingGlow>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (Motion.reduced(context)) {
+    if (context.colors.flatSurfaces) {
+      _controller.stop(); // flat themes (Mushaf) stay glow-free
+    } else if (Motion.reduced(context)) {
       _controller.stop();
       _controller.value = 0.5;
     } else if (!_controller.isAnimating) {
@@ -52,10 +53,11 @@ class _BreathingGlowState extends State<BreathingGlow>
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    if (colors.flatSurfaces) return widget.child;
     final isLight = colors.brightness == Brightness.light;
     final low = isLight ? 0.05 : 0.08;
     final high = isLight ? 0.12 : 0.22;
-    final radius = BorderRadius.circular(context.radiusFor(widget.radius));
+    final radius = BorderRadius.circular(widget.radius);
 
     return RepaintBoundary(
       child: Stack(
