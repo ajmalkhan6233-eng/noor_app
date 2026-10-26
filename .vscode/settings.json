@@ -1,0 +1,16 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^Get-Command code -ErrorAction SilentlyContinue \\| Select-Object -ExpandProperty Source; if \\(Get-Command code -ErrorAction SilentlyContinue\\) \\{ code --help \\| Select-String -Pattern 'command\\|reuse-window' \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^flutter pub get$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^dart run flutter_launcher_icons$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
