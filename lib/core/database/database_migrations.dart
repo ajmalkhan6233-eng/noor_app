@@ -28,7 +28,7 @@ import 'schema/settings_schema.dart';
 import 'schema/tasbih_schema.dart';
 import 'schema/widget_position_schema.dart';
 
-const int latestSchemaVersion = 12;
+const int latestSchemaVersion = 13;
 
 Future<void> createNoorSchema(Database db, int version) async {
   for (final statement in [
@@ -116,5 +116,10 @@ Future<void> upgradeNoorSchema(Database db, int oldVersion, int newVersion) asyn
       "('fear', 22), ('sneezing', 23)",
     );
   }
-  // Next migration: add `if (oldVersion < 13) { ... }` here.
+  if (oldVersion < 13) {
+    await db.execute(
+      "ALTER TABLE app_settings ADD COLUMN motion_mode TEXT NOT NULL DEFAULT 'Full'",
+    );
+  }
+  // Next migration: add `if (oldVersion < 14) { ... }` here.
 }

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/presentation/widgets/breathing_glow.dart';
 import 'haptic_counter_device.dart';
 import '../../../../core/constants/app_typography.dart';
 
@@ -45,7 +46,10 @@ class DraggableCounterGroup extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            HapticCounterDevice(count: count, pulsing: pulsing, onTap: onTap),
+            BreathingGlow(
+              radius: 28,
+              child: HapticCounterDevice(count: count, pulsing: pulsing, onTap: onTap),
+            ),
           ],
         ),
       ),

@@ -14,7 +14,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/corner_radius.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/presentation/widgets/breathing_glow.dart';
 import '../../../prayer_times/data/prayer_times_result.dart';
 import '../../../prayer_times/logic/prayer_cubit/prayer_state.dart';
 import '../../../prayer_times/presentation/widgets/prayer_hero.dart';
@@ -64,7 +66,10 @@ class PrayerSummarySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PrayerHero(times: result, offsets: state.iqamathOffsets),
+        BreathingGlow(
+          radius: context.radiusFor(24),
+          child: PrayerHero(times: result, offsets: state.iqamathOffsets),
+        ),
         const SizedBox(height: 12),
         PrayerTimesStrip(times: result),
       ],

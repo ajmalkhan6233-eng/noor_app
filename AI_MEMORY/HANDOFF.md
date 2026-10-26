@@ -1,10 +1,9 @@
-# HANDOFF (2026-10-01)
+# HANDOFF (2026-10-26)
 
-- Last checkpoint: memory merged into main and pushed (commit 6316681); octopus-memory branch deleted.
-- Current task: none. Waiting for Aj's goal.
-- Done and verified: git pull (fast-forward); analyze clean; 607 tests pass; arm64 build + Web Preview green; secrets scan of committed files.
-- In progress: nothing.
-- Blockers: release keystore secret (Aj's action). Play Store status and launch command unknown for now.
-- Approvals needed: none right now. Any new push needs Aj OK.
-- UNVERIFIED: anything on a real device.
-- Next session action: read OPEN_ITEMS, ask Aj which item, name the single block, wait for GO.
+- Last checkpoint: design/home-living-hero pushed (c135795), PR #16. Details: AI_MEMORY/LIVE.md.
+- Current task: Aj testing APK from run 40281121022; Claude Code running analyze/test and folder cleanup.
+- Done and verified: arm64 build compiled. 
+- UNVERIFIED: analyze, tests, anything on a real device.
+- Blockers: release keystore secret (Aj's action).
+- Approvals needed: merge PR #16 to main (Aj says go).
+- Next session action: read OPEN_ITEMS and LIVE.md, name the single block, wait for GO.

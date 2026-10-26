@@ -43,7 +43,8 @@ const List<String> settingsCreateStatements = [
     pre_reminder_minutes INTEGER NOT NULL DEFAULT 10,
     has_seen_location_onboarding INTEGER NOT NULL DEFAULT 0,
     profile_name TEXT,
-    adhan_reciter TEXT NOT NULL DEFAULT 'doha'
+    adhan_reciter TEXT NOT NULL DEFAULT 'doha',
+    motion_mode TEXT NOT NULL DEFAULT 'Full'
   )
   ''',
 ];

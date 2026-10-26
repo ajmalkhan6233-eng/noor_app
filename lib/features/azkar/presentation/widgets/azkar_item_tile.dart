@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/presentation/motion/motion.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
+import '../../../../core/presentation/widgets/breathing_glow.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/azkar_item.dart';
 import '../../logic/azkar_cubit/azkar_cubit.dart';
@@ -29,9 +31,7 @@ class AzkarItemTile extends StatelessWidget {
         final count = state.progressFor(item.id);
         final done = count >= item.repeatCount;
         final bookmarked = state.isBookmarked(item.id);
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          child: AppCard(
+        final card = AppCard(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,10 +46,17 @@ class AzkarItemTile extends StatelessWidget {
                     child: SemanticButton(
                       label: bookmarked ? 'Remove bookmark' : 'Add bookmark',
                       onTap: () => context.read<AzkarCubit>().toggleBookmark(item.id),
-                      child: Icon(
-                        bookmarked ? Icons.bookmark : Icons.bookmark_border,
-                        color: context.colors.gold,
-                        size: 20,
+                      child: AnimatedSwitcher(
+                        duration: Motion.effective(context, Motion.short),
+                        switchInCurve: Motion.curve,
+                        transitionBuilder: (child, animation) =>
+                            ScaleTransition(scale: animation, child: child),
+                        child: Icon(
+                          bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          key: ValueKey<bool>(bookmarked),
+                          color: context.colors.gold,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -95,7 +102,13 @@ class AzkarItemTile extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          );
+        // A finished dhikr glows softly; unfinished ones stay still.
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: done
+              ? BreathingGlow(radius: context.colors.cornerRadius, child: card)
+              : card,
         );
       },
     );
