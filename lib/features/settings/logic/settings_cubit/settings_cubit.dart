@@ -16,6 +16,7 @@ import '../../data/app_locale.dart';
 import '../../data/app_settings.dart';
 import '../../data/app_theme_mode.dart';
 import '../../data/notification_settings.dart';
+import '../../data/settings_motion_persistence.dart';
 import '../../data/settings_repository.dart';
 import 'settings_state.dart';
 
@@ -28,7 +29,11 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> load() async {
     final settings = await _repository.load();
-    emit(SettingsState(settings: settings, isLoading: false));
+    final motionMode = await SettingsMotionPersistence.load();
+    emit(SettingsState(
+      settings: settings.copyWith(motionMode: motionMode),
+      isLoading: false,
+    ));
   }
 
   Future<void> setMethod(PrayerCalculationMethod method) => _update(
@@ -83,6 +88,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         // caught while adding adhanReciter; fixed both the same way.
         profileName: s.profileName,
         adhanReciter: s.adhanReciter,
+        motionMode: s.motionMode,
       ));
 
   Future<void> setIqamathOffsets(IqamathOffsetMinutes offsets) =>
@@ -115,6 +121,13 @@ class SettingsCubit extends Cubit<SettingsState> {
   /// no restart required. Never affects Arabic/Quran/Azkar text.
   Future<void> setLocale(AppLocaleOption locale) =>
       _update((s) => s.copyWith(locale: locale));
+
+  Future<void> setMotionMode(String mode) async {
+    final next = state.settings.copyWith(motionMode: mode);
+    emit(state.copyWith(settings: next));
+    await _repository.save(next);
+    await SettingsMotionPersistence.save(mode);
+  }
 
   Future<void> _update(AppSettings Function(AppSettings) updater) async {
     final next = updater(state.settings);

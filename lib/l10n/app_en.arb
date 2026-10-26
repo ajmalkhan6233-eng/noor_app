@@ -546,5 +546,8 @@
   "progressStreakSemantics": "Current streak {days} days",
   "@progressStreakSemantics": {"placeholders": {"days": {"type": "int"}}},
   "progressNextBadge": "Next badge at {days} days",
-  "@progressNextBadge": {"placeholders": {"days": {"type": "int"}}}
+  "@progressNextBadge": {"placeholders": {"days": {"type": "int"}}},
+  "motionSettingTitle": "Animation Motion Mode",
+  "motionSettingSemantics": "Motion mode currently set to {mode}",
+  "@motionSettingSemantics": {"placeholders": {"mode": {"type": "String"}}}
 }

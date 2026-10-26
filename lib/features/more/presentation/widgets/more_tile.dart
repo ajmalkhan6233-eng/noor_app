@@ -62,7 +62,7 @@ class MoreTile extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: tileColor.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(context.radiusFor(16)),
+              borderRadius: BorderRadius.circular(context.radiusFor(12)),
             ),
             child: NoorIcon(icon, color: tileColor, size: 26),
           ),

@@ -29,6 +29,7 @@ class AppSettings {
     this.hasSeenLocationOnboarding = false,
     this.profileName,
     this.adhanReciter = AdhanReciter.doha,
+    this.motionMode = 'Full',
   });
 
   final PrayerSettings prayerSettings;
@@ -82,6 +83,9 @@ class AppSettings {
   /// User-selected Adhan sound — see adhan_reciter.dart.
   final AdhanReciter adhanReciter;
 
+  /// Animation level: 'Full', 'Reduced' or 'Off'.
+  final String motionMode;
+
   AppSettings copyWith({
     PrayerSettings? prayerSettings,
     NotificationSettings? notifications,
@@ -97,6 +101,7 @@ class AppSettings {
     bool? hasSeenLocationOnboarding,
     String? profileName,
     AdhanReciter? adhanReciter,
+    String? motionMode,
   }) {
     return AppSettings(
       prayerSettings: prayerSettings ?? this.prayerSettings,
@@ -114,6 +119,7 @@ class AppSettings {
       hasSeenLocationOnboarding: hasSeenLocationOnboarding ?? this.hasSeenLocationOnboarding,
       profileName: profileName ?? this.profileName,
       adhanReciter: adhanReciter ?? this.adhanReciter,
+      motionMode: motionMode ?? this.motionMode,
     );
   }
 
@@ -137,6 +143,7 @@ class AppSettings {
       hasSeenLocationOnboarding: hasSeenLocationOnboarding,
       profileName: profileName,
       adhanReciter: adhanReciter,
+      motionMode: motionMode,
     );
   }
 }

@@ -10,17 +10,14 @@ import '../../../settings/data/notification_settings.dart';
 import '../../data/iqamath_offsets.dart';
 import '../../data/prayer_times_result.dart';
 import 'prayer_row_leading_controls.dart';
+import 'prayer_row_times.dart';
 import 'prayer_time_format.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../../../core/constants/corner_radius.dart';
 
 /// The five daily prayers plus sunrise, in chronological order. The
-/// prayer currently in effect carries a thin gold left rule — the
-/// only colour accent in an otherwise quiet list. When [iqamathOffsets]
-/// is supplied, each prayer (never sunrise) also shows its iqamath
-/// time beside the adhan time. When [notifications] and
-/// [onToggleNotification] are both supplied (Home dashboard only), a
-/// small bell toggle appears inline on each prayer row instead of a
-/// separate notifications section.
+/// current prayer sits in a gold-tinted card. Optional iqamath times and
+/// inline bell toggles appear when their settings are supplied.
 class PrayerTimesList extends StatefulWidget {
   const PrayerTimesList({
     super.key,
@@ -93,14 +90,18 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
         '${iqamathTime != null ? ', iqamath ${formatClock(iqamathTime)}' : ''}'
         '${isCurrent ? ', current' : ''}';
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 3),
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(
-            color: isCurrent ? context.colors.gold : Colors.transparent,
-            width: 2,
-          ),
+        color: isCurrent
+            ? context.colors.gold.withValues(alpha: 0.12)
+            : context.colors.card,
+        borderRadius: BorderRadius.circular(context.radiusFor(12)),
+        border: Border.all(
+          color: isCurrent
+              ? context.colors.gold
+              : context.colors.goldBorder.withValues(alpha: 0.15),
+          width: isCurrent ? 1.5 : 1.0,
         ),
       ),
       child: Row(
@@ -133,25 +134,7 @@ class _PrayerTimesListState extends State<PrayerTimesList> {
           ),
           ),
           const SizedBox(width: 8),
-          // Times shrink to fit instead of overflowing at large text sizes.
-          Flexible(
-            child: ExcludeSemantics(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(formatClock(time), style: AppTypography.time(context.colors.ink)),
-                    if (iqamathTime != null) ...[
-                      const SizedBox(width: 10),
-                      Text(formatClock(iqamathTime), style: AppTypography.caption(context.colors.sage)),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
+          PrayerRowTimes(time: time, iqamathTime: iqamathTime),
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/corner_radius.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../data/quran_surah.dart';
 
@@ -32,18 +33,25 @@ class SurahListTile extends StatelessWidget {
       hint: 'Double tap to open',
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: context.colors.hairline)),
+          color: context.colors.card,
+          borderRadius: BorderRadius.circular(context.radiusFor(12)),
+          border: Border.all(
+            color: context.colors.goldBorder.withValues(alpha: 0.15),
+          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 28,
-              child: Text(
-                '${surah.id}',
-                style: AppTypography.body(context.colors.sage),
+              width: 32,
+              child: Center(
+                child: Text(
+                  '${surah.id}',
+                  style: AppTypography.body(context.colors.gold),
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -53,11 +61,14 @@ class SurahListTile extends StatelessWidget {
                 children: [
                   Text(
                     surah.displayName,
-                    style: AppTypography.body(context.colors.ink),
+                    style: AppTypography.bodyStrong(context.colors.ink),
                   ),
                   if (subtitle.isNotEmpty) ...[
                     const SizedBox(height: 2),
-                    Text(subtitle, style: AppTypography.caption(context.colors.sage)),
+                    Text(
+                      subtitle,
+                      style: AppTypography.caption(context.colors.sage),
+                    ),
                   ],
                 ],
               ),
@@ -67,7 +78,10 @@ class SurahListTile extends StatelessWidget {
               Text(
                 surah.nameArabic!,
                 textDirection: TextDirection.rtl,
-                style: AppTypography.arabic(context.colors.ink).copyWith(fontSize: AppTypography.arabicSmallSize, height: 1.2),
+                style: AppTypography.arabic(context.colors.ink).copyWith(
+                  fontSize: AppTypography.arabicSmallSize,
+                  height: 1.2,
+                ),
               ),
             ],
             const SizedBox(width: 12),
