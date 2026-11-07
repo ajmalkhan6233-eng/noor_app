@@ -1616,4 +1616,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String progressNextBadge(int days) {
     return 'Next badge at $days days';
   }
+
+  @override
+  String get motionSettingTitle => 'அசைவூட்ட இயக்க முறை';
+
+  @override
+  String motionSettingSemantics(String mode) {
+    return 'இயக்க முறை தற்போது $mode என அமைக்கப்பட்டுள்ளது';
+  }
 }

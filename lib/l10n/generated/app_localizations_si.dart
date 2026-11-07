@@ -1614,4 +1614,12 @@ class AppLocalizationsSi extends AppLocalizations {
   String progressNextBadge(int days) {
     return 'Next badge at $days days';
   }
+
+  @override
+  String get motionSettingTitle => 'සජීවීකරණ චලන ප්‍රකාරය';
+
+  @override
+  String motionSettingSemantics(String mode) {
+    return 'චලන ප්‍රකාරය දැනට සකසා ඇත්තේ $mode වෙතය';
+  }
 }

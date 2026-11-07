@@ -1596,4 +1596,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String progressNextBadge(int days) {
     return 'Next badge at $days days';
   }
+
+  @override
+  String get motionSettingTitle => 'Animation Motion Mode';
+
+  @override
+  String motionSettingSemantics(String mode) {
+    return 'Motion mode currently set to $mode';
+  }
 }

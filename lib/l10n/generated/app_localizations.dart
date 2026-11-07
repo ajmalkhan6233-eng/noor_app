@@ -2848,6 +2848,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next badge at {days} days'**
   String progressNextBadge(int days);
+
+  /// No description provided for @motionSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Animation Motion Mode'**
+  String get motionSettingTitle;
+
+  /// No description provided for @motionSettingSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion mode currently set to {mode}'**
+  String motionSettingSemantics(String mode);
 }
 
 class _AppLocalizationsDelegate
