@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/audio_credits.dart';
 import '../../../../core/presentation/widgets/app_card.dart';
 import '../../../../core/presentation/widgets/section_header.dart';
 import '../../../../core/utils/semantics_helpers.dart';
@@ -62,6 +63,13 @@ class AboutSourcesCard extends StatelessWidget {
             style: AppTypography.caption(context.colors.sage),
           ),
           const SizedBox(height: 12),
+          // CC BY adhan recordings: credit is a licence condition (see
+          // core/constants/audio_credits.dart).
+          for (final credit in adhanCredits) ...[
+            Text(credit.line, style: AppTypography.caption(context.colors.sage)),
+            const SizedBox(height: 8),
+          ],
+          const SizedBox(height: 4),
           // MIT requires the permission notice to travel with copies of
           // the work — this is that notice for the two Azkar datasets
           // (see assets/azkar/README.md), which had no attribution
