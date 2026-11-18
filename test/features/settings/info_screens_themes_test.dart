@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:noor/core/constants/app_info.dart';
 import 'package:noor/features/settings/presentation/about_screen.dart';
 import 'package:noor/features/settings/presentation/help_screen.dart';
 import 'package:noor/features/settings/presentation/privacy_policy_screen.dart';
@@ -41,7 +42,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
 
     expect(find.text('No ads, no tracking. Your data stays on your phone.'), findsOneWidget);
-    expect(find.textContaining('Version 1.1.0'), findsOneWidget);
+    expect(find.textContaining('Version $appVersionName'), findsOneWidget);
     expect(find.text('Privacy Policy'), findsWidgets);
     expect(find.text('Help & FAQ'), findsOneWidget);
   });
