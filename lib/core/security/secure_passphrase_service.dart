@@ -32,6 +32,20 @@ class SecurePassphraseService {
   }
 
   /// 256 bits from a cryptographically secure RNG, hex-encoded.
+  /// Forgets the stored passphrase (even if it can't be decrypted) and
+  /// stores a new one. Only for recovering from an unreadable restored
+  /// database — see unreadable_database_recovery.dart.
+  Future<String> resetPassphrase() async {
+    try {
+      await _storage.delete(key: _storageKey);
+    } catch (_) {
+      await _storage.deleteAll();
+    }
+    final generated = _generatePassphrase();
+    await _storage.write(key: _storageKey, value: generated);
+    return generated;
+  }
+
   String _generatePassphrase() {
     final random = Random.secure();
     final bytes = List<int>.generate(32, (_) => random.nextInt(256));

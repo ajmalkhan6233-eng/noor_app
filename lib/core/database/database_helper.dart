@@ -10,6 +10,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../security/secure_passphrase_service.dart';
 import 'database_migrations.dart';
+import 'unreadable_database_recovery.dart';
 
 /// Singleton factory for the app's encrypted local database.
 ///
@@ -50,16 +51,31 @@ class DatabaseHelper {
   Future<Database> _open() async {
     final dir = await getDatabasesPath();
     final path = join(dir, _dbName);
-    final passphrase = await _passphraseService.getOrCreatePassphrase();
-
-    return openDatabase(
-      path,
-      version: _dbVersion,
-      password: passphrase,
-      onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
-    );
+    String passphrase;
+    try {
+      passphrase = await _passphraseService.getOrCreatePassphrase();
+    } catch (_) {
+      // Stored passphrase can't be decrypted (Keystore key not restored):
+      // the old file is unreadable for good. Move it aside, start fresh.
+      await quarantineDatabaseFile(path);
+      passphrase = await _passphraseService.resetPassphrase();
+    }
+    try {
+      return await _openWith(path, passphrase);
+    } catch (error) {
+      if (!isUnreadableDatabaseError(error)) rethrow;
+      await quarantineDatabaseFile(path);
+      return _openWith(path, passphrase);
+    }
   }
+
+  Future<Database> _openWith(String path, String passphrase) => openDatabase(
+    path,
+    version: _dbVersion,
+    password: passphrase,
+    onCreate: _onCreate,
+    onUpgrade: _onUpgrade,
+  );
 
   // Actual schema logic lives in database_migrations.dart, as plain
   // top-level functions — that's what lets migration_test.dart
