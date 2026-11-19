@@ -10,13 +10,11 @@ import 'core/constants/app_theme_mushaf.dart';
 import 'features/settings/data/app_theme_mode.dart';
 import 'core/presentation/app_scroll_behavior.dart';
 import 'core/presentation/location_onboarding_screen.dart';
-import 'core/presentation/splash/splash_gate.dart';
 import 'core/presentation/splash_screen.dart';
 import 'features/home/presentation/home_dashboard.dart';
 import 'features/settings/data/app_locale.dart';
 import 'features/settings/data/settings_repository.dart';
 import 'l10n/generated/app_localizations.dart';
-import 'splash_decision_placeholder.dart';
 import 'core/utils/app_builder.dart';
 
 /// Root widget: shows the splash screen, then fades into the main
@@ -32,33 +30,14 @@ class NoorApp extends StatefulWidget {
 class _NoorAppState extends State<NoorApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  /// Null while [SplashGate] hasn't yet answered whether this open is
-  /// recent enough to skip the splash — resolved before first frame in
-  /// almost every real case, since it's one fast shared_preferences
-  /// read, so there's nothing shown for that gap but a blank obsidian
-  /// background (see [home] below).
-  bool? _showSplash;
+  /// True while the half-second Bismillah + Noor screen shows; it shows
+  /// on every cold start now (no 24 h gate, no extra prefs read).
+  bool _showSplash = true;
   bool _onboardingPushed = false;
-  final _splashGate = SplashGate();
 
   @override
   void initState() {
     super.initState();
-    _splashGate.shouldShowSplash().then((shouldShow) async {
-      if (shouldShow) await _splashGate.markSplashShown();
-      if (!mounted) return;
-      setState(() => _showSplash = shouldShow);
-      // A skipped splash never calls _onSplashFinished, so this is the
-      // only place that triggers onboarding for that path — and it
-      // must check settings first, the same as every other caller,
-      // rather than pushing unconditionally (that bug meant onboarding
-      // re-showed on every reload once the splash itself had already
-      // been seen recently, regardless of hasSeenLocationOnboarding).
-      if (!shouldShow) {
-        final settings = await SettingsRepository().load();
-        if (mounted && !settings.hasSeenLocationOnboarding) _maybePushOnboarding();
-      }
-    });
     SettingsRepository().load().then((settings) {
       // Only seed the controller if Settings hasn't already changed it
       // (e.g. a fast theme switch while this future was pending).
@@ -131,11 +110,9 @@ class _NoorAppState extends State<NoorApp> {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               builder: noorAppBuilder,
-              home: switch (_showSplash) {
-                null => const SplashDecisionPlaceholder(),
-                true => SplashScreen(onFinished: _onSplashFinished),
-                false => const HomeDashboard(),
-              },
+              home: _showSplash
+                  ? SplashScreen(onFinished: _onSplashFinished)
+                  : const HomeDashboard(),
               ),
             );
           },
