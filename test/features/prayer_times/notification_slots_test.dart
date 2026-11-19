@@ -37,12 +37,12 @@ void main() {
     expect(idForSlot(PrayerSlot.isha, kind: NotificationKind.reminder), 104);
   });
 
-  test('ids stay well clear of the 9000+ test-adhan range across the '
-      'whole horizon', () {
+  test('ids stay well clear of the calendar and test-adhan ranges across '
+      'the whole horizon', () {
     for (var day = 0; day < notificationSchedulingHorizonDays; day++) {
       for (final slot in PrayerSlot.values) {
         for (final kind in NotificationKind.values) {
-          expect(idForSlot(slot, kind: kind, dayOffset: day), lessThan(9000));
+          expect(idForSlot(slot, kind: kind, dayOffset: day), lessThan(20000));
         }
       }
     }

@@ -4,11 +4,14 @@
 // and the `core/` services, so this file never needs to grow.
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/database/database_helper.dart';
 import 'core/database/restored_data_guard.dart';
 import 'core/visual_style_controller.dart';
+import 'features/prayer_times/data/background_adhan_task.dart';
 import 'app.dart';
 
 Future<void> main() async {
@@ -31,4 +34,6 @@ Future<void> main() async {
   // One fast prefs read so the first frame is already in the right look.
   await VisualStyleController.instance.load();
   runApp(const NoorApp());
+  // Keeps the adhan coming even if the app isn't opened for days.
+  if (!kIsWeb) unawaited(registerDailyAdhanRefresh());
 }

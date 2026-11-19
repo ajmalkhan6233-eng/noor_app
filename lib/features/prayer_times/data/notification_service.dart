@@ -40,6 +40,11 @@ class NotificationService {
 
   static bool _tzReady = false;
 
+  /// False in the background refresh: there is no screen to show the
+  /// permission dialog, and asking there could fail the whole run.
+  static bool promptForPermission = true;
+  static bool _prompted = false;
+
   /// Initializes the plugin and timezone database. Safe to call more
   /// than once — later calls are no-ops.
   Future<void> initialize() async {
@@ -58,6 +63,10 @@ class NotificationService {
     // every initialize() is harmless once already granted/denied; this
     // is the only place that ever asks, so it has to run somewhere
     // reachable before the very first notification of any kind.
+    // Asked at most once per app run (it used to be asked on every
+    // scheduling call, 7+ times per recompute).
+    if (!promptForPermission || _prompted) return;
+    _prompted = true;
     await _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
@@ -77,7 +86,7 @@ class NotificationService {
     await initialize();
     final name = slotLabel(slot);
     await _plugin.show(
-      9000 + slot.index,
+      testAdhanNotificationIdBase + slot.index,
       '$name adhan (test)',
       'This is what the $name adhan notification sounds like.',
       adhanNotificationDetails(slot, reciter: reciter),
@@ -99,7 +108,7 @@ class NotificationService {
     await initialize();
     final scheduled = tz.TZDateTime.now(tz.local).add(Duration(minutes: minutes));
     await _plugin.zonedSchedule(
-      9500,
+      liveTestNotificationId,
       'Scheduled test notification',
       'If this fired after the app was closed, background scheduling works.',
       scheduled,

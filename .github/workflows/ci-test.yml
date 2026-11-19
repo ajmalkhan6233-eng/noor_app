@@ -1,0 +1,54 @@
+# noor - test-only cloud check (2026-11-19). No APK, no AAB, no signing.
+# Runs analyze (errors block; warnings/infos only reported) and every
+# unit/widget test. Triggered by hand, or by a push to a fix/feature
+# branch, so work can be checked before anything is built or merged.
+
+name: Test only (no APK)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'feature/**'
+      - 'fix/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: noor-test-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: noor-test-${{ runner.os }}-
+
+      - name: Ensure asset folders exist
+        run: mkdir -p assets/database
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Analyze (errors block)
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Unit and widget tests
+        run: flutter test --reporter expanded

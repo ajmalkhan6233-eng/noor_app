@@ -41,7 +41,20 @@ String slotLabel(PrayerSlot slot) => switch (slot) {
 /// all. This is what actually explained "worked once, then never came
 /// again" — not a reboot-wipe (the plugin's own boot receiver already
 /// handles that correctly), but a missing scheduling horizon.
-const int notificationSchedulingHorizonDays = 7;
+///
+/// 14 since 2026-11-19 (was 7): together with the daily background
+/// refresh (background_adhan_refresh.dart) the adhan keeps coming even
+/// when the app isn't opened for a long time. Alarm count stays well
+/// under Android's 500-per-app cap (14 x 5 x 3 notifications + silent
+/// windows).
+const int notificationSchedulingHorizonDays = 14;
+
+/// One-off test notifications (Settings > Test adhan). Far above every
+/// prayer id (max 13104 at a 14-day horizon) and the calendar range
+/// (20000 + reminder row id). Were 9000/9500, which a 14-day horizon
+/// would collide with.
+const int testAdhanNotificationIdBase = 900000;
+const int liveTestNotificationId = 900500;
 
 /// Adhan/iqamath ids are unchanged from before the reminder feature
 /// existed (slot.index * 2 + 0/1) so upgrading installs don't leave an
@@ -49,7 +62,8 @@ const int notificationSchedulingHorizonDays = 7;
 /// its own non-overlapping range instead of reshuffling those.
 /// [dayOffset] (0 = today) is spaced by 1000 — comfortably clear of
 /// every other id range used (reminder tops out at 104, test-adhan
-/// starts at 9000) even at the maximum horizon above.
+/// lives at [testAdhanNotificationIdBase]) even at the maximum horizon
+/// above.
 int idForSlot(
   PrayerSlot slot, {
   NotificationKind kind = NotificationKind.adhan,
