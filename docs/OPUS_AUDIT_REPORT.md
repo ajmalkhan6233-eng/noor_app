@@ -211,3 +211,10 @@ BUILT (tests green, 613 passed):
 NOT BUILT:
 - Per-ayah audio: silence detection tested on all 41 bundled surahs; reliable only for ~9 very short surahs, so it was not shipped (would start ayahs in the wrong place). Clean path: a one-time cloud job (GitHub Actions) running an open forced aligner (e.g. ctc-forced-aligner, MIT) with an open Arabic speech model (Apache-2.0) over the CC BY recordings + Tanzil text, then Aj spot-checks by ear. Needs approval.
 - Exact ACJU match: only possible by embedding ACJU's own tables; needs ACJU's written permission.
+
+## Update 19 Nov night: per-ayah audio
+- One-time cloud alignment ran on all 41 bundled surahs (wav2vec2 Arabic, Apache-2.0 + torchaudio forced_align, Tanzil text). All aligned, mean confidence 0.71-0.88; no isti'adha in the recordings.
+- Independent check: is each ayah start inside a real pause? 642 of 824 boundaries yes; 182 fall in continuous recitation (the reciter joins ayahs, or a misplaced boundary - can't tell without listening).
+- SHIPPED (tap an ayah = recite from it): 67, 81, 93, 97, 98, 101, 103, 105, 106, 108, 110, 111, 112, 113, 114 - every boundary in a pause and every ayah confident.
+- HELD for a listening check: the other 26 (incl. 18, 36, 55). Full output: tools/ayah_align/full_result_2026-11-19.json.
+- Full Quran reader: not wired yet (surah reader only).
