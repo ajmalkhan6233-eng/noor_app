@@ -1,0 +1,36 @@
+# One-time ayah timing generator (2026-11-19). Cloud only, no APK.
+# Runs on a push to tools/ayah-align (or by hand). The result is an
+# artifact (ayah_timings.json); it is reviewed and committed by hand,
+# never auto-pushed.
+name: Ayah alignment (one-time)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['tools/ayah-align']
+    paths: ['tools/ayah_align/**', '.github/workflows/ayah-alignment.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  align:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install tools (CPU)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install --quiet torch==2.5.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+          pip install --quiet "transformers==4.46.3" numpy
+      - name: Align
+        run: python tools/ayah_align/align.py . ayah_timings.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ayah-timings
+          path: ayah_timings.json
