@@ -32,13 +32,9 @@
          set, nothing fired" report on a modern device, on top of the
          separate exact-alarm gap already fixed in notification_service.dart. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <!-- Lets Settings show the system's own "ignore battery
-         optimizations" dialog for this app — the single most common
-         real reason a scheduled adhan alarm silently never fires
-         (Android kills the alarm's process to save battery). Does
-         not enable anything by itself; the user still has to accept
-         the system dialog. -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <!-- REQUEST_IGNORE_BATTERY_OPTIMIZATIONS removed 2026-11-19: Google
+         Play restricts it. Settings opens the system battery list
+         instead (MainActivity.requestIgnoreBatteryOptimizations). -->
     <!-- 2026-09-03: this app's first and only network-capable feature —
          optional, user-initiated Quran audio downloads for surahs
          outside the bundled Juz Amma/curated set (see

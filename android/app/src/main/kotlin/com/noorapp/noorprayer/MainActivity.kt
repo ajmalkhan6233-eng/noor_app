@@ -132,10 +132,21 @@ class MainActivity : FlutterActivity() {
         return powerManager.isIgnoringBatteryOptimizations(packageName)
     }
 
+    // Opens the system "Battery optimisation" list where the person
+    // picks Noor and chooses "Don't optimise". The direct one-tap dialog
+    // (ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) needs the
+    // REQUEST_IGNORE_BATTERY_OPTIMIZATIONS permission, which Google Play
+    // restricts to a short list of app types; removed 2026-11-19.
     private fun requestIgnoreBatteryOptimizations() {
-        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-        intent.data = Uri.parse("package:$packageName")
+        val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        try {
+            startActivity(intent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            val fallback = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            fallback.data = Uri.parse("package:$packageName")
+            fallback.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(fallback)
+        }
     }
 }
