@@ -78,6 +78,15 @@ class SurahAudioPlayer {
     await _player.resume();
   }
 
+  /// Plays [surahId] starting at [start] (an ayah's position, see
+  /// ayah_timings.dart). Same prepared source as [play], so it is
+  /// instant too.
+  Future<void> playFrom(int surahId, Duration start) async {
+    if (_preparedSurahId != surahId && !await prepare(surahId)) return;
+    await _player.seek(start);
+    await _player.resume();
+  }
+
   Future<Source?> _sourceFor(int surahId) async {
     final asset = surahAudioAsset(surahId);
     if (asset != null) return AssetSource(asset);

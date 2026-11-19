@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/widgets/reading_position_tracker.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../data/ayah_timings.dart';
 import '../data/surah_audio_player.dart';
 import '../logic/quran_cubit/quran_cubit.dart';
 import '../logic/quran_cubit/quran_state.dart';
@@ -35,6 +36,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   final _audioPlayer = SurahAudioPlayer();
   StreamSubscription<void>? _completeSub;
   var _playing = false;
+  AyahTimingTable _timings = const {};
 
   @override
   void initState() {
@@ -44,6 +46,9 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
     // failure (no audio for this surah, no audio plugin in tests) is
     // harmless: play() simply prepares again on tap.
     unawaited(_audioPlayer.prepare(widget.surahId).catchError((Object _) => false));
+    loadAyahTimings().then((t) {
+      if (mounted) setState(() => _timings = t);
+    });
     _completeSub = _audioPlayer.onComplete.listen((_) {
       if (mounted) setState(() => _playing = false);
     });
@@ -64,6 +69,15 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
       await _audioPlayer.play(widget.surahId);
       setState(() => _playing = true);
     }
+  }
+
+  /// Tap on an ayah: recite from that ayah (only offered when this
+  /// surah has reviewed timings).
+  Future<void> _playFromAyah(int ayahNumber) async {
+    final start = ayahStart(_timings, widget.surahId, ayahNumber);
+    if (start == null) return;
+    await _audioPlayer.playFrom(widget.surahId, start);
+    if (mounted) setState(() => _playing = true);
   }
 
   GlobalKey _keyFor(int ayahNumber) =>
@@ -121,6 +135,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
                     .toggleBookmark(widget.surahId, ayahNumber),
                 ayahKeyFor: _keyFor,
                 initialAyahNumber: _initialAyahNumber(state),
+                onPlayAyah: _timings.containsKey(widget.surahId) ? _playFromAyah : null,
               ),
             );
           },
