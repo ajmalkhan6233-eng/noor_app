@@ -200,3 +200,14 @@ F1 donation screen (needs Aj), F2 delete old workflows (needs Aj), F24 7-day adh
 ## Update 19 Nov, after Aj's approval
 BUILT: F1 donation ask removed everywhere (More tile, Settings row, Home card, tasbih nudge; feedback kept), F2 legacy workflows deleted, F24 horizon 14 days + daily WorkManager refresh (no network, FGS permissions removed), F26 permission asked once and never in background, F14 privacy text names archive.org + background refresh.
 CI: new test-only workflow (.github/workflows/ci-test.yml). First run on feature/opus-pass: analyze 0 errors, 1 warning (fixed after), 601 tests passed. Android build NOT run (no APK, per Aj); Kotlin + WorkManager compile is UNVERIFIED until the final build.
+
+## Update 19 Nov evening ("fix all")
+BUILT (tests green, 613 passed):
+- Battery: REQUEST_IGNORE_BATTERY_OPTIMIZATIONS removed; button opens the system battery list.
+- Adhan audio stored once (-20 MB): preview plays res/raw via AdhanPreviewChannel.kt. NEW finding fixed: release builds shrink resources and the adhan sounds are named only from Dart, so they could be stripped (silent adhan in release). res/raw/keep.xml keeps them.
+- Signing/16 KB: CI now reports .so 16 KB alignment, zipalign -P 16, signing certificate and final permissions after every release build. The 19 Nov main build already logged "Release signing configured from secrets".
+- Prayer times: new default "Sri Lanka (ACJU timetable match)": Fajr 19.8, Isha 18.4, Shafi, Dhuhr/Asr/Maghrib +2. Fitted on a full year of ACJU zone tables (13 zones, 28,548 times): ~96% within 1 min, worst 2-4. Old default MWL was Fajr 6-9 min late and Isha 4-6 min early vs ACJU. Test checks official ACJU values (Colombo Feb, Hambantota Jul) within 2 min. Users who saved a method keep it.
+- Zakat: nisab basis is now the person's choice (lower of two / gold / silver), rules note (hawl, debts due now, scholars differ, ACJU contact), missing-price heads-up.
+NOT BUILT:
+- Per-ayah audio: silence detection tested on all 41 bundled surahs; reliable only for ~9 very short surahs, so it was not shipped (would start ayahs in the wrong place). Clean path: a one-time cloud job (GitHub Actions) running an open forced aligner (e.g. ctc-forced-aligner, MIT) with an open Arabic speech model (Apache-2.0) over the CC BY recordings + Tanzil text, then Aj spot-checks by ear. Needs approval.
+- Exact ACJU match: only possible by embedding ACJU's own tables; needs ACJU's written permission.

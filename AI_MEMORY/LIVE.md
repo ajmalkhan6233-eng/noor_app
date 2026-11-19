@@ -1,6 +1,5 @@
-# LIVE (2026-11-19 15:45)
+# LIVE (2026-11-19 evening)
 
-- Branch feature/opus-pass: all approved fixes in; test-only CI green (601 tests, 0 analyze errors).
-- Not built: APK/AAB (Aj decides when). Kotlin/WorkManager compile + phone tests UNVERIFIED.
-- Next options: final APK build in cloud, then Android phone test (Qibla, adhan after reboot, silent mode, Simple look).
-- Still open: F25 duplicate adhan audio (-20 MB), F4 signing, F5 16 KB, F6 battery permission, F16 ACJU times, Zakat fiqh choices, per-ayah audio.
+- main = feature/opus-pass (fast-forwarded). Web preview: https://ajmalkhan6233-eng.github.io/noor_app/ (looks only).
+- Tests green (613). Release signing secret now works in CI.
+- Waiting on Aj: Android phone test of the new APK; approve per-ayah alignment job; ask ACJU for timetable permission.
