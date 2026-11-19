@@ -52,20 +52,37 @@ class SurahAudioPlayer {
 
   Stream<void> get onComplete => _player.onPlayerComplete;
 
+  int? _preparedSurahId;
+
+  /// Loads [surahId]'s recitation into the player ahead of time, so a
+  /// later [play] starts at once instead of copying/decoding the file
+  /// on tap (2026-11-19 audit: the cold path took up to ~2 s). Returns
+  /// false when this surah has no audio here (not bundled, not yet
+  /// downloaded). ReleaseMode.stop keeps the source loaded after a stop
+  /// or when the recitation ends, so playing again is instant too.
+  Future<bool> prepare(int surahId) async {
+    final source = await _sourceFor(surahId);
+    if (source == null) return false;
+    await _player.setReleaseMode(ReleaseMode.stop);
+    await _player.setSource(source);
+    _preparedSurahId = surahId;
+    return true;
+  }
+
   /// Plays the recitation for [surahId] — a bundled asset if there is
   /// one, otherwise a previously downloaded local file, otherwise does
   /// nothing (the UI never offers a play control in that case; see
-  /// SurahAudioButton). Stops any currently-playing clip first.
+  /// SurahAudioButton). Uses the prepared source when there is one.
   Future<void> play(int surahId) async {
+    if (_preparedSurahId != surahId && !await prepare(surahId)) return;
+    await _player.resume();
+  }
+
+  Future<Source?> _sourceFor(int surahId) async {
     final asset = surahAudioAsset(surahId);
-    await _player.stop();
-    if (asset != null) {
-      await _player.play(AssetSource(asset));
-      return;
-    }
+    if (asset != null) return AssetSource(asset);
     final localPath = await _downloadService.localPathFor(surahId);
-    if (localPath == null) return;
-    await _player.play(DeviceFileSource(localPath));
+    return localPath == null ? null : DeviceFileSource(localPath);
   }
 
   Future<void> stop() => _player.stop();

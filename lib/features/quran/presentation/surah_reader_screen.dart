@@ -40,6 +40,10 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   void initState() {
     super.initState();
     context.read<QuranCubit>().openSurah(widget.surahId);
+    // Load the recitation now so the play button starts instantly. Any
+    // failure (no audio for this surah, no audio plugin in tests) is
+    // harmless: play() simply prepares again on tap.
+    unawaited(_audioPlayer.prepare(widget.surahId).catchError((Object _) => false));
     _completeSub = _audioPlayer.onComplete.listen((_) {
       if (mounted) setState(() => _playing = false);
     });
