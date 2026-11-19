@@ -196,3 +196,7 @@ The Moeed Alharthi item has surah files only (114 x 3 bitrates), no per-ayah fil
 
 ## Still to do (ranked)
 F1 donation screen (needs Aj), F2 delete old workflows (needs Aj), F24 7-day adhan gap, F25 duplicate adhan audio, F4 signing, F5 16 KB check, F6 battery permission, F14 privacy wording, F16 ACJU timetable, F9 adhan preview preload, F26, F18-F20 cleanup, F10/F29 per-ayah audio.
+
+## Update 19 Nov, after Aj's approval
+BUILT: F1 donation ask removed everywhere (More tile, Settings row, Home card, tasbih nudge; feedback kept), F2 legacy workflows deleted, F24 horizon 14 days + daily WorkManager refresh (no network, FGS permissions removed), F26 permission asked once and never in background, F14 privacy text names archive.org + background refresh.
+CI: new test-only workflow (.github/workflows/ci-test.yml). First run on feature/opus-pass: analyze 0 errors, 1 warning (fixed after), 601 tests passed. Android build NOT run (no APK, per Aj); Kotlin + WorkManager compile is UNVERIFIED until the final build.

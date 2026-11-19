@@ -72,15 +72,14 @@ class AboutDonateSection extends StatelessWidget {
 }
 
 class _Row extends StatelessWidget {
-  const _Row({required this.icon, required this.label, this.muted = false});
+  const _Row({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
-  final bool muted;
 
   @override
   Widget build(BuildContext context) {
-    final color = muted ? context.colors.sage : context.colors.ink;
+    final color = context.colors.ink;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
