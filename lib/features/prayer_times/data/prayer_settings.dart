@@ -21,6 +21,8 @@ enum PrayerCalculationMethod {
   singapore,
   turkey,
   tehran,
+  // Appended at the end: values are persisted by name.
+  sriLankaAcju,
 }
 
 /// Which madhab's rule governs the Asr shadow-length calculation.
@@ -30,7 +32,10 @@ enum PrayerMadhab { shafi, hanafi }
 /// always visible on screen, never silently assumed.
 class PrayerSettings {
   const PrayerSettings({
-    this.method = PrayerCalculationMethod.muslimWorldLeague,
+    // Default for Sri Lanka since 2026-11-19: matched to the ACJU
+    // timetables (see sri_lanka_acju_method.dart). MWL was 5-9 minutes
+    // off ACJU for Fajr and Isha.
+    this.method = PrayerCalculationMethod.sriLankaAcju,
     this.madhab = PrayerMadhab.shafi,
     this.highLatitudeRule = PrayerHighLatitudeRule.middleOfNight,
     this.adjustments = const PrayerAdjustmentMinutes(),
@@ -83,6 +88,8 @@ extension PrayerCalculationMethodLabel on PrayerCalculationMethod {
         return 'Turkey (Diyanet)';
       case PrayerCalculationMethod.tehran:
         return 'Tehran (Institute of Geophysics)';
+      case PrayerCalculationMethod.sriLankaAcju:
+        return 'Sri Lanka (ACJU timetable match)';
     }
   }
 }

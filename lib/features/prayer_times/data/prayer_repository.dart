@@ -19,6 +19,7 @@ import '../../../core/location/location_service.dart';
 import 'prayer_high_latitude_rule.dart';
 import 'prayer_settings.dart';
 import 'prayer_times_result.dart';
+import 'sri_lanka_acju_method.dart';
 
 /// Computes prayer times, refusing to surface a fabricated Isha/Fajr
 /// at latitudes where the true sun angle never occurs that day.
@@ -35,7 +36,9 @@ class PrayerRepository {
       coordinates.latitude,
       coordinates.longitude,
     );
-    final params = settings.method.toAdhan().getParameters()
+    final params = (settings.method == PrayerCalculationMethod.sriLankaAcju
+        ? sriLankaAcjuParameters()
+        : settings.method.toAdhan().getParameters())
       ..madhab = settings.madhab.toAdhan()
       ..highLatitudeRule = settings.highLatitudeRule.toAdhan()
       ..adjustments = adhan.PrayerAdjustments(
@@ -120,6 +123,9 @@ extension on PrayerCalculationMethod {
         return adhan.CalculationMethod.turkey;
       case PrayerCalculationMethod.tehran:
         return adhan.CalculationMethod.tehran;
+      case PrayerCalculationMethod.sriLankaAcju:
+        // Never reached: calculate() uses sriLankaAcjuParameters().
+        return adhan.CalculationMethod.other;
     }
   }
 }
