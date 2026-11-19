@@ -92,8 +92,28 @@ def spans(labels, scores, blank):
         prev = lab
     return starts, ends, [float(np.mean(p)) for p in probs]
 
+def boundary_loudness(wav, starts_ms):
+    """Independent check: dB (relative to the loud 95th percentile) of
+    the quietest 100 ms within 250 ms of each ayah start. A real ayah
+    boundary sits in a pause, so this should be clearly below speech."""
+    n = 320
+    f = len(wav) // n
+    db = 20 * np.log10(np.sqrt(np.mean(wav[:f * n].reshape(f, n) ** 2, axis=1)) + 1e-9)
+    ref = float(np.percentile(db, 95))
+    out = []
+    for ms in starts_ms[1:]:
+        c = int(ms / 20)
+        lo, hi = max(0, c - 12), min(f, c + 13)
+        win = db[lo:hi]
+        if len(win) < 5:
+            out.append(0.0); continue
+        smooth = np.convolve(win, np.ones(5) / 5, mode="valid")
+        out.append(round(float(smooth.min() - ref), 1))
+    return out
+
 def run_surah(model, processor, vocab, blank, surah, texts):
-    em = emissions(model, processor, decode(audio_path(surah)))
+    wav = decode(audio_path(surah))
+    em = emissions(model, processor, wav)
     best = None
     for with_istiadha in (False, True):
         pieces = ([normalize(ISTIADHA, vocab)] if with_istiadha else []) + [normalize(t, vocab) for t in texts]
@@ -138,6 +158,7 @@ def run_surah(model, processor, vocab, blank, surah, texts):
         "start_ms": starts_ms,
         "confidence": [round(float(np.mean(c)), 3) for c in conf],
         "mean_confidence": round(mean, 3),
+        "boundary_db": boundary_loudness(wav, starts_ms),
     }
 
 def main():
@@ -161,6 +182,10 @@ def main():
             result["surahs"][str(s)] = r
         with open(OUT, "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=1)
+    # The artifact can't always be downloaded; print the result too.
+    print("===TIMINGS-JSON-BEGIN===")
+    print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
+    print("===TIMINGS-JSON-END===", flush=True)
 
 if __name__ == "__main__":
     main()
