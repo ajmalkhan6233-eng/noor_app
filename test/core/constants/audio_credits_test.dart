@@ -15,9 +15,9 @@ void main() {
     expect(credited, contains('CC BY 3.0'));
   });
 
-  test('every credited file exists in assets/audio/adhan', () {
+  test('every credited file exists as an Android res/raw sound', () {
     for (final c in adhanCredits) {
-      expect(File('assets/audio/adhan/${c.file}').existsSync(), isTrue,
+      expect(File('android/app/src/main/res/raw/adhan_${c.file}').existsSync(), isTrue,
           reason: '${c.file} is credited but not bundled');
     }
   });

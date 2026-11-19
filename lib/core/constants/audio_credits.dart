@@ -10,7 +10,7 @@
 class AudioCredit {
   const AudioCredit(this.file, this.line);
 
-  /// Asset file name under assets/audio/adhan/.
+  /// Sound name; bundled as android/app/src/main/res/raw/adhan_<file>.
   final String file;
 
   /// Text shown to the user.

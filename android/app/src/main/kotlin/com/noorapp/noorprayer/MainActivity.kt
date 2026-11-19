@@ -28,7 +28,10 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private val channelName = "com.noorapp.noorprayer/silent_mode"
 
+    private var adhanPreview: AdhanPreviewChannel? = null
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        adhanPreview = AdhanPreviewChannel(this, flutterEngine.dartExecutor.binaryMessenger)
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName)
             .setMethodCallHandler { call, result ->
@@ -125,6 +128,11 @@ class MainActivity : FlutterActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, flags)
         alarmManager.cancel(pendingIntent)
         pendingIntent.cancel()
+    }
+
+    override fun onDestroy() {
+        adhanPreview?.stop()
+        super.onDestroy()
     }
 
     private fun isIgnoringBatteryOptimizations(): Boolean {

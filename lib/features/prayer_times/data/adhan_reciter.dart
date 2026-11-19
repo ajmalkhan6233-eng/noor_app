@@ -39,26 +39,15 @@ extension AdhanReciterLabel on AdhanReciter {
   };
 }
 
-/// `doha` (default) has one recording per prayer, matching the
-/// original five-file set; every other reciter has one generic
-/// recording played regardless of which prayer it's for.
-String? adhanAssetFor(AdhanReciter reciter, String prayerName) {
-  if (reciter == AdhanReciter.doha) {
-    return switch (prayerName) {
-      'Fajr' => 'audio/adhan/fajr.mp3',
-      'Dhuhr' => 'audio/adhan/dhuhr.mp3',
-      'Asr' => 'audio/adhan/asr.mp3',
-      'Maghrib' => 'audio/adhan/maghrib.mp3',
-      'Isha' => 'audio/adhan/isha.mp3',
-      _ => null,
-    };
-  }
-  if (prayerName == 'Sunrise') return null;
-  return switch (reciter) {
-    AdhanReciter.indonesia => 'audio/adhan/indonesia.mp3',
-    AdhanReciter.marrakech => 'audio/adhan/marrakech.mp3',
-    AdhanReciter.aroumd => 'audio/adhan/aroumd.mp3',
-    AdhanReciter.hamtramck => 'audio/adhan/hamtramck.mp3',
-    AdhanReciter.doha => null, // unreachable, handled above
-  };
+/// The res/raw sound used for [prayerName] with [reciter] — the same
+/// file the adhan notification plays (see notification_details.dart),
+/// and what the preview plays (AdhanPreviewChannel.kt). `doha` has one
+/// recording per prayer; every other reciter has one generic recording.
+/// Null for Sunrise and unknown names (no adhan).
+String? adhanRawResourceFor(AdhanReciter reciter, String prayerName) {
+  const prayers = {'Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'};
+  if (!prayers.contains(prayerName)) return null;
+  return reciter == AdhanReciter.doha
+      ? 'adhan_${prayerName.toLowerCase()}'
+      : 'adhan_${reciter.name}';
 }

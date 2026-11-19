@@ -1,59 +1,68 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Local-asset-only Adhan playback. Never streams, never fetches
-// remote audio — see assets/audio/adhan/README.md for the bundled
-// recordings' provenance and licence (Public Domain Mark 1.0).
+// Adhan preview playback. Since 2026-11-19 it plays the res/raw files
+// the adhan notifications already use, through AdhanPreviewChannel.kt
+// (Android MediaPlayer, prepared from a local resource: starts at
+// once). The second copy of every adhan under assets/audio/adhan (about
+// 20 MB) was removed. Never streams, never fetches remote audio. See
+// assets/audio/adhan/README.md for provenance and licences.
 
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
+
+import 'package:flutter/services.dart';
 
 import 'adhan_reciter.dart';
 
-/// Maps a prayer name to its bundled Adhan asset for the default
-/// (`doha`) reciter. `null` for names with no recording (e.g.
-/// "Sunrise", which has no Adhan). Kept for callers that don't yet
-/// pass a reciter; prefer `adhanAssetFor` from adhan_reciter.dart.
-String? adhanAssetForPrayer(String prayerName) =>
-    adhanAssetFor(AdhanReciter.doha, prayerName);
+/// True when [prayerName] has an adhan to preview (not Sunrise).
+bool hasAdhanForPrayer(String prayerName) =>
+    adhanRawResourceFor(AdhanReciter.doha, prayerName) != null;
 
 /// Thin wrapper so callers (a Cubit, never a widget directly) don't
-/// depend on the `audioplayers` package type.
+/// depend on the platform channel.
 class AdhanAudioPlayer {
-  AdhanAudioPlayer({AudioPlayer? player}) : _player = player ?? AudioPlayer() {
-    // Explicitly bind to the media (STREAM_MUSIC) audio stream so the
-    // hardware volume rocker adjusts this playback in real time —
-    // left at audioplayers' implicit default, some OEM skins (MIUI)
-    // route a freshly-started clip to the ringer/notification volume
-    // instead until a stream is explicitly requested.
-    _player.setAudioContext(
-      const AudioContext(
-        android: AudioContextAndroid(
-          contentType: AndroidContentType.music,
-          usageType: AndroidUsageType.media,
-          audioFocus: AndroidAudioFocus.gain,
-        ),
-      ),
-    );
-  }
+  AdhanAudioPlayer({MethodChannel? channel})
+    : _channel = channel ?? const MethodChannel('com.noorapp.noorprayer/adhan_preview');
 
-  final AudioPlayer _player;
+  final MethodChannel _channel;
+  final StreamController<void> _completed = StreamController<void>.broadcast();
+  bool _listening = false;
 
-  /// Fires when the currently-playing clip finishes on its own (as
-  /// opposed to being stopped early) — lets callers reset a "playing"
-  /// UI state without polling.
-  Stream<void> get onComplete => _player.onPlayerComplete;
+  /// Fires when a preview plays to its end.
+  Stream<void> get onComplete => _completed.stream;
 
-  /// Plays [reciter]'s Adhan for [prayerName], or does nothing if
-  /// there's no recording for it. Stops any currently-playing clip
-  /// first, so tapping a different prayer's preview never overlaps
-  /// audio.
   Future<void> play(String prayerName, {AdhanReciter reciter = AdhanReciter.doha}) async {
-    final asset = adhanAssetFor(reciter, prayerName);
-    if (asset == null) return;
-    await _player.stop();
-    await _player.play(AssetSource(asset));
+    final name = adhanRawResourceFor(reciter, prayerName);
+    if (name == null) return;
+    _listen();
+    try {
+      await _channel.invokeMethod<bool>('play', {'name': name});
+    } catch (_) {
+      // No Android side (web preview, tests): silently nothing.
+    }
   }
 
-  Future<void> stop() => _player.stop();
+  Future<void> stop() async {
+    try {
+      await _channel.invokeMethod<void>('stop');
+    } catch (_) {}
+  }
 
-  Future<void> dispose() => _player.dispose();
+  Future<void> dispose() async {
+    await stop();
+    await _completed.close();
+  }
+
+  // Set lazily: registering a handler needs the Flutter binding, which
+  // plain unit tests don't start.
+  void _listen() {
+    if (_listening) return;
+    _listening = true;
+    try {
+      _channel.setMethodCallHandler((call) async {
+        if (call.method == 'completed' && !_completed.isClosed) _completed.add(null);
+      });
+    } catch (_) {
+      _listening = false;
+    }
+  }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Release builds shrink unused resources. The adhan sounds are named
+     only from Dart (notification_details.dart), which the shrinker can't
+     see, so without this a release build could drop them and the adhan
+     notification would play the default sound or nothing. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/adhan_*" />

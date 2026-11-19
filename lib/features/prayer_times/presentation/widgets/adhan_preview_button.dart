@@ -22,7 +22,7 @@ class AdhanPreviewButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (adhanAssetForPrayer(prayerName) == null) return const SizedBox.shrink();
+    if (!hasAdhanForPrayer(prayerName)) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<AdhanPreviewCubit, String?>(
       builder: (context, previewing) {

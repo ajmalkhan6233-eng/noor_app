@@ -83,7 +83,6 @@ flutter:
     - assets/quran/
     - assets/quran_translations/
     - assets/azkar/
-    - assets/audio/adhan/
     - assets/quran/audio/juz_amma/
     - assets/quran/audio/popular/
     - assets/qibla/
