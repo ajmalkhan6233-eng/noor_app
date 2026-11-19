@@ -1,7 +1,7 @@
-# LIVE (2026-11-18)
+# LIVE (2026-11-19)
 
-- Branch: fix/launch-blockers-credits-restore-guard (3 commits, pushed, NOT merged)
-- Done in code: CC BY credits for indonesia/aroumd/hamtramck on About; restored-data guard now wipes only on fresh install; version 1.1.2+4 and app_info.dart synced (main had drifted).
-- UNVERIFIED: flutter analyze/test not run (no Flutter in the cloud session; CI only triggers on main). Nothing run on a real phone.
-- Next: Aj runs Actions > "Build Noor Android APK" > Run workflow on this branch; if green, merge to main.
-- Still open (audit): 16 KB alignment check, signing/keystore, battery permission, privacy policy Archive.org wording, docs cleanup (.clinerules, free-to-paid lines).
+- Work branch: feature/opus-pass (pushed, NOT merged, NOT built — Aj: no APK until final is agreed)
+- Built (code + unit tests, UNVERIFIED until a CI test run): Zakat parsing, Qibla declination + sensors, restore safety, Silent Mode safety, alarm queue, 0.5 s launch, instant Quran audio, Simple look + Rich visuals switch.
+- Report: docs/OPUS_AUDIT_REPORT.md (Part 1 = 20 fixes, Part 2 = F21-F29 + what was built).
+- Needs Aj: F1 donation screen, F2 old workflows, F24 (adhan after 7 days), Zakat fiqh choices, per-ayah audio plan.
+- Next: one CI run of tests on feature/opus-pass, fix anything red, then phone test.

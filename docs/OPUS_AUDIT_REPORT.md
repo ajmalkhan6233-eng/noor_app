@@ -143,3 +143,56 @@ Usage: `/usage` is not available in this cloud chat; audit kept to ~30 commands.
 - Approve F1 (remove donation ask), F2 (delete old workflows), F4 (keystore), F6, F10, F15, F16, F17
 
 Status: NEEDS YOU
+
+---
+# PART 2 — DEEP PASS (Opus extra, 19 Nov) + WHAT WAS BUILT
+Branch: `feature/opus-pass` (from fix/launch-blockers-credits-restore-guard + this report). NOT built, NOT run: no Flutter in this cloud session and Aj asked for no APK yet. Everything below marked BUILT is code + unit tests, UNVERIFIED until one CI test run.
+
+## New findings (F21+)
+**F21 Silent Mode can leave the phone silent for good** — HIGH — BUILT
+SilentModeReceiver.kt saved the ringer mode on every SILENCE (overlap saved SILENT as "previous"); a reboot during a window wiped the RESTORE alarm; revoked DND access threw in the receiver. Fixed: window flag, restore only if still silent, BOOT_COMPLETED restore, SecurityException caught.
+
+**F22 Restored database with no key = app broken forever** — HIGH — BUILT
+If a backup restores noor.db but not the Keystore key, the passphrase can't be read / the file can't be opened, and every screen fails. Fixed: on that exact error (SQLITE_NOTADB / unreadable passphrase) the file is renamed `.unreadable-<time>` (never deleted) and a fresh DB is created. Plus F3 (data_extraction_rules.xml) BUILT so Android 12+ device transfer no longer copies app data.
+
+**F23 Overlapping alarm scheduling** — MEDIUM — BUILT
+PrayerCubit fired horizon runs unawaited; two runs (GPS fix after fallback, Settings close) could interleave and re-schedule a prayer just switched off. Fixed: runs are queued.
+
+**F24 Adhan stops after 7 days without opening the app** — HIGH — NOT BUILT (OPUS, needs approval)
+Notifications are scheduled 7 days ahead only when the app recomputes. No background rescheduling exists. Fix options: (a) WorkManager daily job (Dart, offline) that reschedules — recommended; (b) raise horizon to 14 days (alarm count ~210, safe under Android's 500 cap) as a quick stop-gap. Approval: YES.
+
+**F25 Adhan audio stored twice (40 MB)** — HIGH (size) — NOT BUILT (SONNET)
+The same 9 adhan files sit in android/res/raw (20 MB, notification sound) AND assets/audio/adhan (20 MB, preview). Real bundled audio is ~63 MB, not 44. Fix: preview plays the res/raw copy via a tiny native call (or trim notification copies to the first ~30 s). Saves ~20 MB.
+
+**F26 Notification permission asked at every scheduling call** — LOW — NOT BUILT (HAIKU)
+NotificationService.initialize() calls requestNotificationsPermission() each time (7x per recompute) and before onboarding explains why. Move the request to the onboarding/Settings button.
+
+**F27 Qibla declination was ~6 degrees wrong in Sri Lanka** — HIGH — BUILT
+The "declination" was the bearing to the magnetic pole: +3.5 E in Colombo vs the real ~2.4 W. Now Android GeomagneticField (World Magnetic Model, offline) via a small channel; fallback 0. Sensors moved off the 200 ms default so the needle no longer lags. Bearings checked: Colombo 294.79, Kandy 294.16, Jaffna 291.83 (tests). Real phone test still needed (UNVERIFIED).
+
+**F28 Zakat: "150,000" counted as 0** — HIGH — BUILT
+double.tryParse failed on commas, so typed amounts silently became 0; negatives were accepted. Fixed with parseZakatAmount (+ tests).
+Not built (need a scholar's decision, Aj/ACJU): (a) nisab uses the LOWER of gold/silver and pools gold+silver+cash (Hanafi view; Shafi'i, the main Sri Lankan madhab, treats gold and silver separately); (b) all liabilities are deducted (many scholars: only debts due now); (c) no hawl (one lunar year) note; (d) gold grams with no gold price silently count as 0.
+
+**F29 Per-ayah audio (Athan-style)** — research result
+The Moeed Alharthi item has surah files only (114 x 3 bitrates), no per-ayah files. Big apps use licensed per-ayah sets (e.g. Quran.com / EveryAyah-style) whose terms are non-commercial or unclear; none verified as freely redistributable. Clean path: keep the CC BY surah files and add our own ayah timestamps (forced alignment with open Apache-2.0 tools), then "tap ayah = seek". OPUS-size, needs approval.
+
+## Religious text verification (done, programmatic)
+- Quran Arabic: SHA-256 matches the shipped constant; README documents a 2-mirror, 6,236-ayah cross-check (tanzil.net itself unreachable here).
+- Launch Bismillah (AppStrings.splashGreeting) vs Tanzil 1:1: same letters; shadda/fatha order differs (canonically equivalent Unicode, renders the same). No change needed.
+- Morning/evening adhkar (34 items, ar + en): byte-identical to upstream Seen-Arabic/Morning-And-Evening-Adhkar-DB (SHA match).
+- Hisn al-Muslim supplementary (116 items): 107 verbatim with upstream asellam/HisnElMuslim incl. hadith references; 9 differ ONLY in line breaks turned into spaces. No letter differs.
+- English translation (Saheeh International via Tanzil) is "non-commercial only": fine for a free app, another reason to remove the donation ask (F1).
+
+## BUILT on feature/opus-pass (one commit each)
+1. Zakat amount parsing (F28)
+2. Qibla declination + sensor rate (F27)
+3. Data-transfer exclusion + unreadable-DB recovery (F3, F22)
+4. Silent Mode safety (F21)
+5. Alarm horizon queue (F23)
+6. Launch: still Bismillah + Noor ~0.5 s (F7)
+7. Quran audio prepared on open, instant play (F8)
+8. Simple look default + one "Rich visuals" switch, no idle tickers, no blur (F11, F12)
+
+## Still to do (ranked)
+F1 donation screen (needs Aj), F2 delete old workflows (needs Aj), F24 7-day adhan gap, F25 duplicate adhan audio, F4 signing, F5 16 KB check, F6 battery permission, F14 privacy wording, F16 ACJU timetable, F9 adhan preview preload, F26, F18-F20 cleanup, F10/F29 per-ayah audio.
