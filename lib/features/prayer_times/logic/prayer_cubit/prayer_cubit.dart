@@ -39,6 +39,7 @@ class PrayerCubit extends Cubit<PrayerState> {
   final PrayerNotificationCoordinator _notificationCoordinator;
   final DateTime Function() _clock;
   final LastKnownLocationStore _lastKnown;
+  Future<void> _horizon = Future<void>.value();
 
   /// `state.date` is set once at construction; without this the cubit
   /// keeps showing (and scheduling from) the launch day after midnight.
@@ -166,14 +167,18 @@ class PrayerCubit extends Cubit<PrayerState> {
     // fallback message the moment this recalculates the result right
     // after setting it.
     emit(state.copyWith(result: result, locationError: state.locationError));
-    // Fire-and-forget; see notification_horizon_scheduler.dart.
-    unawaited(
-      scheduleNotificationHorizon(
-        repository: _repository,
-        notificationCoordinator: _notificationCoordinator,
-        state: state,
-        coordinates: coordinates,
-      ),
-    );
+    // Fire-and-forget, but queued: overlapping runs used to interleave,
+    // so an older run could re-schedule a prayer the person had just
+    // switched off. Each run now waits for the previous one.
+    final snapshot = state;
+    _horizon = _horizon
+        .then((_) => scheduleNotificationHorizon(
+              repository: _repository,
+              notificationCoordinator: _notificationCoordinator,
+              state: snapshot,
+              coordinates: coordinates,
+            ))
+        .catchError((Object _) {});
+    unawaited(_horizon);
   }
 }
