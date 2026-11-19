@@ -37,7 +37,20 @@ class _GlowHeroTitleState extends State<GlowHeroTitle> with SingleTickerProvider
     _glowController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
-    )..repeat(reverse: true);
+    );
+  }
+
+  /// No ticker in the Simple look or under reduced motion: a running
+  /// controller schedules frames even while the title shows still text.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = context.colors.flatSurfaces || MediaQuery.of(context).disableAnimations;
+    if (still) {
+      if (_glowController.isAnimating) _glowController.stop();
+    } else if (!_glowController.isAnimating) {
+      _glowController.repeat(reverse: true);
+    }
   }
 
   @override

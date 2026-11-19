@@ -44,7 +44,21 @@ class _CosmicBackgroundState extends State<CosmicBackground>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 90),
-    )..repeat();
+    );
+  }
+
+  /// Starts or stops the drift whenever the look changes: the Simple
+  /// look and reduced motion keep no ticker running at all (a ticking
+  /// controller schedules a frame 60 times a second even unseen).
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = context.colors.flatSurfaces || Motion.reduced(context);
+    if (still) {
+      if (_controller.isAnimating) _controller.stop();
+    } else if (!_controller.isAnimating) {
+      _controller.repeat();
+    }
   }
 
   @override
@@ -57,6 +71,11 @@ class _CosmicBackgroundState extends State<CosmicBackground>
   Widget build(BuildContext context) {
     final reduced = Motion.reduced(context);
     final tokens = context.colors;
+    // Simple look (flat tokens) or reduced motion: a plain background,
+    // no particle painter and no ticking controller.
+    if (tokens.flatSurfaces || reduced) {
+      return DecoratedBox(decoration: BoxDecoration(color: tokens.paper));
+    }
     return DecoratedBox(
       decoration: BoxDecoration(color: tokens.paper),
       child: AnimatedBuilder(

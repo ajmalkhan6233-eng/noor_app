@@ -7,6 +7,7 @@ import '../../../../core/app_theme_controller.dart';
 import '../../../../core/utils/semantics_helpers.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/app_theme_mode.dart';
+import 'rich_visuals_switch.dart';
 import '../../logic/settings_cubit/settings_cubit.dart';
 import '../../logic/settings_cubit/settings_state.dart';
 import '../../../../core/constants/app_color_tokens.dart';
@@ -27,6 +28,7 @@ class DisplaySection extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const RichVisualsSwitch(),
             _themeSegments(context, settings.themeMode),
             const SizedBox(height: 12),
             Semantics(

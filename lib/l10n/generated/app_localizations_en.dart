@@ -1191,6 +1191,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsQuranTextSize => 'Quran text size';
 
   @override
+  String get settingsRichVisuals => 'Rich visuals';
+
+  @override
+  String get settingsRichVisualsHint =>
+      'Dark and gold colours, glow and animations. Off = plain and fast.';
+
+  @override
   String get settingsHijriOffset => 'Hijri offset';
 
   @override

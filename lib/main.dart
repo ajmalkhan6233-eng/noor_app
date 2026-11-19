@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/database/database_helper.dart';
 import 'core/database/restored_data_guard.dart';
+import 'core/visual_style_controller.dart';
 import 'app.dart';
 
 Future<void> main() async {
@@ -27,5 +28,7 @@ Future<void> main() async {
       await db.delete('fasting_days');
     });
   }
+  // One fast prefs read so the first frame is already in the right look.
+  await VisualStyleController.instance.load();
   runApp(const NoorApp());
 }

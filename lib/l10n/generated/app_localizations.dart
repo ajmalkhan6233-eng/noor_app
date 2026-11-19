@@ -2171,6 +2171,18 @@ abstract class AppLocalizations {
   /// **'Quran text size'**
   String get settingsQuranTextSize;
 
+  /// No description provided for @settingsRichVisuals.
+  ///
+  /// In en, this message translates to:
+  /// **'Rich visuals'**
+  String get settingsRichVisuals;
+
+  /// No description provided for @settingsRichVisualsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark and gold colours, glow and animations. Off = plain and fast.'**
+  String get settingsRichVisualsHint;
+
   /// No description provided for @settingsHijriOffset.
   ///
   /// In en, this message translates to:

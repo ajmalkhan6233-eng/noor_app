@@ -7,6 +7,8 @@ import 'core/constants/app_strings.dart';
 import 'core/constants/app_theme.dart';
 import 'core/constants/app_theme_emerald.dart';
 import 'core/constants/app_theme_mushaf.dart';
+import 'core/constants/app_color_tokens_simple.dart';
+import 'core/visual_style_controller.dart';
 import 'features/settings/data/app_theme_mode.dart';
 import 'core/presentation/app_scroll_behavior.dart';
 import 'core/presentation/location_onboarding_screen.dart';
@@ -90,29 +92,38 @@ class _NoorAppState extends State<NoorApp> {
         return ValueListenableBuilder<ThemeMode?>(
           valueListenable: AppThemeController.instance.themeMode,
           builder: (context, themeMode, _) {
-            return ValueListenableBuilder<AppThemeModeOption>(
+            return ValueListenableBuilder<bool>(
+              valueListenable: VisualStyleController.instance.rich,
+              builder: (context, rich, _) => ValueListenableBuilder<AppThemeModeOption>(
               valueListenable: AppThemeController.instance.option,
               builder: (context, option, _) => MaterialApp(
               navigatorKey: _navigatorKey,
               title: AppStrings.appName,
               debugShowCheckedModeBanner: false,
               scrollBehavior: AppScrollBehavior(),
-              themeMode: themeMode ?? ThemeMode.dark,
+              // Simple look (default) follows the phone's light/dark.
+              themeMode: rich ? (themeMode ?? ThemeMode.dark) : ThemeMode.system,
               themeAnimationDuration: const Duration(milliseconds: 300),
               themeAnimationCurve: Curves.easeInOut,
-              darkTheme: option == AppThemeModeOption.emeraldNight
-                  ? buildEmeraldTheme()
-                  : buildDarkTheme(),
-              theme: option == AppThemeModeOption.mushaf
-                  ? buildMushafTheme()
-                  : buildLightTheme(),
+              darkTheme: !rich
+                  ? buildAppTheme(appColorTokensSimpleDark)
+                  : option == AppThemeModeOption.emeraldNight
+                      ? buildEmeraldTheme()
+                      : buildDarkTheme(),
+              theme: !rich
+                  ? buildAppTheme(appColorTokensSimpleLight)
+                  : option == AppThemeModeOption.mushaf
+                      ? buildMushafTheme()
+                      : buildLightTheme(),
               locale: locale,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              builder: noorAppBuilder,
+              builder: (context, child) =>
+                  noorAppBuilder(context, child, reduceMotion: !rich),
               home: _showSplash
                   ? SplashScreen(onFinished: _onSplashFinished)
                   : const HomeDashboard(),
+              ),
               ),
             );
           },

@@ -31,6 +31,18 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Simple look: a plain solid card, no blur (blur is a GPU cost).
+    if (context.colors.flatSurfaces) {
+      return Container(
+        padding: padding,
+        decoration: BoxDecoration(
+          color: context.colors.card,
+          borderRadius: borderRadius,
+          border: Border.all(color: context.colors.hairline, width: 1),
+        ),
+        child: child,
+      );
+    }
     return ClipRRect(
       borderRadius: borderRadius,
       child: BackdropFilter(

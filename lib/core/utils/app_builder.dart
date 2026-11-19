@@ -10,12 +10,16 @@ import 'text_scale.dart';
 /// gets the app-wide boost (2026-08-26: text read too small on a real
 /// device; most widgets set explicit font sizes, so one MediaQuery-level
 /// bump reaches every screen) composed on top of the OS text scale.
-Widget noorAppBuilder(BuildContext context, Widget? child) {
+Widget noorAppBuilder(BuildContext context, Widget? child, {bool reduceMotion = false}) {
   final mediaQuery = MediaQuery.of(context);
   return AnnotatedRegion<SystemUiOverlayStyle>(
     value: overlayStyleFor(Theme.of(context).brightness),
     child: MediaQuery(
-      data: mediaQuery.copyWith(textScaler: boostedTextScaler(mediaQuery.textScaler)),
+      data: mediaQuery.copyWith(
+        textScaler: boostedTextScaler(mediaQuery.textScaler),
+        // Simple look: every Motion-aware widget becomes still.
+        disableAnimations: reduceMotion || mediaQuery.disableAnimations,
+      ),
       child: child!,
     ),
   );

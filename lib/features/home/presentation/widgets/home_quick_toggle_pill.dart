@@ -65,6 +65,18 @@ class GlassPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(context.radiusFor(20));
+    final decoration = BoxDecoration(
+      color: context.colors.flatSurfaces
+          ? context.colors.card
+          : context.colors.card.withValues(alpha: on ? 0.65 : 0.3),
+      borderRadius: borderRadius,
+      border: Border.all(color: on ? context.colors.gold : context.colors.hairline),
+    );
+    const padding = EdgeInsets.symmetric(horizontal: 14, vertical: 8);
+    // Simple look: no blur.
+    if (context.colors.flatSurfaces) {
+      return Container(padding: padding, decoration: decoration, child: child);
+    }
     return ClipRRect(
       borderRadius: borderRadius,
       child: BackdropFilter(

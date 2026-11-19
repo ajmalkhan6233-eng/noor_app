@@ -418,6 +418,8 @@
   "trackerViewProgress": "View your progress",
   "settingsThemeLabel": "Theme",
   "settingsQuranTextSize": "Quran text size",
+  "settingsRichVisuals": "Rich visuals",
+  "settingsRichVisualsHint": "Dark and gold colours, glow and animations. Off = plain and fast.",
   "settingsHijriOffset": "Hijri offset",
   "settingsHijriDecrease": "Decrease Hijri offset",
   "settingsHijriIncrease": "Increase Hijri offset",
