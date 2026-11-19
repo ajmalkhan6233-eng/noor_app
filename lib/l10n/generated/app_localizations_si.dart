@@ -1212,6 +1212,30 @@ class AppLocalizationsSi extends AppLocalizations {
   String get settingsRichVisuals => 'Rich visuals';
 
   @override
+  String get zakatNisabBasisLabel =>
+      'Nisab based on';
+
+  @override
+  String get zakatNisabBasisLowest =>
+      'Lower of the two';
+
+  @override
+  String get zakatNisabBasisGold =>
+      'Gold';
+
+  @override
+  String get zakatNisabBasisSilver =>
+      'Silver';
+
+  @override
+  String get zakatMissingPriceNote =>
+      'Heads-up: enter the price per gram for the gold or silver you added, or it counts as 0.';
+
+  @override
+  String get zakatRulesNote =>
+      'Zakat is due on wealth held for one full lunar year (hawl). Under debts, enter only what you must pay now. Scholars differ on which nisab to use and on adding gold and silver together, so please confirm with your local scholar (ACJU: +94 117 490 490).';
+
+  @override
   String get settingsRichVisualsHint =>
       'Dark and gold colours, glow and animations. Off = plain and fast.';
 

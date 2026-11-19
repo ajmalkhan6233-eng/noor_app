@@ -14,6 +14,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../data/zakat_calculator.dart';
 import '../data/zakat_price_memory.dart';
 import 'widgets/zakat_number_field.dart';
+import 'widgets/zakat_method_card.dart';
 import 'widgets/zakat_result_card.dart';
 import '../../../core/constants/app_color_tokens.dart';
 
@@ -127,6 +128,11 @@ class _ZakatScreenState extends State<ZakatScreen> {
                 ),
               ],
             ),
+          ),
+          const SizedBox(height: 16),
+          ZakatMethodCard(
+            basis: _inputs.nisabBasis,
+            onChanged: (b) => setState(() => _inputs = _inputs.copyWith(nisabBasis: b)),
           ),
           const SizedBox(height: 16),
           ZakatResultCard(result: result),

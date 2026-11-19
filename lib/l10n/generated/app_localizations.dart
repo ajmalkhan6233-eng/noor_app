@@ -2177,6 +2177,42 @@ abstract class AppLocalizations {
   /// **'Rich visuals'**
   String get settingsRichVisuals;
 
+  /// No description provided for @zakatNisabBasisLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nisab based on'**
+  String get zakatNisabBasisLabel;
+
+  /// No description provided for @zakatNisabBasisLowest.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower of the two'**
+  String get zakatNisabBasisLowest;
+
+  /// No description provided for @zakatNisabBasisGold.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold'**
+  String get zakatNisabBasisGold;
+
+  /// No description provided for @zakatNisabBasisSilver.
+  ///
+  /// In en, this message translates to:
+  /// **'Silver'**
+  String get zakatNisabBasisSilver;
+
+  /// No description provided for @zakatMissingPriceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads-up: enter the price per gram for the gold or silver you added, or it counts as 0.'**
+  String get zakatMissingPriceNote;
+
+  /// No description provided for @zakatRulesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat is due on wealth held for one full lunar year (hawl). Under debts, enter only what you must pay now. Scholars differ on which nisab to use and on adding gold and silver together, so please confirm with your local scholar (ACJU: +94 117 490 490).'**
+  String get zakatRulesNote;
+
   /// No description provided for @settingsRichVisualsHint.
   ///
   /// In en, this message translates to:

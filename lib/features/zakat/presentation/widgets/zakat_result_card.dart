@@ -41,6 +41,10 @@ class ZakatResultCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(nisabLabel, style: AppTypography.caption(context.colors.sage)),
+            if (result.missingGoldPrice || result.missingSilverPrice) ...[
+              const SizedBox(height: 8),
+              Text(l10n.zakatMissingPriceNote, style: AppTypography.caption(context.colors.gold)),
+            ],
             const SizedBox(height: 16),
             Divider(color: context.colors.hairline, height: 1),
             const SizedBox(height: 16),

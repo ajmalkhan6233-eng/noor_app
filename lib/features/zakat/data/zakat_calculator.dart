@@ -8,6 +8,12 @@
 // LOWER of the two nisab values is used for mixed/cash wealth — that
 // includes more people under the obligation, not fewer.
 
+/// Which metal sets the nisab threshold. Scholars differ; the person
+/// chooses (2026-11-19). `lowest` (default) is the majority contemporary
+/// position for cash and mixed wealth and includes more people under the
+/// obligation; `gold` / `silver` use that metal alone.
+enum NisabBasis { lowest, gold, silver }
+
 class ZakatInputs {
   const ZakatInputs({
     this.goldGrams = 0,
@@ -18,6 +24,7 @@ class ZakatInputs {
     this.receivables = 0,
     this.businessInventoryValue = 0,
     this.liabilities = 0,
+    this.nisabBasis = NisabBasis.lowest,
   });
 
   final double goldGrams;
@@ -28,6 +35,7 @@ class ZakatInputs {
   final double receivables;
   final double businessInventoryValue;
   final double liabilities;
+  final NisabBasis nisabBasis;
 
   double get goldValue => goldGrams * goldPricePerGram;
   double get silverValue => silverGrams * silverPricePerGram;
@@ -49,6 +57,7 @@ class ZakatInputs {
     double? receivables,
     double? businessInventoryValue,
     double? liabilities,
+    NisabBasis? nisabBasis,
   }) {
     return ZakatInputs(
       goldGrams: goldGrams ?? this.goldGrams,
@@ -60,6 +69,7 @@ class ZakatInputs {
       businessInventoryValue:
           businessInventoryValue ?? this.businessInventoryValue,
       liabilities: liabilities ?? this.liabilities,
+      nisabBasis: nisabBasis ?? this.nisabBasis,
     );
   }
 }
@@ -70,12 +80,19 @@ class ZakatResult {
     required this.nisabThreshold,
     required this.nisabMet,
     required this.zakatDue,
+    this.missingGoldPrice = false,
+    this.missingSilverPrice = false,
   });
 
   final double netWealth;
   final double nisabThreshold;
   final bool nisabMet;
   final double zakatDue;
+
+  /// Gold/silver grams were entered without that metal's price, so they
+  /// are counted as 0 until a price is entered. Shown as a heads-up.
+  final bool missingGoldPrice;
+  final bool missingSilverPrice;
 }
 
 abstract final class ZakatCalculator {
@@ -89,9 +106,11 @@ abstract final class ZakatCalculator {
 
     // If a price wasn't entered (0), that metal can't set the floor —
     // fall back to whichever metal's nisab is actually prices-in.
+    final useGold = inputs.nisabBasis != NisabBasis.silver;
+    final useSilver = inputs.nisabBasis != NisabBasis.gold;
     final candidates = [
-      if (inputs.goldPricePerGram > 0) nisabByGold,
-      if (inputs.silverPricePerGram > 0) nisabBySilver,
+      if (useGold && inputs.goldPricePerGram > 0) nisabByGold,
+      if (useSilver && inputs.silverPricePerGram > 0) nisabBySilver,
     ];
     final nisabThreshold = candidates.isEmpty
         ? 0.0
@@ -105,6 +124,8 @@ abstract final class ZakatCalculator {
       nisabThreshold: nisabThreshold,
       nisabMet: nisabMet,
       zakatDue: nisabMet ? netWealth * rate : 0,
+      missingGoldPrice: inputs.goldGrams > 0 && inputs.goldPricePerGram <= 0,
+      missingSilverPrice: inputs.silverGrams > 0 && inputs.silverPricePerGram <= 0,
     );
   }
 }
