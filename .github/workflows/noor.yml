@@ -210,6 +210,31 @@ jobs:
             --dart-define=BUILD_NUMBER="$GITHUB_RUN_NUMBER" \
             2>&1 | tee /tmp/build_aab.log
 
+      - name: Release checks - 16 KB pages, signing, permissions (report only)
+        continue-on-error: true
+        run: |
+          set +e
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          AAB=build/app/outputs/bundle/release/app-release.aab
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          {
+            echo "## 16 KB page size (every native library in the AAB)"
+            rm -rf /tmp/so && mkdir -p /tmp/so && unzip -q -o "$AAB" 'base/lib/*' -d /tmp/so
+            bad=0
+            for so in $(find /tmp/so -name '*.so'); do
+              for a in $(readelf -lW "$so" | awk '$1=="LOAD"{print $NF}'); do
+                if [ $((a)) -lt 16384 ]; then echo "- NOT 16 KB: ${so#/tmp/so/} (align $a)"; bad=1; fi
+              done
+            done
+            [ $bad -eq 0 ] && echo "- All .so LOAD segments are 16 KB aligned."
+            echo "## APK zip alignment for .so (16 KB)"
+            "$BT/zipalign" -c -P 16 -v 4 "$APK" > /tmp/zipalign.log 2>&1 && echo "- zipalign -P 16: OK" || { echo "- zipalign -P 16: see log"; grep -E "lib/.*\.so" /tmp/zipalign.log | grep -v "(OK" | head -20; }
+            echo "## Signing certificate (never secret)"
+            "$BT/apksigner" verify --print-certs "$APK" | grep -E "certificate (DN|SHA-256 digest)" | sed 's/^/- /'
+            echo "## Permissions in the final APK"
+            "$BT/aapt2" dump permissions "$APK" 2>/dev/null | sed 's/^/- /'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: Upload AAB artifact
         if: success()
         uses: actions/upload-artifact@v4
@@ -226,10 +251,11 @@ jobs:
           cp build/app/outputs/flutter-apk/app-release.apk \
              "noor-v${{ github.run_number }}.apk"
           SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          if [ -f android/key.properties ]; then SIGNED="Release-signed"; else SIGNED="Debug-signed (no release keystore secret)"; fi
           gh release create "build-${{ github.run_number }}" \
             "noor-v${{ github.run_number }}.apk" \
             --title "noor build ${{ github.run_number }} ($SHORT_SHA)" \
-            --notes "On-screen build stamp (Home tab, bottom): Build $SHORT_SHA · #${{ github.run_number }}. Debug-signed."
+            --notes "On-screen build stamp (Home tab, bottom): Build $SHORT_SHA · #${{ github.run_number }}. $SIGNED."
 
       - name: Success summary
         if: success()
