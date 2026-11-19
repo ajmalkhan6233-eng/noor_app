@@ -26,6 +26,7 @@ class PaginatedSurahText extends StatefulWidget {
     required this.onToggleBookmark,
     required this.ayahKeyFor,
     this.initialAyahNumber,
+    this.onPlayAyah,
   });
 
   final List<QuranAyah> ayahs;
@@ -37,6 +38,9 @@ class PaginatedSurahText extends StatefulWidget {
   /// Opens straight to the page containing this ayah (last-read
   /// resume) instead of always starting at page 1.
   final int? initialAyahNumber;
+
+  /// See ContinuousSurahText.onPlayAyah.
+  final ValueChanged<int>? onPlayAyah;
 
   @override
   State<PaginatedSurahText> createState() => _PaginatedSurahTextState();
@@ -127,6 +131,7 @@ class _PaginatedSurahTextState extends State<PaginatedSurahText> {
                 bookmarkedAyahNumbers: widget.bookmarkedAyahNumbers,
                 onToggleBookmark: widget.onToggleBookmark,
                 ayahKeyFor: widget.ayahKeyFor,
+                onPlayAyah: widget.onPlayAyah,
               ),
             ),
           ),
