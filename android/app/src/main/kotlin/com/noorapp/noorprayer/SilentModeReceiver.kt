@@ -60,7 +60,7 @@ class SilentModeReceiver : BroadcastReceiver() {
                     )
                 }
             }
-        } catch (_: SecurityException) {
+        } catch (e: SecurityException) {
             // Do Not Disturb access was revoked; nothing safe to do.
         }
     }
