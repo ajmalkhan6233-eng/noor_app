@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/constants/app_color_tokens.dart';
+import '../../data/zakat_amount_parser.dart';
 
 class ZakatNumberField extends StatefulWidget {
   const ZakatNumberField({
@@ -71,7 +72,7 @@ class _ZakatNumberFieldState extends State<ZakatNumberField> {
             labelText: widget.label,
             labelStyle: AppTypography.caption(context.colors.sage),
           ),
-          onChanged: (v) => widget.onChanged(double.tryParse(v) ?? 0),
+          onChanged: (v) => widget.onChanged(parseZakatAmount(v)),
         ),
       ),
     );
