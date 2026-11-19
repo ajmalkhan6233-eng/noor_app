@@ -12,7 +12,6 @@ import 'package:noor/features/qibla/presentation/qibla_compass_screen.dart';
 import 'package:noor/features/settings/presentation/about_screen.dart';
 import 'package:noor/features/settings/presentation/help_screen.dart';
 import 'package:noor/features/settings/presentation/privacy_policy_screen.dart';
-import 'package:noor/features/settings/presentation/support_developer_screen.dart';
 import 'package:noor/features/zakat/presentation/zakat_screen.dart';
 
 import '../helpers/theme_harness.dart';
@@ -37,7 +36,6 @@ void main() {
     'Help': (build: () => const HelpScreen(), title: 'Help & FAQ'),
     'About': (build: () => const AboutScreen(), title: 'About'),
     'Privacy': (build: () => const PrivacyPolicyScreen(), title: 'Privacy Policy'),
-    'Support': (build: () => const SupportDeveloperScreen(), title: 'Support noor'),
     'Zakat': (build: () => const ZakatScreen(), title: 'Zakat calculator'),
     'Qibla': (
       build: () => QiblaCompassScreen(

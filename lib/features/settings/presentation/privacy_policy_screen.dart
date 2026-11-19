@@ -96,9 +96,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   '• Notifications and exact alarms — adhan and iqamah reminders.\n'
                   '• Do Not Disturb access — only if you turn on Silent Mode.\n'
                   '• Internet — used only if you choose to download extra '
-                  'Quran recitation audio. Every other feature in noor, '
+                  'Quran recitation audio. The files come from archive.org, '
+                  'which (like any website) sees your phone\'s IP address '
+                  'for that download. Every other feature in noor, '
                   'including everything above, works with zero connectivity '
-                  'and makes no network call of any kind.',
+                  'and makes no network call of any kind.\n'
+                  '• Background refresh — once a day, on your phone only, '
+                  'noor re-schedules the adhan alarms so they keep coming '
+                  'even if you do not open the app. No internet is used.',
                   style: TextStyle(color: context.colors.ink, height: 1.5),
                 ),
               ],
@@ -112,8 +117,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 const SectionHeader('Contact'),
                 const SizedBox(height: 8),
                 Text(
-                  'Questions about this policy can be sent through the '
-                  'Support noor screen.',
+                  'Questions about this policy can be sent through '
+                  'Settings > Send Feedback.',
                   style: AppTypography.caption(context.colors.sage),
                 ),
               ],

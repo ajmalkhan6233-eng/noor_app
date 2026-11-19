@@ -1,8 +1,8 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// About sits with the rest of Settings navigation. Donate is a single
-// quiet entry at the very bottom — no badge, no popup, no prompt
-// anywhere else in the app.
+// About, Help, Feedback, Backup and Check for update. The Donate row
+// was removed on 2026-11-19 (Play payments policy; Noor asks for
+// nothing).
 
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,6 @@ import '../about_screen.dart';
 import '../help_screen.dart';
 import '../backup_restore_screen.dart';
 import '../send_feedback_screen.dart';
-import '../support_developer_screen.dart';
 import 'check_update_row.dart';
 import '../../../../core/constants/app_color_tokens.dart';
 import '../../../../core/constants/app_typography.dart';
@@ -66,19 +65,6 @@ class AboutDonateSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           const CheckUpdateRow(),
-          const SizedBox(height: 4),
-          SemanticButton(
-            label: 'Donate',
-            hint: 'Double tap for ways to support this project',
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const SupportDeveloperScreen()),
-            ),
-            child: const _Row(
-              icon: Icons.favorite_border,
-              label: 'Donate',
-              muted: true,
-            ),
-          ),
         ],
       ),
     );

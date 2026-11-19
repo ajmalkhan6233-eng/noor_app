@@ -19,7 +19,6 @@ import '../../prayer_times/logic/prayer_cubit/prayer_cubit.dart';
 import '../../qibla/presentation/qibla_compass_screen.dart';
 import '../../settings/presentation/about_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
-import '../../settings/presentation/support_developer_screen.dart';
 import '../../tasbih/presentation/tasbih_screen.dart';
 import '../../zakat/presentation/zakat_screen.dart';
 import '../../../core/constants/app_color_tokens.dart';
@@ -84,15 +83,8 @@ class MoreScreen extends StatelessWidget {
         label: l10n.aboutLabel,
         builder: (_) => const AboutScreen(),
       ),
-      // 7th tile, added 2026-08-30: visible, not buried in Settings —
-      // the existing Settings > Donate entry stays too, two doors to
-      // the same room, not one hidden door.
-      MoreTile(
-        icon: NoorIconType.support,
-        color: context.colors.gold,
-        label: l10n.supportNoorTitle,
-        builder: (_) => const SupportDeveloperScreen(),
-      ),
+      // Support/donate tile removed 2026-11-19 (Play payments policy;
+      // Noor asks for nothing).
       // Hajj/Umrah/pilgrimage guide feature is cut from v1 and its
       // source was removed entirely (2026-08-26) — see CLAUDE.md's
       // Deferred section.

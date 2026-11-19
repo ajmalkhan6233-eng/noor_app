@@ -1,18 +1,16 @@
 // Bismillahir Rahmanir Raheem — watermark: ALLAH
 //
-// Same WhatsApp/email handoff pattern as support_developer_screen.dart
-// — an OS-level app handoff (url_launcher opening wa.me/mailto:), not
-// a network call this app makes itself, so this adds no INTERNET
-// permission. Kept as its own screen rather than folded into Support
-// the Developer since the two have different intents (a bug report or
-// suggestion vs. a donation) and different message bodies.
+// WhatsApp/email handoff for feedback — an OS-level app handoff
+// (url_launcher opening wa.me/mailto:), not a network call this app
+// makes itself. The donation screen it used to sit beside was removed
+// on 2026-11-19: Noor asks for nothing.
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/semantics_helpers.dart';
-import 'support_developer_screen.dart';
+import '../data/developer_contact.dart';
 import '../../../core/constants/app_color_tokens.dart';
 import '../../../core/constants/corner_radius.dart';
 
@@ -24,7 +22,7 @@ class SendFeedbackScreen extends StatelessWidget {
 
   Future<void> _sendViaWhatsApp(BuildContext context) async {
     final uri = Uri.parse(
-      'https://wa.me/${SupportDeveloperScreen.whatsappNumber}'
+      'https://wa.me/${DeveloperContact.whatsappNumber}'
       '?text=${Uri.encodeComponent(_message)}',
     );
     if (await canLaunchUrl(uri)) {
@@ -37,7 +35,7 @@ class SendFeedbackScreen extends StatelessWidget {
   Future<void> _sendViaEmail(BuildContext context) async {
     final uri = Uri(
       scheme: 'mailto',
-      path: SupportDeveloperScreen.developerEmail,
+      path: DeveloperContact.email,
       query:
           'subject=${Uri.encodeComponent("Feedback for noor")}&body=${Uri.encodeComponent(_message)}',
     );

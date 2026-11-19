@@ -12,7 +12,6 @@ import 'package:noor/features/settings/data/app_settings.dart';
 import 'package:noor/features/settings/data/settings_repository.dart';
 import 'package:noor/features/settings/presentation/licences_screen.dart';
 import 'package:noor/features/settings/presentation/send_feedback_screen.dart';
-import 'package:noor/features/settings/presentation/support_developer_screen.dart';
 import 'package:noor/features/zakat/presentation/zakat_screen.dart';
 
 import '../helpers/theme_harness.dart';
@@ -54,7 +53,6 @@ void main() {
     ),
     'Zakat': () => const ZakatScreen(),
     'Licences': () => const LicencesScreen(),
-    'Support': () => const SupportDeveloperScreen(),
     'Feedback': () => const SendFeedbackScreen(),
   };
 
