@@ -100,7 +100,12 @@
 
         <!-- Silent Mode: fires SILENCE/RESTORE at scheduled times set
              from Dart via SilentModeChannel/MainActivity. -->
-        <receiver android:exported="false" android:name=".SilentModeReceiver"/>
+        <receiver android:exported="false" android:name=".SilentModeReceiver">
+            <!-- Reboot clears the RESTORE alarm; restore the ringer at boot. -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
