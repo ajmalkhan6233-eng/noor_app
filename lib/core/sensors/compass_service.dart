@@ -57,11 +57,16 @@ class CompassService {
     Stream<MagnetometerEvent>? Function()? magnetometerProvider,
     Stream<GyroscopeEvent>? Function()? gyroscopeProvider,
   }) : _accelerometerProvider =
-           accelerometerProvider ?? (() => accelerometerEventStream()),
+           accelerometerProvider ??
+           (() => accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval)),
        _magnetometerProvider =
-           magnetometerProvider ?? (() => magnetometerEventStream()),
+           magnetometerProvider ??
+           (() => magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval)),
+       // Gyro at game rate: it carries the fast, smooth part of the
+       // heading. The default 200 ms rate made the needle lag seconds.
        _gyroscopeProvider =
-           gyroscopeProvider ?? (() => gyroscopeEventStream());
+           gyroscopeProvider ??
+           (() => gyroscopeEventStream(samplingPeriod: SensorInterval.gameInterval));
 
   /// Fraction (`0`–`1`) moved toward each new raw heading per event —
   /// lower is smoother but slower to respond. See `compass_service.dart`

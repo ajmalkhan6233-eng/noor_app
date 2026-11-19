@@ -11,7 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:noor/core/location/location_service.dart';
 import 'package:noor/core/sensors/compass_reading.dart';
 import 'package:noor/core/sensors/compass_service.dart';
-import 'package:noor/core/sensors/magnetic_declination.dart';
 import 'package:noor/features/qibla/data/qibla_calculator.dart';
 import 'package:noor/features/qibla/logic/heading_filter.dart';
 import 'package:noor/features/qibla/logic/qibla_compass_cubit.dart';
@@ -183,9 +182,10 @@ void main() {
         compassService: _Compass(readings.stream),
         hapticService: haptics,
         filter: HeadingFilter(factor: 1, deadbandDegrees: 0),
+        declinationLookup: (_, __) async => -2.4,
       );
       await cubit.start();
-      final declination = MagneticDeclination.estimate(_london.latitude, _london.longitude);
+      const declination = -2.4;
       final bearing = cubit.state.bearing!;
 
       // Point the phone so that magnetic + declination equals the bearing.
@@ -208,6 +208,32 @@ void main() {
 
       await cubit.close();
       await readings.close();
+    });
+  });
+
+  group('declination', () {
+    test('a missing platform declination falls back to 0, never an error', () async {
+      final readings = StreamController<CompassReading>();
+      final cubit = QiblaCompassCubit(
+        locationService: const _Location(_london),
+        compassService: _Compass(readings.stream),
+        hapticService: SilentHaptics(),
+        filter: HeadingFilter(factor: 1, deadbandDegrees: 0),
+        declinationLookup: (_, __) async => null,
+      );
+      await cubit.start();
+      readings.add(_good(100));
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.heading, closeTo(100, 1e-6));
+      await cubit.close();
+      await readings.close();
+    });
+
+    test('Sri Lanka qibla bearings match reference values', () {
+      // Independent great-circle reference values (Kaaba 21.4225, 39.8262).
+      expect(QiblaCalculator.bearingToKaaba(6.9271, 79.8612), closeTo(294.79, 0.05)); // Colombo
+      expect(QiblaCalculator.bearingToKaaba(7.2906, 80.6337), closeTo(294.16, 0.05)); // Kandy
+      expect(QiblaCalculator.bearingToKaaba(9.6615, 80.0255), closeTo(291.83, 0.05)); // Jaffna
     });
   });
 

@@ -16,6 +16,7 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.hardware.GeomagneticField
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -58,6 +59,28 @@ class MainActivity : FlutterActivity() {
                     }
                     else -> result.notImplemented()
                 }
+            }
+        // Qibla: magnetic declination from Android's built-in World
+        // Magnetic Model (offline formula, no network).
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.noorapp.noorprayer/geomagnetic")
+            .setMethodCallHandler { call, result ->
+                if (call.method != "declination") {
+                    result.notImplemented()
+                    return@setMethodCallHandler
+                }
+                val latitude = call.argument<Double>("latitude")
+                val longitude = call.argument<Double>("longitude")
+                if (latitude == null || longitude == null) {
+                    result.error("bad_args", "latitude and longitude are required", null)
+                    return@setMethodCallHandler
+                }
+                val field = GeomagneticField(
+                    latitude.toFloat(),
+                    longitude.toFloat(),
+                    0f,
+                    System.currentTimeMillis(),
+                )
+                result.success(field.declination.toDouble())
             }
     }
 

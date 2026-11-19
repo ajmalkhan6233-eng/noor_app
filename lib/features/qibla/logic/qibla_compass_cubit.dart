@@ -13,7 +13,7 @@ import '../../../core/haptics/haptic_service.dart';
 import '../../../core/location/location_service.dart';
 import '../../../core/sensors/compass_reading.dart';
 import '../../../core/sensors/compass_service.dart';
-import '../../../core/sensors/magnetic_declination.dart';
+import '../../../core/sensors/declination_source.dart';
 import '../../../core/utils/angle_math.dart';
 import '../../prayer_times/data/coordinate_bounds.dart';
 import '../data/qibla_calculator.dart';
@@ -26,17 +26,20 @@ class QiblaCompassCubit extends Cubit<QiblaCompassState> {
     CompassService? compassService,
     HapticService? hapticService,
     HeadingFilter? filter,
+    DeclinationLookup? declinationLookup,
     this.noSensorTimeout = const Duration(seconds: 4),
   }) : _location = locationService ?? const LocationService(),
        _compass = compassService ?? CompassService(),
        _haptics = hapticService ?? const HapticService(),
        _filter = filter ?? HeadingFilter(),
+       _declinationLookup = declinationLookup ?? platformDeclination,
        super(const QiblaCompassState());
 
   final LocationService _location;
   final CompassService _compass;
   final HapticService _haptics;
   final HeadingFilter _filter;
+  final DeclinationLookup _declinationLookup;
 
   /// How long to wait for a first compass reading before treating the
   /// compass as missing.
@@ -53,7 +56,7 @@ class QiblaCompassCubit extends Cubit<QiblaCompassState> {
       coordinates = await _location.autoFetchCoordinates();
     } catch (_) {}
     if (isClosed) return;
-    _applyLocation(
+    await _applyLocation(
       coordinates?.latitude ?? colomboFallbackLatitude,
       coordinates?.longitude ?? colomboFallbackLongitude,
       approximate: coordinates == null,
@@ -68,11 +71,14 @@ class QiblaCompassCubit extends Cubit<QiblaCompassState> {
       coordinates = await _location.getCurrentCoordinates();
     } catch (_) {}
     if (coordinates == null || isClosed) return;
-    _applyLocation(coordinates.latitude, coordinates.longitude, approximate: false);
+    await _applyLocation(coordinates.latitude, coordinates.longitude, approximate: false);
   }
 
-  void _applyLocation(double latitude, double longitude, {required bool approximate}) {
-    _declination = MagneticDeclination.estimate(latitude, longitude);
+  Future<void> _applyLocation(double latitude, double longitude, {required bool approximate}) async {
+    // Unknown declination falls back to 0: in Sri Lanka that is ~2.4
+    // degrees off, far better than the old pole estimate (~6 off).
+    _declination = await _declinationLookup(latitude, longitude) ?? 0;
+    if (isClosed) return;
     emit(
       state.copyWith(
         loading: false,
